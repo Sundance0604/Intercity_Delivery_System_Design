@@ -8,7 +8,7 @@ from config import DeliveryConfig
 class DeliveryData:
    
     # 集合定义
-    arcs_manual_1: List[Tuple[int, int]]       # A^1: 城市1中人工车辆所有可能的时间弧 (i, j)
+    arcs_manual_1: List[int, Tuple[int, int]]       # A^1: 城市1中人工车辆所有可能的时间弧 (i, j)
     arcs_manual_2: List[Tuple[int, int]]       # A^2: 城市2中人工车辆所有可能的时间弧 (i, j)
     arcs_auto: List[Tuple[int, int]]         # hat{A}: 自动驾驶车辆所有可能的时间弧 (i, j)
     
@@ -74,9 +74,9 @@ class DataLoader:
         arcs_manual_1 = []
         arcs_manual_2 = []
         for i in range(self.cfg.T):
-            for j in range(i+1, i+self._BHH_function_1(self.cfg.N_manual[1])):
+            for j in range(i+1, i+self.BHH_function_1(self.cfg.capacity_manual)):
                 arcs_manual_1.append((i, j))
-            for j in range(i+1, i+self._BHH_function_2(self.cfg.N_manual[2])):
+            for j in range(i+1, i+self.BHH_function_2(self.cfg.capacity_manual)):
                 arcs_manual_2.append((i, j))
         return arcs_manual_1, arcs_manual_2
      # 自动驾驶车辆: 固定行驶时间 tau
