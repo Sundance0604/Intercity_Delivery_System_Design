@@ -3,6 +3,9 @@ import math
 from dataclasses import dataclass
 from typing import List, Tuple, Dict
 from config import DeliveryConfig
+from functools import lru_cache
+from typing import Iterator
+
 
 @dataclass
 class DeliveryData:
@@ -14,29 +17,34 @@ class DeliveryData:
     
     # 状态映射 S^k(t) 和 hat{S}(t)
     # key: 时间点 t, value: 覆盖该时间点的路径列表 [(i, j), ...]
-    active_manual_sets_1: Dict[int, List[Tuple[int, int]]]
-    active_manual_sets_2: Dict[int, List[Tuple[int, int]]]
-    active_auto_sets: Dict[int, List[Tuple[int, int]]]
+    sets_manual_1: Dict[int, List[Tuple[int, int]]]
+    sets_manual_2: Dict[int, List[Tuple[int, int]]]
+    sets_auto: Dict[int, List[Tuple[int, int]]]
     
     # 预计算参数
     # key: (i, j), value: 对应路径的最大载重量 (公式6右侧部分)
-    manual_capacity_coeff: Dict[Tuple[int, int], float] 
+    cap_coeff_1: Dict[Tuple[int, int], float]
+    cap_coeff_2: Dict[Tuple[int, int], float]
+
+    # order categorization set
+    pos_orders: Dict[int, List[int]]  # 正向订单集合
+    neg_orders: Dict[int, List[int]]  # 反向订单集合
+    all_orders: Dict[int, List[int]]  # 所有订单集合
     
 class DataLoader:
     def __init__(self, config: DeliveryConfig):
         self.cfg = config
     # 为城市1的BHH近似
+    @lru_cache(maxsize=1024)
     def BHH_function_1(self, load: float) -> float:
-        a = self.cfg.service_a_1
-        b = self.cfg.service_b_1
-        return a * load + b * math.sqrt(load)
+        return self.cfg.service_a_1 * load + self.cfg.service_b_1 * math.sqrt(load)
     # 为城市2的BHH近似
+    @lru_cache(maxsize=1024)
     def BHH_function_2(self, load: float) -> float:
-        a = self.cfg.service_a_2
-        b = self.cfg.service_b_2
-        return a * load + b * math.sqrt(load)
+        return self.cfg.service_a_2 * load + self.cfg.service_b_2 * math.sqrt(load)
 
     # 为城市1的反函数
+    @lru_cache(maxsize=1024)
     def inverse_function_1(self, duration_minutes: float) -> float:
         """
         求解反函数 (f^1)^(-1)(T)。
@@ -54,6 +62,7 @@ class DataLoader:
         return u**2
     
     # 为城市2的反函数
+    @lru_cache(maxsize=1024)
     def inverse_function_2(self, duration_minutes: float) -> float:
         """
         求解反函数 (f^2)^(-1)(T)。
@@ -70,15 +79,17 @@ class DataLoader:
         u = (-b + math.sqrt(delta)) / (2 * a)
         return u**2
      # 人工车辆:  j > i 且 j <= i+f^k(M) 即可
-    def generate_arcs_manual(self) -> List[Tuple[int, int]]:
-        arcs_manual_1 = []
-        arcs_manual_2 = []
+    def _generate_single_city_arcs(self, service_func) -> Iterator[Tuple[int, int]]:
         for i in range(self.cfg.T):
-            for j in range(i+1, i+self.BHH_function_1(self.cfg.capacity_manual)):
-                arcs_manual_1.append((i, j))
-            for j in range(i+1, i+self.BHH_function_2(self.cfg.capacity_manual)):
-                arcs_manual_2.append((i, j))
-        return arcs_manual_1, arcs_manual_2
+            limit = i + int(service_func(self.cfg.capacity_manual))
+            for j in range(i + 1, limit):
+                yield (i, j)  
+
+    def generate_arcs_manual(self):
+        iter_1 = self._generate_single_city_arcs(self.BHH_function_1)
+        iter_2 = self._generate_single_city_arcs(self.BHH_function_2)
+        return iter_1, iter_2
+    
      # 自动驾驶车辆: 固定行驶时间 tau
     def generate_arcs_auto(self) -> List[Tuple[int, int]]:
         # j = i + tau
@@ -88,16 +99,29 @@ class DataLoader:
             j = i + tau
             arcs_auto.append((i, j))
         return arcs_auto
-    def generate_arcs_for_t(self, t: int, arcs:List) -> List[Tuple[int, int]]:
-        arcs_t = []
-        # 计算活跃集合 S(t)
-        # S(t) = {(i, j) | i <= t < j}
-        for (i, j) in arcs:
+    # 生成S^k(t)和\hat{S}(t)
+    def generate_active_sets(self, arcs_manual_1, arcs_manual_2, arcs_auto):
+      
+        sets_manual_1 = {t: [] for t in range(self.cfg.T)}    
+        for (i, j) in arcs_manual_1:
             for t in range(i, j):
                 if t < self.cfg.T:
-                    arcs_t[t].append((i, j))
-        return arcs_t
-           
+                    sets_manual_1[t].append((i, j))
+
+        sets_manual_2 = {t: [] for t in range(self.cfg.T)}
+        for (i, j) in arcs_manual_2:
+            for t in range(i, j):
+                if t < self.cfg.T:
+                    sets_manual_2[t].append((i, j))
+
+        sets_auto = {t: [] for t in range(self.cfg.T)}
+        for (i, j) in arcs_auto:
+            for t in range(i, j):
+                if t < self.cfg.T:
+                    sets_auto[t].append((i, j))
+
+        return sets_manual_1, sets_manual_2, sets_auto
+    
     # 预计算公式 6所需的参数
     # lambda = (f)^-1( (j-i)*t0 )
     def pre_inverse_count(self, arcs_manual_1:List, arcs_manual_2:List) -> Dict[Tuple[int, int], float]:
@@ -121,7 +145,7 @@ class DataLoader:
 @dataclass
 class OrderBatch:
     batch_id: int            # 对应 l
-    direction: int           # 对应 方向 (1或2)
+    direction: str           # 对应 方向,记为+或-
     quantity: int            # 对应 d_l 
     earliest_start: int      # 对应 s_l 
     latest_completion: int   # 对应 e_l

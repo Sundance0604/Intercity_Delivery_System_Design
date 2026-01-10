@@ -17,7 +17,7 @@ class DeliveryConfig:
     # N^i: number of available vehicles for city i\in{1,2}
     N_manual: Dict[int, int] = field(default_factory=lambda: {1: 30, 2: 30}) 
     # hat{N}^i: number of availabe automated vehicles
-    N_auto: int = field(default=15)
+    N_auto: Dict[int, int] = field(default_factory=lambda: {1: 15, 2: 15})
     
     # M: capacity of manually driven vehicles
     capacity_manual: float = 1000.0  # 如果是乘客数目应该是int
