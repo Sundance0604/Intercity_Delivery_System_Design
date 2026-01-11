@@ -30,6 +30,9 @@ class DeliveryData:
     pos_orders: Dict[int, List[int]]  # 正向订单集合
     neg_orders: Dict[int, List[int]]  # 反向订单集合
     all_orders: Dict[int, List[int]]  # 所有订单集合
+
+    # the set of time pairs that violate the time-window constraints
+    epsilon_sets: List[Tuple[int, int, str, int]]
     
 class DataLoader:
     def __init__(self, config: DeliveryConfig):
@@ -100,7 +103,7 @@ class DataLoader:
             arcs_auto.append((i, j))
         return arcs_auto
     # 生成S^k(t)和\hat{S}(t)
-    def generate_active_sets(self, arcs_manual_1, arcs_manual_2, arcs_auto):
+    def generate_sets(self, arcs_manual_1, arcs_manual_2, arcs_auto):
       
         sets_manual_1 = {t: [] for t in range(self.cfg.T)}    
         for (i, j) in arcs_manual_1:
@@ -121,7 +124,30 @@ class DataLoader:
                     sets_auto[t].append((i, j))
 
         return sets_manual_1, sets_manual_2, sets_auto
-    
+    # 生成约束七中所出现的集合epsilon
+    def generate_epsilon_sets(self, pos_orders, neg_orders, arcs_manual_1, arcs_manual_2):
+        
+        epsilon_sets = []
+        all_arcs = arcs_manual_1 + arcs_manual_2 
+ 
+        for l, order in pos_orders.items():
+            # 筛选逻辑：i >= s_l 且 j <= e_l
+            valid_arcs = [
+                (i, j, "+", l) 
+                for (i, j) in all_arcs 
+                if i >= order.earliest_start and j <= order.latest_completion
+            ]
+            epsilon_sets.extend(valid_arcs)
+            
+        for l, order in neg_orders.items():
+            valid_arcs = [
+                (i, j, "-", l) 
+                for (i, j) in all_arcs 
+                if i >= order.earliest_start and j <= order.latest_completion
+            ]
+            epsilon_sets.extend(valid_arcs)
+            
+        return epsilon_sets
     # 预计算公式 6所需的参数
     # lambda = (f)^-1( (j-i)*t0 )
     def pre_inverse_count(self, arcs_manual_1:List, arcs_manual_2:List) -> Dict[Tuple[int, int], float]:
@@ -144,7 +170,7 @@ class DataLoader:
     
 @dataclass
 class OrderBatch:
-    batch_id: int            # 对应 l
+    quantity: int            # 对应 l
     direction: str           # 对应 方向,记为+或-
     quantity: int            # 对应 d_l 
     earliest_start: int      # 对应 s_l 

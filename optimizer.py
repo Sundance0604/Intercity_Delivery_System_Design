@@ -18,15 +18,17 @@ class Optimizer:
     def setup_variables(self):
         self.flow = ["+", "-"] # 流量方向：+表示城市1到城市2，-表示城市2到城市1
         self.arcs_indices = []
+        self.orders_indices = []
         # 城市 1 的弧
         for (i, j) in self.data.arcs_manual_1:
             for direction in self.flow: 
-                self.arcs_indices.append((i, j, 1, direction))        
+                self.arcs_indices.append((i, j, 1, direction))
+                self.orders_indices.append((i, j, direction))        
         # 城市 2 的弧
         for (i, j) in self.data.arcs_manual_2:
             for direction in self.flow:
                 self.arcs_indices.append((i, j, 2, direction))
-        
+                self.orders_indices.append((i, j, direction))      
         # 创建变量 x
         self.x_manual = self.model.addVars(self.arcs_indices, vtype=GRB.INTEGER, name="x_manual")
         # 创建变量 y 
@@ -35,10 +37,10 @@ class Optimizer:
         )
         # 创建变量 g
         self.g_manual = self.model.addVars(
-            self.arcs_indices, self.data.all_orders.keys(), vtype=GRB.INTEGER, name= "g_manual"
+            self.orders_indices, self.data.all_orders.keys(), vtype=GRB.INTEGER, name= "g_manual"
         )
         self.g_auto = self.model.addVars(
-            self.data.arcs_auto, self.data.all_orders.keys(), vtype=GRB.INTEGER, name = "g_auto"
+            self.data.arcs_auto, self.flow, self.data.all_orders.keys(), vtype=GRB.INTEGER, name = "g_auto"
         )
         # 创建变量 z
         self.z_unserved = self.model.addVars(
@@ -133,9 +135,84 @@ class Optimizer:
             )
             self.model.addConstr(
                 gp.quicksum(
-                    self.g_manual[i, j, city, direction, l] <= self.x_manual[i, j, city, direction] * coeff_dict[(i, j)]
+                    self.g_manual[i, j, direction, l] <= self.x_manual[i, j, city, direction] * coeff_dict[(i, j)]
                     for l in orders.keys()
                 ),
-                name=f"(6)Manual_intercity_volume_time{t}_city{city}_dir{direction}"
+                name=f"(6)Manual_intercity_volume_city{city}_dir{direction}"
             )
-        
+        # 建立第六个约束(7)
+        self.model.addConstrs(
+            (self.g_auto[i, j, flow, l] <= self.y_auto[i, j, flow] * self.cfg.capacity_auto
+            for (i, j) in self.data.arcs_auto
+            for flow in self.flow
+            for l in (self.data.pos_orders if flow == "+" else self.data.neg_orders)),
+            name="(7)Auto_intercity_volume"
+        )
+        # 建立第七个约束(8)
+        self.model.addConstrs(
+            (self.g_manual[i, j, direction, l] == 0
+            for (i, j, direction, l) in self.data.epsilon_sets
+            ),
+            name=f"(8)Manual_epsilon_constraints"
+        )
+        # 建立第八、九个约束(9)(10)
+        for t in range(self.cfg.T):  
+            for direction in self.flow:
+                if direction == "+":
+                    # 正向 (+): City 1 (Origin) -> Auto -> City 2 (Dest)
+                    orders = self.data.pos_orders
+                    arcs_manual_origin = self.data.arcs_manual_1 
+                    arcs_manual_dest   = self.data.arcs_manual_2  
+                else:
+                    # 反向 (-): City 2 (Origin) -> Auto -> City 1 (Dest)
+                    orders = self.data.neg_orders
+                    arcs_manual_origin = self.data.arcs_manual_2
+                    arcs_manual_dest   = self.data.arcs_manual_1
+
+                auto_departure_origin = gp.quicksum(
+                    self.g_auto[i, j, direction, l]
+                    for (i, j) in self.data.arcs_auto
+                    for l in orders.keys()
+                    if i <= t
+                )
+
+                manual_arrival_origin = gp.quicksum(
+                    self.g_manual[i, j, direction, l]
+                    for (i, j) in arcs_manual_origin
+                    for l in orders.keys()
+                    if j <= t
+                )
+
+                self.model.addConstr(
+                    auto_departure_origin <= manual_arrival_origin,
+                    name=f"(9)transfer_origin_dir{direction}_t{t}"
+                )
+                # 这里是约束(10)
+                auto_arrival_dest = gp.quicksum(
+                    self.g_auto[i, j, direction, l]
+                    for (i, j) in self.data.arcs_auto
+                    for l in orders.keys()
+                    if j <= t
+                )
+
+                manual_departure_dest = gp.quicksum(
+                    self.g_manual[i, j, direction, l]
+                    for (i, j) in arcs_manual_dest
+                    for l in orders.keys()
+                    if i <= t
+                )
+
+                self.model.addConstr(
+                    auto_arrival_dest >= manual_departure_dest,
+                    name=f"(10)transfer_dest_dir{direction}_t{t}"
+                )
+        # 建立第十个约束(11)
+        self.model.addConstrs(
+        (gp.quicksum(
+            self.g_manual[i, j, order.direction, l]
+            for (i, j) in (self.data.arcs_manual_1 if order.direction == "+" else self.data.arcs_manual_2)
+         ) == order.quantity - self.z_unserved[l]
+         for l, order in self.data.all_orders.items()),
+            name="unserved_passenger_volume"
+        )
+                      
