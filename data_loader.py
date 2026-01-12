@@ -127,27 +127,39 @@ class DataLoader:
     # 生成约束七中所出现的集合epsilon
     def generate_epsilon_sets(self, pos_orders, neg_orders, arcs_manual_1, arcs_manual_2):
         
-        epsilon_sets = []
-        all_arcs = arcs_manual_1 + arcs_manual_2 
- 
+        infeasible_sets = []
+
+        # City 1 -> City 2
         for l, order in pos_orders.items():
-            # 筛选逻辑：i >= s_l 且 j <= e_l
-            valid_arcs = [
-                (i, j, "+", l) 
-                for (i, j) in all_arcs 
-                if i >= order.earliest_start and j <= order.latest_completion
-            ]
-            epsilon_sets.extend(valid_arcs)
-            
+            # 出发太早 (i < s_l)
+            infeasible_sets.extend([
+                (i, j, "+", l)
+                for (i, j) in arcs_manual_1
+                if i < order.earliest_start  
+            ])
+            # 到达太晚 (j > e_l)
+            infeasible_sets.extend([
+                (i, j, "+", l)
+                for (i, j) in arcs_manual_2
+                if j > order.latest_completion 
+            ])
+
+        # City 2 -> City 1
         for l, order in neg_orders.items():
-            valid_arcs = [
-                (i, j, "-", l) 
-                for (i, j) in all_arcs 
-                if i >= order.earliest_start and j <= order.latest_completion
-            ]
-            epsilon_sets.extend(valid_arcs)
-            
-        return epsilon_sets
+            # 出发太早
+            infeasible_sets.extend([
+                (i, j, "-", l)
+                for (i, j) in arcs_manual_2   
+                if i < order.earliest_start   
+            ])
+            # 到达太晚
+            infeasible_sets.extend([
+                (i, j, "-", l)
+                for (i, j) in arcs_manual_1   
+                if j > order.latest_completion 
+            ])
+                
+        return infeasible_sets
     # 预计算公式 6所需的参数
     # lambda = (f)^-1( (j-i)*t0 )
     def pre_inverse_count(self, arcs_manual_1:List, arcs_manual_2:List) -> Dict[Tuple[int, int], float]:
@@ -170,8 +182,9 @@ class DataLoader:
     
 @dataclass
 class OrderBatch:
-    quantity: int            # 对应 l
+    batch_id: int            # 对应 l
     direction: str           # 对应 方向,记为+或-
     quantity: int            # 对应 d_l 
     earliest_start: int      # 对应 s_l 
     latest_completion: int   # 对应 e_l
+    penalty_lost: float      # 对应 delta_l

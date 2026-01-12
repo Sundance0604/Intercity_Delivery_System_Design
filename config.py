@@ -27,7 +27,7 @@ class DeliveryConfig:
     # --- 3. 成本参数 ---
     cost_manual: float = 20.0     # c: unit driving cost for manually driven vehicles
     cost_auto: float = 15.0       # hat{c}: unit driving cost for automated vehicles
-    penalty_lost: Dict[float] = 500.0   # delta_l: unity penalty cost for lost demand
+    # delta_l: unity penalty cost for lost demand is in class OrderBatch
 
     # --- 4. 服务效率函数参数 ---
     # 假设 f(lambda) = a*lambda + b*sqrt(lambda)
