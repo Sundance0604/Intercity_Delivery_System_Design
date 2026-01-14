@@ -28,7 +28,7 @@ class DeliveryConfig:
     cost_manual: float = 20.0     # c: unit driving cost for manually driven vehicles
     cost_auto: float = 15.0       # hat{c}: unit driving cost for automated vehicles
     # delta_l: unity penalty cost for lost demand is in class OrderBatch
-
+    penalty_lost: float = 10
     # --- 4. 服务效率函数参数 ---
     # 假设 f(lambda) = a*lambda + b*sqrt(lambda)
     # 用于计算人工车辆在特定时间内的最大载货量

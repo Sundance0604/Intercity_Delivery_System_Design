@@ -1,0 +1,4 @@
+Exp_ID,Num_Orders,Param_N_Auto,Param_Cost_Auto,Param_N_Manual,Total_Cost,Unserved_Rate,Solve_Time_Sec,Status
+B_100,100,50,15.0,100,9600.0,0.0,15.03,2
+B_200,200,50,15.0,100,18000.0,0.0,311.52,9
+B_500,500,50,15.0,100,43200.0,0.0,348.81,9

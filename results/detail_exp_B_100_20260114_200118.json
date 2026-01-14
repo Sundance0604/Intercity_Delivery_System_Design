@@ -1,0 +1,830 @@
+{
+    "config": {
+        "T": 24,
+        "t_0": 60.0,
+        "travel_time_periods": 4,
+        "N_manual": {
+            "1": 100,
+            "2": 100
+        },
+        "N_auto": {
+            "1": 50,
+            "2": 50
+        },
+        "capacity_manual": 1000.0,
+        "capacity_auto": 2000.0,
+        "cost_manual": 20.0,
+        "cost_auto": 15.0,
+        "penalty_lost": 10,
+        "service_a_1": 0.05,
+        "service_b_1": 0.1,
+        "service_a_2": 0.05,
+        "service_b_2": 0.1
+    },
+    "orders": {
+        "1": {
+            "batch_id": 1,
+            "flow": "-",
+            "quantity": 19,
+            "earliest_start": 6,
+            "latest_completion": 16,
+            "penalty_lost": 190
+        },
+        "2": {
+            "batch_id": 2,
+            "flow": "+",
+            "quantity": 20,
+            "earliest_start": 8,
+            "latest_completion": 13,
+            "penalty_lost": 200
+        },
+        "3": {
+            "batch_id": 3,
+            "flow": "+",
+            "quantity": 24,
+            "earliest_start": 14,
+            "latest_completion": 21,
+            "penalty_lost": 240
+        },
+        "4": {
+            "batch_id": 4,
+            "flow": "-",
+            "quantity": 34,
+            "earliest_start": 3,
+            "latest_completion": 10,
+            "penalty_lost": 340
+        },
+        "5": {
+            "batch_id": 5,
+            "flow": "-",
+            "quantity": 41,
+            "earliest_start": 3,
+            "latest_completion": 11,
+            "penalty_lost": 410
+        },
+        "6": {
+            "batch_id": 6,
+            "flow": "-",
+            "quantity": 133,
+            "earliest_start": 3,
+            "latest_completion": 13,
+            "penalty_lost": 1330
+        },
+        "7": {
+            "batch_id": 7,
+            "flow": "-",
+            "quantity": 17,
+            "earliest_start": 5,
+            "latest_completion": 11,
+            "penalty_lost": 170
+        },
+        "8": {
+            "batch_id": 8,
+            "flow": "+",
+            "quantity": 30,
+            "earliest_start": 17,
+            "latest_completion": 24,
+            "penalty_lost": 300
+        },
+        "9": {
+            "batch_id": 9,
+            "flow": "+",
+            "quantity": 50,
+            "earliest_start": 4,
+            "latest_completion": 13,
+            "penalty_lost": 500
+        },
+        "10": {
+            "batch_id": 10,
+            "flow": "+",
+            "quantity": 20,
+            "earliest_start": 18,
+            "latest_completion": 24,
+            "penalty_lost": 200
+        },
+        "11": {
+            "batch_id": 11,
+            "flow": "+",
+            "quantity": 28,
+            "earliest_start": 14,
+            "latest_completion": 23,
+            "penalty_lost": 280
+        },
+        "12": {
+            "batch_id": 12,
+            "flow": "-",
+            "quantity": 181,
+            "earliest_start": 6,
+            "latest_completion": 11,
+            "penalty_lost": 1810
+        },
+        "13": {
+            "batch_id": 13,
+            "flow": "+",
+            "quantity": 165,
+            "earliest_start": 17,
+            "latest_completion": 24,
+            "penalty_lost": 1650
+        },
+        "14": {
+            "batch_id": 14,
+            "flow": "+",
+            "quantity": 18,
+            "earliest_start": 11,
+            "latest_completion": 20,
+            "penalty_lost": 180
+        },
+        "15": {
+            "batch_id": 15,
+            "flow": "+",
+            "quantity": 11,
+            "earliest_start": 9,
+            "latest_completion": 19,
+            "penalty_lost": 110
+        },
+        "16": {
+            "batch_id": 16,
+            "flow": "+",
+            "quantity": 10,
+            "earliest_start": 10,
+            "latest_completion": 15,
+            "penalty_lost": 100
+        },
+        "17": {
+            "batch_id": 17,
+            "flow": "+",
+            "quantity": 107,
+            "earliest_start": 11,
+            "latest_completion": 18,
+            "penalty_lost": 1070
+        },
+        "18": {
+            "batch_id": 18,
+            "flow": "+",
+            "quantity": 40,
+            "earliest_start": 13,
+            "latest_completion": 19,
+            "penalty_lost": 400
+        },
+        "19": {
+            "batch_id": 19,
+            "flow": "-",
+            "quantity": 38,
+            "earliest_start": 1,
+            "latest_completion": 7,
+            "penalty_lost": 380
+        },
+        "20": {
+            "batch_id": 20,
+            "flow": "+",
+            "quantity": 12,
+            "earliest_start": 9,
+            "latest_completion": 19,
+            "penalty_lost": 120
+        },
+        "21": {
+            "batch_id": 21,
+            "flow": "-",
+            "quantity": 26,
+            "earliest_start": 9,
+            "latest_completion": 18,
+            "penalty_lost": 260
+        },
+        "22": {
+            "batch_id": 22,
+            "flow": "-",
+            "quantity": 282,
+            "earliest_start": 4,
+            "latest_completion": 12,
+            "penalty_lost": 2820
+        },
+        "23": {
+            "batch_id": 23,
+            "flow": "-",
+            "quantity": 217,
+            "earliest_start": 0,
+            "latest_completion": 8,
+            "penalty_lost": 2170
+        },
+        "24": {
+            "batch_id": 24,
+            "flow": "+",
+            "quantity": 105,
+            "earliest_start": 16,
+            "latest_completion": 22,
+            "penalty_lost": 1050
+        },
+        "25": {
+            "batch_id": 25,
+            "flow": "-",
+            "quantity": 16,
+            "earliest_start": 14,
+            "latest_completion": 19,
+            "penalty_lost": 160
+        },
+        "26": {
+            "batch_id": 26,
+            "flow": "+",
+            "quantity": 16,
+            "earliest_start": 2,
+            "latest_completion": 8,
+            "penalty_lost": 160
+        },
+        "27": {
+            "batch_id": 27,
+            "flow": "-",
+            "quantity": 50,
+            "earliest_start": 15,
+            "latest_completion": 20,
+            "penalty_lost": 500
+        },
+        "28": {
+            "batch_id": 28,
+            "flow": "-",
+            "quantity": 298,
+            "earliest_start": 16,
+            "latest_completion": 24,
+            "penalty_lost": 2980
+        },
+        "29": {
+            "batch_id": 29,
+            "flow": "-",
+            "quantity": 25,
+            "earliest_start": 2,
+            "latest_completion": 10,
+            "penalty_lost": 250
+        },
+        "30": {
+            "batch_id": 30,
+            "flow": "+",
+            "quantity": 264,
+            "earliest_start": 11,
+            "latest_completion": 19,
+            "penalty_lost": 2640
+        },
+        "31": {
+            "batch_id": 31,
+            "flow": "+",
+            "quantity": 290,
+            "earliest_start": 0,
+            "latest_completion": 5,
+            "penalty_lost": 2900
+        },
+        "32": {
+            "batch_id": 32,
+            "flow": "+",
+            "quantity": 12,
+            "earliest_start": 14,
+            "latest_completion": 24,
+            "penalty_lost": 120
+        },
+        "33": {
+            "batch_id": 33,
+            "flow": "+",
+            "quantity": 282,
+            "earliest_start": 7,
+            "latest_completion": 15,
+            "penalty_lost": 2820
+        },
+        "34": {
+            "batch_id": 34,
+            "flow": "+",
+            "quantity": 11,
+            "earliest_start": 5,
+            "latest_completion": 11,
+            "penalty_lost": 110
+        },
+        "35": {
+            "batch_id": 35,
+            "flow": "+",
+            "quantity": 40,
+            "earliest_start": 4,
+            "latest_completion": 13,
+            "penalty_lost": 400
+        },
+        "36": {
+            "batch_id": 36,
+            "flow": "-",
+            "quantity": 13,
+            "earliest_start": 14,
+            "latest_completion": 20,
+            "penalty_lost": 130
+        },
+        "37": {
+            "batch_id": 37,
+            "flow": "+",
+            "quantity": 34,
+            "earliest_start": 4,
+            "latest_completion": 13,
+            "penalty_lost": 340
+        },
+        "38": {
+            "batch_id": 38,
+            "flow": "+",
+            "quantity": 35,
+            "earliest_start": 5,
+            "latest_completion": 10,
+            "penalty_lost": 350
+        },
+        "39": {
+            "batch_id": 39,
+            "flow": "+",
+            "quantity": 43,
+            "earliest_start": 4,
+            "latest_completion": 11,
+            "penalty_lost": 430
+        },
+        "40": {
+            "batch_id": 40,
+            "flow": "+",
+            "quantity": 44,
+            "earliest_start": 7,
+            "latest_completion": 15,
+            "penalty_lost": 440
+        },
+        "41": {
+            "batch_id": 41,
+            "flow": "-",
+            "quantity": 20,
+            "earliest_start": 10,
+            "latest_completion": 18,
+            "penalty_lost": 200
+        },
+        "42": {
+            "batch_id": 42,
+            "flow": "+",
+            "quantity": 20,
+            "earliest_start": 12,
+            "latest_completion": 22,
+            "penalty_lost": 200
+        },
+        "43": {
+            "batch_id": 43,
+            "flow": "+",
+            "quantity": 124,
+            "earliest_start": 18,
+            "latest_completion": 24,
+            "penalty_lost": 1240
+        },
+        "44": {
+            "batch_id": 44,
+            "flow": "-",
+            "quantity": 44,
+            "earliest_start": 8,
+            "latest_completion": 17,
+            "penalty_lost": 440
+        },
+        "45": {
+            "batch_id": 45,
+            "flow": "-",
+            "quantity": 27,
+            "earliest_start": 2,
+            "latest_completion": 9,
+            "penalty_lost": 270
+        },
+        "46": {
+            "batch_id": 46,
+            "flow": "+",
+            "quantity": 151,
+            "earliest_start": 16,
+            "latest_completion": 24,
+            "penalty_lost": 1510
+        },
+        "47": {
+            "batch_id": 47,
+            "flow": "+",
+            "quantity": 225,
+            "earliest_start": 0,
+            "latest_completion": 10,
+            "penalty_lost": 2250
+        },
+        "48": {
+            "batch_id": 48,
+            "flow": "+",
+            "quantity": 45,
+            "earliest_start": 1,
+            "latest_completion": 7,
+            "penalty_lost": 450
+        },
+        "49": {
+            "batch_id": 49,
+            "flow": "+",
+            "quantity": 49,
+            "earliest_start": 17,
+            "latest_completion": 24,
+            "penalty_lost": 490
+        },
+        "50": {
+            "batch_id": 50,
+            "flow": "+",
+            "quantity": 222,
+            "earliest_start": 3,
+            "latest_completion": 12,
+            "penalty_lost": 2220
+        },
+        "51": {
+            "batch_id": 51,
+            "flow": "+",
+            "quantity": 48,
+            "earliest_start": 18,
+            "latest_completion": 24,
+            "penalty_lost": 480
+        },
+        "52": {
+            "batch_id": 52,
+            "flow": "+",
+            "quantity": 32,
+            "earliest_start": 15,
+            "latest_completion": 21,
+            "penalty_lost": 320
+        },
+        "53": {
+            "batch_id": 53,
+            "flow": "-",
+            "quantity": 14,
+            "earliest_start": 2,
+            "latest_completion": 12,
+            "penalty_lost": 140
+        },
+        "54": {
+            "batch_id": 54,
+            "flow": "+",
+            "quantity": 135,
+            "earliest_start": 18,
+            "latest_completion": 24,
+            "penalty_lost": 1350
+        },
+        "55": {
+            "batch_id": 55,
+            "flow": "+",
+            "quantity": 29,
+            "earliest_start": 5,
+            "latest_completion": 13,
+            "penalty_lost": 290
+        },
+        "56": {
+            "batch_id": 56,
+            "flow": "-",
+            "quantity": 24,
+            "earliest_start": 5,
+            "latest_completion": 10,
+            "penalty_lost": 240
+        },
+        "57": {
+            "batch_id": 57,
+            "flow": "+",
+            "quantity": 132,
+            "earliest_start": 4,
+            "latest_completion": 11,
+            "penalty_lost": 1320
+        },
+        "58": {
+            "batch_id": 58,
+            "flow": "-",
+            "quantity": 24,
+            "earliest_start": 3,
+            "latest_completion": 10,
+            "penalty_lost": 240
+        },
+        "59": {
+            "batch_id": 59,
+            "flow": "-",
+            "quantity": 123,
+            "earliest_start": 17,
+            "latest_completion": 24,
+            "penalty_lost": 1230
+        },
+        "60": {
+            "batch_id": 60,
+            "flow": "+",
+            "quantity": 34,
+            "earliest_start": 5,
+            "latest_completion": 11,
+            "penalty_lost": 340
+        },
+        "61": {
+            "batch_id": 61,
+            "flow": "+",
+            "quantity": 26,
+            "earliest_start": 10,
+            "latest_completion": 17,
+            "penalty_lost": 260
+        },
+        "62": {
+            "batch_id": 62,
+            "flow": "-",
+            "quantity": 45,
+            "earliest_start": 6,
+            "latest_completion": 14,
+            "penalty_lost": 450
+        },
+        "63": {
+            "batch_id": 63,
+            "flow": "+",
+            "quantity": 39,
+            "earliest_start": 17,
+            "latest_completion": 22,
+            "penalty_lost": 390
+        },
+        "64": {
+            "batch_id": 64,
+            "flow": "-",
+            "quantity": 23,
+            "earliest_start": 4,
+            "latest_completion": 9,
+            "penalty_lost": 230
+        },
+        "65": {
+            "batch_id": 65,
+            "flow": "+",
+            "quantity": 154,
+            "earliest_start": 10,
+            "latest_completion": 16,
+            "penalty_lost": 1540
+        },
+        "66": {
+            "batch_id": 66,
+            "flow": "+",
+            "quantity": 154,
+            "earliest_start": 14,
+            "latest_completion": 24,
+            "penalty_lost": 1540
+        },
+        "67": {
+            "batch_id": 67,
+            "flow": "+",
+            "quantity": 44,
+            "earliest_start": 9,
+            "latest_completion": 14,
+            "penalty_lost": 440
+        },
+        "68": {
+            "batch_id": 68,
+            "flow": "-",
+            "quantity": 19,
+            "earliest_start": 2,
+            "latest_completion": 11,
+            "penalty_lost": 190
+        },
+        "69": {
+            "batch_id": 69,
+            "flow": "+",
+            "quantity": 19,
+            "earliest_start": 6,
+            "latest_completion": 12,
+            "penalty_lost": 190
+        },
+        "70": {
+            "batch_id": 70,
+            "flow": "-",
+            "quantity": 297,
+            "earliest_start": 13,
+            "latest_completion": 18,
+            "penalty_lost": 2970
+        },
+        "71": {
+            "batch_id": 71,
+            "flow": "+",
+            "quantity": 286,
+            "earliest_start": 18,
+            "latest_completion": 24,
+            "penalty_lost": 2860
+        },
+        "72": {
+            "batch_id": 72,
+            "flow": "+",
+            "quantity": 38,
+            "earliest_start": 10,
+            "latest_completion": 20,
+            "penalty_lost": 380
+        },
+        "73": {
+            "batch_id": 73,
+            "flow": "+",
+            "quantity": 30,
+            "earliest_start": 9,
+            "latest_completion": 15,
+            "penalty_lost": 300
+        },
+        "74": {
+            "batch_id": 74,
+            "flow": "-",
+            "quantity": 197,
+            "earliest_start": 16,
+            "latest_completion": 22,
+            "penalty_lost": 1970
+        },
+        "75": {
+            "batch_id": 75,
+            "flow": "+",
+            "quantity": 119,
+            "earliest_start": 4,
+            "latest_completion": 9,
+            "penalty_lost": 1190
+        },
+        "76": {
+            "batch_id": 76,
+            "flow": "+",
+            "quantity": 48,
+            "earliest_start": 16,
+            "latest_completion": 21,
+            "penalty_lost": 480
+        },
+        "77": {
+            "batch_id": 77,
+            "flow": "+",
+            "quantity": 42,
+            "earliest_start": 8,
+            "latest_completion": 13,
+            "penalty_lost": 420
+        },
+        "78": {
+            "batch_id": 78,
+            "flow": "+",
+            "quantity": 36,
+            "earliest_start": 7,
+            "latest_completion": 13,
+            "penalty_lost": 360
+        },
+        "79": {
+            "batch_id": 79,
+            "flow": "+",
+            "quantity": 38,
+            "earliest_start": 12,
+            "latest_completion": 20,
+            "penalty_lost": 380
+        },
+        "80": {
+            "batch_id": 80,
+            "flow": "+",
+            "quantity": 171,
+            "earliest_start": 7,
+            "latest_completion": 14,
+            "penalty_lost": 1710
+        },
+        "81": {
+            "batch_id": 81,
+            "flow": "+",
+            "quantity": 22,
+            "earliest_start": 14,
+            "latest_completion": 22,
+            "penalty_lost": 220
+        },
+        "82": {
+            "batch_id": 82,
+            "flow": "+",
+            "quantity": 31,
+            "earliest_start": 15,
+            "latest_completion": 22,
+            "penalty_lost": 310
+        },
+        "83": {
+            "batch_id": 83,
+            "flow": "-",
+            "quantity": 22,
+            "earliest_start": 18,
+            "latest_completion": 24,
+            "penalty_lost": 220
+        },
+        "84": {
+            "batch_id": 84,
+            "flow": "+",
+            "quantity": 125,
+            "earliest_start": 10,
+            "latest_completion": 19,
+            "penalty_lost": 1250
+        },
+        "85": {
+            "batch_id": 85,
+            "flow": "+",
+            "quantity": 230,
+            "earliest_start": 14,
+            "latest_completion": 24,
+            "penalty_lost": 2300
+        },
+        "86": {
+            "batch_id": 86,
+            "flow": "-",
+            "quantity": 19,
+            "earliest_start": 3,
+            "latest_completion": 13,
+            "penalty_lost": 190
+        },
+        "87": {
+            "batch_id": 87,
+            "flow": "-",
+            "quantity": 275,
+            "earliest_start": 14,
+            "latest_completion": 22,
+            "penalty_lost": 2750
+        },
+        "88": {
+            "batch_id": 88,
+            "flow": "-",
+            "quantity": 33,
+            "earliest_start": 6,
+            "latest_completion": 16,
+            "penalty_lost": 330
+        },
+        "89": {
+            "batch_id": 89,
+            "flow": "-",
+            "quantity": 116,
+            "earliest_start": 3,
+            "latest_completion": 12,
+            "penalty_lost": 1160
+        },
+        "90": {
+            "batch_id": 90,
+            "flow": "-",
+            "quantity": 18,
+            "earliest_start": 10,
+            "latest_completion": 16,
+            "penalty_lost": 180
+        },
+        "91": {
+            "batch_id": 91,
+            "flow": "+",
+            "quantity": 37,
+            "earliest_start": 6,
+            "latest_completion": 15,
+            "penalty_lost": 370
+        },
+        "92": {
+            "batch_id": 92,
+            "flow": "-",
+            "quantity": 147,
+            "earliest_start": 6,
+            "latest_completion": 14,
+            "penalty_lost": 1470
+        },
+        "93": {
+            "batch_id": 93,
+            "flow": "+",
+            "quantity": 14,
+            "earliest_start": 8,
+            "latest_completion": 16,
+            "penalty_lost": 140
+        },
+        "94": {
+            "batch_id": 94,
+            "flow": "+",
+            "quantity": 38,
+            "earliest_start": 6,
+            "latest_completion": 16,
+            "penalty_lost": 380
+        },
+        "95": {
+            "batch_id": 95,
+            "flow": "+",
+            "quantity": 27,
+            "earliest_start": 10,
+            "latest_completion": 19,
+            "penalty_lost": 270
+        },
+        "96": {
+            "batch_id": 96,
+            "flow": "+",
+            "quantity": 20,
+            "earliest_start": 5,
+            "latest_completion": 13,
+            "penalty_lost": 200
+        },
+        "97": {
+            "batch_id": 97,
+            "flow": "+",
+            "quantity": 270,
+            "earliest_start": 3,
+            "latest_completion": 11,
+            "penalty_lost": 2700
+        },
+        "98": {
+            "batch_id": 98,
+            "flow": "+",
+            "quantity": 32,
+            "earliest_start": 2,
+            "latest_completion": 9,
+            "penalty_lost": 320
+        },
+        "99": {
+            "batch_id": 99,
+            "flow": "-",
+            "quantity": 24,
+            "earliest_start": 13,
+            "latest_completion": 20,
+            "penalty_lost": 240
+        },
+        "100": {
+            "batch_id": 100,
+            "flow": "-",
+            "quantity": 42,
+            "earliest_start": 14,
+            "latest_completion": 22,
+            "penalty_lost": 420
+        }
+    },
+    "solution": {
+        "y_auto": {},
+        "z_unserved": {}
+    }
+}

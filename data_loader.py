@@ -11,7 +11,7 @@ from typing import Iterator
 class DeliveryData:
    
     # 集合定义
-    arcs_manual_1: List[int, Tuple[int, int]]       # A^1: 城市1中人工车辆所有可能的时间弧 (i, j)
+    arcs_manual_1: List[Tuple[int, int]]       # A^1: 城市1中人工车辆所有可能的时间弧 (i, j)
     arcs_manual_2: List[Tuple[int, int]]       # A^2: 城市2中人工车辆所有可能的时间弧 (i, j)
     arcs_auto: List[Tuple[int, int]]         # hat{A}: 自动驾驶车辆所有可能的时间弧 (i, j)
     
@@ -89,8 +89,8 @@ class DataLoader:
                 yield (i, j)  
 
     def generate_arcs_manual(self):
-        iter_1 = self._generate_single_city_arcs(self.BHH_function_1)
-        iter_2 = self._generate_single_city_arcs(self.BHH_function_2)
+        iter_1 = list(self._generate_single_city_arcs(self.BHH_function_1))
+        iter_2 = list(self._generate_single_city_arcs(self.BHH_function_2))
         return iter_1, iter_2
     
      # 自动驾驶车辆: 固定行驶时间 tau
@@ -129,32 +129,33 @@ class DataLoader:
         
         infeasible_sets = []
 
-        # City 1 -> City 2
+        # 1. 处理正向订单 (City 1 -> City 2)
         for l, order in pos_orders.items():
             # 出发太早 (i < s_l)
+           
             infeasible_sets.extend([
-                (i, j, "+", l)
+                (i, j, 1, "+", l)  
                 for (i, j) in arcs_manual_1
                 if i < order.earliest_start  
             ])
             # 到达太晚 (j > e_l)
             infeasible_sets.extend([
-                (i, j, "+", l)
+                (i, j, 2, "+", l)  
                 for (i, j) in arcs_manual_2
                 if j > order.latest_completion 
             ])
 
-        # City 2 -> City 1
+        # 2. 处理反向订单 (City 2 -> City 1)
         for l, order in neg_orders.items():
             # 出发太早
             infeasible_sets.extend([
-                (i, j, "-", l)
+                (i, j, 2, "-", l)  
                 for (i, j) in arcs_manual_2   
                 if i < order.earliest_start   
             ])
             # 到达太晚
             infeasible_sets.extend([
-                (i, j, "-", l)
+                (i, j, 1, "-", l) 
                 for (i, j) in arcs_manual_1   
                 if j > order.latest_completion 
             ])
@@ -167,13 +168,13 @@ class DataLoader:
         cap_coeff_2 = {}
         # 对第一个城市计算
         for (i, j) in arcs_manual_1:
-            duration = (j - i) * self.cfg.t0
+            duration = (j - i) * self.cfg.t_0
             # 这里调用反函数求解
             max_load = self.inverse_function_1(duration)
             cap_coeff_1[(i, j)] = max_load
         # 对第二个城市计算
         for (i, j) in arcs_manual_2:
-            duration = (j - i) * self.cfg.t0
+            duration = (j - i) * self.cfg.t_0
             # 这里调用反函数求解
             max_load = self.inverse_function_2(duration)
             cap_coeff_2[(i, j)] = max_load
@@ -183,7 +184,7 @@ class DataLoader:
 @dataclass
 class OrderBatch:
     batch_id: int            # 对应 l
-    direction: str           # 对应 方向,记为+或-
+    flow: str           # 对应 方向,记为+或-
     quantity: int            # 对应 d_l 
     earliest_start: int      # 对应 s_l 
     latest_completion: int   # 对应 e_l

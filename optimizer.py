@@ -18,17 +18,16 @@ class Optimizer:
     def setup_variables(self):
         self.flow = ["+", "-"] # 流量方向：+表示城市1到城市2，-表示城市2到城市1
         self.arcs_indices = []
-        self.orders_indices = []
         # 城市 1 的弧
         for (i, j) in self.data.arcs_manual_1:
             for flow in self.flow: 
                 self.arcs_indices.append((i, j, 1, flow))
-                self.orders_indices.append((i, j, flow))        
+                     
         # 城市 2 的弧
         for (i, j) in self.data.arcs_manual_2:
             for flow in self.flow:
                 self.arcs_indices.append((i, j, 2, flow))
-                self.orders_indices.append((i, j, flow))      
+                
         # 创建变量 x
         self.x_manual = self.model.addVars(self.arcs_indices, vtype=GRB.INTEGER, name="x_manual")
         # 创建变量 y 
@@ -37,7 +36,7 @@ class Optimizer:
         )
         # 创建变量 g
         self.g_manual = self.model.addVars(
-            self.orders_indices, self.data.all_orders.keys(), vtype=GRB.INTEGER, name= "g_manual"
+            self.arcs_indices, self.data.all_orders.keys(), vtype=GRB.INTEGER, name= "g_manual"
         )
         self.g_auto = self.model.addVars(
             self.data.arcs_auto, self.flow, self.data.all_orders.keys(), vtype=GRB.INTEGER, name = "g_auto"
@@ -106,12 +105,12 @@ class Optimizer:
             # ㊣流计算
             postive_flow = gp.quicksum(
                 self.y_auto[i, j, "+"]
-                for (i, j) in self.data.arcs_auto[t] if i < t
+                for (i, j) in self.data.arcs_auto if i < t
             )
             # 逆流计算
             negative_flow = gp.quicksum(
                 self.y_auto[i, j, "-"]
-                for (i, j) in self.data.arcs_auto[t] if i < t
+                for (i, j) in self.data.arcs_auto if i < t
             )
             # 添加约束：㊣流 - 逆流 + \hat{N}^1 \geq 0
             self.model.addConstr(
@@ -124,37 +123,35 @@ class Optimizer:
                 name=f"(5)Intercity_Negtive_Flow_Balance_Time{t}"
             )
         # 建立第五个约束(6)
+        # 建立第五个约束(6)
         for (i, j, city, flow) in self.arcs_indices:
-            coeff_dict = (
-                self.data.cap_coeff_1 if city == 1
-                else self.data.cap_coeff_2
+            coeff_dict = (self.data.cap_coeff_1 if city == 1 else self.data.cap_coeff_2)
+            orders = (self.data.pos_orders if flow == "+" else self.data.neg_orders)
+            
+            lhs = gp.quicksum(
+                self.g_manual[i, j, city, flow, l] 
+                for l in orders.keys()
             )
-            orders = (
-                self.data.pos_orders if flow == "+"
-                else self.data.neg_orders
-            )
-            self.model.addConstr(
-                gp.quicksum(
-                    self.g_manual[i, j, flow, l] <= self.x_manual[i, j, city, flow] * coeff_dict[(i, j)]
-                    for l in orders.keys()
-                ),
-                name=f"(6)Manual_intercity_volume_city{city}_dir{flow}"
-            )
+            rhs = self.x_manual[i, j, city, flow] * coeff_dict[(i, j)]
+            
+            self.model.addConstr(lhs <= rhs, name=f"(6)Manual_Cap_{city}_{flow}_{i}_{j}")
+
         # 建立第六个约束(7)
-        self.model.addConstrs(
-            (self.g_auto[i, j, flow, l] <= self.y_auto[i, j, flow] * self.cfg.capacity_auto
-            for (i, j) in self.data.arcs_auto
-            for flow in self.flow
-            for l in (self.data.pos_orders if flow == "+" else self.data.neg_orders)),
-            name="(7)Auto_intercity_volume"
-        )
-        # 建立第七个约束(8)
+        # 原模型中的约束应该有求和
         self.model.addConstrs(
             (gp.quicksum(self.g_auto[i, j, flow, l] for l in (self.data.pos_orders if flow == "+" else self.data.neg_orders))
              <= self.y_auto[i, j, flow] * self.cfg.capacity_auto
             for (i, j) in self.data.arcs_auto
             for flow in self.flow),
             name="(7)Auto_Capacity_Total"
+        )
+        # 建立第七个约束(8)
+        # 建立第七个约束(8)
+        self.model.addConstrs(
+            (self.g_manual[i, j, city, flow, l] == 0  
+            for (i, j, city, flow, l) in self.data.epsilon_sets 
+            ),
+            name=f"(8)Time_Window_Violation"
         )
         # 建立第八、九个约束(9)(10)
         for t in range(self.cfg.T):  
@@ -178,7 +175,7 @@ class Optimizer:
                 )
 
                 manual_arrival_origin = gp.quicksum(
-                    self.g_manual[i, j, flow, l]
+                    self.g_manual[i, j, (1 if flow == "+" else 2), flow, l] 
                     for (i, j) in arcs_manual_origin
                     for l in orders.keys()
                     if j <= t
@@ -197,7 +194,7 @@ class Optimizer:
                 )
 
                 manual_departure_dest = gp.quicksum(
-                    self.g_manual[i, j, flow, l]
+                    self.g_manual[i, j, (2 if flow == "+" else 1), flow, l] 
                     for (i, j) in arcs_manual_dest
                     for l in orders.keys()
                     if i <= t
@@ -209,11 +206,14 @@ class Optimizer:
                 )
         # 建立第十个约束(11)
         self.model.addConstrs(
-        (gp.quicksum(
-            self.g_manual[i, j, order.flow, l]
-            for (i, j) in (self.data.arcs_manual_1 if order.flow == "+" else self.data.arcs_manual_2)
-         ) == order.quantity - self.z_unserved[l]
-         for l, order in self.data.all_orders.items()),
+            (gp.quicksum(
+                
+                self.g_manual[i, j, (1 if self.data.all_orders[l].flow == "+" else 2), self.data.all_orders[l].flow, l]
+                for (i, j) in (self.data.arcs_manual_1 if self.data.all_orders[l].flow == "+" else self.data.arcs_manual_2)
+             ) == self.data.all_orders[l].quantity - self.z_unserved[l]
+             # 注意all_orders不可hash
+             for l in self.data.all_orders.keys()),
+            
             name="unserved_passenger_volume"
         )
                       
