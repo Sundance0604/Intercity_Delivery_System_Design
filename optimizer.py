@@ -205,9 +205,8 @@ class Optimizer:
                     name=f"(10)transfer_dest_dir{flow}_t{t}"
                 )
         # 建立第十个约束(11)
-        self.model.addConstrs(
+        """ self.model.addConstrs(
             (gp.quicksum(
-                
                 self.g_manual[i, j, (1 if self.data.all_orders[l].flow == "+" else 2), self.data.all_orders[l].flow, l]
                 for (i, j) in (self.data.arcs_manual_1 if self.data.all_orders[l].flow == "+" else self.data.arcs_manual_2)
              ) == self.data.all_orders[l].quantity - self.z_unserved[l]
@@ -216,4 +215,16 @@ class Optimizer:
             
             name="unserved_passenger_volume"
         )
-                      
+         """
+        for k in [1, 2]: 
+            self.model.addConstrs(
+                (gp.quicksum(
+    
+                    self.g_manual[i, j, k, self.data.all_orders[l].flow, l]
+                    for (i, j) in (self.data.arcs_manual_1 if k == 1 else self.data.arcs_manual_2)
+                 ) == self.data.all_orders[l].quantity - self.z_unserved[l]
+                 
+                 for l in self.data.all_orders.keys()),
+                
+                name=f"Demand_Conservation_City{k}"
+            )            
