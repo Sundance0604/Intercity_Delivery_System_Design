@@ -1,423 +1,113 @@
+"""程序入口。
+
+这个文件故意保持很薄：它只负责判断用户想打开图形界面，还是用命令行批处理。
+真正的实验生成、数据构造、求解器调用都在 experiment_core.py 和 solvers.py 中；
+可视化界面在 experiment_gui.py 中。这样后续新增 rolling horizon 等算法时，
+不需要把 main.py 改成一个越来越复杂的大文件。
+"""
+
 import argparse
-import json
-import os
-import random
-import time
-from dataclasses import asdict, dataclass, replace
+from dataclasses import asdict
 from datetime import datetime
-from itertools import product
-from typing import Dict, List, Optional, Tuple
 
-import numpy as np
-import pandas as pd
-
-from config import DeliveryConfig
-from data_loader import DataLoader, DeliveryData, OrderBatch
-
-
-@dataclass
-class ExperimentSpec:
-    """A reproducible simulation case used by the paper-oriented benchmark."""
-
-    experiment_id: str
-    scenario: str
-    config: DeliveryConfig
-    num_orders: int
-    seed: int
-    buffer_range: Tuple[int, int] = (0, 5)
-    large_order_prob: float = 0.3
-    time_limit: int = 500
-    save_detail: bool = False
-
-
-def generate_random_orders(
-    config: DeliveryConfig,
-    num_orders: int = 50,
-    seed: int = 42,
-    buffer_range: Tuple[int, int] = (0, 5),
-    large_order_prob: float = 0.3,
-    small_quantity_range: Tuple[int, int] = (10, 50),
-    large_quantity_range: Tuple[int, int] = (100, 300),
-):
-    random.seed(seed)
-    np.random.seed(seed)
-
-    pos_orders = {}
-    neg_orders = {}
-    all_orders = {}
-    min_buffer, max_buffer = buffer_range
-
-    for l in range(1, num_orders + 1):
-        flow = "+" if random.random() > 0.5 else "-"
-        min_duration = config.travel_time_periods + 1
-        max_start = config.T - min_duration - max_buffer - 1
-
-        if max_start <= 0:
-            earliest_start = 0
-            latest_completion = config.T
-        else:
-            earliest_start = random.randint(0, max_start)
-            buffer = random.randint(min_buffer, max_buffer)
-            latest_completion = min(config.T, earliest_start + min_duration + buffer)
-
-        if random.random() < large_order_prob:
-            quantity = random.randint(*large_quantity_range)
-        else:
-            quantity = random.randint(*small_quantity_range)
-
-        order = OrderBatch(
-            batch_id=l,
-            flow=flow,
-            quantity=quantity,
-            earliest_start=earliest_start,
-            latest_completion=latest_completion,
-            penalty_lost=config.penalty_lost,
-        )
-
-        all_orders[l] = order
-        if flow == "+":
-            pos_orders[l] = order
-        else:
-            neg_orders[l] = order
-
-    return pos_orders, neg_orders, all_orders
-
-
-def build_delivery_data(config: DeliveryConfig, orders_tuple) -> DeliveryData:
-    pos, neg, all_ord = orders_tuple
-    loader = DataLoader(config)
-    m1, m2 = loader.generate_arcs_manual()
-    auto = loader.generate_arcs_auto()
-    sets_m1, sets_m2, sets_auto = loader.generate_sets(m1, m2, auto)
-    epsilon = loader.generate_epsilon_sets(pos, neg, m1, m2)
-    coeff1, coeff2 = loader.pre_inverse_count(m1, m2)
-
-    return DeliveryData(
-        arcs_manual_1=m1,
-        arcs_manual_2=m2,
-        arcs_auto=auto,
-        sets_manual_1=sets_m1,
-        sets_manual_2=sets_m2,
-        sets_auto=sets_auto,
-        cap_coeff_1=coeff1,
-        cap_coeff_2=coeff2,
-        pos_orders=pos,
-        neg_orders=neg,
-        all_orders=all_ord,
-        epsilon_sets=epsilon,
-    )
-
-
-def run_single_experiment(
-    experiment_id: str,
-    config: DeliveryConfig,
-    orders_tuple,
-    scenario: str = "custom",
-    seed: Optional[int] = None,
-    buffer_range: Tuple[int, int] = (0, 5),
-    large_order_prob: float = 0.3,
-    time_limit: int = 500,
-):
-    import gurobipy as gp
-    from optimizer import Optimizer
-
-    start_time = time.time()
-    _, _, all_ord = orders_tuple
-
-    data = build_delivery_data(config, orders_tuple)
-
-    opt = Optimizer(config, data)
-    opt.setup_variables()
-    opt.set_objective()
-    opt.set_constraints()
-
-    opt.model.setParam("TimeLimit", time_limit)
-    opt.model.setParam("OutputFlag", 0)
-    opt.model.optimize()
-
-    solve_time = time.time() - start_time
-    total_demand = sum(o.quantity for o in all_ord.values())
-
-    result_summary = {
-        "Scenario": scenario,
-        "Exp_ID": experiment_id,
-        "Seed": seed,
-        "Status": opt.model.Status,
-        "Solve_Time_Sec": round(solve_time, 2),
-        "Time_Limit_Sec": time_limit,
-        "Num_Orders": len(all_ord),
-        "Total_Demand": total_demand,
-        "Buffer_Min": buffer_range[0],
-        "Buffer_Max": buffer_range[1],
-        "Large_Order_Prob": large_order_prob,
-        "Param_N_Auto": config.N_auto[1],
-        "Param_N_Manual": config.N_manual[1],
-        "Param_Cost_Auto": config.cost_auto,
-        "Total_Cost": None,
-        "Best_Bound": None,
-        "MIP_Gap": None,
-        "Unserved_Rate": None,
-        "Auto_Usage": 0,
-        "Manual_Usage": 0,
-    }
-
-    detailed_log = None
-
-    if opt.model.SolCount > 0:
-        result_summary["Total_Cost"] = opt.model.ObjVal
-        result_summary["Best_Bound"] = opt.model.ObjBound
-        result_summary["MIP_Gap"] = opt.model.MIPGap
-        unserved_amount = sum(v.X for v in opt.z_unserved.values())
-        result_summary["Unserved_Rate"] = (
-            round(unserved_amount / total_demand, 4) if total_demand > 0 else 0
-        )
-        result_summary["Auto_Usage"] = sum(v.X for v in opt.y_auto.values())
-        result_summary["Manual_Usage"] = sum(v.X for v in opt.x_manual.values())
-
-        if opt.model.Status == gp.GRB.OPTIMAL:
-            print(f"  [成功] 找到全局最优解！Cost = {result_summary['Total_Cost']:.2f}")
-        elif opt.model.Status == gp.GRB.TIME_LIMIT:
-            print(f"  [警告] 达到时间限制 ({opt.model.Params.TimeLimit}s)！")
-            print(f"  [提示] 当前解可能不是最优解 (MIP Gap: {opt.model.MIPGap * 100:.2f}%)")
-            print(f"        当前找到的最好 Cost = {result_summary['Total_Cost']:.2f}")
-
-        detailed_log = {
-            "scenario": scenario,
-            "experiment_id": experiment_id,
-            "seed": seed,
-            "buffer_range": buffer_range,
-            "large_order_prob": large_order_prob,
-            "config": asdict(config),
-            "orders": {k: asdict(v) for k, v in all_ord.items()},
-            "solution": {
-                "y_auto": {str(k): v.X for k, v in opt.y_auto.items() if v.X > 0.1},
-                "z_unserved": {k: v.X for k, v in opt.z_unserved.items() if v.X > 0.1},
-            },
-        }
-        print(
-            f"Exp {experiment_id} | Scenario={scenario} | Orders={len(all_ord)} "
-            f"| Seed={seed} | Cost={result_summary['Total_Cost']}"
-        )
-    else:
-        print(f"  [失败] 未找到任何可行解。Gurobi 状态码: {opt.model.Status}")
-
-    return result_summary, detailed_log
-
-
-def make_seed_list(start: int, count: int) -> List[int]:
-    return [start + i for i in range(count)]
-
-
-def build_baseline_specs(seed_count: int, time_limit: int) -> List[ExperimentSpec]:
-    specs = []
-    base_cfg = DeliveryConfig()
-    for num_orders in [20, 50]:
-        for seed in make_seed_list(1001, seed_count):
-            specs.append(
-                ExperimentSpec(
-                    experiment_id=f"BASE_N{num_orders}_S{seed}",
-                    scenario="baseline",
-                    config=base_cfg,
-                    num_orders=num_orders,
-                    seed=seed,
-                    time_limit=time_limit,
-                    save_detail=num_orders == 20,
-                )
-            )
-    return specs
-
-
-def build_scale_specs(seed_count: int, time_limit: int) -> List[ExperimentSpec]:
-    specs = []
-    scale_cfg = DeliveryConfig(N_auto={1: 50, 2: 50}, N_manual={1: 100, 2: 100})
-    for num_orders in [100, 200, 500, 1000]:
-        for seed in make_seed_list(2001, seed_count):
-            specs.append(
-                ExperimentSpec(
-                    experiment_id=f"SCALE_N{num_orders}_S{seed}",
-                    scenario="scale",
-                    config=scale_cfg,
-                    num_orders=num_orders,
-                    seed=seed,
-                    time_limit=time_limit,
-                    save_detail=num_orders <= 100,
-                )
-            )
-    return specs
-
-
-def build_sensitivity_specs(seed_count: int, time_limit: int) -> List[ExperimentSpec]:
-    specs = []
-    seeds = make_seed_list(3001, seed_count)
-    base_cfg = DeliveryConfig(N_auto={1: 30, 2: 30}, N_manual={1: 60, 2: 60})
-
-    for n_auto, seed in product([0, 5, 10, 20, 30, 50], seeds):
-        specs.append(
-            ExperimentSpec(
-                experiment_id=f"SENS_AUTO_{n_auto}_S{seed}",
-                scenario="sens_auto_fleet",
-                config=replace(base_cfg, N_auto={1: n_auto, 2: n_auto}),
-                num_orders=100,
-                seed=seed,
-                time_limit=time_limit,
-            )
-        )
-
-    for cost_auto, seed in product([5.0, 10.0, 15.0, 20.0, 25.0], seeds):
-        specs.append(
-            ExperimentSpec(
-                experiment_id=f"SENS_AUTO_COST_{cost_auto:g}_S{seed}",
-                scenario="sens_auto_cost",
-                config=replace(base_cfg, cost_auto=cost_auto),
-                num_orders=100,
-                seed=seed,
-                time_limit=time_limit,
-            )
-        )
-
-    for n_manual, seed in product([10, 20, 30, 50, 80], seeds):
-        specs.append(
-            ExperimentSpec(
-                experiment_id=f"SENS_MANUAL_{n_manual}_S{seed}",
-                scenario="sens_manual_fleet",
-                config=replace(base_cfg, N_manual={1: n_manual, 2: n_manual}),
-                num_orders=100,
-                seed=seed,
-                time_limit=time_limit,
-            )
-        )
-
-    for buffer_range, seed in product([(0, 1), (0, 3), (0, 5), (0, 8)], seeds):
-        specs.append(
-            ExperimentSpec(
-                experiment_id=f"SENS_WINDOW_{buffer_range[1]}_S{seed}",
-                scenario="sens_time_window",
-                config=base_cfg,
-                num_orders=100,
-                seed=seed,
-                buffer_range=buffer_range,
-                time_limit=time_limit,
-            )
-        )
-
-    for large_prob, seed in product([0.1, 0.3, 0.5, 0.7], seeds):
-        specs.append(
-            ExperimentSpec(
-                experiment_id=f"SENS_DEMAND_{large_prob:.1f}_S{seed}",
-                scenario="sens_demand_mix",
-                config=base_cfg,
-                num_orders=100,
-                seed=seed,
-                large_order_prob=large_prob,
-                time_limit=time_limit,
-            )
-        )
-
-    return specs
-
-
-def build_specs(scenario: str, seed_count: int, time_limit: int) -> List[ExperimentSpec]:
-    if scenario == "quick":
-        return [
-            ExperimentSpec(
-                experiment_id="QUICK_N20_S42",
-                scenario="quick",
-                config=DeliveryConfig(),
-                num_orders=20,
-                seed=42,
-                time_limit=time_limit,
-                save_detail=True,
-            )
-        ]
-    if scenario == "baseline":
-        return build_baseline_specs(seed_count, time_limit)
-    if scenario == "scale":
-        return build_scale_specs(seed_count, time_limit)
-    if scenario == "sensitivity":
-        return build_sensitivity_specs(seed_count, time_limit)
-    if scenario == "all":
-        return (
-            build_baseline_specs(seed_count, time_limit)
-            + build_scale_specs(seed_count, time_limit)
-            + build_sensitivity_specs(seed_count, time_limit)
-        )
-    raise ValueError(f"Unsupported scenario: {scenario}")
-
-
-def run_experiment_suite(specs: List[ExperimentSpec], timestamp: str) -> pd.DataFrame:
-    all_summaries = []
-    os.makedirs("results", exist_ok=True)
-
-    for index, spec in enumerate(specs, start=1):
-        print(f"\n[{index}/{len(specs)}] Running {spec.experiment_id}")
-        orders = generate_random_orders(
-            spec.config,
-            num_orders=spec.num_orders,
-            seed=spec.seed,
-            buffer_range=spec.buffer_range,
-            large_order_prob=spec.large_order_prob,
-        )
-        res, details = run_single_experiment(
-            spec.experiment_id,
-            spec.config,
-            orders,
-            scenario=spec.scenario,
-            seed=spec.seed,
-            buffer_range=spec.buffer_range,
-            large_order_prob=spec.large_order_prob,
-            time_limit=spec.time_limit,
-        )
-        all_summaries.append(res)
-
-        if spec.save_detail and details:
-            detail_path = f"results/detail_{spec.experiment_id}_{timestamp}.json"
-            with open(detail_path, "w", encoding="utf-8") as f:
-                json.dump(details, f, indent=4, ensure_ascii=False)
-
-    df = pd.DataFrame(all_summaries)
-    csv_filename = f"results/full_experiment_summary_{timestamp}.csv"
-    df.to_csv(csv_filename, index=False, encoding="utf-8-sig")
-    print(f"\n所有测试完成！汇总结果已保存至: {csv_filename}")
-    print(df)
-    return df
+from experiment_core import ExperimentPlan, build_specs, run_experiment_suite
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Run intercity delivery simulation experiments.")
+    """解析命令行参数。
+
+    默认直接运行 `python main.py` 会打开图形界面。
+    如果要在终端批量运行，则加上 `--cli`。
+    """
+
+    parser = argparse.ArgumentParser(description="城际配送系统仿真实验入口")
+    parser.add_argument(
+        "--cli",
+        action="store_true",
+        help="使用命令行模式运行；不加该参数时会打开可视化窗口。",
+    )
     parser.add_argument(
         "--scenario",
         choices=["quick", "baseline", "scale", "sensitivity", "all"],
         default="quick",
-        help="Experiment suite to run. Use quick for a smoke test.",
+        help="命令行模式下选择实验场景。",
+    )
+    parser.add_argument(
+        "--solver",
+        choices=["exact_mip", "rolling_horizon", "all"],
+        default="exact_mip",
+        help="命令行模式下选择求解方式。rolling_horizon 目前是预留接口。",
     )
     parser.add_argument(
         "--seeds",
         type=int,
         default=3,
-        help="Number of random seeds per experiment level.",
+        help="每个参数水平使用的随机种子数量。",
     )
     parser.add_argument(
         "--time-limit",
         type=int,
         default=500,
-        help="Gurobi time limit in seconds for each instance.",
+        help="每个算例的 Gurobi 求解时间限制，单位为秒。",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Print the planned experiment cases without solving them.",
+        help="只打印实验计划，不实际求解。",
     )
     return parser.parse_args()
 
 
-if __name__ == "__main__":
-    args = parse_args()
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    specs = build_specs(args.scenario, args.seeds, args.time_limit)
+def expand_scenario_name(name: str):
+    """把命令行中的场景名称转换为内部场景列表。"""
 
-    print(f"Planned experiments: {len(specs)}")
+    if name == "all":
+        return ["baseline", "scale", "sensitivity"]
+    return [name]
+
+
+def expand_solver_name(name: str):
+    """把命令行中的求解器名称转换为内部求解器列表。"""
+
+    if name == "all":
+        return ["exact_mip", "rolling_horizon"]
+    return [name]
+
+
+def run_cli(args):
+    """命令行批处理入口。
+
+    命令行模式适合长时间跑实验，或者在没有图形界面的服务器上运行。
+    GUI 和 CLI 最终都会调用 run_experiment_suite，因此结果字段保持一致。
+    """
+
+    plan = ExperimentPlan(seed_count=args.seeds, time_limit=args.time_limit)
+    specs = build_specs(expand_scenario_name(args.scenario), plan)
+    solver_names = expand_solver_name(args.solver)
+
+    print(f"计划算例数：{len(specs)}")
+    print(f"求解器：{', '.join(solver_names)}")
+
     if args.dry_run:
         for spec in specs:
             print(asdict(spec))
+        return
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_experiment_suite(specs, solver_names, timestamp)
+
+
+def main():
+    """根据参数启动 GUI 或 CLI。"""
+
+    args = parse_args()
+    if args.cli:
+        run_cli(args)
     else:
-        run_experiment_suite(specs, timestamp)
+        from experiment_gui import launch_gui
+
+        launch_gui()
+
+
+if __name__ == "__main__":
+    main()

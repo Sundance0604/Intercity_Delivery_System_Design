@@ -12,6 +12,7 @@
 
 * **Python 3.11+**
 * **Gurobi Optimizer** (需要有效的 License)
+* **customtkinter** (用于可视化实验界面)
 
 ## 📂 项目结构
 .
@@ -21,7 +22,13 @@
 
 ├── optimizer.py        # 核心优化引擎 (Gurobi 变量定义、约束构建、目标函数)
 
-├── main.py             # 程序入口 (随机订单生成、多场景实验调度、结果保存)
+├── main.py             # 程序入口 (启动可视化界面或命令行批处理)
+
+├── experiment_core.py  # 仿真实验核心逻辑 (实验计划、订单生成、批量运行、结果保存)
+
+├── solvers.py          # 求解器接口层 (精确MIP、Rolling Horizon等算法扩展入口)
+
+├── experiment_gui.py   # 可视化实验界面
 
 └── results/            # 输出目录 (自动存放 CSV 和 JSON 结果文件)
 
@@ -34,7 +41,7 @@
     在 `config.py` 中调整基础参数（如时间段 `T`、车辆数 `N`、单位成本 `cost` 等）。
 
 2.  **运行模型**：
-    直接运行主程序，默认执行一个小规模快速测试。
+    直接运行主程序，默认打开可视化实验界面。
 
     ```bash
     python main.py
@@ -43,16 +50,16 @@
     也可以通过命令行参数运行论文仿真场景：
 
     ```bash
-    python main.py --scenario baseline --seeds 5 --time-limit 300
-    python main.py --scenario scale --seeds 5 --time-limit 500
-    python main.py --scenario sensitivity --seeds 5 --time-limit 500
-    python main.py --scenario all --seeds 5 --time-limit 500
+    python main.py --cli --scenario baseline --solver exact_mip --seeds 5 --time-limit 300
+    python main.py --cli --scenario scale --solver exact_mip --seeds 5 --time-limit 500
+    python main.py --cli --scenario sensitivity --solver exact_mip --seeds 5 --time-limit 500
+    python main.py --cli --scenario all --solver exact_mip --seeds 5 --time-limit 500
     ```
 
     如需先查看实验计划而不求解：
 
     ```bash
-    python main.py --scenario sensitivity --seeds 3 --dry-run
+    python main.py --cli --scenario sensitivity --solver exact_mip --seeds 3 --dry-run
     ```
 
 3.  **查看结果**：
@@ -61,6 +68,11 @@
     * `detail_exp_*.json`: 特定实验的车辆路径和订单分配详情。
 
 ## ⚙️ 实验配置
+
+详细操作说明请见：
+
+* [可视化仿真实验界面操作说明](docs/gui_usage.md)
+* [仿真实验运行结果说明](docs/result_fields.md)
 
 `main.py` 目前支持四类实验套件：
 
@@ -72,7 +84,9 @@
 
 主要命令行参数：
 
+* `--cli`：使用命令行模式；不加该参数时默认打开可视化界面。
 * `--scenario`：选择实验套件，可选 `quick`、`baseline`、`scale`、`sensitivity`、`all`。
+* `--solver`：选择求解器，可选 `exact_mip`、`rolling_horizon`、`all`。
 * `--seeds`：每个参数水平运行的随机种子数量，用于得到均值和波动范围。
 * `--time-limit`：每个算例的 Gurobi 求解时间上限，单位为秒。
 * `--dry-run`：仅打印实验计划，不执行求解。
@@ -95,3 +109,11 @@
 * 随机订单生成器新增时间窗缓冲区间和大订单比例参数，便于研究时间窗紧迫程度与需求结构变化。
 * 实验结果新增随机种子、总需求量、时间窗参数、大订单比例、MIP Gap 和 Best Bound 等论文分析字段。
 * 支持 `--dry-run` 查看实验计划，便于在正式长时间求解前确认仿真矩阵。
+
+### 2026-06-26 可视化与求解器接口重构
+
+* 将 `main.py` 拆分为入口、实验核心、求解器接口和可视化界面四层结构。
+* 新增 `customtkinter` 可视化实验界面，可在窗口中选择实验场景、求解方式和参数范围。
+* 新增统一求解器接口，当前支持 `exact_mip`，并预留 `rolling_horizon` 扩展入口。
+* 保证同一个算例的订单数据只生成一次，再传给不同求解器，便于后续算法公平对比。
+* 新增可视化界面操作说明和运行结果字段说明文档。
