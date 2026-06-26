@@ -34,10 +34,25 @@
     在 `config.py` 中调整基础参数（如时间段 `T`、车辆数 `N`、单位成本 `cost` 等）。
 
 2.  **运行模型**：
-    直接运行主程序，系统将自动生成随机订单并执行优化实验。
+    直接运行主程序，默认执行一个小规模快速测试。
 
     ```bash
     python main.py
+    ```
+
+    也可以通过命令行参数运行论文仿真场景：
+
+    ```bash
+    python main.py --scenario baseline --seeds 5 --time-limit 300
+    python main.py --scenario scale --seeds 5 --time-limit 500
+    python main.py --scenario sensitivity --seeds 5 --time-limit 500
+    python main.py --scenario all --seeds 5 --time-limit 500
+    ```
+
+    如需先查看实验计划而不求解：
+
+    ```bash
+    python main.py --scenario sensitivity --seeds 3 --dry-run
     ```
 
 3.  **查看结果**：
@@ -47,9 +62,22 @@
 
 ## ⚙️ 实验配置
 
-在 `main.py` 中，您可以自定义两种实验模式：
-* **参数敏感性分析 (Scenario A)**：修改 `levels_n_auto` 等列表，测试不同车队配置下的成本变化。
-* **大规模压力测试 (Scenario B)**：修改 `scale_levels`，测试 100~500+ 订单规模下的求解性能。
+`main.py` 目前支持四类实验套件：
+
+* **quick**：默认快速测试，订单规模为 20，用于检查模型能否正常运行。
+* **baseline**：小规模基准测试，订单规模为 20、50，用于和精确 MIP 最优解或后续算法结果对比。
+* **scale**：规模扩展测试，订单规模为 100、200、500、1000，用于分析求解时间、服务率和成本随规模的变化。
+* **sensitivity**：灵敏度分析，分别考察自动驾驶车辆数量、自动驾驶车辆单位成本、人工车辆数量、时间窗紧迫程度和大订单比例。
+* **all**：依次运行 baseline、scale 和 sensitivity。
+
+主要命令行参数：
+
+* `--scenario`：选择实验套件，可选 `quick`、`baseline`、`scale`、`sensitivity`、`all`。
+* `--seeds`：每个参数水平运行的随机种子数量，用于得到均值和波动范围。
+* `--time-limit`：每个算例的 Gurobi 求解时间上限，单位为秒。
+* `--dry-run`：仅打印实验计划，不执行求解。
+
+实验结果会记录 `Scenario`、`Seed`、`Num_Orders`、`Total_Demand`、`Buffer_Min`、`Buffer_Max`、`Large_Order_Prob`、`MIP_Gap`、`Best_Bound`、`Total_Cost`、`Unserved_Rate`、`Auto_Usage` 和 `Manual_Usage` 等字段，便于后续论文制表和算法对比。
 
 ## 修改记录
 
@@ -60,3 +88,10 @@
 * 修正自动驾驶车辆跨城平衡约束：约束 (4)(5) 现在按模型区分车辆出发时间 `i <= t` 和到达时间 `j <= t`。
 * 修正转运节点流守恒约束：约束 (9)(10) 现在按订单 `l` 分别建立，避免不同订单之间的货量相互抵消。
 * 暂未调整货量变量类型与自动驾驶车辆容量约束，保持当前整数货量变量和总容量约束实现不变。
+
+### 2026-06-26 论文仿真实验框架
+
+* 将主程序由交互式选择改为命令行实验套件，支持快速测试、基准测试、规模扩展测试、灵敏度分析和全量实验。
+* 随机订单生成器新增时间窗缓冲区间和大订单比例参数，便于研究时间窗紧迫程度与需求结构变化。
+* 实验结果新增随机种子、总需求量、时间窗参数、大订单比例、MIP Gap 和 Best Bound 等论文分析字段。
+* 支持 `--dry-run` 查看实验计划，便于在正式长时间求解前确认仿真矩阵。
