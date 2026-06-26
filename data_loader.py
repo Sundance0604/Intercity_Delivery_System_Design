@@ -81,11 +81,11 @@ class DataLoader:
         delta = b**2 + 4 * a * T_val
         u = (-b + math.sqrt(delta)) / (2 * a)
         return u**2
-     # 人工车辆:  j > i 且 j <= i+f^k(M) 即可
+     # 人工车辆:  j > i 且 j <= i+f^k(M)，同时不超过规划期末
     def _generate_single_city_arcs(self, service_func) -> Iterator[Tuple[int, int]]:
         for i in range(self.cfg.T):
-            limit = i + int(service_func(self.cfg.capacity_manual))
-            for j in range(i + 1, limit):
+            limit = min(self.cfg.T, i + int(service_func(self.cfg.capacity_manual)))
+            for j in range(i + 1, limit + 1):
                 yield (i, j)  
 
     def generate_arcs_manual(self):

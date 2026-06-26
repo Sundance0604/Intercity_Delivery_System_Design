@@ -49,7 +49,7 @@ def generate_random_orders(config: DeliveryConfig, num_orders=50, seed=42):
             quantity=quantity,
             earliest_start=earliest_start,
             latest_completion=latest_completion,
-            penalty_lost=config.penalty_lost * quantity
+            penalty_lost=config.penalty_lost
         )
         
         all_orders[l] = order

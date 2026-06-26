@@ -103,23 +103,31 @@ class Optimizer:
         # 建立第三、四个约束(4)(5)
         for t in range(self.cfg.T):
             # ㊣流计算
-            postive_flow = gp.quicksum(
+            positive_departures = gp.quicksum(
                 self.y_auto[i, j, "+"]
-                for (i, j) in self.data.arcs_auto if i < t
+                for (i, j) in self.data.arcs_auto if i <= t
             )
             # 逆流计算
-            negative_flow = gp.quicksum(
+            negative_departures = gp.quicksum(
                 self.y_auto[i, j, "-"]
-                for (i, j) in self.data.arcs_auto if i < t
+                for (i, j) in self.data.arcs_auto if i <= t
+            )
+            positive_arrivals = gp.quicksum(
+                self.y_auto[i, j, "+"]
+                for (i, j) in self.data.arcs_auto if j <= t
+            )
+            negative_arrivals = gp.quicksum(
+                self.y_auto[i, j, "-"]
+                for (i, j) in self.data.arcs_auto if j <= t
             )
             # 添加约束：㊣流 - 逆流 + \hat{N}^1 \geq 0
             self.model.addConstr(
-                postive_flow - negative_flow + self.cfg.N_auto[1] >= 0,
+                positive_departures - negative_arrivals + self.cfg.N_auto[1] >= 0,
                 name=f"(4)Intercity_Postive_Flow_Balance_Time{t}"
             )
             # 添加约束：㊣流 - 逆流 + \hat{N}^2 \geq 0
             self.model.addConstr(
-                negative_flow - postive_flow + self.cfg.N_auto[2] >= 0,
+                negative_departures - positive_arrivals + self.cfg.N_auto[2] >= 0,
                 name=f"(5)Intercity_Negtive_Flow_Balance_Time{t}"
             )
         # 建立第五个约束(6)
@@ -159,51 +167,52 @@ class Optimizer:
                 if flow == "+":
                     # 正向 (+): City 1 (Origin) -> Auto -> City 2 (Dest)
                     orders = self.data.pos_orders
+                    origin_city = 1
+                    dest_city = 2
                     arcs_manual_origin = self.data.arcs_manual_1 
                     arcs_manual_dest   = self.data.arcs_manual_2  
                 else:
                     # 反向 (-): City 2 (Origin) -> Auto -> City 1 (Dest)
                     orders = self.data.neg_orders
+                    origin_city = 2
+                    dest_city = 1
                     arcs_manual_origin = self.data.arcs_manual_2
                     arcs_manual_dest   = self.data.arcs_manual_1
 
-                auto_departure_origin = gp.quicksum(
-                    self.g_auto[i, j, flow, l]
-                    for (i, j) in self.data.arcs_auto
-                    for l in orders.keys()
-                    if i <= t
-                )
+                for l in orders.keys():
+                    auto_departure_origin = gp.quicksum(
+                        self.g_auto[i, j, flow, l]
+                        for (i, j) in self.data.arcs_auto
+                        if i <= t
+                    )
 
-                manual_arrival_origin = gp.quicksum(
-                    self.g_manual[i, j, (1 if flow == "+" else 2), flow, l] 
-                    for (i, j) in arcs_manual_origin
-                    for l in orders.keys()
-                    if j <= t
-                )
+                    manual_arrival_origin = gp.quicksum(
+                        self.g_manual[i, j, origin_city, flow, l]
+                        for (i, j) in arcs_manual_origin
+                        if j <= t
+                    )
 
-                self.model.addConstr(
-                    auto_departure_origin <= manual_arrival_origin,
-                    name=f"(9)transfer_origin_dir{flow}_t{t}"
-                )
-                # 这里是约束(10)
-                auto_arrival_dest = gp.quicksum(
-                    self.g_auto[i, j, flow, l]
-                    for (i, j) in self.data.arcs_auto
-                    for l in orders.keys()
-                    if j <= t
-                )
+                    self.model.addConstr(
+                        auto_departure_origin <= manual_arrival_origin,
+                        name=f"(9)transfer_origin_dir{flow}_order{l}_t{t}"
+                    )
+                    # 这里是约束(10)
+                    auto_arrival_dest = gp.quicksum(
+                        self.g_auto[i, j, flow, l]
+                        for (i, j) in self.data.arcs_auto
+                        if j <= t
+                    )
 
-                manual_departure_dest = gp.quicksum(
-                    self.g_manual[i, j, (2 if flow == "+" else 1), flow, l] 
-                    for (i, j) in arcs_manual_dest
-                    for l in orders.keys()
-                    if i <= t
-                )
+                    manual_departure_dest = gp.quicksum(
+                        self.g_manual[i, j, dest_city, flow, l]
+                        for (i, j) in arcs_manual_dest
+                        if i <= t
+                    )
 
-                self.model.addConstr(
-                    auto_arrival_dest >= manual_departure_dest,
-                    name=f"(10)transfer_dest_dir{flow}_t{t}"
-                )
+                    self.model.addConstr(
+                        auto_arrival_dest >= manual_departure_dest,
+                        name=f"(10)transfer_dest_dir{flow}_order{l}_t{t}"
+                    )
         # 建立第十个约束(11)
         """ self.model.addConstrs(
             (gp.quicksum(
