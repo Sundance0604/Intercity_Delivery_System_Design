@@ -35,11 +35,22 @@ class Optimizer:
             self.data.arcs_auto, self.flow, vtype=GRB.INTEGER, name="y_auto"
         )
         # 创建变量 g
+        # 论文将人工车和自动车承运货量定义为非负连续变量 R+。
+        # 即便当前随机算例中的订单需求量是整数，车辆也允许承运部分货量。
         self.g_manual = self.model.addVars(
-            self.arcs_indices, self.data.all_orders.keys(), vtype=GRB.INTEGER, name= "g_manual"
+            self.arcs_indices,
+            self.data.all_orders.keys(),
+            vtype=GRB.CONTINUOUS,
+            lb=0.0,
+            name="g_manual",
         )
         self.g_auto = self.model.addVars(
-            self.data.arcs_auto, self.flow, self.data.all_orders.keys(), vtype=GRB.INTEGER, name = "g_auto"
+            self.data.arcs_auto,
+            self.flow,
+            self.data.all_orders.keys(),
+            vtype=GRB.CONTINUOUS,
+            lb=0.0,
+            name="g_auto",
         )
         # 创建变量 z
         self.z_unserved = self.model.addVars(
@@ -65,7 +76,10 @@ class Optimizer:
         )
         
     def set_constraints(self):
-        # 建立第一个约束(2)
+        # 约束 (2)：城市内部人工车队规模限制。
+        # 对任意城市 k 和时间段 t，统计所有覆盖 t 的人工服务弧 (i,j)
+        # 上正在执行任务的车辆数，并同时计入正、反两个运输方向。该总数不能
+        # 超过城市 k 配置的人工车辆数 N^k，防止同一辆人工车在同一时段被重复使用。
         for t in range(self.cfg.T):
             for city in [1, 2]:
                 # 1. 获取该城市在时间 t 的活跃弧集合 S^k(t)
@@ -86,7 +100,9 @@ class Optimizer:
                     active_vehicles <= self.cfg.N_manual[city],
                     name=f"(2)Fleet_Capacity_InnerCity{city}_Time{t}"
                 )
-        # 建立第二个约束(3)
+        # 约束 (3)：城际自动驾驶车队的同时在途规模限制。
+        # 对任意时间段 t，统计所有覆盖 t 的城际弧上、两个方向的自动驾驶车辆数。
+        # 同时在途车辆总数不得超过两个城市初始自动驾驶车辆数之和 N_hat^1+N_hat^2。
         for t in range(self.cfg.T):        
             # 1. 计算当前活跃车辆总数
             active_vehicles = gp.quicksum(
@@ -100,7 +116,11 @@ class Optimizer:
                 active_vehicles <= sum(self.cfg.N_auto.values()),
                 name=f"(3)Fleet_Capacity_InterCity_Time{t}"
             )
-        # 建立第三、四个约束(4)(5)
+        # 约束 (4) 与 (5)：两个城市的自动驾驶车辆时序平衡限制。
+        # 在时间 t 前，i<=t 表示已经从始发城市发出的车辆，j<=t 表示已经到达
+        # 目的城市的车辆。约束 (4) 按论文原式累计正向出发与反向到达，并加上
+        # 城市 1 的初始车辆数 N_hat^1；约束 (5) 对反向出发、正向到达和城市 2
+        # 作对称处理。二者共同限制各方向在每个时点可执行的城际车辆任务。
         for t in range(self.cfg.T):
             # ㊣流计算
             positive_departures = gp.quicksum(
@@ -120,18 +140,20 @@ class Optimizer:
                 self.y_auto[i, j, "-"]
                 for (i, j) in self.data.arcs_auto if j <= t
             )
-            # 添加约束：㊣流 - 逆流 + \hat{N}^1 \geq 0
+            # 约束 (4)：累计正向出发 - 累计反向到达 + N_hat^1 >= 0。
             self.model.addConstr(
                 positive_departures - negative_arrivals + self.cfg.N_auto[1] >= 0,
                 name=f"(4)Intercity_Postive_Flow_Balance_Time{t}"
             )
-            # 添加约束：㊣流 - 逆流 + \hat{N}^2 \geq 0
+            # 约束 (5)：累计反向出发 - 累计正向到达 + N_hat^2 >= 0。
             self.model.addConstr(
                 negative_departures - positive_arrivals + self.cfg.N_auto[2] >= 0,
                 name=f"(5)Intercity_Negtive_Flow_Balance_Time{t}"
             )
-        # 建立第五个约束(6)
-        # 建立第五个约束(6)
+        # 约束 (6)：人工车辆在单条城市服务弧上的总承运能力限制。
+        # 对城市 k、方向 flow 和服务弧 (i,j)，先汇总该方向全部订单在该弧上的
+        # 人工承运货量。单车在持续时间 (j-i)*t0 内可完成的最大服务量由
+        # (f^k)^(-1)[(j-i)*t0] 给出，再乘该弧投入的人工车辆数 x，得到总容量。
         for (i, j, city, flow) in self.arcs_indices:
             coeff_dict = (self.data.cap_coeff_1 if city == 1 else self.data.cap_coeff_2)
             orders = (self.data.pos_orders if flow == "+" else self.data.neg_orders)
@@ -144,24 +166,33 @@ class Optimizer:
             
             self.model.addConstr(lhs <= rhs, name=f"(6)Manual_Cap_{city}_{flow}_{i}_{j}")
 
-        # 建立第六个约束(7)
-        # 原模型中的约束应该有求和
+        # 约束 (7)：自动驾驶车辆对每一订单的城际承运能力限制。
+        # 严格按照论文原式，对每个方向、城际弧和订单 l 分别建立
+        # g_hat^l_ij <= y^flow_ij * M_hat。这里不再对同一弧上的订单求和；
+        # 因而每个订单在该弧上的承运量分别受投入车辆总容量约束。
         self.model.addConstrs(
-            (gp.quicksum(self.g_auto[i, j, flow, l] for l in (self.data.pos_orders if flow == "+" else self.data.neg_orders))
+            (self.g_auto[i, j, flow, l]
              <= self.y_auto[i, j, flow] * self.cfg.capacity_auto
             for (i, j) in self.data.arcs_auto
-            for flow in self.flow),
-            name="(7)Auto_Capacity_Total"
+            for flow in self.flow
+            for l in (
+                self.data.pos_orders if flow == "+" else self.data.neg_orders
+            ).keys()),
+            name="(7)Auto_Capacity_Per_Order"
         )
-        # 建立第七个约束(8)
-        # 建立第七个约束(8)
+
+        # 约束 (8)：订单服务时间窗限制。
+        # epsilon_sets 预先收集所有违反时间窗的“人工服务弧-城市-方向-订单”组合：
+        # 始发城市服务开始早于 s_l，或目的城市服务完成晚于 e_l。将这些组合上的
+        # 人工承运货量固定为 0，确保任何实际服务都落在订单允许的时间窗内。
         self.model.addConstrs(
             (self.g_manual[i, j, city, flow, l] == 0  
             for (i, j, city, flow, l) in self.data.epsilon_sets 
             ),
             name=f"(8)Time_Window_Violation"
         )
-        # 建立第八、九个约束(9)(10)
+        # 约束 (9) 与 (10)：每个订单在两个换装节点上的时序流量守恒。
+        # 约束按订单分别建立，避免不同订单之间的货量相互抵消或借用。
         for t in range(self.cfg.T):  
             for flow in self.flow:
                 if flow == "+":
@@ -180,12 +211,15 @@ class Optimizer:
                     arcs_manual_dest   = self.data.arcs_manual_1
 
                 for l in orders.keys():
+                    # 约束 (9) 的左侧：截至 t 已从始发城市发出的城际货量。
                     auto_departure_origin = gp.quicksum(
                         self.g_auto[i, j, flow, l]
                         for (i, j) in self.data.arcs_auto
                         if i <= t
                     )
 
+                    # 约束 (9) 的右侧：截至 t 已完成人工揽收并到达始发换装点的货量。
+                    # 城际累计发出量不能超过已经完成始发端人工服务的累计货量。
                     manual_arrival_origin = gp.quicksum(
                         self.g_manual[i, j, origin_city, flow, l]
                         for (i, j) in arcs_manual_origin
@@ -196,13 +230,15 @@ class Optimizer:
                         auto_departure_origin <= manual_arrival_origin,
                         name=f"(9)transfer_origin_dir{flow}_order{l}_t{t}"
                     )
-                    # 这里是约束(10)
+                    # 约束 (10) 的左侧：截至 t 已到达目的城市的城际货量。
                     auto_arrival_dest = gp.quicksum(
                         self.g_auto[i, j, flow, l]
                         for (i, j) in self.data.arcs_auto
                         if j <= t
                     )
 
+                    # 约束 (10) 的右侧：截至 t 已从目的换装点开始末端人工服务的货量。
+                    # 末端人工累计发出量不能超过已经完成城际运输的累计到达量。
                     manual_departure_dest = gp.quicksum(
                         self.g_manual[i, j, dest_city, flow, l]
                         for (i, j) in arcs_manual_dest
@@ -213,18 +249,10 @@ class Optimizer:
                         auto_arrival_dest >= manual_departure_dest,
                         name=f"(10)transfer_dest_dir{flow}_order{l}_t{t}"
                     )
-        # 建立第十个约束(11)
-        """ self.model.addConstrs(
-            (gp.quicksum(
-                self.g_manual[i, j, (1 if self.data.all_orders[l].flow == "+" else 2), self.data.all_orders[l].flow, l]
-                for (i, j) in (self.data.arcs_manual_1 if self.data.all_orders[l].flow == "+" else self.data.arcs_manual_2)
-             ) == self.data.all_orders[l].quantity - self.z_unserved[l]
-             # 注意all_orders不可hash
-             for l in self.data.all_orders.keys()),
-            
-            name="unserved_passenger_volume"
-        )
-         """
+        # 约束 (11)：订单需求量与未服务量守恒。
+        # 对每个订单 l 和每个城市 k，该订单在城市 k 所有人工服务弧上的承运量
+        # 必须等于 d_l-z_l。由于两个城市分别使用同一个 z_l，这也保证一笔订单
+        # 在始发端和目的端具有相同的最终服务量；未被完整链路服务的部分计入 z_l。
         for k in [1, 2]: 
             self.model.addConstrs(
                 (gp.quicksum(
