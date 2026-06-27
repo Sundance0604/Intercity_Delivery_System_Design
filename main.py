@@ -28,7 +28,7 @@ def parse_args():
     )
     parser.add_argument(
         "--scenario",
-        choices=["quick", "baseline", "scale", "sensitivity", "all"],
+        choices=["quick", "sensitivity", "all"],
         default="quick",
         help="命令行模式下选择实验场景。",
     )
@@ -62,7 +62,7 @@ def expand_scenario_name(name: str):
     """把命令行中的场景名称转换为内部场景列表。"""
 
     if name == "all":
-        return ["baseline", "scale", "sensitivity"]
+        return ["quick", "sensitivity"]
     return [name]
 
 

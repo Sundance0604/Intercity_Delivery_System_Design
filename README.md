@@ -6,8 +6,8 @@
 
 * **多车型协同**：支持人工车辆（短途/集散）与自动驾驶车辆（长途/干线）的混合调度。
 * **精确建模**：考虑了车辆流守恒、载重限制、服务时间窗及 BHH 服务效率函数。
-* **灵敏度分析**：支持对自动驾驶车队规模、成本系数等关键参数进行批量压力测试。
-* **详细日志**：自动保存实验结果汇总（CSV）及详细调度方案（JSON）。
+* **动态灵敏度分析**：自动发现 `DeliveryConfig` 的全部字段，并覆盖订单规模、时间窗和需求结构等生成参数。
+* **完整实验记录**：同时保存适合统计的 CSV 和可复现实验输入、订单及求解结果的结构化 JSON。
 ## 🛠️ 环境依赖
 
 * **Python 3.11+**
@@ -50,8 +50,7 @@
     也可以通过命令行参数运行论文仿真场景：
 
     ```bash
-    python main.py --cli --scenario baseline --solver exact_mip --seeds 5 --time-limit 300
-    python main.py --cli --scenario scale --solver exact_mip --seeds 5 --time-limit 500
+    python main.py --cli --scenario quick --solver exact_mip --time-limit 300
     python main.py --cli --scenario sensitivity --solver exact_mip --seeds 5 --time-limit 500
     python main.py --cli --scenario all --solver exact_mip --seeds 5 --time-limit 500
     ```
@@ -64,8 +63,9 @@
 
 3.  **查看结果**：
     运行结束后，前往 `results/` 目录查看：
-    * `experiment_summary_*.csv`: 所有实验组的成本、服务率等 KPI 汇总。
-    * `detail_exp_*.json`: 特定实验的车辆路径和订单分配详情。
+    * `full_experiment_summary_*.csv`：所有算例和求解器的参数、状态及 KPI 汇总。
+    * `full_experiment_results_*.json`：完整配置、订单输入和各求解器结果。
+    * `detail_*.json`：快速测试等指定算例的独立详细结果。
 
 ## ⚙️ 实验配置
 
@@ -74,26 +74,38 @@
 * [可视化仿真实验界面操作说明](docs/gui_usage.md)
 * [仿真实验运行结果说明](docs/result_fields.md)
 
-`main.py` 目前支持四类实验套件：
+`main.py` 目前支持两类实验套件：
 
 * **quick**：默认快速测试，订单规模为 20，用于检查模型能否正常运行。
-* **baseline**：小规模基准测试，订单规模为 20、50，用于和精确 MIP 最优解或后续算法结果对比。
-* **scale**：规模扩展测试，订单规模为 100、200、500、1000，用于分析求解时间、服务率和成本随规模的变化。
-* **sensitivity**：灵敏度分析，分别考察自动驾驶车辆数量、自动驾驶车辆单位成本、人工车辆数量、时间窗紧迫程度和大订单比例。
-* **all**：依次运行 baseline、scale 和 sensitivity。
+* **sensitivity**：动态单因素灵敏度分析，覆盖 `config.py` 的全部配置字段和全部订单生成参数。
+* **all**：依次运行 quick 和 sensitivity。
+
+原有小规模基准和规模扩展由 `input.num_orders` 的灵敏度水平统一覆盖。界面中的灵敏度
+水平使用 JSON 数组，例如 `[20,50,100,200]`；字典参数可写成
+`[{"1":10,"2":10},{"1":30,"2":30}]`。
 
 主要命令行参数：
 
 * `--cli`：使用命令行模式；不加该参数时默认打开可视化界面。
-* `--scenario`：选择实验套件，可选 `quick`、`baseline`、`scale`、`sensitivity`、`all`。
+* `--scenario`：选择实验套件，可选 `quick`、`sensitivity`、`all`。
 * `--solver`：选择求解器，可选 `exact_mip`、`rolling_horizon`、`all`。
 * `--seeds`：每个参数水平运行的随机种子数量，用于得到均值和波动范围。
 * `--time-limit`：每个算例的 Gurobi 求解时间上限，单位为秒。
 * `--dry-run`：仅打印实验计划，不执行求解。
 
-实验结果会记录 `Scenario`、`Seed`、`Num_Orders`、`Total_Demand`、`Buffer_Min`、`Buffer_Max`、`Large_Order_Prob`、`MIP_Gap`、`Best_Bound`、`Total_Cost`、`Unserved_Rate`、`Auto_Usage` 和 `Manual_Usage` 等字段，便于后续论文制表和算法对比。
+实验结果会记录灵敏度参数及水平、全部订单生成参数、动态展开的全部 `Config_*`
+模型参数，以及成本、服务率、车辆使用量、MIP Gap 和 Best Bound 等求解指标。
 
 ## 修改记录
+
+### 2026-06-27 动态灵敏度实验与完整结果输出
+
+* 将实验类别精简为快速测试和灵敏度分析；订单规模水平同时承担基准与规模扩展实验。
+* 灵敏度分析改为动态发现 `DeliveryConfig` 的全部 dataclass 字段，新增配置字段后无需修改 GUI。
+* 将订单数、时间窗缓冲、大订单概率及大小订单货量范围全部纳入单因素灵敏度分析。
+* GUI 的参数水平统一采用 JSON 数组，支持数值、布尔值、区间、列表和城市字典。
+* CSV 自动输出全部 `Config_*` 参数列，并新增明确的灵敏度参数、水平及完整订单生成字段。
+* 新增完整批次 JSON，同一算例的订单只保存一次，并集中记录多个求解器的结果。
 
 ### 2026-06-27 模型公式一致性修正
 
