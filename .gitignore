@@ -2,10 +2,10 @@
 __pycache__/
 *.py[cod]
 
-# 本地仿真实验输出。已有被 Git 跟踪的历史结果不会受此规则影响。
-results/*.csv
-results/*.json
+# 本地仿真实验输出
+results/
 
 # 本地临时文件
+tmp/
 *.tmp
 *.log

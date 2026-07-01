@@ -1,7 +1,7 @@
 """customtkinter 可视化实验工具。
 
-界面只负责读取用户输入、预览计划和展示运行日志。模型参数输入框根据
-DeliveryConfig 动态生成，因此在 config.py 增加 dataclass 字段后无需修改本文件。
+模型、算法、订单三类参数均由 config.py 中的 dataclass 动态生成。界面使用整行
+参数标签页和底部双栏输出区，避免参数被压缩在左侧狭窄区域。
 """
 
 import contextlib
@@ -14,17 +14,19 @@ import customtkinter as ctk
 
 from experiment_core import (
     ExperimentPlan,
+    PARAMETER_CONFIGS,
     build_specs,
-    get_sensitivity_parameters,
+    get_parameter_groups,
     levels_to_text,
     parse_parameter_levels,
+    planned_run_count,
     run_experiment_suite,
 )
 from solvers import SOLVER_REGISTRY, get_solver_display_name
 
 
 class QueueWriter(io.TextIOBase):
-    """把后台线程中的 print 输出安全地转发到界面日志框。"""
+    """把后台线程输出安全转发到界面日志框。"""
 
     def __init__(self, callback):
         self.callback = callback
@@ -39,7 +41,7 @@ class QueueWriter(io.TextIOBase):
 
 
 class ExperimentApp(ctk.CTk):
-    """仿真实验主窗口。"""
+    """城际配送仿真实验主窗口。"""
 
     def __init__(self):
         super().__init__()
@@ -48,11 +50,16 @@ class ExperimentApp(ctk.CTk):
         ctk.set_default_color_theme("blue")
 
         self.title("城际配送系统仿真实验平台")
-        self.geometry("1250x820")
-        self.minsize(1080, 720)
+        self.geometry("1480x920")
+        self.minsize(1180, 760)
 
         self.plan = ExperimentPlan()
-        self.sensitivity_parameters = get_sensitivity_parameters()
+        self.parameter_groups = get_parameter_groups()
+        self.sensitivity_parameters = [
+            parameter
+            for parameters in self.parameter_groups.values()
+            for parameter in parameters
+        ]
         self.running = False
         self.scenario_vars = {}
         self.solver_vars = {}
@@ -63,158 +70,216 @@ class ExperimentApp(ctk.CTk):
         self._refresh_preview()
 
     def _build_layout(self):
-        """搭建窗口左右两栏布局。"""
+        """构建顶部控制、整行参数区和底部输出区。"""
 
-        self.grid_columnconfigure(0, weight=0)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(2, weight=3)
+        self.grid_rowconfigure(3, weight=2)
 
         ctk.CTkLabel(
             self,
             text="城际配送系统仿真实验平台",
-            font=ctk.CTkFont(size=22, weight="bold"),
-        ).grid(row=0, column=0, columnspan=2, sticky="w", padx=18, pady=(16, 8))
+            font=ctk.CTkFont(size=24, weight="bold"),
+        ).grid(row=0, column=0, sticky="w", padx=20, pady=(14, 8))
 
-        left_panel = ctk.CTkFrame(self, width=440)
-        left_panel.grid(row=1, column=0, sticky="nsew", padx=(18, 8), pady=(0, 18))
-        left_panel.grid_columnconfigure(0, weight=1)
+        self._build_control_bar()
+        self._build_parameter_tabs()
+        self._build_output_panel()
 
-        right_panel = ctk.CTkFrame(self)
-        right_panel.grid(row=1, column=1, sticky="nsew", padx=(8, 18), pady=(0, 18))
-        right_panel.grid_columnconfigure(0, weight=1)
-        right_panel.grid_rowconfigure(1, weight=1)
+    def _build_control_bar(self):
+        """在窗口顶部横向放置场景、求解器、运行设置和操作按钮。"""
 
-        self._build_selector_panel(left_panel)
-        self._build_parameter_panel(left_panel)
-        self._build_action_panel(left_panel)
-        self._build_preview_and_log(right_panel)
+        bar = ctk.CTkFrame(self)
+        bar.grid(row=1, column=0, sticky="ew", padx=20, pady=(0, 10))
+        bar.grid_columnconfigure((0, 1, 2), weight=1)
 
-    def _build_selector_panel(self, parent):
-        """创建两类实验场景和求解器选择区。"""
-
-        frame = ctk.CTkFrame(parent)
-        frame.grid(row=0, column=0, sticky="ew", padx=12, pady=(12, 8))
-        frame.grid_columnconfigure(0, weight=1)
-
-        ctk.CTkLabel(frame, text="实验场景", font=ctk.CTkFont(size=16, weight="bold")).grid(
-            row=0, column=0, sticky="w", padx=12, pady=(10, 4)
-        )
+        scenario_frame = ctk.CTkFrame(bar, fg_color="transparent")
+        scenario_frame.grid(row=0, column=0, sticky="nsew", padx=12, pady=10)
+        ctk.CTkLabel(
+            scenario_frame,
+            text="实验场景",
+            font=ctk.CTkFont(size=15, weight="bold"),
+        ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 6))
         scenario_labels = {
-            "quick": "快速测试 quick",
-            "sensitivity": "灵敏度分析 sensitivity",
+            "quick": "快速测试",
+            "sensitivity": "单因素灵敏度分析",
         }
-        for row, (name, label) in enumerate(scenario_labels.items(), start=1):
+        for column, (name, label) in enumerate(scenario_labels.items()):
             variable = ctk.BooleanVar(value=(name == "quick"))
             self.scenario_vars[name] = variable
             ctk.CTkCheckBox(
-                frame,
+                scenario_frame,
                 text=label,
                 variable=variable,
                 command=self._refresh_preview,
-            ).grid(row=row, column=0, sticky="w", padx=12, pady=4)
+            ).grid(row=1, column=column, sticky="w", padx=(0, 18))
 
-        solver_start = len(scenario_labels) + 1
-        ctk.CTkLabel(frame, text="求解方式", font=ctk.CTkFont(size=16, weight="bold")).grid(
-            row=solver_start, column=0, sticky="w", padx=12, pady=(14, 4)
-        )
-        for row, name in enumerate(SOLVER_REGISTRY, start=solver_start + 1):
+        solver_frame = ctk.CTkFrame(bar, fg_color="transparent")
+        solver_frame.grid(row=0, column=1, sticky="nsew", padx=12, pady=10)
+        ctk.CTkLabel(
+            solver_frame,
+            text="求解方式",
+            font=ctk.CTkFont(size=15, weight="bold"),
+        ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 6))
+        for column, name in enumerate(SOLVER_REGISTRY):
             variable = ctk.BooleanVar(value=(name == "exact_mip"))
             self.solver_vars[name] = variable
             ctk.CTkCheckBox(
-                frame,
+                solver_frame,
                 text=get_solver_display_name(name),
                 variable=variable,
                 command=self._refresh_preview,
-            ).grid(row=row, column=0, sticky="w", padx=12, pady=4)
+            ).grid(row=1, column=column, sticky="w", padx=(0, 18))
 
-    def _add_entry(self, frame, row, label, value):
-        """添加一个带中文标签的输入框，并绑定实时预览。"""
-
-        ctk.CTkLabel(frame, text=label, anchor="w").grid(
-            row=row, column=0, sticky="w", padx=8, pady=5
+        settings_frame = ctk.CTkFrame(bar, fg_color="transparent")
+        settings_frame.grid(row=0, column=2, sticky="nsew", padx=12, pady=10)
+        settings_frame.grid_columnconfigure((1, 3), weight=1)
+        ctk.CTkLabel(
+            settings_frame,
+            text="运行设置",
+            font=ctk.CTkFont(size=15, weight="bold"),
+        ).grid(row=0, column=0, columnspan=4, sticky="w", pady=(0, 6))
+        ctk.CTkLabel(settings_frame, text="种子数").grid(
+            row=1, column=0, sticky="e", padx=(0, 6)
         )
-        entry = ctk.CTkEntry(frame)
+        self.fields["seed_count"] = self._compact_entry(
+            settings_frame, 1, 1, str(self.plan.seed_count)
+        )
+        ctk.CTkLabel(settings_frame, text="时间限制(秒)").grid(
+            row=1, column=2, sticky="e", padx=(14, 6)
+        )
+        self.fields["time_limit"] = self._compact_entry(
+            settings_frame, 1, 3, str(self.plan.time_limit)
+        )
+
+        action_frame = ctk.CTkFrame(bar, fg_color="transparent")
+        action_frame.grid(row=0, column=3, sticky="e", padx=12, pady=10)
+        ctk.CTkButton(
+            action_frame,
+            text="刷新预览",
+            width=110,
+            command=self._refresh_preview,
+        ).grid(row=0, column=0, padx=5)
+        self.run_button = ctk.CTkButton(
+            action_frame,
+            text="批量运行",
+            width=120,
+            command=self._run_from_gui,
+        )
+        self.run_button.grid(row=0, column=1, padx=5)
+
+    def _compact_entry(self, parent, row, column, value):
+        entry = ctk.CTkEntry(parent, width=90)
         entry.insert(0, value)
-        entry.grid(row=row, column=1, sticky="ew", padx=8, pady=5)
+        entry.grid(row=row, column=column, sticky="ew")
         entry.bind("<KeyRelease>", lambda _event: self._refresh_preview())
         return entry
 
-    def _build_parameter_panel(self, parent):
-        """根据核心层提供的参数清单动态创建灵敏度输入框。
+    def _build_parameter_tabs(self):
+        """为三类动态参数建立独立、宽幅标签页。"""
 
-        每个水平都使用 JSON 数组表示，例如 [10,20,30]。字典参数可以写为
-        [{"1":10,"2":10},{"1":30,"2":30}]，解析时会自动恢复整数城市编号。
-        """
-
-        frame = ctk.CTkScrollableFrame(parent, label_text="参数范围（灵敏度水平使用 JSON 数组）")
-        frame.grid(row=1, column=0, sticky="nsew", padx=12, pady=8)
-        parent.grid_rowconfigure(1, weight=1)
-        frame.grid_columnconfigure(1, weight=1)
-
-        fixed_rows = [
-            ("seed_count", "每个水平随机种子数", str(self.plan.seed_count)),
-            ("time_limit", "单算例时间限制(秒)", str(self.plan.time_limit)),
-            ("quick_orders", "快速测试订单数", str(self.plan.quick_orders)),
-        ]
-        row = 0
-        for key, label, value in fixed_rows:
-            self.fields[key] = self._add_entry(frame, row, label, value)
-            row += 1
+        container = ctk.CTkFrame(self)
+        container.grid(row=2, column=0, sticky="nsew", padx=20, pady=(0, 10))
+        container.grid_columnconfigure(0, weight=1)
+        container.grid_rowconfigure(1, weight=1)
 
         ctk.CTkLabel(
-            frame,
-            text="单因素灵敏度参数",
-            font=ctk.CTkFont(size=14, weight="bold"),
-        ).grid(row=row, column=0, columnspan=2, sticky="w", padx=8, pady=(14, 5))
-        row += 1
+            container,
+            text="灵敏度参数水平（JSON 数组；每次实验只改变一个参数）",
+            font=ctk.CTkFont(size=16, weight="bold"),
+        ).grid(row=0, column=0, sticky="w", padx=12, pady=(10, 4))
 
-        for parameter in self.sensitivity_parameters:
-            levels = self.plan.sensitivity_levels[parameter.key]
-            self.sensitivity_fields[parameter.key] = self._add_entry(
-                frame,
-                row,
-                parameter.label,
-                levels_to_text(levels),
+        tabs = ctk.CTkTabview(container)
+        tabs.grid(row=1, column=0, sticky="nsew", padx=10, pady=(0, 10))
+
+        for source, (category_label, _config_type) in PARAMETER_CONFIGS.items():
+            tab = tabs.add(category_label)
+            tab.grid_columnconfigure(0, weight=1)
+            tab.grid_rowconfigure(0, weight=1)
+            scroll = ctk.CTkScrollableFrame(tab)
+            scroll.grid(row=0, column=0, sticky="nsew", padx=6, pady=6)
+            scroll.grid_columnconfigure((1, 3), weight=1)
+            self._populate_parameter_group(
+                scroll, self.parameter_groups[source]
             )
-            row += 1
 
-    def _build_action_panel(self, parent):
-        """创建刷新和运行按钮。"""
+    def _populate_parameter_group(self, frame, parameters):
+        """把一类参数分成左右两组，充分利用横向空间。"""
 
-        frame = ctk.CTkFrame(parent)
-        frame.grid(row=2, column=0, sticky="ew", padx=12, pady=(8, 12))
-        frame.grid_columnconfigure((0, 1), weight=1)
-        ctk.CTkButton(frame, text="刷新预览", command=self._refresh_preview).grid(
-            row=0, column=0, sticky="ew", padx=8, pady=10
-        )
-        ctk.CTkButton(frame, text="批量运行", command=self._run_from_gui).grid(
-            row=0, column=1, sticky="ew", padx=8, pady=10
-        )
+        split_index = (len(parameters) + 1) // 2
+        for index, parameter in enumerate(parameters):
+            group = 0 if index < split_index else 1
+            local_row = index if group == 0 else index - split_index
+            label_column = group * 2
+            entry_column = label_column + 1
+            base_text = levels_to_text([parameter.base_value])
+            ctk.CTkLabel(
+                frame,
+                text=f"{parameter.field_name}\n基准值 {base_text}",
+                anchor="w",
+                justify="left",
+            ).grid(
+                row=local_row,
+                column=label_column,
+                sticky="w",
+                padx=(10, 8),
+                pady=7,
+            )
+            entry = ctk.CTkEntry(frame)
+            entry.insert(
+                0,
+                levels_to_text(self.plan.sensitivity_levels[parameter.key]),
+            )
+            entry.grid(
+                row=local_row,
+                column=entry_column,
+                sticky="ew",
+                padx=(0, 18),
+                pady=7,
+            )
+            entry.bind("<KeyRelease>", lambda _event: self._refresh_preview())
+            self.sensitivity_fields[parameter.key] = entry
 
-    def _build_preview_and_log(self, parent):
-        """创建实验计划预览框和运行日志框。"""
+    def _build_output_panel(self):
+        """底部横向展示实验预览和运行日志。"""
+
+        panel = ctk.CTkFrame(self)
+        panel.grid(row=3, column=0, sticky="nsew", padx=20, pady=(0, 18))
+        panel.grid_columnconfigure((0, 1), weight=1)
+        panel.grid_rowconfigure(1, weight=1)
 
         ctk.CTkLabel(
-            parent, text="实验计划预览", font=ctk.CTkFont(size=16, weight="bold")
-        ).grid(row=0, column=0, sticky="w", padx=12, pady=(12, 4))
-        self.preview = ctk.CTkTextbox(parent, height=280)
-        self.preview.grid(row=1, column=0, sticky="nsew", padx=12, pady=(0, 10))
-
+            panel,
+            text="实验计划预览",
+            font=ctk.CTkFont(size=15, weight="bold"),
+        ).grid(row=0, column=0, sticky="w", padx=12, pady=(10, 4))
         ctk.CTkLabel(
-            parent, text="运行日志", font=ctk.CTkFont(size=16, weight="bold")
-        ).grid(row=2, column=0, sticky="w", padx=12, pady=(4, 4))
-        self.log = ctk.CTkTextbox(parent, height=260)
-        self.log.grid(row=3, column=0, sticky="nsew", padx=12, pady=(0, 12))
-        parent.grid_rowconfigure(3, weight=1)
+            panel,
+            text="运行日志",
+            font=ctk.CTkFont(size=15, weight="bold"),
+        ).grid(row=0, column=1, sticky="w", padx=12, pady=(10, 4))
+
+        self.preview = ctk.CTkTextbox(panel)
+        self.preview.grid(
+            row=1, column=0, sticky="nsew", padx=(12, 6), pady=(0, 12)
+        )
+        self.log = ctk.CTkTextbox(panel)
+        self.log.grid(
+            row=1, column=1, sticky="nsew", padx=(6, 12), pady=(0, 12)
+        )
 
     def _selected_scenarios(self) -> List[str]:
-        return [name for name, variable in self.scenario_vars.items() if variable.get()]
+        return [
+            name for name, variable in self.scenario_vars.items() if variable.get()
+        ]
 
     def _selected_solvers(self) -> List[str]:
-        return [name for name, variable in self.solver_vars.items() if variable.get()]
+        return [
+            name for name, variable in self.solver_vars.items() if variable.get()
+        ]
 
     def _read_plan(self) -> ExperimentPlan:
-        """读取固定参数和全部动态灵敏度参数。"""
+        """读取固定运行设置和三类动态灵敏度水平。"""
 
         sensitivity_levels = {}
         for parameter in self.sensitivity_parameters:
@@ -225,26 +290,36 @@ class ExperimentApp(ctk.CTk):
         return ExperimentPlan(
             seed_count=int(self.fields["seed_count"].get()),
             time_limit=int(self.fields["time_limit"].get()),
-            quick_orders=int(self.fields["quick_orders"].get()),
             sensitivity_levels=sensitivity_levels,
         )
 
     def _refresh_preview(self):
-        """解析当前输入并刷新算例预览，不调用求解器。"""
+        """解析当前输入并刷新计划，不调用求解器。"""
 
         try:
             plan = self._read_plan()
             solvers = self._selected_solvers()
             specs = build_specs(self._selected_scenarios(), plan)
+            run_count = planned_run_count(specs, solvers)
         except Exception as exc:
             self.preview.delete("1.0", "end")
             self.preview.insert("end", f"参数暂不可解析：{exc}")
             return
 
+        category_counts = {"model": 0, "algorithm": 0, "order": 0}
+        for spec in specs:
+            if spec.sensitivity_parameter:
+                category_counts[spec.sensitivity_parameter.split(".", 1)[0]] += 1
+
         lines = [
-            f"算例数量：{len(specs)}",
-            f"求解器数量：{len(solvers)}",
-            f"预计结果行数：{len(specs) * len(solvers)}",
+            f"算例规格数：{len(specs)}",
+            f"实际求解次数：{run_count}",
+            (
+                "分类：模型 {model} / 算法 {algorithm} / 订单 {order}".format(
+                    **category_counts
+                )
+            ),
+            "说明：精确 MIP 自动跳过算法参数灵敏度规格。",
             "",
             "前 30 个算例：",
         ]
@@ -252,11 +327,12 @@ class ExperimentApp(ctk.CTk):
             sensitivity = (
                 f"{spec.sensitivity_parameter}={spec.sensitivity_value}"
                 if spec.sensitivity_parameter
-                else "环境连通性检查"
+                else "快速连通性检查"
             )
             lines.append(
-                f"{spec.experiment_id} | {spec.scenario} | orders={spec.num_orders} | "
-                f"seed={spec.seed} | {sensitivity}"
+                f"{spec.experiment_id} | {spec.scenario} | "
+                f"orders={spec.order_config.num_orders} | seed={spec.seed} | "
+                f"{sensitivity}"
             )
         if len(specs) > 30:
             lines.append(f"... 另有 {len(specs) - 30} 个算例未显示")
@@ -265,8 +341,6 @@ class ExperimentApp(ctk.CTk):
         self.preview.insert("end", "\n".join(lines))
 
     def _append_log(self, text: str):
-        """从后台线程安全地请求追加日志。"""
-
         self.after(0, self._append_log_on_ui_thread, text)
 
     def _append_log_on_ui_thread(self, text: str):
@@ -286,13 +360,19 @@ class ExperimentApp(ctk.CTk):
             solver_names = self._selected_solvers()
             if not solver_names:
                 raise ValueError("请至少选择一个求解方式。")
+            if planned_run_count(specs, solver_names) <= 0:
+                raise ValueError("当前参数类别与所选求解器之间没有可执行组合。")
         except Exception as exc:
             self._append_log(f"\n[参数错误] {exc}\n")
             return
 
         self.running = True
+        self.run_button.configure(state="disabled")
         self.log.delete("1.0", "end")
-        self._append_log(f"准备运行 {len(specs)} 个算例，{len(solver_names)} 个求解器。\n")
+        self._append_log(
+            f"准备运行 {len(specs)} 个规格，"
+            f"{planned_run_count(specs, solver_names)} 次求解。\n"
+        )
         threading.Thread(
             target=self._run_worker,
             args=(specs, solver_names),
@@ -300,8 +380,6 @@ class ExperimentApp(ctk.CTk):
         ).start()
 
     def _run_worker(self, specs, solver_names):
-        """后台执行批量实验，使窗口在求解期间保持可响应。"""
-
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         writer = QueueWriter(self._append_log)
         try:
@@ -311,10 +389,9 @@ class ExperimentApp(ctk.CTk):
             self._append_log(f"\n[错误] {exc}\n")
         finally:
             self.running = False
+            self.after(0, lambda: self.run_button.configure(state="normal"))
             self._append_log("\n运行线程已结束。\n")
 
 
 def launch_gui():
-    """启动图形界面。"""
-
     ExperimentApp().mainloop()

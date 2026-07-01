@@ -36,7 +36,7 @@ CSV 每行代表“一个算例 + 一个求解器”。同一个 `Exp_ID` 交给
 SENS_<参数来源>_<参数名>_L<水平序号>_S<随机种子>
 ```
 
-例如 `SENS_CONFIG_COST_AUTO_L2_S3001` 表示：测试 `config.cost_auto` 的第 2 个
+例如 `SENS_MODEL_COST_AUTO_L2_S3001` 表示：测试 `model.cost_auto` 的第 2 个
 水平，随机种子为 3001。
 
 ### 2.2 求解状态
@@ -48,40 +48,40 @@ SENS_<参数来源>_<参数名>_L<水平序号>_S<随机种子>
 | `Time_Limit_Sec` | 用户设置的单算例时间限制 |
 | `Message` | 求解器返回的文字状态 |
 
-### 2.3 完整订单生成参数
+### 2.3 订单规模与总需求
 
 | 字段 | 含义 |
 |---|---|
 | `Num_Orders` | 订单批次数 |
 | `Total_Demand` | 本算例全部订单货量之和 |
-| `Buffer_Min`、`Buffer_Max` | 时间窗随机缓冲上下限 |
-| `Large_Order_Prob` | 大订单生成概率 |
-| `Small_Quantity_Min`、`Small_Quantity_Max` | 小订单货量上下限 |
-| `Large_Quantity_Min`、`Large_Quantity_Max` | 大订单货量上下限 |
 
-这组字段与 `Seed` 一起，覆盖随机订单生成器的全部可变输入。
+完整订单配置由后续的 `Order_*` 动态列记录。
 
-### 2.4 完整模型配置参数
+### 2.4 三类动态配置参数
 
-`DeliveryConfig` 的每个字段自动写成一列，列名统一为：
+三个配置 dataclass 的每个字段会自动写成一列：
 
 ```text
-Config_<config.py 中的字段名>
+Model_<DeliveryConfig 字段名>
+Algorithm_<RollingHorizonConfig 字段名>
+Order_<OrderGenerationConfig 字段名>
 ```
 
 例如：
 
 | 字段 | 含义 |
 |---|---|
-| `Config_T` | 离散规划期长度 |
-| `Config_t_0` | 单个时间段长度 |
-| `Config_travel_time_periods` | 城际行驶时间段数 |
-| `Config_N_manual` | 两城市人工车辆数字典 |
-| `Config_N_auto` | 两城市自动驾驶车辆数字典 |
-| `Config_capacity_manual`、`Config_capacity_auto` | 两类车辆容量 |
-| `Config_cost_manual`、`Config_cost_auto` | 两类车辆单位成本 |
-| `Config_penalty_lost` | 单位未服务惩罚 |
-| `Config_service_a_1` 至 `Config_service_b_2` | 两城市服务效率函数参数 |
+| `Model_T` | 离散规划期长度 |
+| `Model_t_0` | 单个时间段长度 |
+| `Model_travel_time_periods` | 城际行驶时间段数 |
+| `Model_N_manual`、`Model_N_auto` | 两类车辆数字典 |
+| `Model_capacity_manual`、`Model_capacity_auto` | 两类车辆容量 |
+| `Model_cost_manual`、`Model_cost_auto` | 两类车辆单位成本 |
+| `Model_penalty_lost` | 单位未服务惩罚 |
+| `Algorithm_prediction_horizon` | Rolling Horizon 预测区间 |
+| `Algorithm_rolling_step` | Rolling Horizon 滚动步长 |
+| `Order_num_orders` | 订单数量 |
+| `Order_buffer_range` | 时间窗随机缓冲区间 |
 
 字典、列表和区间在 CSV 单元格中保存为 JSON 文本。用户在 `config.py` 新增字段后，
 CSV 会自动新增对应列，不需要修改输出代码。
@@ -105,7 +105,7 @@ JSON 顶层结构：
 
 ```json
 {
-  "format_version": 2,
+  "format_version": 3,
   "generated_at": "20260627_181023",
   "experiment_count": 1,
   "solver_names": ["exact_mip"],
@@ -115,7 +115,8 @@ JSON 顶层结构：
 
 | 字段 | 含义 |
 |---|---|
-| `format_version` | 输出结构版本，当前为 2 |
+| `format_version` | 输出结构版本，当前为 3 |
+| `solver_run_count` | 实际执行的求解次数 |
 | `generated_at` | 本批次时间戳 |
 | `experiment_count` | 算例数量，不乘求解器数量 |
 | `solver_names` | 本批次选择的求解器 |
@@ -130,8 +131,10 @@ JSON 顶层结构：
 | `sensitivity_value` | 被测试参数的原始结构化值 |
 | `sensitivity_level` | 水平序号 |
 | `time_limit_sec` | 单算例时间限制 |
-| `config` | `DeliveryConfig` 的全部字段和实际值 |
-| `generation_parameters` | 订单生成器的全部可变输入 |
+| `model_parameters` | 完整模型参数 |
+| `algorithm_parameters` | 完整算法参数 |
+| `order_parameters` | 完整订单参数 |
+| `generation_parameters` | 订单参数与随机种子 |
 | `orders` | 该算例实际生成的全部订单 |
 | `solver_results` | 各求解器在同一输入上的结果列表 |
 
@@ -203,7 +206,7 @@ Algorithm_Gap = (Algorithm_Cost - Exact_MIP_Cost) / Exact_MIP_Cost
 
 1. CSV 中每个 `Sensitivity_Parameter` 的水平数与 GUI 输入一致；
 2. 每个水平的行数等于 seed 数乘求解器数；
-3. `Config_*` 列完整覆盖当前 `DeliveryConfig` 字段；
+3. `Model_*`、`Algorithm_*`、`Order_*` 分别动态覆盖三类配置字段；
 4. JSON 的 `experiment_count` 等于 `experiments` 数组长度；
 5. 相同 `Exp_ID` 的不同求解器使用同一份 `orders`；
 6. `Status=9` 时结合 `MIP_Gap` 判断限时解质量；

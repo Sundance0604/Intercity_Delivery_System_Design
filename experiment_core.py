@@ -1,8 +1,7 @@
 """仿真实验核心逻辑。
 
-本文件负责实验参数发现、算例生成、订单生成、求解器调用和结果保存。
-图形界面与命令行都只调用这里的公共函数，因此两种运行方式使用完全相同的
-实验定义和输出格式。
+本文件负责三类参数发现、算例生成、订单生成、求解器调用和结果保存。
+图形界面与命令行只调用这里的公共函数，因此两种入口使用完全相同的实验定义。
 """
 
 import json
@@ -12,34 +11,14 @@ import re
 from dataclasses import asdict, dataclass, field, fields, replace
 from datetime import datetime
 from itertools import product
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
 
-from config import DeliveryConfig
+from config import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
 from data_loader import DataLoader, DeliveryData, OrderBatch
 from solvers import SOLVER_REGISTRY
-
-
-# 订单生成参数不属于数学模型的 DeliveryConfig，但同样会影响实验输入数据。
-# 它们与 config.py 中动态发现的字段一起参加单因素灵敏度分析。
-INPUT_PARAMETER_DEFAULTS: Dict[str, Any] = {
-    "num_orders": 100,
-    "buffer_range": (0, 5),
-    "large_order_prob": 0.3,
-    "small_quantity_range": (10, 50),
-    "large_quantity_range": (100, 300),
-}
-
-INPUT_PARAMETER_LEVELS: Dict[str, List[Any]] = {
-    "num_orders": [20, 50, 100, 200],
-    "buffer_range": [(0, 1), (0, 3), (0, 5), (0, 8)],
-    "large_order_prob": [0.1, 0.3, 0.5, 0.7],
-    "small_quantity_range": [(5, 25), (10, 50), (20, 100)],
-    "large_quantity_range": [(50, 150), (100, 300), (200, 500)],
-}
-
 
 @dataclass(frozen=True)
 class SensitivityParameter:
@@ -51,19 +30,15 @@ class SensitivityParameter:
     field_name: str
     base_value: Any
     default_levels: List[Any]
+    solver_names: Optional[Tuple[str, ...]] = None
 
 
 @dataclass
 class ExperimentPlan:
-    """界面和命令行共同使用的批量实验计划。
-
-    sensitivity_levels 的键由 get_sensitivity_parameters 动态生成。用户在
-    DeliveryConfig 中新增 dataclass 字段后，该字段会自动进入这里，无需修改 GUI。
-    """
+    """GUI 和 CLI 共用的批量实验计划。"""
 
     seed_count: int = 3
     time_limit: int = 500
-    quick_orders: int = 20
     sensitivity_levels: Dict[str, List[Any]] = field(default_factory=dict)
 
     def __post_init__(self):
@@ -85,12 +60,9 @@ class ExperimentSpec:
     experiment_id: str
     scenario: str
     config: DeliveryConfig
-    num_orders: int
+    algorithm_config: RollingHorizonConfig
+    order_config: OrderGenerationConfig
     seed: int
-    buffer_range: Tuple[int, int] = (0, 5)
-    large_order_prob: float = 0.3
-    small_quantity_range: Tuple[int, int] = (10, 50)
-    large_quantity_range: Tuple[int, int] = (100, 300)
     time_limit: int = 500
     sensitivity_parameter: str = ""
     sensitivity_value: Any = None
@@ -115,6 +87,21 @@ def _scaled_default_levels(value: Any) -> List[Any]:
         if value == 0:
             return [0.0, 0.5, 1.0]
         return [round(value * factor, 6) for factor in (0.5, 1.0, 1.5)]
+    if isinstance(value, tuple) and value and all(
+        isinstance(item, (int, float)) and not isinstance(item, bool)
+        for item in value
+    ):
+        levels = []
+        for factor in (0.5, 1.0, 1.5):
+            scaled = tuple(
+                type(item)(round(item * factor))
+                if isinstance(item, int)
+                else round(item * factor, 6)
+                for item in value
+            )
+            if scaled not in levels:
+                levels.append(scaled)
+        return levels
     if isinstance(value, dict) and value and all(
         isinstance(item, (int, float)) and not isinstance(item, bool)
         for item in value.values()
@@ -131,40 +118,51 @@ def _scaled_default_levels(value: Any) -> List[Any]:
     return [value]
 
 
+PARAMETER_CONFIGS = {
+    "model": ("模型参数", DeliveryConfig),
+    "algorithm": ("算法参数", RollingHorizonConfig),
+    "order": ("订单参数", OrderGenerationConfig),
+}
+
+
 def get_sensitivity_parameters() -> List[SensitivityParameter]:
-    """动态返回全部模型参数和订单生成参数。
+    """从三个 dataclass 动态发现全部单因素灵敏度参数。"""
 
-    DeliveryConfig 必须保持为 dataclass。只要用户在 config.py 中增加一个字段并
-    给出默认值，这里就会发现它，GUI、算例生成、CSV 和 JSON 都会自动包含该字段。
-    """
-
-    default_config = DeliveryConfig()
     parameters = []
-    for config_field in fields(DeliveryConfig):
-        value = getattr(default_config, config_field.name)
-        parameters.append(
-            SensitivityParameter(
-                key=f"config.{config_field.name}",
-                label=f"模型参数 {config_field.name}",
-                source="config",
-                field_name=config_field.name,
-                base_value=value,
-                default_levels=_scaled_default_levels(value),
+    for source, (_category_label, config_type) in PARAMETER_CONFIGS.items():
+        default_config = config_type()
+        for config_field in fields(config_type):
+            value = getattr(default_config, config_field.name)
+            parameters.append(
+                SensitivityParameter(
+                    key=f"{source}.{config_field.name}",
+                    label=config_field.name,
+                    source=source,
+                    field_name=config_field.name,
+                    base_value=value,
+                    default_levels=list(
+                        config_field.metadata.get(
+                            "sensitivity_levels",
+                            _scaled_default_levels(value),
+                        )
+                    ),
+                    solver_names=(
+                        tuple(config_field.metadata["solvers"])
+                        if "solvers" in config_field.metadata
+                        else None
+                    ),
+                )
             )
-        )
-
-    for name, value in INPUT_PARAMETER_DEFAULTS.items():
-        parameters.append(
-            SensitivityParameter(
-                key=f"input.{name}",
-                label=f"订单参数 {name}",
-                source="input",
-                field_name=name,
-                base_value=value,
-                default_levels=INPUT_PARAMETER_LEVELS[name],
-            )
-        )
     return parameters
+
+
+def get_parameter_groups() -> Dict[str, List[SensitivityParameter]]:
+    """按模型、算法、订单三类返回动态参数，供 GUI 和 CLI 共用。"""
+
+    groups = {source: [] for source in PARAMETER_CONFIGS}
+    for parameter in get_sensitivity_parameters():
+        groups[parameter.source].append(parameter)
+    return groups
 
 
 def _coerce_like(value: Any, template: Any) -> Any:
@@ -231,24 +229,21 @@ def parse_parameter_levels(text: str, template: Any) -> List[Any]:
 
 def generate_random_orders(
     config: DeliveryConfig,
-    num_orders: int = 50,
+    order_config: OrderGenerationConfig,
     seed: int = 42,
-    buffer_range: Tuple[int, int] = (0, 5),
-    large_order_prob: float = 0.3,
-    small_quantity_range: Tuple[int, int] = (10, 50),
-    large_quantity_range: Tuple[int, int] = (100, 300),
 ):
     """按给定参数生成一批可复现的随机订单。"""
 
+    order_config.validate()
     random.seed(seed)
     np.random.seed(seed)
 
     pos_orders = {}
     neg_orders = {}
     all_orders = {}
-    min_buffer, max_buffer = buffer_range
+    min_buffer, max_buffer = order_config.buffer_range
 
-    for order_id in range(1, num_orders + 1):
+    for order_id in range(1, order_config.num_orders + 1):
         flow = "+" if random.random() > 0.5 else "-"
         min_duration = config.travel_time_periods + 1
         max_start = config.T - min_duration - max_buffer - 1
@@ -262,7 +257,9 @@ def generate_random_orders(
             latest_completion = min(config.T, earliest_start + min_duration + buffer)
 
         quantity_range = (
-            large_quantity_range if random.random() < large_order_prob else small_quantity_range
+            order_config.large_quantity_range
+            if random.random() < order_config.large_order_prob
+            else order_config.small_quantity_range
         )
         quantity = random.randint(*quantity_range)
         order = OrderBatch(
@@ -323,12 +320,14 @@ def make_seed_list(start: int, count: int) -> List[int]:
 def build_quick_specs(plan: ExperimentPlan) -> List[ExperimentSpec]:
     """构建用于检查环境、模型和输出链路的快速测试。"""
 
+    order_config = OrderGenerationConfig()
     return [
         ExperimentSpec(
-            experiment_id=f"QUICK_N{plan.quick_orders}_S42",
+            experiment_id=f"QUICK_N{order_config.num_orders}_S42",
             scenario="quick",
             config=DeliveryConfig(),
-            num_orders=plan.quick_orders,
+            algorithm_config=RollingHorizonConfig(),
+            order_config=order_config,
             seed=42,
             time_limit=plan.time_limit,
             save_detail=True,
@@ -352,23 +351,29 @@ def _build_spec_for_level(
     """以默认输入为基准，只替换一个参数，构建单因素灵敏度算例。"""
 
     config = DeliveryConfig()
-    input_values = dict(INPUT_PARAMETER_DEFAULTS)
-    if parameter.source == "config":
+    algorithm_config = RollingHorizonConfig()
+    order_config = OrderGenerationConfig()
+    if parameter.source == "model":
         config = replace(config, **{parameter.field_name: value})
+    elif parameter.source == "algorithm":
+        algorithm_config = replace(
+            algorithm_config, **{parameter.field_name: value}
+        )
+    elif parameter.source == "order":
+        order_config = replace(order_config, **{parameter.field_name: value})
     else:
-        input_values[parameter.field_name] = value
+        raise ValueError(f"未知参数类别：{parameter.source}")
+    algorithm_config.validate()
+    order_config.validate()
 
     parameter_id = _safe_id_fragment(parameter.key)
     return ExperimentSpec(
         experiment_id=f"SENS_{parameter_id}_L{level_index}_S{seed}",
         scenario="sensitivity",
         config=config,
-        num_orders=input_values["num_orders"],
+        algorithm_config=algorithm_config,
+        order_config=order_config,
         seed=seed,
-        buffer_range=input_values["buffer_range"],
-        large_order_prob=input_values["large_order_prob"],
-        small_quantity_range=input_values["small_quantity_range"],
-        large_quantity_range=input_values["large_quantity_range"],
         time_limit=plan.time_limit,
         sensitivity_parameter=parameter.key,
         sensitivity_value=value,
@@ -377,7 +382,7 @@ def _build_spec_for_level(
 
 
 def build_sensitivity_specs(plan: ExperimentPlan) -> List[ExperimentSpec]:
-    """动态构建覆盖全部模型参数和订单参数的单因素灵敏度算例。"""
+    """动态构建覆盖模型、算法和订单参数的单因素灵敏度算例。"""
 
     specs = []
     seeds = make_seed_list(3001, plan.seed_count)
@@ -415,12 +420,14 @@ def _json_value(value: Any) -> str:
     return value
 
 
-def _config_csv_fields(config: DeliveryConfig) -> Dict[str, Any]:
-    """动态展开全部 DeliveryConfig 字段，新增参数会自动进入 CSV。"""
+def _dataclass_csv_fields(prefix: str, config_object) -> Dict[str, Any]:
+    """动态展开任意一类 dataclass 参数并写入 CSV。"""
 
     return {
-        f"Config_{config_field.name}": _json_value(getattr(config, config_field.name))
-        for config_field in fields(DeliveryConfig)
+        f"{prefix}_{config_field.name}": _json_value(
+            getattr(config_object, config_field.name)
+        )
+        for config_field in fields(type(config_object))
     }
 
 
@@ -428,13 +435,46 @@ def _generation_payload(spec: ExperimentSpec) -> Dict[str, Any]:
     """返回能够完整复现订单的全部生成参数。"""
 
     return {
-        "num_orders": spec.num_orders,
         "seed": spec.seed,
-        "buffer_range": spec.buffer_range,
-        "large_order_prob": spec.large_order_prob,
-        "small_quantity_range": spec.small_quantity_range,
-        "large_quantity_range": spec.large_quantity_range,
+        **asdict(spec.order_config),
     }
+
+
+def applicable_solver_names(
+    spec: ExperimentSpec, solver_names: List[str]
+) -> List[str]:
+    """过滤对当前灵敏度参数有实际响应的求解器。
+
+    算法参数只交给声明支持该参数类别的算法，避免精确 MIP 产生完全重复的伪结果。
+    """
+
+    if not spec.sensitivity_parameter:
+        return list(solver_names)
+    source = spec.sensitivity_parameter.split(".", 1)[0]
+    parameter = next(
+        (
+            item
+            for item in get_sensitivity_parameters()
+            if item.key == spec.sensitivity_parameter
+        ),
+        None,
+    )
+    return [
+        name
+        for name in solver_names
+        if source in SOLVER_REGISTRY[name].sensitivity_sources
+        and (
+            parameter is None
+            or parameter.solver_names is None
+            or name in parameter.solver_names
+        )
+    ]
+
+
+def planned_run_count(specs: List[ExperimentSpec], solver_names: List[str]) -> int:
+    """返回实际会执行的“算例×适用求解器”数量，供 GUI 和 CLI 预览。"""
+
+    return sum(len(applicable_solver_names(spec, solver_names)) for spec in specs)
 
 
 def run_experiment_suite(
@@ -463,12 +503,8 @@ def run_experiment_suite(
         print(f"\n[{index}/{len(specs)}] 构建算例 {spec.experiment_id}")
         orders_tuple = generate_random_orders(
             spec.config,
-            num_orders=spec.num_orders,
+            spec.order_config,
             seed=spec.seed,
-            buffer_range=spec.buffer_range,
-            large_order_prob=spec.large_order_prob,
-            small_quantity_range=spec.small_quantity_range,
-            large_quantity_range=spec.large_quantity_range,
         )
         data = build_delivery_data(spec.config, orders_tuple)
         total_demand = sum(order.quantity for order in orders_tuple[2].values())
@@ -479,16 +515,27 @@ def run_experiment_suite(
             "sensitivity_value": spec.sensitivity_value,
             "sensitivity_level": spec.sensitivity_level or None,
             "time_limit_sec": spec.time_limit,
-            "config": asdict(spec.config),
+            "model_parameters": asdict(spec.config),
+            "algorithm_parameters": asdict(spec.algorithm_config),
+            "order_parameters": asdict(spec.order_config),
             "generation_parameters": _generation_payload(spec),
             "orders": {str(key): asdict(value) for key, value in orders_tuple[2].items()},
             "solver_results": [],
         }
 
-        for solver_name in solver_names:
+        spec_solver_names = applicable_solver_names(spec, solver_names)
+        if not spec_solver_names:
+            print("  -> 当前所选求解器均不适用于该参数类别，跳过。")
+        for solver_name in spec_solver_names:
             solver = SOLVER_REGISTRY[solver_name]
             print(f"  -> 使用求解器：{solver.display_name}")
-            result = solver.solve(spec.config, data, orders_tuple, spec.time_limit)
+            result = solver.solve(
+                spec.config,
+                data,
+                orders_tuple,
+                spec.time_limit,
+                spec.algorithm_config,
+            )
             print(f"     {result.message}")
 
             summary = {
@@ -502,22 +549,25 @@ def run_experiment_suite(
                 "Status": result.status,
                 "Solve_Time_Sec": result.solve_time_sec,
                 "Time_Limit_Sec": spec.time_limit,
-                "Num_Orders": spec.num_orders,
+                "Parameter_Category": (
+                    spec.sensitivity_parameter.split(".", 1)[0]
+                    if spec.sensitivity_parameter
+                    else None
+                ),
+                "Num_Orders": spec.order_config.num_orders,
                 "Total_Demand": total_demand,
-                "Buffer_Min": spec.buffer_range[0],
-                "Buffer_Max": spec.buffer_range[1],
-                "Large_Order_Prob": spec.large_order_prob,
-                "Small_Quantity_Min": spec.small_quantity_range[0],
-                "Small_Quantity_Max": spec.small_quantity_range[1],
-                "Large_Quantity_Min": spec.large_quantity_range[0],
-                "Large_Quantity_Max": spec.large_quantity_range[1],
-                **_config_csv_fields(spec.config),
+                **_dataclass_csv_fields("Model", spec.config),
+                **_dataclass_csv_fields("Algorithm", spec.algorithm_config),
+                **_dataclass_csv_fields("Order", spec.order_config),
                 "Total_Cost": result.total_cost,
                 "Best_Bound": result.best_bound,
                 "MIP_Gap": result.mip_gap,
                 "Unserved_Rate": result.unserved_rate,
                 "Auto_Usage": result.auto_usage,
                 "Manual_Usage": result.manual_usage,
+                "Direct_Ratio": result.direct_ratio,
+                "Direct_Volume": result.direct_volume,
+                "Transshipment_Volume": result.transshipment_volume,
                 "Message": result.message,
             }
             all_summaries.append(summary)
@@ -532,6 +582,9 @@ def run_experiment_suite(
                     "unserved_rate": result.unserved_rate,
                     "auto_usage": result.auto_usage,
                     "manual_usage": result.manual_usage,
+                    "direct_ratio": result.direct_ratio,
+                    "direct_volume": result.direct_volume,
+                    "transshipment_volume": result.transshipment_volume,
                     "message": result.message,
                     "detail": result.detail,
                 }
@@ -554,9 +607,10 @@ def run_experiment_suite(
     with open(json_filename, "w", encoding="utf-8") as file:
         json.dump(
             {
-                "format_version": 2,
+                "format_version": 3,
                 "generated_at": timestamp,
                 "experiment_count": len(specs),
+                "solver_run_count": len(all_summaries),
                 "solver_names": solver_names,
                 "experiments": json_experiments,
             },

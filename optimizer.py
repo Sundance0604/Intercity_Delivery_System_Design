@@ -118,9 +118,8 @@ class Optimizer:
             )
         # 约束 (4) 与 (5)：两个城市的自动驾驶车辆时序平衡限制。
         # 在时间 t 前，i<=t 表示已经从始发城市发出的车辆，j<=t 表示已经到达
-        # 目的城市的车辆。约束 (4) 按论文原式累计正向出发与反向到达，并加上
-        # 城市 1 的初始车辆数 N_hat^1；约束 (5) 对反向出发、正向到达和城市 2
-        # 作对称处理。二者共同限制各方向在每个时点可执行的城际车辆任务。
+        # 目的城市的车辆。任一城市的累计出发量不能超过该城市的初始车辆数与
+        # 从另一城市累计到达的车辆数之和。
         for t in range(self.cfg.T):
             # ㊣流计算
             positive_departures = gp.quicksum(
@@ -140,14 +139,14 @@ class Optimizer:
                 self.y_auto[i, j, "-"]
                 for (i, j) in self.data.arcs_auto if j <= t
             )
-            # 约束 (4)：累计正向出发 - 累计反向到达 + N_hat^1 >= 0。
+            # 约束 (4)：N_hat^1 + 累计反向到达 - 累计正向出发 >= 0。
             self.model.addConstr(
-                positive_departures - negative_arrivals + self.cfg.N_auto[1] >= 0,
+                self.cfg.N_auto[1] + negative_arrivals - positive_departures >= 0,
                 name=f"(4)Intercity_Postive_Flow_Balance_Time{t}"
             )
-            # 约束 (5)：累计反向出发 - 累计正向到达 + N_hat^2 >= 0。
+            # 约束 (5)：N_hat^2 + 累计正向到达 - 累计反向出发 >= 0。
             self.model.addConstr(
-                negative_departures - positive_arrivals + self.cfg.N_auto[2] >= 0,
+                self.cfg.N_auto[2] + positive_arrivals - negative_departures >= 0,
                 name=f"(5)Intercity_Negtive_Flow_Balance_Time{t}"
             )
         # 约束 (6)：人工车辆在单条城市服务弧上的总承运能力限制。
@@ -264,4 +263,64 @@ class Optimizer:
                  for l in self.data.all_orders.keys()),
                 
                 name=f"Demand_Conservation_City{k}"
-            )            
+            )
+
+    def decision_variable_groups(self):
+        """返回全部带时间弧的决策变量，供滚动时域统一固定和截断。"""
+
+        return {
+            "x_manual": self.x_manual,
+            "y_auto": self.y_auto,
+            "g_manual": self.g_manual,
+            "g_auto": self.g_auto,
+        }
+
+    def configure_rolling_window(
+        self,
+        current_time: int,
+        window_end: int,
+        committed_decisions: Dict[str, Dict[tuple, float]],
+    ):
+        """固定历史决策，并关闭预测区间之外的弧。
+
+        模型仍保留全局时间索引。这样历史弧、跨窗口在途车辆和已经承运的货量
+        会继续参与原有累计平衡约束，不需要在每轮人工重建一套边界状态约束。
+        """
+
+        if not 0 <= current_time < window_end <= self.cfg.T:
+            raise ValueError(
+                f"非法滚动窗口：current_time={current_time}, window_end={window_end}"
+            )
+
+        for group_name, variables in self.decision_variable_groups().items():
+            committed = committed_decisions.get(group_name, {})
+            for key, variable in variables.items():
+                departure_time = key[0]
+                arrival_time = key[1]
+
+                if departure_time < current_time:
+                    value = float(committed.get(tuple(key), 0.0))
+                    variable.lb = value
+                    variable.ub = value
+                elif departure_time >= window_end or arrival_time > window_end:
+                    variable.ub = 0.0
+
+        self.model.update()
+
+    def extract_committed_decisions(
+        self,
+        start_time: int,
+        commit_end: int,
+        tolerance: float = 1e-7,
+    ) -> Dict[str, Dict[tuple, float]]:
+        """提取本轮真正执行的决策；预测区间后段的解不会被固定。"""
+
+        decisions: Dict[str, Dict[tuple, float]] = {}
+        for group_name, variables in self.decision_variable_groups().items():
+            decisions[group_name] = {
+                tuple(key): float(variable.X)
+                for key, variable in variables.items()
+                if start_time <= key[0] < commit_end
+                and abs(variable.X) > tolerance
+            }
+        return decisions
