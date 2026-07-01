@@ -1,6 +1,55 @@
 # config.py
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, Tuple
+
+
+@dataclass(frozen=True)
+class RollingHorizonConfig:
+    """Rolling Horizon 算法参数。
+
+    这些参数属于求解策略，而不是配送数学模型，因此与 DeliveryConfig 分开，
+    避免被现有的模型参数灵敏度分析自动收集。
+    """
+
+    prediction_horizon: int = 8
+    rolling_step: int = 2
+
+    def validate(self) -> None:
+        if self.prediction_horizon <= 0:
+            raise ValueError("prediction_horizon 必须大于 0。")
+        if self.rolling_step <= 0:
+            raise ValueError("rolling_step 必须大于 0。")
+        if self.rolling_step > self.prediction_horizon:
+            raise ValueError("rolling_step 不能大于 prediction_horizon。")
+
+
+@dataclass(frozen=True)
+class OrderGenerationConfig:
+    """随机订单生成参数。
+
+    与数学模型和求解算法分离；新增字段后，实验核心和 GUI 会自动发现它。
+    """
+
+    num_orders: int = 20
+    buffer_range: Tuple[int, int] = (0, 5)
+    large_order_prob: float = 0.3
+    small_quantity_range: Tuple[int, int] = (10, 50)
+    large_quantity_range: Tuple[int, int] = (100, 300)
+
+    def validate(self) -> None:
+        if self.num_orders <= 0:
+            raise ValueError("num_orders 必须大于 0。")
+        if not 0 <= self.large_order_prob <= 1:
+            raise ValueError("large_order_prob 必须位于 [0, 1]。")
+        for name in (
+            "buffer_range",
+            "small_quantity_range",
+            "large_quantity_range",
+        ):
+            lower, upper = getattr(self, name)
+            if lower < 0 or lower > upper:
+                raise ValueError(f"{name} 必须满足 0 <= 下限 <= 上限。")
+
 
 @dataclass
 class DeliveryConfig:
@@ -37,3 +86,56 @@ class DeliveryConfig:
 
     service_a_2: float = 0.05
     service_b_2: float = 0.1
+
+    # --- 5. 直送变种模型参数 ---
+    # 以下参数仅供 flexible_direct_mip / flexible_direct_rolling 使用。
+    # solvers 元数据使灵敏度系统不会把这些参数交给不使用直送机制的基准求解器。
+    direct_travel_time_periods: int = field(
+        default=4,
+        metadata={
+            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "sensitivity_levels": [3, 4, 5],
+        },
+    )
+    capacity_direct: float = field(
+        default=1000.0,
+        metadata={
+            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "sensitivity_levels": [500.0, 1000.0, 1500.0],
+        },
+    )
+    cost_direct: float = field(
+        default=25.0,
+        metadata={
+            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "sensitivity_levels": [15.0, 25.0, 35.0],
+        },
+    )
+    transfer_time_periods: int = field(
+        default=0,
+        metadata={
+            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "sensitivity_levels": [0, 1, 2, 4],
+        },
+    )
+    transfer_cost_per_unit: float = field(
+        default=0.0,
+        metadata={
+            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "sensitivity_levels": [0.0, 5.0, 10.0, 20.0],
+        },
+    )
+    direct_ratio_min: float = field(
+        default=0.0,
+        metadata={
+            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "sensitivity_levels": [0.0, 0.25, 0.5, 0.75],
+        },
+    )
+    direct_ratio_max: float = field(
+        default=1.0,
+        metadata={
+            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "sensitivity_levels": [0.25, 0.5, 0.75, 1.0],
+        },
+    )

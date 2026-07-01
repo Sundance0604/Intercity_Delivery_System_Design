@@ -1,137 +1,242 @@
 # Intercity Delivery System Design
 
-这是一个基于混合整数规划（MIP）的城际物流配送系统优化模型。该系统旨在通过协同调度**人工驾驶车辆**和**自动驾驶车辆**，在满足订单时间窗和运力限制的前提下，最小化总运营成本。
+基于混合整数规划（MIP）的城际配送系统优化与仿真实验平台。系统协同调度城市内
+人工驾驶车辆和城际自动驾驶车辆，在车辆、容量、换装时序和订单时间窗约束下最小化
+车辆成本与未服务惩罚。
 
-## ✨ 主要功能
+## 主要功能
 
-* **多车型协同**：支持人工车辆（短途/集散）与自动驾驶车辆（长途/干线）的混合调度。
-* **精确建模**：考虑了车辆流守恒、载重限制、服务时间窗及 BHH 服务效率函数。
-* **动态灵敏度分析**：自动发现 `DeliveryConfig` 的全部字段，并覆盖订单规模、时间窗和需求结构等生成参数。
-* **完整实验记录**：同时保存适合统计的 CSV 和可复现实验输入、订单及求解结果的结构化 JSON。
-## 🛠️ 环境依赖
+- 精确 MIP 与 Rolling Horizon 两种求解方式。
+- 模型参数、算法参数、订单参数三类动态单因素灵敏度分析。
+- GUI 与 CLI 使用同一个实验规格生成、求解和结果输出链路。
+- CSV 汇总结果与可复现实验输入、订单和详细解的 JSON 结果。
 
-* **Python 3.11+**
-* **Gurobi Optimizer** (需要有效的 License)
-* **customtkinter** (用于可视化实验界面)
+## 环境
 
-## 📂 项目结构
+- Python 3.11+
+- Gurobi Optimizer 与有效许可证
+- `numpy`、`pandas`
+- `customtkinter`
+
+推荐使用项目环境：
+
+```bash
+conda activate pavane
+```
+
+## 项目结构
+
+```text
 .
-├── config.py           # 参数配置中心 (车辆参数、成本、时间窗设置)
-
-├── data_loader.py      # 数据预处理 (生成时间弧、计算载重系数、加载订单)
-
-├── optimizer.py        # 核心优化引擎 (Gurobi 变量定义、约束构建、目标函数)
-
-├── main.py             # 程序入口 (启动可视化界面或命令行批处理)
-
-├── experiment_core.py  # 仿真实验核心逻辑 (实验计划、订单生成、批量运行、结果保存)
-
-├── solvers.py          # 求解器接口层 (精确MIP、Rolling Horizon等算法扩展入口)
-
+├── config.py           # 模型、算法、订单三类参数 dataclass
+├── data_loader.py      # 时间弧、集合、容量系数与订单数据
+├── optimizer.py        # Gurobi 数学模型
+├── flexible_direct_optimizer.py # 直送与换装共存模型
+├── rolling_horizon.py  # Rolling Horizon 窗口控制和决策提交
+├── solvers.py          # 统一求解器接口
+├── experiment_core.py  # 动态参数、实验规格、结果输出
 ├── experiment_gui.py   # 可视化实验界面
+├── main.py             # GUI 与 CLI 统一入口
+├── docs/               # 使用与实现说明
+└── results/            # CSV、JSON 输出
+```
 
-└── results/            # 输出目录 (自动存放 CSV 和 JSON 结果文件)
+## 三类动态参数
 
-### 第三部分：运行指南与实验配置
+参数全部定义在 `config.py`：
 
+| 类别 | 配置类 | 参数键前缀 | 适用范围 |
+|---|---|---|---|
+| 模型参数 | `DeliveryConfig` | `model.*` | 精确 MIP、Rolling Horizon |
+| 算法参数 | `RollingHorizonConfig` | `algorithm.*` | Rolling Horizon |
+| 订单参数 | `OrderGenerationConfig` | `order.*` | 订单生成及全部求解器 |
 
-## 🚀 快速开始
+实验核心通过 dataclass 字段反射自动发现参数。以后向这三个配置类新增字段，无需同步
+修改 GUI 参数列表、CLI 参数列表或 CSV 配置列。
 
-1.  **配置参数**：
-    在 `config.py` 中调整基础参数（如时间段 `T`、车辆数 `N`、单位成本 `cost` 等）。
+默认灵敏度水平按基准值自动生成。GUI 和 CLI 都可以用 JSON 数组覆盖水平，例如：
 
-2.  **运行模型**：
-    直接运行主程序，默认打开可视化实验界面。
+```text
+[6,8,10]
+[[0,2],[0,5],[0,8]]
+[{"1":10,"2":10},{"1":30,"2":30}]
+```
 
-    ```bash
-    python main.py
-    ```
+算法参数灵敏度规格只交给支持算法参数的 Rolling Horizon。选择全部求解器时，精确
+MIP 会自动跳过算法参数规格，避免记录参数变化但算法实际未使用的重复结果。
 
-    也可以通过命令行参数运行论文仿真场景：
+## 可视化界面
 
-    ```bash
-    python main.py --cli --scenario quick --solver exact_mip --time-limit 300
-    python main.py --cli --scenario sensitivity --solver exact_mip --seeds 5 --time-limit 500
-    python main.py --cli --scenario all --solver exact_mip --seeds 5 --time-limit 500
-    ```
+直接运行：
 
-    如需先查看实验计划而不求解：
+```bash
+python main.py
+```
 
-    ```bash
-    python main.py --cli --scenario sensitivity --solver exact_mip --seeds 3 --dry-run
-    ```
+界面结构：
 
-3.  **查看结果**：
-    运行结束后，前往 `results/` 目录查看：
-    * `full_experiment_summary_*.csv`：所有算例和求解器的参数、状态及 KPI 汇总。
-    * `full_experiment_results_*.json`：完整配置、订单输入和各求解器结果。
-    * `detail_*.json`：快速测试等指定算例的独立详细结果。
+- 顶部：实验场景、求解器、种子数、时间限制与运行按钮。
+- 中部：模型参数、算法参数、订单参数三个宽幅标签页。
+- 底部：实验计划预览和运行日志并排显示。
 
-## ⚙️ 实验配置
+参数不再集中在左侧窄区域。每个标签页自动读取对应配置类字段，并使用左右两组布局
+充分利用窗口宽度。
 
-详细操作说明请见：
+## 命令行
 
-* [可视化仿真实验界面操作说明](docs/gui_usage.md)
-* [仿真实验运行结果说明](docs/result_fields.md)
+CLI 与 GUI 调用相同的 `ExperimentPlan`、`build_specs()` 和
+`run_experiment_suite()`。
 
-`main.py` 目前支持两类实验套件：
+查看全部动态参数：
 
-* **quick**：默认快速测试，订单规模为 20，用于检查模型能否正常运行。
-* **sensitivity**：动态单因素灵敏度分析，覆盖 `config.py` 的全部配置字段和全部订单生成参数。
-* **all**：依次运行 quick 和 sensitivity。
+```bash
+python main.py --list-parameters
+```
 
-原有小规模基准和规模扩展由 `input.num_orders` 的灵敏度水平统一覆盖。界面中的灵敏度
-水平使用 JSON 数组，例如 `[20,50,100,200]`；字典参数可写成
-`[{"1":10,"2":10},{"1":30,"2":30}]`。
+快速比较两个求解器：
 
-主要命令行参数：
+```bash
+python main.py --cli --scenario quick --solver all --time-limit 60
+```
 
-* `--cli`：使用命令行模式；不加该参数时默认打开可视化界面。
-* `--scenario`：选择实验套件，可选 `quick`、`sensitivity`、`all`。
-* `--solver`：选择求解器，可选 `exact_mip`、`rolling_horizon`、`all`。
-* `--seeds`：每个参数水平运行的随机种子数量，用于得到均值和波动范围。
-* `--time-limit`：每个算例的 Gurobi 求解时间上限，单位为秒。
-* `--dry-run`：仅打印实验计划，不执行求解。
+运行灵敏度分析：
 
-实验结果会记录灵敏度参数及水平、全部订单生成参数、动态展开的全部 `Config_*`
-模型参数，以及成本、服务率、车辆使用量、MIP Gap 和 Best Bound 等求解指标。
+```bash
+python main.py --cli --scenario sensitivity --solver all --seeds 3 --time-limit 300
+```
+
+覆盖一个或多个参数水平：
+
+```bash
+python main.py --cli --scenario sensitivity --solver all --seeds 1 \
+  --level "algorithm.prediction_horizon=[6,8,10]" \
+  --level "order.num_orders=[20,50,100]"
+```
+
+PowerShell 中也可以给 `KEY=JSON` 整体加单引号。
+
+只检查实验矩阵：
+
+```bash
+python main.py --cli --scenario sensitivity --solver all --seeds 1 --dry-run
+```
+
+主要参数：
+
+- `--scenario`：`quick`、`sensitivity`、`all`
+- `--solver`：`exact_mip`、`rolling_horizon`、`flexible_direct_mip`、
+  `flexible_direct_rolling`、`all`
+- `--seeds`：每个参数水平的随机种子数
+- `--time-limit`：每次求解的总时间限制
+- `--level KEY=JSON`：覆盖动态参数水平，可重复使用
+- `--list-parameters`：列出三类参数及默认水平
+- `--dry-run`：打印规格但不求解
+
+## 结果
+
+输出目录为 `results/`：
+
+- `full_experiment_summary_*.csv`：一行对应一次实际求解。
+- `full_experiment_results_*.json`：参数、订单、多个求解器结果和详细解。
+- `detail_*.json`：需要保存明细的单个算例结果。
+
+CSV 参数列按类别动态展开：
+
+```text
+Model_T
+Algorithm_prediction_horizon
+Order_num_orders
+```
+
+JSON 分别保存：
+
+```text
+model_parameters
+algorithm_parameters
+order_parameters
+generation_parameters
+```
+
+结果格式版本当前为 `3`。Rolling Horizon 的 `Best_Bound` 和全局 `MIP_Gap` 留空，
+各窗口状态和窗口 Gap 位于 `detail.windows`。
+
+## 相关文档
+
+- [Rolling Horizon 实现与修改说明](docs/rolling_horizon.md)
+- [直送—换装协同模型实现说明](docs/flexible_direct_model.md)
+- [可视化界面操作说明](docs/gui_usage.md)
+- [实验结果字段说明](docs/result_fields.md)
 
 ## 修改记录
 
+### 2026-07-01
+
+#### Rolling Horizon
+
+- 实现“外部一次调用、内部多窗口求解”的 Rolling Horizon 控制器。
+- 增加预测区间 `prediction_horizon` 和滚动步长 `rolling_step`。
+- 固定已经提交的历史弧，关闭预测区间外的决策，并保留跨窗口车辆与货物流状态。
+- 将 Rolling Horizon 正式接入统一求解器注册表、GUI、CLI、CSV 和 JSON。
+- 修正自动驾驶车辆城市库存平衡约束符号。
+
+#### 三类动态参数
+
+- 将参数明确拆分为 `DeliveryConfig`、`RollingHorizonConfig` 和
+  `OrderGenerationConfig`。
+- 删除订单参数硬编码字典，三类灵敏度参数统一通过 dataclass 字段动态发现。
+- 实验规格同时携带模型、算法、订单三类配置。
+- CSV 和 JSON 分类别动态记录全部参数。
+- 精确 MIP 自动跳过不适用的算法参数灵敏度规格。
+
+#### GUI 与 CLI
+
+- GUI 改为顶部控制栏、中部三类参数宽幅标签页、底部预览/日志双栏布局。
+- CLI 新增 `--list-parameters` 和可重复使用的 `--level KEY=JSON`。
+- GUI 与 CLI 统一使用同一实验核心，并显示真实的适用求解次数。
+- 已通过 CLI 同时运行精确 MIP 和 Rolling Horizon 的快速回归测试。
+
+#### 直送—换装协同模型
+
+- 新增独立的 `FlexibleDirectOptimizer`，允许自动化换装运输与人工跨城直送共存。
+- 直送车辆与城市人工车共享库存，并在跨城后进入目的城市车队。
+- 新增直送容量、成本、换装时间/成本和直送比例边界参数。
+- 新增完整 MIP 与 Rolling Horizon 两个统一求解器接口。
+- 新增求解级单元测试，覆盖自由直送选择和固定 50% 直送比例。
+
 ### 2026-06-27 动态灵敏度实验与完整结果输出
 
-* 将实验类别精简为快速测试和灵敏度分析；订单规模水平同时承担基准与规模扩展实验。
-* 灵敏度分析改为动态发现 `DeliveryConfig` 的全部 dataclass 字段，新增配置字段后无需修改 GUI。
-* 将订单数、时间窗缓冲、大订单概率及大小订单货量范围全部纳入单因素灵敏度分析。
-* GUI 的参数水平统一采用 JSON 数组，支持数值、布尔值、区间、列表和城市字典。
-* CSV 自动输出全部 `Config_*` 参数列，并新增明确的灵敏度参数、水平及完整订单生成字段。
-* 新增完整批次 JSON，同一算例的订单只保存一次，并集中记录多个求解器的结果。
+- 将实验类别精简为快速测试和灵敏度分析；订单规模水平同时承担基准与规模扩展实验。
+- 灵敏度分析改为动态发现 `DeliveryConfig` 的全部 dataclass 字段，新增配置字段后无需修改 GUI。
+- 将订单数、时间窗缓冲、大订单概率及大小订单货量范围全部纳入单因素灵敏度分析。
+- GUI 的参数水平统一采用 JSON 数组，支持数值、布尔值、区间、列表和城市字典。
+- CSV 自动输出全部 `Config_*` 参数列，并新增明确的灵敏度参数、水平及完整订单生成字段。
+- 新增完整批次 JSON，同一算例的订单只保存一次，并集中记录多个求解器的结果。
 
 ### 2026-06-27 模型公式一致性修正
 
-* 将人工车辆和自动驾驶车辆的承运货量变量由整数变量调整为非负连续变量，与模型中的 \(\mathbb{R}^+\) 定义一致。
-* 将自动驾驶车辆容量约束（7）由“同一弧全部订单货量求和”调整为模型原式中的逐订单约束。
-* 为约束（2）—（11）补充业务含义、累计时序关系和容量计算方式的详细代码注释。
+- 将人工车辆和自动驾驶车辆的承运货量变量由整数变量调整为非负连续变量，与模型中的 \(\mathbb{R}^+\) 定义一致。
+- 将自动驾驶车辆容量约束（7）由“同一弧全部订单货量求和”调整为模型原式中的逐订单约束。
+- 为约束（2）—（11）补充业务含义、累计时序关系和容量计算方式的详细代码注释。
 
 ### 2026-06-26 模型一致性修正
 
-* 修正随机订单生成中的未服务惩罚成本：`OrderBatch.penalty_lost` 现在保存单位未服务惩罚成本，避免在目标函数中重复乘以订单需求量。
-* 修正人工车辆时间弧生成逻辑：时间弧现在包含 `j <= i + f^k(M)` 的边界情况，并限制 `j` 不超过规划期末。
-* 修正自动驾驶车辆跨城平衡约束：约束 (4)(5) 现在按模型区分车辆出发时间 `i <= t` 和到达时间 `j <= t`。
-* 修正转运节点流守恒约束：约束 (9)(10) 现在按订单 `l` 分别建立，避免不同订单之间的货量相互抵消。
-* 暂未调整货量变量类型与自动驾驶车辆容量约束，保持当前整数货量变量和总容量约束实现不变。
+- 修正随机订单生成中的未服务惩罚成本：`OrderBatch.penalty_lost` 现在保存单位未服务惩罚成本，避免在目标函数中重复乘以订单需求量。
+- 修正人工车辆时间弧生成逻辑：时间弧现在包含 `j <= i + f^k(M)` 的边界情况，并限制 `j` 不超过规划期末。
+- 修正自动驾驶车辆跨城平衡约束：约束 (4)(5) 现在按模型区分车辆出发时间 `i <= t` 和到达时间 `j <= t`。
+- 修正转运节点流守恒约束：约束 (9)(10) 现在按订单 `l` 分别建立，避免不同订单之间的货量相互抵消。
+- 暂未调整货量变量类型与自动驾驶车辆容量约束，保持当前整数货量变量和总容量约束实现不变。
 
 ### 2026-06-26 论文仿真实验框架
 
-* 将主程序由交互式选择改为命令行实验套件，支持快速测试、基准测试、规模扩展测试、灵敏度分析和全量实验。
-* 随机订单生成器新增时间窗缓冲区间和大订单比例参数，便于研究时间窗紧迫程度与需求结构变化。
-* 实验结果新增随机种子、总需求量、时间窗参数、大订单比例、MIP Gap 和 Best Bound 等论文分析字段。
-* 支持 `--dry-run` 查看实验计划，便于在正式长时间求解前确认仿真矩阵。
+- 将主程序由交互式选择改为命令行实验套件，支持快速测试、基准测试、规模扩展测试、灵敏度分析和全量实验。
+- 随机订单生成器新增时间窗缓冲区间和大订单比例参数，便于研究时间窗紧迫程度与需求结构变化。
+- 实验结果新增随机种子、总需求量、时间窗参数、大订单比例、MIP Gap 和 Best Bound 等论文分析字段。
+- 支持 `--dry-run` 查看实验计划，便于在正式长时间求解前确认仿真矩阵。
 
 ### 2026-06-26 可视化与求解器接口重构
 
-* 将 `main.py` 拆分为入口、实验核心、求解器接口和可视化界面四层结构。
-* 新增 `customtkinter` 可视化实验界面，可在窗口中选择实验场景、求解方式和参数范围。
-* 新增统一求解器接口，当前支持 `exact_mip`，并预留 `rolling_horizon` 扩展入口。
-* 保证同一个算例的订单数据只生成一次，再传给不同求解器，便于后续算法公平对比。
-* 新增可视化界面操作说明和运行结果字段说明文档。
+- 将 `main.py` 拆分为入口、实验核心、求解器接口和可视化界面四层结构。
+- 新增 `customtkinter` 可视化实验界面，可在窗口中选择实验场景、求解方式和参数范围。
+- 新增统一求解器接口，当前支持 `exact_mip`，并预留 `rolling_horizon` 扩展入口。
+- 保证同一个算例的订单数据只生成一次，再传给不同求解器，便于后续算法公平对比。
+- 新增可视化界面操作说明和运行结果字段说明文档。
