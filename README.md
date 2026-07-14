@@ -4,6 +4,54 @@
 人工驾驶车辆和城际自动驾驶车辆，在车辆、容量、换装时序和订单时间窗约束下最小化
 车辆成本与未服务惩罚。
 
+## 论文 Solution Approach（2026-07-14）
+
+`Intercity_Operation.pdf` 的两个解法已经实现，并作为两个独立求解器接入实验框架：
+
+- `paper_candidate_mip`：状态相关候选弧生成 + 削减后的滚动 MIP（Algorithm 1）。
+- `paper_priority_heuristic`：动态 BHH-aware 优先级构造启发式（Algorithm 2）。
+
+两者使用新的 `paper_rolling_horizon.py`。该控制器支持控制窗口、预测起始窗口、
+扩展完成窗口、订单逐期揭示和已提交车辆/货流状态；原有 `rolling_horizon.py` 未被修改。
+GUI 中两个论文解法是独立复选框，可全选或只选其中一个，旧求解器保留为可选基准。
+
+对应说明：
+
+- [解法 1：状态相关候选弧削减 MIP](docs/state_dependent_candidate_mip.md)
+- [解法 2：动态 BHH-aware 优先级启发式](docs/dynamic_bhh_priority_heuristic.md)
+
+### 生成数据与真实数据
+
+GUI 的“测试数据”区域必须明确选择数据来源：
+
+- **生成数据**：使用 `OrderGenerationConfig` 和随机种子构造订单。
+- **真实数据**：选择 `cfs_data_processor.py` 输出的 `cfs_model_orders.json`。
+
+真实模式按实验种子从文件中确定性抽样 `order.num_orders` 条记录，重新编号并使用当前
+模型的 `penalty_lost`。若订单时间窗超出当前 `T`，程序会报错并提示使用相同规划期
+重新处理 CFS 数据，避免静默裁剪。
+
+官方 2022 CFS PUMS 的处理方法见：
+
+- [CFS 2022 数据内容与处理](docs/cfs_2022_data_processing.md)
+
+示例处理命令（在 `pavane` 环境运行）：
+
+```powershell
+conda activate pavane
+python cfs_data_processor.py --input path\to\cfs_2022_pumf.zip `
+  --output-dir data\cfs_processed --num-orders 100 --seed 42
+```
+
+新增核心文件：
+
+```text
+paper_rolling_horizon.py       # 论文专用滚动时域控制与统一窗口接口
+state_dependent_mip.py         # Algorithm 1
+bhh_priority_heuristic.py      # Algorithm 2
+cfs_data_processor.py          # 官方 CFS PUMS 转换为模型订单
+```
+
 ## 主要功能
 
 - 精确 MIP 与 Rolling Horizon 两种求解方式。
