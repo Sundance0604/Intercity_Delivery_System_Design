@@ -8,6 +8,7 @@ import contextlib
 import io
 import threading
 from datetime import datetime
+from tkinter import filedialog
 from typing import List
 
 import customtkinter as ctk
@@ -63,6 +64,8 @@ class ExperimentApp(ctk.CTk):
         self.running = False
         self.scenario_vars = {}
         self.solver_vars = {}
+        self.data_source_var = ctk.StringVar(value="generated")
+        self.real_data_path_var = ctk.StringVar(value="")
         self.fields = {}
         self.sensitivity_fields = {}
 
@@ -91,7 +94,7 @@ class ExperimentApp(ctk.CTk):
 
         bar = ctk.CTkFrame(self)
         bar.grid(row=1, column=0, sticky="ew", padx=20, pady=(0, 10))
-        bar.grid_columnconfigure((0, 1, 2), weight=1)
+        bar.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
         scenario_frame = ctk.CTkFrame(bar, fg_color="transparent")
         scenario_frame.grid(row=0, column=0, sticky="nsew", padx=12, pady=10)
@@ -118,18 +121,28 @@ class ExperimentApp(ctk.CTk):
         solver_frame.grid(row=0, column=1, sticky="nsew", padx=12, pady=10)
         ctk.CTkLabel(
             solver_frame,
-            text="求解方式",
+            text="论文 Solution Approach（可单选或全选）",
             font=ctk.CTkFont(size=15, weight="bold"),
         ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 6))
-        for column, name in enumerate(SOLVER_REGISTRY):
-            variable = ctk.BooleanVar(value=(name == "exact_mip"))
+        paper_names = ("paper_candidate_mip", "paper_priority_heuristic")
+        for column, name in enumerate(paper_names):
+            variable = ctk.BooleanVar(value=True)
             self.solver_vars[name] = variable
             ctk.CTkCheckBox(
-                solver_frame,
-                text=get_solver_display_name(name),
-                variable=variable,
+                solver_frame, text=get_solver_display_name(name), variable=variable,
                 command=self._refresh_preview,
             ).grid(row=1, column=column, sticky="w", padx=(0, 18))
+        ctk.CTkLabel(solver_frame, text="基准求解器（可选）").grid(
+            row=2, column=0, columnspan=2, sticky="w", pady=(8, 4)
+        )
+        baseline_names = [name for name in SOLVER_REGISTRY if name not in paper_names]
+        for index, name in enumerate(baseline_names):
+            variable = ctk.BooleanVar(value=False)
+            self.solver_vars[name] = variable
+            ctk.CTkCheckBox(
+                solver_frame, text=get_solver_display_name(name), variable=variable,
+                command=self._refresh_preview,
+            ).grid(row=3 + index // 2, column=index % 2, sticky="w", padx=(0, 18), pady=2)
 
         settings_frame = ctk.CTkFrame(bar, fg_color="transparent")
         settings_frame.grid(row=0, column=2, sticky="nsew", padx=12, pady=10)
@@ -167,6 +180,39 @@ class ExperimentApp(ctk.CTk):
             command=self._run_from_gui,
         )
         self.run_button.grid(row=0, column=1, padx=5)
+
+        data_frame = ctk.CTkFrame(bar, fg_color="transparent")
+        data_frame.grid(row=1, column=0, columnspan=4, sticky="ew", padx=12, pady=(0, 10))
+        ctk.CTkLabel(
+            data_frame, text="测试数据", font=ctk.CTkFont(size=15, weight="bold")
+        ).grid(row=0, column=0, sticky="w", padx=(0, 12))
+        ctk.CTkRadioButton(
+            data_frame, text="生成数据", variable=self.data_source_var,
+            value="generated", command=self._refresh_preview,
+        ).grid(row=0, column=1, sticky="w", padx=(0, 14))
+        ctk.CTkRadioButton(
+            data_frame, text="真实数据（CFS 处理后 JSON）", variable=self.data_source_var,
+            value="real", command=self._refresh_preview,
+        ).grid(row=0, column=2, sticky="w", padx=(0, 10))
+        self.real_data_entry = ctk.CTkEntry(
+            data_frame, textvariable=self.real_data_path_var, width=440,
+            placeholder_text="选择 cfs_model_orders.json（仅真实数据模式需要）",
+        )
+        self.real_data_entry.grid(row=0, column=3, sticky="ew", padx=(0, 8))
+        self.real_data_entry.bind("<KeyRelease>", lambda _event: self._refresh_preview())
+        ctk.CTkButton(
+            data_frame, text="浏览", width=70, command=self._browse_real_data
+        ).grid(row=0, column=4, sticky="e")
+        data_frame.grid_columnconfigure(3, weight=1)
+
+    def _browse_real_data(self):
+        path = filedialog.askopenfilename(
+            title="选择 CFS 处理后订单 JSON", filetypes=[("JSON", "*.json"), ("所有文件", "*.*")]
+        )
+        if path:
+            self.real_data_path_var.set(path)
+            self.data_source_var.set("real")
+            self._refresh_preview()
 
     def _compact_entry(self, parent, row, column, value):
         entry = ctk.CTkEntry(parent, width=90)
@@ -313,6 +359,8 @@ class ExperimentApp(ctk.CTk):
 
         lines = [
             f"算例规格数：{len(specs)}",
+            f"数据来源：{'真实 CFS 数据' if self.data_source_var.get() == 'real' else '程序生成数据'}",
+            f"数据文件：{self.real_data_path_var.get() or '未选择'}" if self.data_source_var.get() == "real" else "",
             f"实际求解次数：{run_count}",
             (
                 "分类：模型 {model} / 算法 {algorithm} / 订单 {order}".format(
@@ -360,6 +408,8 @@ class ExperimentApp(ctk.CTk):
             solver_names = self._selected_solvers()
             if not solver_names:
                 raise ValueError("请至少选择一个求解方式。")
+            if self.data_source_var.get() == "real" and not self.real_data_path_var.get().strip():
+                raise ValueError("真实数据模式必须选择 cfs_model_orders.json。")
             if planned_run_count(specs, solver_names) <= 0:
                 raise ValueError("当前参数类别与所选求解器之间没有可执行组合。")
         except Exception as exc:
@@ -375,16 +425,20 @@ class ExperimentApp(ctk.CTk):
         )
         threading.Thread(
             target=self._run_worker,
-            args=(specs, solver_names),
+            args=(specs, solver_names, self.data_source_var.get(), self.real_data_path_var.get().strip()),
             daemon=True,
         ).start()
 
-    def _run_worker(self, specs, solver_names):
+    def _run_worker(self, specs, solver_names, data_source, real_data_path):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         writer = QueueWriter(self._append_log)
         try:
             with contextlib.redirect_stdout(writer), contextlib.redirect_stderr(writer):
-                run_experiment_suite(specs, solver_names, timestamp)
+                run_experiment_suite(
+                    specs, solver_names, timestamp,
+                    data_source=data_source,
+                    real_data_path=real_data_path or None,
+                )
         except Exception as exc:
             self._append_log(f"\n[错误] {exc}\n")
         finally:

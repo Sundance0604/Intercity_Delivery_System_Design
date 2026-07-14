@@ -35,12 +35,23 @@ def parse_args():
             "rolling_horizon",
             "flexible_direct_mip",
             "flexible_direct_rolling",
+            "paper_candidate_mip",
+            "paper_priority_heuristic",
             "all",
         ],
         default="exact_mip",
         help="选择求解器。",
     )
     parser.add_argument("--seeds", type=int, default=3, help="每个参数水平的种子数。")
+    parser.add_argument(
+        "--data-source", choices=["generated", "real"], default="generated",
+        help="订单来源：程序生成或 CFS 处理后的真实数据。",
+    )
+    parser.add_argument(
+        "--real-data-path",
+        help="真实数据模式下的 cfs_model_orders.json 路径。",
+    )
+
     parser.add_argument(
         "--time-limit",
         type=int,
@@ -130,6 +141,8 @@ def run_cli(args):
             "rolling_horizon",
             "flexible_direct_mip",
             "flexible_direct_rolling",
+            "paper_candidate_mip",
+            "paper_priority_heuristic",
         ),
     )
     specs = build_specs(scenarios, plan)
@@ -144,7 +157,13 @@ def run_cli(args):
         return
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_experiment_suite(specs, solver_names, timestamp)
+    run_experiment_suite(
+        specs,
+        solver_names,
+        timestamp,
+        data_source=args.data_source,
+        real_data_path=args.real_data_path,
+    )
 
 
 def main():

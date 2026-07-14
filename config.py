@@ -2,6 +2,13 @@
 from dataclasses import dataclass, field
 from typing import Dict, Tuple
 
+DIRECT_MODEL_SOLVERS = (
+    "flexible_direct_mip",
+    "flexible_direct_rolling",
+    "paper_candidate_mip",
+    "paper_priority_heuristic",
+)
+
 
 @dataclass(frozen=True)
 class RollingHorizonConfig:
@@ -13,6 +20,20 @@ class RollingHorizonConfig:
 
     prediction_horizon: int = 8
     rolling_step: int = 2
+    extension_horizon: int = field(
+        default=6,
+        metadata={
+            "solvers": ("paper_candidate_mip", "paper_priority_heuristic"),
+            "sensitivity_levels": [4, 6, 8],
+        },
+    )
+    priority_epsilon: float = field(
+        default=1e-6,
+        metadata={
+            "solvers": ("paper_priority_heuristic",),
+            "sensitivity_levels": [1e-8, 1e-6, 1e-4],
+        },
+    )
 
     def validate(self) -> None:
         if self.prediction_horizon <= 0:
@@ -21,6 +42,10 @@ class RollingHorizonConfig:
             raise ValueError("rolling_step 必须大于 0。")
         if self.rolling_step > self.prediction_horizon:
             raise ValueError("rolling_step 不能大于 prediction_horizon。")
+        if self.extension_horizon < 0:
+            raise ValueError("extension_horizon 不能小于 0。")
+        if self.priority_epsilon <= 0:
+            raise ValueError("priority_epsilon 必须大于 0。")
 
 
 @dataclass(frozen=True)
@@ -93,49 +118,49 @@ class DeliveryConfig:
     direct_travel_time_periods: int = field(
         default=4,
         metadata={
-            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "solvers": DIRECT_MODEL_SOLVERS,
             "sensitivity_levels": [3, 4, 5],
         },
     )
     capacity_direct: float = field(
         default=1000.0,
         metadata={
-            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "solvers": DIRECT_MODEL_SOLVERS,
             "sensitivity_levels": [500.0, 1000.0, 1500.0],
         },
     )
     cost_direct: float = field(
         default=25.0,
         metadata={
-            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "solvers": DIRECT_MODEL_SOLVERS,
             "sensitivity_levels": [15.0, 25.0, 35.0],
         },
     )
     transfer_time_periods: int = field(
         default=0,
         metadata={
-            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "solvers": DIRECT_MODEL_SOLVERS,
             "sensitivity_levels": [0, 1, 2, 4],
         },
     )
     transfer_cost_per_unit: float = field(
         default=0.0,
         metadata={
-            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "solvers": DIRECT_MODEL_SOLVERS,
             "sensitivity_levels": [0.0, 5.0, 10.0, 20.0],
         },
     )
     direct_ratio_min: float = field(
         default=0.0,
         metadata={
-            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "solvers": DIRECT_MODEL_SOLVERS,
             "sensitivity_levels": [0.0, 0.25, 0.5, 0.75],
         },
     )
     direct_ratio_max: float = field(
         default=1.0,
         metadata={
-            "solvers": ("flexible_direct_mip", "flexible_direct_rolling"),
+            "solvers": DIRECT_MODEL_SOLVERS,
             "sensitivity_levels": [0.25, 0.5, 0.75, 1.0],
         },
     )

@@ -358,12 +358,95 @@ class FlexibleDirectRollingSolver(BaseSolver):
         )
 
 
+class _PaperRollingSolver(BaseSolver):
+    """论文两种窗口解法共用的独立 Rolling Horizon 适配层。"""
+
+    sensitivity_sources = frozenset({"model", "algorithm", "order"})
+    approach_class = None
+
+    def solve(
+        self,
+        config: DeliveryConfig,
+        data: DeliveryData,
+        orders_tuple,
+        time_limit: int,
+        algorithm_config: RollingHorizonConfig,
+    ) -> SolverResult:
+        from paper_rolling_horizon import PaperRollingHorizonController
+
+        _, _, all_orders = orders_tuple
+        total_demand = sum(order.quantity for order in all_orders.values())
+        approach = self.approach_class()
+        outcome = PaperRollingHorizonController(
+            config=config,
+            data=data,
+            orders_tuple=orders_tuple,
+            algorithm_config=algorithm_config,
+            approach=approach,
+        ).run(time_limit=time_limit)
+        served = outcome.direct_volume + outcome.transshipment_volume
+        direct_ratio = outcome.direct_volume / served if served > 0 else 0.0
+        last_window = (
+            outcome.detail.get("windows", [{}])[-1]
+            if outcome.detail and outcome.detail.get("windows")
+            else {}
+        )
+        return SolverResult(
+            solver_name=self.name,
+            status=outcome.status,
+            solve_time_sec=outcome.solve_time_sec,
+            total_cost=outcome.total_cost,
+            best_bound=last_window.get("best_bound"),
+            mip_gap=last_window.get("mip_gap"),
+            unserved_rate=(
+                round(outcome.unserved_amount / total_demand, 4)
+                if outcome.unserved_amount is not None and total_demand > 0
+                else None
+            ),
+            auto_usage=outcome.auto_usage,
+            manual_usage=outcome.manual_usage,
+            detail=outcome.detail,
+            direct_ratio=direct_ratio,
+            direct_volume=outcome.direct_volume,
+            transshipment_volume=outcome.transshipment_volume,
+            message=outcome.message,
+        )
+
+
+class PaperCandidateMIPSolver(_PaperRollingSolver):
+    """Algorithm 1：状态相关候选弧削减后的滚动 MILP。"""
+
+    name = "paper_candidate_mip"
+    display_name = "论文解法 1：状态相关候选弧 MIP"
+
+    @property
+    def approach_class(self):
+        from state_dependent_mip import StateDependentMIPApproach
+
+        return StateDependentMIPApproach
+
+
+class PaperPriorityHeuristicSolver(_PaperRollingSolver):
+    """Algorithm 2：动态 BHH-aware 优先级构造启发式。"""
+
+    name = "paper_priority_heuristic"
+    display_name = "论文解法 2：动态 BHH 优先级启发式"
+
+    @property
+    def approach_class(self):
+        from bhh_priority_heuristic import DynamicBHHPriorityApproach
+
+        return DynamicBHHPriorityApproach
+
+
 # 所有可选求解器都在这里注册。GUI 和命令行都会读取这个注册表。
 SOLVER_REGISTRY: Dict[str, BaseSolver] = {
     ExactMIPSolver.name: ExactMIPSolver(),
     RollingHorizonSolver.name: RollingHorizonSolver(),
     FlexibleDirectMIPSolver.name: FlexibleDirectMIPSolver(),
     FlexibleDirectRollingSolver.name: FlexibleDirectRollingSolver(),
+    PaperCandidateMIPSolver.name: PaperCandidateMIPSolver(),
+    PaperPriorityHeuristicSolver.name: PaperPriorityHeuristicSolver(),
 }
 
 

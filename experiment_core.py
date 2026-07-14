@@ -11,6 +11,7 @@ import re
 from dataclasses import asdict, dataclass, field, fields, replace
 from datetime import datetime
 from itertools import product
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -280,6 +281,51 @@ def generate_random_orders(
     return pos_orders, neg_orders, all_orders
 
 
+def load_real_orders(
+    path: str,
+    config: DeliveryConfig,
+    order_config: OrderGenerationConfig,
+    seed: int = 42,
+):
+    """从 CFS 处理器 JSON 中确定性抽样，并适配当前算例参数。"""
+
+    from cfs_data_processor import load_processed_orders
+
+    input_path = Path(path).expanduser()
+    if not input_path.is_file():
+        raise FileNotFoundError(f"真实数据文件不存在：{input_path}")
+    _, _, source_orders = load_processed_orders(input_path)
+    requested = order_config.num_orders
+    if requested > len(source_orders):
+        raise ValueError(
+            f"真实数据只有 {len(source_orders)} 条订单，当前算例要求 {requested} 条。"
+        )
+
+    selected_ids = sorted(
+        random.Random(seed).sample(list(source_orders), requested)
+    )
+    all_orders = {}
+    for new_id, source_id in enumerate(selected_ids, start=1):
+        source = source_orders[source_id]
+        if source.flow not in {"+", "-"}:
+            raise ValueError(f"订单 {source_id} 的 flow 必须为 '+' 或 '-'。")
+        if not (0 <= source.earliest_start < source.latest_completion <= config.T):
+            raise ValueError(
+                f"订单 {source_id} 的时间窗 [{source.earliest_start}, "
+                f"{source.latest_completion}] 超出当前 T={config.T}；请按相同规划期"
+                "重新运行 cfs_data_processor.py，或调整模型参数。"
+            )
+        all_orders[new_id] = replace(
+            source,
+            batch_id=new_id,
+            penalty_lost=config.penalty_lost,
+        )
+
+    pos_orders = {key: order for key, order in all_orders.items() if order.flow == "+"}
+    neg_orders = {key: order for key, order in all_orders.items() if order.flow == "-"}
+    return pos_orders, neg_orders, all_orders
+
+
 def build_delivery_data(config: DeliveryConfig, orders_tuple) -> DeliveryData:
     """把订单和参数转换为优化模型需要的数据结构。"""
 
@@ -481,6 +527,8 @@ def run_experiment_suite(
     specs: List[ExperimentSpec],
     solver_names: List[str],
     timestamp: str = None,
+    data_source: str = "generated",
+    real_data_path: str = None,
 ) -> pd.DataFrame:
     """批量运行实验，并同时保存完整 CSV 和结构化 JSON。
 
@@ -493,6 +541,10 @@ def run_experiment_suite(
         raise ValueError(f"未知求解器：{', '.join(sorted(unknown_solvers))}")
     if not solver_names:
         raise ValueError("请至少选择一个求解器。")
+    if data_source not in {"generated", "real"}:
+        raise ValueError("data_source 必须为 generated 或 real。")
+    if data_source == "real" and not real_data_path:
+        raise ValueError("选择真实数据时必须提供 CFS 处理后 JSON 文件。")
 
     all_summaries = []
     json_experiments = []
@@ -501,14 +553,21 @@ def run_experiment_suite(
 
     for index, spec in enumerate(specs, start=1):
         print(f"\n[{index}/{len(specs)}] 构建算例 {spec.experiment_id}")
-        orders_tuple = generate_random_orders(
-            spec.config,
-            spec.order_config,
-            seed=spec.seed,
-        )
+        if data_source == "real":
+            orders_tuple = load_real_orders(
+                real_data_path, spec.config, spec.order_config, seed=spec.seed
+            )
+        else:
+            orders_tuple = generate_random_orders(
+                spec.config,
+                spec.order_config,
+                seed=spec.seed,
+            )
         data = build_delivery_data(spec.config, orders_tuple)
         total_demand = sum(order.quantity for order in orders_tuple[2].values())
         json_experiment = {
+            "data_source": data_source,
+            "real_data_path": str(Path(real_data_path).resolve()) if real_data_path else None,
             "scenario": spec.scenario,
             "experiment_id": spec.experiment_id,
             "sensitivity_parameter": spec.sensitivity_parameter or None,
@@ -542,6 +601,7 @@ def run_experiment_suite(
                 "Scenario": spec.scenario,
                 "Exp_ID": spec.experiment_id,
                 "Solver": result.solver_name,
+                "Data_Source": data_source,
                 "Seed": spec.seed,
                 "Sensitivity_Parameter": spec.sensitivity_parameter,
                 "Sensitivity_Value": _json_value(spec.sensitivity_value),
@@ -612,6 +672,8 @@ def run_experiment_suite(
                 "experiment_count": len(specs),
                 "solver_run_count": len(all_summaries),
                 "solver_names": solver_names,
+                "data_source": data_source,
+                "real_data_path": str(Path(real_data_path).resolve()) if real_data_path else None,
                 "experiments": json_experiments,
             },
             file,
