@@ -47,7 +47,7 @@ RollingHorizonConfig(
 
 ## 3. 修改文件
 
-### `config.py`
+### `intercity_delivery/configuration.py`
 
 新增独立的 `RollingHorizonConfig`：
 
@@ -57,7 +57,7 @@ RollingHorizonConfig(
 该配置与 `DeliveryConfig` 分离，并作为“算法参数”由灵敏度系统独立动态加载。
 算法参数规格只交给 Rolling Horizon，精确 MIP 自动跳过。
 
-### `optimizer.py`
+### `intercity_delivery/models/base_optimizer.py`
 
 新增三个公共方法：
 
@@ -73,7 +73,7 @@ N_auto[1] + negative_arrivals - positive_departures >= 0
 N_auto[2] + positive_arrivals - negative_departures >= 0
 ```
 
-### `rolling_horizon.py`
+### `intercity_delivery/algorithms/rolling_horizon.py`
 
 原来的重复模型代码替换为：
 
@@ -85,7 +85,7 @@ N_auto[2] + positive_arrivals - negative_departures >= 0
 传入的 `time_limit` 是整个 Rolling Horizon 过程共享的总预算，而不是每个窗口各用
 一次完整预算。
 
-### `solvers.py`
+### `intercity_delivery/experiments/solvers.py`
 
 删除占位实现，注册正式的 `RollingHorizonSolver`。它将控制器结果转换为项目统一的
 `SolverResult`，因此 GUI、CSV 和 JSON 输出链路无需单独修改。

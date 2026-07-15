@@ -512,7 +512,7 @@ def write_outputs(
 def load_processed_orders(path: str | Path):
     """读取脚本输出，返回项目求解器使用的 (pos, neg, all_orders)。"""
 
-    from data_loader import OrderBatch
+    from intercity_delivery.data.loader import OrderBatch
 
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     all_orders = {

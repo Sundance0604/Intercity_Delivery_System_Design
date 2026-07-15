@@ -10,9 +10,10 @@ from typing import Dict, List, Optional
 
 import gurobipy as gp
 
-from config import DeliveryConfig, RollingHorizonConfig
-from data_loader import DeliveryData
-from optimizer import Optimizer
+from intercity_delivery.configuration import DeliveryConfig, RollingHorizonConfig
+from intercity_delivery.data.loader import DeliveryData
+from intercity_delivery.models.base_optimizer import Optimizer
+from intercity_delivery.models.gurobi_results import optional_model_float
 
 
 @dataclass
@@ -129,7 +130,9 @@ class RollingHorizonController:
             }
             if optimizer.model.SolCount > 0:
                 record["objective"] = optimizer.model.ObjVal
-                record["mip_gap"] = optimizer.model.MIPGap
+                mip_gap = optional_model_float(optimizer.model, "MIPGap")
+                if mip_gap is not None:
+                    record["mip_gap"] = mip_gap
             window_records.append(record)
 
             if optimizer.model.SolCount <= 0:

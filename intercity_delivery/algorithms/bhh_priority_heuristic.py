@@ -7,8 +7,8 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
-from paper_rolling_horizon import PaperWindowContext, PaperWindowSolution
-from state_dependent_mip import CandidateNetwork, StateDependentCandidateGenerator
+from intercity_delivery.algorithms.paper_rolling_horizon import PaperWindowContext, PaperWindowSolution
+from intercity_delivery.algorithms.state_dependent_mip import CandidateNetwork, StateDependentCandidateGenerator
 
 
 @dataclass(frozen=True)
@@ -190,7 +190,7 @@ class DynamicBHHPriorityApproach:
         )
 
     def _direct_capacity(self, context: PaperWindowContext, arc) -> float:
-        from flexible_direct_optimizer import FlexibleDirectOptimizer
+        from intercity_delivery.models.flexible_direct_optimizer import FlexibleDirectOptimizer
 
         # 复用模型中联合 BHH 反函数，避免启发式与 MILP 的容量口径漂移。
         helper = object.__new__(FlexibleDirectOptimizer)

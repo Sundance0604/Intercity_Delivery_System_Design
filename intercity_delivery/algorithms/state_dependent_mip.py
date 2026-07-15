@@ -6,9 +6,10 @@ import math
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Sequence, Set, Tuple
 
-from data_loader import DataLoader, DeliveryData
-from flexible_direct_optimizer import FlexibleDirectOptimizer
-from paper_rolling_horizon import PaperWindowContext, PaperWindowSolution
+from intercity_delivery.data.loader import DataLoader, DeliveryData
+from intercity_delivery.models.flexible_direct_optimizer import FlexibleDirectOptimizer
+from intercity_delivery.algorithms.paper_rolling_horizon import PaperWindowContext, PaperWindowSolution
+from intercity_delivery.models.gurobi_results import optional_model_float
 
 
 Arc = Tuple[int, int]
@@ -315,8 +316,8 @@ class StateDependentMIPApproach:
             feasible=True,
             status=optimizer.model.Status,
             objective=float(optimizer.model.ObjVal),
-            best_bound=float(optimizer.model.ObjBound),
-            mip_gap=float(optimizer.model.MIPGap),
+            best_bound=optional_model_float(optimizer.model, "ObjBound"),
+            mip_gap=optional_model_float(optimizer.model, "MIPGap"),
             decisions=self._extract_decisions(optimizer),
             unserved_by_order={
                 int(order_id): float(variable.X)

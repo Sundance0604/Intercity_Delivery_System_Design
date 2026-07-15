@@ -10,8 +10,8 @@ import time
 from dataclasses import dataclass
 from typing import Dict, Optional
 
-from config import DeliveryConfig, RollingHorizonConfig
-from data_loader import DeliveryData
+from intercity_delivery.configuration import DeliveryConfig, RollingHorizonConfig
+from intercity_delivery.data.loader import DeliveryData
 
 
 @dataclass
@@ -79,7 +79,7 @@ class ExactMIPSolver(BaseSolver):
         algorithm_config: RollingHorizonConfig,
     ) -> SolverResult:
         import gurobipy as gp
-        from optimizer import Optimizer
+        from intercity_delivery.models.base_optimizer import Optimizer
 
         start_time = time.time()
         _, _, all_orders = orders_tuple
@@ -155,7 +155,7 @@ class RollingHorizonSolver(BaseSolver):
         time_limit: int,
         algorithm_config: RollingHorizonConfig,
     ) -> SolverResult:
-        from rolling_horizon import RollingHorizonController
+        from intercity_delivery.algorithms.rolling_horizon import RollingHorizonController
 
         _, _, all_orders = orders_tuple
         total_demand = sum(order.quantity for order in all_orders.values())
@@ -200,7 +200,7 @@ class FlexibleDirectMIPSolver(BaseSolver):
         algorithm_config: RollingHorizonConfig,
     ) -> SolverResult:
         import gurobipy as gp
-        from flexible_direct_optimizer import FlexibleDirectOptimizer
+        from intercity_delivery.models.flexible_direct_optimizer import FlexibleDirectOptimizer
 
         start_time = time.time()
         _, _, all_orders = orders_tuple
@@ -321,8 +321,8 @@ class FlexibleDirectRollingSolver(BaseSolver):
         time_limit: int,
         algorithm_config: RollingHorizonConfig,
     ) -> SolverResult:
-        from flexible_direct_optimizer import FlexibleDirectOptimizer
-        from rolling_horizon import RollingHorizonController
+        from intercity_delivery.models.flexible_direct_optimizer import FlexibleDirectOptimizer
+        from intercity_delivery.algorithms.rolling_horizon import RollingHorizonController
 
         _, _, all_orders = orders_tuple
         total_demand = sum(order.quantity for order in all_orders.values())
@@ -372,7 +372,7 @@ class _PaperRollingSolver(BaseSolver):
         time_limit: int,
         algorithm_config: RollingHorizonConfig,
     ) -> SolverResult:
-        from paper_rolling_horizon import PaperRollingHorizonController
+        from intercity_delivery.algorithms.paper_rolling_horizon import PaperRollingHorizonController
 
         _, _, all_orders = orders_tuple
         total_demand = sum(order.quantity for order in all_orders.values())
@@ -421,7 +421,7 @@ class PaperCandidateMIPSolver(_PaperRollingSolver):
 
     @property
     def approach_class(self):
-        from state_dependent_mip import StateDependentMIPApproach
+        from intercity_delivery.algorithms.state_dependent_mip import StateDependentMIPApproach
 
         return StateDependentMIPApproach
 
@@ -434,7 +434,7 @@ class PaperPriorityHeuristicSolver(_PaperRollingSolver):
 
     @property
     def approach_class(self):
-        from bhh_priority_heuristic import DynamicBHHPriorityApproach
+        from intercity_delivery.algorithms.bhh_priority_heuristic import DynamicBHHPriorityApproach
 
         return DynamicBHHPriorityApproach
 

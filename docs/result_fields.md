@@ -83,7 +83,7 @@ Order_<OrderGenerationConfig 字段名>
 | `Order_num_orders` | 订单数量 |
 | `Order_buffer_range` | 时间窗随机缓冲区间 |
 
-字典、列表和区间在 CSV 单元格中保存为 JSON 文本。用户在 `config.py` 新增字段后，
+字典、列表和区间在 CSV 单元格中保存为 JSON 文本。用户在 `intercity_delivery/configuration.py` 新增字段后，
 CSV 会自动新增对应列，不需要修改输出代码。
 
 ### 2.5 目标值与算法质量

@@ -13,7 +13,7 @@ from typing import List
 
 import customtkinter as ctk
 
-from experiment_core import (
+from intercity_delivery.experiments.core import (
     ExperimentPlan,
     PARAMETER_CONFIGS,
     build_specs,
@@ -23,7 +23,7 @@ from experiment_core import (
     planned_run_count,
     run_experiment_suite,
 )
-from solvers import SOLVER_REGISTRY, get_solver_display_name
+from intercity_delivery.experiments.solvers import SOLVER_REGISTRY, get_solver_display_name
 
 
 class QueueWriter(io.TextIOBase):

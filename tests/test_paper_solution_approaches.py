@@ -3,9 +3,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from config import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
-from experiment_core import build_delivery_data, generate_random_orders, load_real_orders
-from solvers import SOLVER_REGISTRY
+from intercity_delivery.configuration import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
+from intercity_delivery.experiments.core import build_delivery_data, generate_random_orders, load_real_orders
+from intercity_delivery.experiments.solvers import SOLVER_REGISTRY
 
 
 class PaperSolutionApproachTests(unittest.TestCase):
@@ -34,6 +34,24 @@ class PaperSolutionApproachTests(unittest.TestCase):
                 self.assertTrue(result.detail["algorithm"]["completed"])
                 self.assertEqual(result.detail["algorithm"]["approach"], name)
                 self.assertGreater(len(result.detail["windows"]), 1)
+
+    def test_candidate_mip_handles_window_without_mip_gap(self):
+        """Regression: a reduced continuous window has no Gurobi MIPGap."""
+
+        config = DeliveryConfig()
+        order_config = OrderGenerationConfig(num_orders=20)
+        orders = generate_random_orders(config, order_config, seed=42)
+        data = build_delivery_data(config, orders)
+        result = SOLVER_REGISTRY["paper_candidate_mip"].solve(
+            config,
+            data,
+            orders,
+            time_limit=30,
+            algorithm_config=RollingHorizonConfig(),
+        )
+
+        self.assertIsNotNone(result.total_cost)
+        self.assertTrue(result.detail["algorithm"]["completed"])
 
     def test_real_order_loader_samples_and_relabels(self):
         payload = {"orders": [

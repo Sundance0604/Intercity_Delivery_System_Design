@@ -4,7 +4,7 @@ import argparse
 from dataclasses import asdict
 from datetime import datetime
 
-from experiment_core import (
+from intercity_delivery.experiments.core import (
     ExperimentPlan,
     build_specs,
     get_sensitivity_parameters,
@@ -172,7 +172,7 @@ def main():
         run_cli(args)
         return
 
-    from experiment_gui import launch_gui
+    from intercity_delivery.experiments.gui import launch_gui
 
     launch_gui()
 

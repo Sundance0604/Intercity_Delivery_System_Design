@@ -2,7 +2,7 @@
 
 ## 1. 文件与接口
 
-核心模型为 `flexible_direct_optimizer.py`，提供两个统一求解器：
+核心模型为 `intercity_delivery/models/flexible_direct_optimizer.py`，提供两个统一求解器：
 
 ```text
 flexible_direct_mip
@@ -12,7 +12,7 @@ flexible_direct_rolling
 程序化构建：
 
 ```python
-from flexible_direct_optimizer import FlexibleDirectOptimizer
+from intercity_delivery.models.flexible_direct_optimizer import FlexibleDirectOptimizer
 
 optimizer = FlexibleDirectOptimizer(config, data).build_model()
 optimizer.model.setParam("TimeLimit", 60)

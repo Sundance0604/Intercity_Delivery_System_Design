@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from cfs_data_processor import ProcessorConfig, load_processed_orders, main
+from intercity_delivery.data.cfs_processor import ProcessorConfig, load_processed_orders, main
 
 
 class CfsDataProcessorTests(unittest.TestCase):

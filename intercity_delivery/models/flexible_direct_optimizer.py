@@ -15,8 +15,8 @@ from typing import Dict
 import gurobipy as gp
 from gurobipy import GRB
 
-from config import DeliveryConfig
-from data_loader import DeliveryData
+from intercity_delivery.configuration import DeliveryConfig
+from intercity_delivery.data.loader import DeliveryData
 
 
 class FlexibleDirectOptimizer:

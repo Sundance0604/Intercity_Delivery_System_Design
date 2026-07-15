@@ -8,9 +8,9 @@
 
 import unittest
 
-from config import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
-from experiment_core import build_delivery_data, generate_random_orders
-from solvers import SOLVER_REGISTRY
+from intercity_delivery.configuration import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
+from intercity_delivery.experiments.core import build_delivery_data, generate_random_orders
+from intercity_delivery.experiments.solvers import SOLVER_REGISTRY
 
 
 class FlexibleDirectOptimizerTests(unittest.TestCase):

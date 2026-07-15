@@ -38,7 +38,7 @@ python main.py
 
 ## 5. 三类动态参数
 
-参数由 `config.py` 中三个 dataclass 自动加载：
+参数由 `intercity_delivery/configuration.py` 中三个 dataclass 自动加载：
 
 - 模型参数：`DeliveryConfig`，参数键为 `model.<字段名>`。
 - 算法参数：`RollingHorizonConfig`，参数键为 `algorithm.<字段名>`。

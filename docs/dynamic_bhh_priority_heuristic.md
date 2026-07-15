@@ -4,7 +4,7 @@
 
 本实现对应 `Intercity_Operation.pdf` 的 Solution Approach / Algorithm 2。它复用解法 1 的状态相关候选网络，但不调用 MIP 求解器，而是按照订单紧迫度、拒单损失和剩余需求动态排序，逐单构造满足车辆、容量、方向和时间窗的直送或换装路径。
 
-实现文件为 `bhh_priority_heuristic.py`，统一注册名为 `paper_priority_heuristic`。它同样只使用新的 `paper_rolling_horizon.py`。
+实现文件为 `intercity_delivery/algorithms/bhh_priority_heuristic.py`，统一注册名为 `paper_priority_heuristic`。它使用论文专用 `paper_rolling_horizon.py`。
 
 ## 动态优先级
 
@@ -29,4 +29,4 @@
 
 ## GUI 使用
 
-在“论文 Solution Approach”中勾选“论文解法 2：动态 BHH 优先级启发式”。可以只选该方法快速测试，也可与解法 1 全选对比。GUI 的“测试数据”区域可明确选择程序生成数据或 `cfs_data_processor.py` 生成的真实 CFS JSON。
+在“论文 Solution Approach”中勾选“论文解法 2：动态 BHH 优先级启发式”。可以只选该方法快速测试，也可与解法 1 全选对比。GUI 的“测试数据”区域可明确选择程序生成数据或 CFS 处理模块生成的真实 JSON。

@@ -59,7 +59,7 @@ d_l^{route}=\rho\,d_l^{GC}
 
 ## 4. 处理流程
 
-处理脚本为项目根目录下的 `cfs_data_processor.py`。
+处理模块为 `intercity_delivery/data/cfs_processor.py`。
 
 ### 4.1 分块读取
 
@@ -155,7 +155,7 @@ conda activate pavane
 显式选择两个都市区，例如 Los Angeles–Long Beach 与 San Jose–San Francisco–Oakland：
 
 ```powershell
-python cfs_data_processor.py `
+python -m intercity_delivery.data.cfs_processor `
   --input "D:\download\cfs_2022_pums.csv.zip" `
   --output-dir "data\cfs_processed" `
   --city-a 06-348 `
@@ -167,7 +167,7 @@ python cfs_data_processor.py `
 自动选择双向货流最充足的都市区对：
 
 ```powershell
-python cfs_data_processor.py `
+python -m intercity_delivery.data.cfs_processor `
   --input "D:\download\cfs_2022_pums.csv.zip" `
   --output-dir "data\cfs_processed" `
   --num-orders 100
@@ -176,7 +176,7 @@ python cfs_data_processor.py `
 若自动得到的干线时间使 `T=24` 过短，可以增大单时段长度或规划期：
 
 ```powershell
-python cfs_data_processor.py `
+python -m intercity_delivery.data.cfs_processor `
   --input "D:\download\cfs_2022_pums.csv.zip" `
   --period-hours 2 `
   --planning-periods 36
@@ -193,8 +193,8 @@ python cfs_data_processor.py `
 在 Python 中加载为当前项目的订单三元组：
 
 ```python
-from cfs_data_processor import load_processed_orders
-from experiment_core import build_delivery_data
+from intercity_delivery.data.cfs_processor import load_processed_orders
+from intercity_delivery.experiments.core import build_delivery_data
 
 orders_tuple = load_processed_orders(
     "data/cfs_processed/cfs_model_orders.json"

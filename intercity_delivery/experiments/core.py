@@ -17,9 +17,9 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-from config import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
-from data_loader import DataLoader, DeliveryData, OrderBatch
-from solvers import SOLVER_REGISTRY
+from intercity_delivery.configuration import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
+from intercity_delivery.data.loader import DataLoader, DeliveryData, OrderBatch
+from intercity_delivery.experiments.solvers import SOLVER_REGISTRY
 
 @dataclass(frozen=True)
 class SensitivityParameter:
@@ -289,7 +289,7 @@ def load_real_orders(
 ):
     """从 CFS 处理器 JSON 中确定性抽样，并适配当前算例参数。"""
 
-    from cfs_data_processor import load_processed_orders
+    from intercity_delivery.data.cfs_processor import load_processed_orders
 
     input_path = Path(path).expanduser()
     if not input_path.is_file():

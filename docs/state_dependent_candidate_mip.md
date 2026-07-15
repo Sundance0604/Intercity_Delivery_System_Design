@@ -4,7 +4,7 @@
 
 本实现对应 `Intercity_Operation.pdf` 的 Solution Approach / Algorithm 1。核心思想不是在每个滚动窗口重复建立完整时空网络，而是根据当前已经提交的车辆状态、当前可见订单和时间窗，只保留仍可能进入可行解的人工配送弧、自动驾驶干线弧和直送弧，再求解削减后的混合整数规划。
 
-实现文件为 `state_dependent_mip.py`，统一注册名为 `paper_candidate_mip`。它只通过新的 `paper_rolling_horizon.py` 运行，不修改原有 `rolling_horizon.py`。
+实现文件为 `intercity_delivery/algorithms/state_dependent_mip.py`，统一注册名为 `paper_candidate_mip`。它只通过论文专用 `paper_rolling_horizon.py` 运行。
 
 ## 窗口和状态
 

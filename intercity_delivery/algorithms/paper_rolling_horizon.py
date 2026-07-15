@@ -11,8 +11,8 @@ import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Protocol
 
-from config import DeliveryConfig, RollingHorizonConfig
-from data_loader import DeliveryData
+from intercity_delivery.configuration import DeliveryConfig, RollingHorizonConfig
+from intercity_delivery.data.loader import DeliveryData
 
 
 @dataclass

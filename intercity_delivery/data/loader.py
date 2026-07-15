@@ -2,7 +2,7 @@
 import math
 from dataclasses import dataclass
 from typing import List, Tuple, Dict
-from config import DeliveryConfig
+from intercity_delivery.configuration import DeliveryConfig
 from functools import lru_cache
 from typing import Iterator
 

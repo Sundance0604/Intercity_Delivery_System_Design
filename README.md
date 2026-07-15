@@ -11,8 +11,8 @@
 - `paper_candidate_mip`：状态相关候选弧生成 + 削减后的滚动 MIP（Algorithm 1）。
 - `paper_priority_heuristic`：动态 BHH-aware 优先级构造启发式（Algorithm 2）。
 
-两者使用新的 `paper_rolling_horizon.py`。该控制器支持控制窗口、预测起始窗口、
-扩展完成窗口、订单逐期揭示和已提交车辆/货流状态；原有 `rolling_horizon.py` 未被修改。
+两者使用 `intercity_delivery/algorithms/paper_rolling_horizon.py`。该控制器支持控制窗口、预测起始窗口、
+扩展完成窗口、订单逐期揭示和已提交车辆/货流状态；原有算法位于 `intercity_delivery/algorithms/rolling_horizon.py`。
 GUI 中两个论文解法是独立复选框，可全选或只选其中一个，旧求解器保留为可选基准。
 
 对应说明：
@@ -25,7 +25,7 @@ GUI 中两个论文解法是独立复选框，可全选或只选其中一个，�
 GUI 的“测试数据”区域必须明确选择数据来源：
 
 - **生成数据**：使用 `OrderGenerationConfig` 和随机种子构造订单。
-- **真实数据**：选择 `cfs_data_processor.py` 输出的 `cfs_model_orders.json`。
+- **真实数据**：选择 CFS 处理模块输出的 `cfs_model_orders.json`。
 
 真实模式按实验种子从文件中确定性抽样 `order.num_orders` 条记录，重新编号并使用当前
 模型的 `penalty_lost`。若订单时间窗超出当前 `T`，程序会报错并提示使用相同规划期
@@ -39,17 +39,17 @@ GUI 的“测试数据”区域必须明确选择数据来源：
 
 ```powershell
 conda activate pavane
-python cfs_data_processor.py --input path\to\cfs_2022_pumf.zip `
+python -m intercity_delivery.data.cfs_processor --input path\to\cfs_2022_pumf.zip `
   --output-dir data\cfs_processed --num-orders 100 --seed 42
 ```
 
-新增核心文件：
+论文解法核心文件：
 
 ```text
-paper_rolling_horizon.py       # 论文专用滚动时域控制与统一窗口接口
-state_dependent_mip.py         # Algorithm 1
-bhh_priority_heuristic.py      # Algorithm 2
-cfs_data_processor.py          # 官方 CFS PUMS 转换为模型订单
+intercity_delivery/algorithms/paper_rolling_horizon.py      # 论文专用滚动时域接口
+intercity_delivery/algorithms/state_dependent_mip.py        # Algorithm 1
+intercity_delivery/algorithms/bhh_priority_heuristic.py     # Algorithm 2
+intercity_delivery/data/cfs_processor.py                    # 官方 CFS PUMS 转换
 ```
 
 ## 主要功能
@@ -76,22 +76,33 @@ conda activate pavane
 
 ```text
 .
-├── config.py           # 模型、算法、订单三类参数 dataclass
-├── data_loader.py      # 时间弧、集合、容量系数与订单数据
-├── optimizer.py        # Gurobi 数学模型
-├── flexible_direct_optimizer.py # 直送与换装共存模型
-├── rolling_horizon.py  # Rolling Horizon 窗口控制和决策提交
-├── solvers.py          # 统一求解器接口
-├── experiment_core.py  # 动态参数、实验规格、结果输出
-├── experiment_gui.py   # 可视化实验界面
-├── main.py             # GUI 与 CLI 统一入口
-├── docs/               # 使用与实现说明
-└── results/            # CSV、JSON 输出
+├── main.py                         # GUI 与 CLI 统一入口（根目录唯一 Python 文件）
+├── intercity_delivery/
+│   ├── configuration.py            # 模型、算法、订单配置
+│   ├── data/
+│   │   ├── loader.py               # 时间弧、容量系数与订单结构
+│   │   └── cfs_processor.py        # 官方 CFS 数据处理
+│   ├── models/
+│   │   ├── base_optimizer.py       # 基础 Gurobi 模型
+│   │   ├── flexible_direct_optimizer.py
+│   │   └── gurobi_results.py       # 状态相关属性安全读取
+│   ├── algorithms/
+│   │   ├── rolling_horizon.py
+│   │   ├── paper_rolling_horizon.py
+│   │   ├── state_dependent_mip.py
+│   │   └── bhh_priority_heuristic.py
+│   └── experiments/
+│       ├── solvers.py               # 统一求解器注册表
+│       ├── core.py                  # 实验规格与结果输出
+│       └── gui.py                   # 可视化界面
+├── tests/                            # 回归测试
+├── docs/                             # 使用与实现说明
+└── results/                          # CSV、JSON 输出
 ```
 
 ## 三类动态参数
 
-参数全部定义在 `config.py`：
+参数全部定义在 `intercity_delivery/configuration.py`：
 
 | 类别 | 配置类 | 参数键前缀 | 适用范围 |
 |---|---|---|---|
@@ -173,9 +184,12 @@ python main.py --cli --scenario sensitivity --solver all --seeds 1 --dry-run
 
 - `--scenario`：`quick`、`sensitivity`、`all`
 - `--solver`：`exact_mip`、`rolling_horizon`、`flexible_direct_mip`、
-  `flexible_direct_rolling`、`all`
+  `flexible_direct_rolling`、`paper_candidate_mip`、
+  `paper_priority_heuristic`、`all`
 - `--seeds`：每个参数水平的随机种子数
 - `--time-limit`：每次求解的总时间限制
+- `--data-source`：`generated` 或 `real`
+- `--real-data-path`：真实数据模式下的 `cfs_model_orders.json`
 - `--level KEY=JSON`：覆盖动态参数水平，可重复使用
 - `--list-parameters`：列出三类参数及默认水平
 - `--dry-run`：打印规格但不求解
