@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 
 from intercity_delivery.data.cfs_processor import ProcessorConfig, load_processed_orders, main
+from intercity_delivery.data.sqlite_store import build_sqlite_store, validate_sqlite_store
 
 
 class CfsDataProcessorTests(unittest.TestCase):
@@ -66,6 +67,59 @@ class CfsDataProcessorTests(unittest.TestCase):
             self.assertEqual(len(orders_tuple[2]), 6)
             for order in orders_tuple[2].values():
                 self.assertLess(order.earliest_start, order.latest_completion)
+
+    def test_sqlite_store_can_feed_order_processor(self):
+        rows = [
+            {
+                "SHIPMT_ID": f"S{index}",
+                "ORIG_CFS_AREA": "06-348" if index % 2 else "06-488",
+                "DEST_CFS_AREA": "06-488" if index % 2 else "06-348",
+                "MODE": "111",
+                "SCTG": "35",
+                "SHIPMT_VALUE": 1000 + index,
+                "SHIPMT_WGHT": 1000 + index,
+                "SHIPMT_DIST_GC": 100 + index,
+                "TEMP_CNTL_YN": "N",
+                "EXPORT_YN": "N",
+                "HAZMAT": "N",
+                "WGT_FACTOR": 1 + index,
+            }
+            for index in range(1, 5)
+        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            source = root / "sample.csv"
+            database = root / "sample.sqlite"
+            output = root / "sqlite_output"
+            pd.DataFrame(rows).to_csv(source, index=False)
+
+            metadata = build_sqlite_store(source, database, chunksize=2)
+            self.assertEqual(metadata["row_count"], 4)
+            self.assertEqual(validate_sqlite_store(database)["row_count"], 4)
+
+            paths = main(
+                [
+                    "--input",
+                    str(database),
+                    "--output-dir",
+                    str(output),
+                    "--city-a",
+                    "06-348",
+                    "--city-b",
+                    "06-488",
+                    "--num-orders",
+                    "4",
+                    "--planning-periods",
+                    "24",
+                    "--min-distance-miles",
+                    "50",
+                    "--chunksize",
+                    "2",
+                ]
+            )
+            payload = json.loads(Path(paths["json"]).read_text(encoding="utf-8"))
+            self.assertEqual(len(payload["orders"]), 4)
+            self.assertEqual({item["flow"] for item in payload["orders"]}, {"+", "-"})
 
     def test_configuration_rejects_short_planning_horizon(self):
         config = ProcessorConfig(planning_periods=1)

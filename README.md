@@ -35,13 +35,21 @@ GUI 的“测试数据”区域必须明确选择数据来源：
 
 - [CFS 2022 数据内容与处理](docs/cfs_2022_data_processing.md)
 
-示例处理命令（在 `pavane` 环境运行）：
+对于 2GB 以上的官方 CSV，推荐先建立一次带索引的 SQLite 缓存，再从缓存生成模型订单：
 
 ```powershell
 conda activate pavane
-python -m intercity_delivery.data.cfs_processor --input path\to\cfs_2022_pumf.zip `
+python -m intercity_delivery.data.sqlite_store `
+  --input data\cfs_2022_pums.csv `
+  --output data\cfs_2022_pums.sqlite
+
+python -m intercity_delivery.data.cfs_processor `
+  --input data\cfs_2022_pums.sqlite `
   --output-dir data\cfs_processed --num-orders 100 --seed 42
 ```
+
+首次建库仍会顺序扫描一次 CSV；随后按 OD、方式和距离的重复筛选直接走 SQLite。
+GUI 的真实数据入口继续选择第二步生成的 `data/cfs_processed/cfs_model_orders.json`。
 
 论文解法核心文件：
 
@@ -81,7 +89,8 @@ conda activate pavane
 │   ├── configuration.py            # 模型、算法、订单配置
 │   ├── data/
 │   │   ├── loader.py               # 时间弧、容量系数与订单结构
-│   │   └── cfs_processor.py        # 官方 CFS 数据处理
+│   │   ├── cfs_processor.py        # 官方 CFS 数据处理
+│   │   └── sqlite_store.py         # 大型 CFS CSV 的索引缓存
 │   ├── models/
 │   │   ├── base_optimizer.py       # 基础 Gurobi 模型
 │   │   ├── flexible_direct_optimizer.py

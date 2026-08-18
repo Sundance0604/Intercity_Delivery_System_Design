@@ -61,9 +61,31 @@ d_l^{route}=\rho\,d_l^{GC}
 
 处理模块为 `intercity_delivery/data/cfs_processor.py`。
 
-### 4.1 分块读取
+### 4.1 SQLite 缓存与分块读取
 
-官方 CSV 规模很大，脚本通过 `pandas.read_csv(..., chunksize=250000)` 分块读取，只加载转换所需的 12 列。CSV、GZIP 和仅包含一个 CSV 的 ZIP 均可直接读取。
+当前官方 CSV 约 2.82GB。首次转换使用 `pandas.read_csv(..., chunksize=250000)`，只加载转换所需的 12 列并逐块写入 SQLite，不会把整份数据载入内存：
+
+```powershell
+python -m intercity_delivery.data.sqlite_store `
+  --input data\cfs_2022_pums.csv `
+  --output data\cfs_2022_pums.sqlite
+```
+
+构建器先写入同目录的 `.building` 临时文件，全部数据提交并建立以下索引后才原子重命名：
+
+- 起点—终点索引；
+- 起点—终点—运输方式索引；
+- 运输方式—出口标记—距离筛选索引。
+
+之后从 SQLite 生成订单：
+
+```powershell
+python -m intercity_delivery.data.cfs_processor `
+  --input data\cfs_2022_pums.sqlite `
+  --output-dir data\cfs_processed --num-orders 100 --seed 42
+```
+
+CSV、GZIP 和仅包含一个 CSV 的 ZIP 仍可直接作为 `cfs_processor` 输入，但重复实验推荐使用 SQLite。指定城市对时，筛选条件会下推到 SQL，只读取匹配 OD；SQLite 只是官方记录的无损类型化缓存，订单时间窗仍由后续处理步骤构造。
 
 ### 4.2 基础筛选
 

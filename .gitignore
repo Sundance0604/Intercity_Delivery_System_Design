@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 
 # 本地仿真实验输出
+# 本地原始/缓存数据（CFS CSV、ZIP、SQLite 均可能达到 GB 级）
+/data/
+*.sqlite
+*.sqlite3
+*.db
 results/
 
 # 本地临时文件

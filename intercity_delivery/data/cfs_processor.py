@@ -21,7 +21,9 @@ import heapq
 import json
 import math
 import random
+import sqlite3
 from collections import defaultdict
+from contextlib import closing
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Dict, Iterable, Iterator, List, Optional, Sequence, Tuple
@@ -156,8 +158,75 @@ def _normalize_area(value: object) -> str:
     return f"{state.zfill(2)}-{metro.zfill(3) if metro.isdigit() else metro}"
 
 
-def _read_chunks(path: Path, chunksize: int) -> Iterator[pd.DataFrame]:
-    """只读取转换所需列；支持 CSV、CSV.GZ 以及只含一个 CSV 的 ZIP。"""
+def _sqlite_query(
+    config: Optional[ProcessorConfig],
+    city_pair: Optional[Tuple[str, str]],
+) -> Tuple[str, list]:
+    columns = ", ".join(f'"{column}"' for column in REQUIRED_COLUMNS)
+    if config is None:
+        return f'SELECT {columns} FROM "shipments"', []
+
+    mode_placeholders = ", ".join("?" for _ in config.modes)
+    conditions = [
+        f'"MODE" IN ({mode_placeholders})',
+        '"ORIG_CFS_AREA" IS NOT NULL',
+        '"DEST_CFS_AREA" IS NOT NULL',
+        '"ORIG_CFS_AREA" <> "DEST_CFS_AREA"',
+        '"SHIPMT_WGHT" > 0',
+        '"SHIPMT_DIST_GC" >= ?',
+        '"WGT_FACTOR" > 0',
+    ]
+    parameters: list = [*config.modes, config.min_distance_miles]
+    if config.domestic_only:
+        conditions.append('"EXPORT_YN" = ?')
+        parameters.append("N")
+    if city_pair is not None:
+        city_a, city_b = city_pair
+        conditions.append(
+            '(("ORIG_CFS_AREA" = ? AND "DEST_CFS_AREA" = ?) OR '
+            '("ORIG_CFS_AREA" = ? AND "DEST_CFS_AREA" = ?))'
+        )
+        parameters.extend((city_a, city_b, city_b, city_a))
+    source = (
+        '"shipments" INDEXED BY idx_shipments_od'
+        if city_pair is not None
+        else '"shipments"'
+    )
+    return f"SELECT {columns} FROM {source} WHERE " + " AND ".join(conditions), parameters
+
+
+def _read_chunks(
+    path: Path,
+    chunksize: int,
+    config: Optional[ProcessorConfig] = None,
+    city_pair: Optional[Tuple[str, str]] = None,
+) -> Iterator[pd.DataFrame]:
+    """Read required columns from CSV/ZIP/GZ or the indexed SQLite store."""
+
+    if path.suffix.lower() in {".sqlite", ".sqlite3", ".db"}:
+        query, parameters = _sqlite_query(config, city_pair)
+        with closing(sqlite3.connect(f"file:{path.resolve()}?mode=ro", uri=True)) as connection:
+            columns = {
+                row[1] for row in connection.execute('PRAGMA table_info("shipments")')
+            }
+            missing = set(REQUIRED_COLUMNS) - columns
+            if missing:
+                raise ValueError(
+                    "SQLite shipments 表缺少字段："
+                    + ", ".join(sorted(missing))
+                )
+            for chunk in pd.read_sql_query(
+                query,
+                connection,
+                params=parameters,
+                chunksize=chunksize,
+            ):
+                for column in CODE_COLUMNS:
+                    chunk[column] = chunk[column].astype("string").str.strip()
+                for column in NUMERIC_COLUMNS:
+                    chunk[column] = pd.to_numeric(chunk[column], errors="coerce")
+                yield chunk
+        return
 
     try:
         reader = pd.read_csv(
@@ -213,7 +282,7 @@ def select_city_pair(input_path: Path, config: ProcessorConfig) -> Tuple[str, st
     weighted = defaultdict(lambda: [0.0, 0.0])
     counts = defaultdict(lambda: [0, 0])
 
-    for chunk in _read_chunks(input_path, config.chunksize):
+    for chunk in _read_chunks(input_path, config.chunksize, config=config):
         filtered = _base_filter(chunk, config)
         if filtered.empty:
             continue
@@ -291,7 +360,12 @@ def sample_pair_records(
     eligible_counts = {"+": 0, "-": 0}
     sequence = 0
 
-    for chunk in _read_chunks(input_path, config.chunksize):
+    for chunk in _read_chunks(
+        input_path,
+        config.chunksize,
+        config=config,
+        city_pair=(city_a, city_b),
+    ):
         filtered = _base_filter(chunk, config)
         pair_rows = filtered.loc[
             (
@@ -535,7 +609,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="把 2022 CFS PUMS 转换为城际配送模型订单。"
     )
-    parser.add_argument("--input", required=True, type=Path, help="官方 PUMS CSV/ZIP/GZ。")
+    parser.add_argument("--input", required=True, type=Path, help="官方 PUMS CSV/ZIP/GZ 或转换后的 SQLite。")
     parser.add_argument("--output-dir", type=Path, default=Path("data/cfs_processed"))
     parser.add_argument("--city-a", help="城市1的 CFS Area，如 06-348。")
     parser.add_argument("--city-b", help="城市2的 CFS Area，如 06-488。")
