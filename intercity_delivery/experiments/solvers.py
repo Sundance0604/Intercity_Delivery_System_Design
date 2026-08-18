@@ -417,7 +417,8 @@ class PaperCandidateMIPSolver(_PaperRollingSolver):
     """Algorithm 1：状态相关候选弧削减后的滚动 MILP。"""
 
     name = "paper_candidate_mip"
-    display_name = "论文解法 1：状态相关候选弧 MIP"
+    display_name = "Rolling Horizon：剪枝"
+    result_slug = "RH_pruning"
 
     @property
     def approach_class(self):
@@ -430,7 +431,8 @@ class PaperPriorityHeuristicSolver(_PaperRollingSolver):
     """Algorithm 2：动态 BHH-aware 优先级构造启发式。"""
 
     name = "paper_priority_heuristic"
-    display_name = "论文解法 2：动态 BHH 优先级启发式"
+    display_name = "Rolling Horizon：剪枝 + 生成解"
+    result_slug = "RH_pruning_solution"
 
     @property
     def approach_class(self):
@@ -460,3 +462,9 @@ def get_solver_display_name(name: str) -> str:
     """返回 GUI 中显示的求解器名称。"""
 
     return SOLVER_REGISTRY[name].display_name
+
+
+def get_solver_result_slug(name: str) -> str:
+    """返回适合写入结果文件名的稳定算法短名称。"""
+
+    return getattr(SOLVER_REGISTRY[name], "result_slug", name)

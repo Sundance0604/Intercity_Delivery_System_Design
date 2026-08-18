@@ -5,10 +5,12 @@
 每次完整运行会在 `results/` 中生成：
 
 ```text
-full_experiment_summary_YYYYMMDD_HHMMSS.csv
-full_experiment_results_YYYYMMDD_HHMMSS.json
-detail_<Exp_ID>_<Solver>_YYYYMMDD_HHMMSS.json
+full_experiment_summary_<城市对或generated>__<算法>__YYYYMMDD_HHMMSS.csv
+full_experiment_results_<城市对或generated>__<算法>__YYYYMMDD_HHMMSS.json
+detail_<Exp_ID>_<城市对或generated>__<算法>__YYYYMMDD_HHMMSS.json
 ```
+
+文件名中的算法标签：RH_pruning 表示“Rolling Horizon：剪枝”，RH_pruning_solution 表示“Rolling Horizon：剪枝 + 生成解”。同时选择两种时用加号连接。
 
 CSV 适合统计和制图；完整批次 JSON 用于复现输入、检查订单与解；`detail` 文件目前
 只为快速测试等标记了 `save_detail` 的算例生成。
@@ -25,6 +27,8 @@ CSV 每行代表“一个算例 + 一个求解器”。同一个 `Exp_ID` 交给
 | `Scenario` | `quick` 或 `sensitivity` |
 | `Exp_ID` | 唯一算例编号 |
 | `Solver` | 求解器内部名称 |
+| City_1_CFS_Area、City_2_CFS_Area | 真实数据的两个 CFS Area 代码 |
+| City_1_Name、City_2_Name | 官方 CFS Area 英文名称 |
 | `Seed` | 订单随机种子 |
 | `Sensitivity_Parameter` | 本算例唯一变化的参数，如 `config.cost_auto` |
 | `Sensitivity_Value` | 该参数本算例的实际值；字典和区间保存为 JSON 文本 |
@@ -105,7 +109,7 @@ JSON 顶层结构：
 
 ```json
 {
-  "format_version": 3,
+  "format_version": 4,
   "generated_at": "20260627_181023",
   "experiment_count": 1,
   "solver_names": ["exact_mip"],
@@ -115,11 +119,13 @@ JSON 顶层结构：
 
 | 字段 | 含义 |
 |---|---|
-| `format_version` | 输出结构版本，当前为 3 |
+| format_version | 输出结构版本，当前为 4 |
 | `solver_run_count` | 实际执行的求解次数 |
 | `generated_at` | 本批次时间戳 |
 | `experiment_count` | 算例数量，不乘求解器数量 |
 | `solver_names` | 本批次选择的求解器 |
+| city_pair、city_names | 真实数据的城市代码和官方名称；生成数据为 null |
+| result_context | 写入结果文件名的城市对和算法标签 |
 | `experiments` | 按算例组织的完整数据 |
 
 ### 3.1 experiments 中的单个算例
@@ -135,6 +141,7 @@ JSON 顶层结构：
 | `algorithm_parameters` | 完整算法参数 |
 | `order_parameters` | 完整订单参数 |
 | `generation_parameters` | 订单参数与随机种子 |
+| real_data_metadata | SQLite 抽样统计、城市名称和模型时间建议；生成数据为 null |
 | `orders` | 该算例实际生成的全部订单 |
 | `solver_results` | 各求解器在同一输入上的结果列表 |
 

@@ -36,6 +36,24 @@ python main.py
 算法参数规格只运行 Rolling Horizon 类求解器；直送专属参数只运行两个直送模型
 求解器。预览中的“实际求解次数”已经扣除不适用组合。
 
+### 4.1 两种论文 Solution Approach
+
+两种解法都运行在论文专用 Rolling Horizon 控制器中：
+
+| GUI 名称 | 内部名称 | 窗口内处理 |
+|---|---|---|
+| Rolling Horizon：剪枝 | paper_candidate_mip | 生成状态相关候选网络并求解剪枝后的 MIP |
+| Rolling Horizon：剪枝 + 生成解 | paper_priority_heuristic | 先做相同剪枝，再由动态优先级启发式直接生成解 |
+
+### 4.2 真实 CFS SQLite 与城市对
+
+1. 选择“真实数据（CFS SQLite）”。
+2. 点击“浏览”选择数据库；GUI 在后台读取 shipments 表。
+3. 界面显示实际列名及 SQL 类型。
+4. 先选择城市 1；城市 2 只列出与城市 1 双向均有记录的都市区。
+5. 界面显示两个方向的原始记录数。
+6. 运行时根据订单数和随机种子从该城市对直接抽样，不需要预生成 JSON。
+
 ## 5. 三类动态参数
 
 参数由 `intercity_delivery/configuration.py` 中三个 dataclass 自动加载：
@@ -73,7 +91,8 @@ python main.py
 | 实际求解次数少于规格数×求解器数 | 精确 MIP 自动跳过算法参数规格，属于正常行为 |
 | Rolling Horizon 未完成全部窗口 | 总时间预算可能耗尽，检查 JSON 的 `detail.windows` |
 | 全部订单未服务 | 检查未服务惩罚与车辆成本量纲 |
-| 界面运行时短暂无日志 | Gurobi 正在处理当前窗口或当前完整 MIP |
+| 界面运行时短暂无日志 | SQLite 可能正在加载城市目录，或 Gurobi 正在处理当前窗口 |
+| 城市 2 列表为空 | 所选城市 1 在 SQLite 中没有双向都市区记录 |
 
 ## 8. CLI 等价入口
 

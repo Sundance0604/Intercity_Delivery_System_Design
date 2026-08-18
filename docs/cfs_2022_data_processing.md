@@ -87,6 +87,8 @@ python -m intercity_delivery.data.cfs_processor `
 
 CSV、GZIP 和仅包含一个 CSV 的 ZIP 仍可直接作为 `cfs_processor` 输入，但重复实验推荐使用 SQLite。指定城市对时，筛选条件会下推到 SQL，只读取匹配 OD；SQLite 只是官方记录的无损类型化缓存，订单时间窗仍由后续处理步骤构造。
 
+GUI 现在可以直接加载 SQLite：读取 shipments 的 PRAGMA 列信息，通过 OD 索引汇总双向城市对，并按“城市 1—城市 2”两级联动选择。目录查询不加载货运明细；真正运行时才针对所选 OD 执行加权抽样和订单转换。
+
 ### 4.2 基础筛选
 
 默认条件为：

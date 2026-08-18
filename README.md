@@ -8,12 +8,14 @@
 
 `Intercity_Operation.pdf` 的两个解法已经实现，并作为两个独立求解器接入实验框架：
 
-- `paper_candidate_mip`：状态相关候选弧生成 + 削减后的滚动 MIP（Algorithm 1）。
-- `paper_priority_heuristic`：动态 BHH-aware 优先级构造启发式（Algorithm 2）。
+- paper_candidate_mip：Rolling Horizon + 状态相关候选网络剪枝；每个窗口求解剪枝后的 MIP。
+- paper_priority_heuristic：Rolling Horizon + 同样的候选网络剪枝 + 动态优先级生成可行解。
 
 两者使用 `intercity_delivery/algorithms/paper_rolling_horizon.py`。该控制器支持控制窗口、预测起始窗口、
 扩展完成窗口、订单逐期揭示和已提交车辆/货流状态；原有算法位于 `intercity_delivery/algorithms/rolling_horizon.py`。
 GUI 中两个论文解法是独立复选框，可全选或只选其中一个，旧求解器保留为可选基准。
+
+因此两个 Solution Approach 的共同前提都是 Rolling Horizon；区别在于窗口内采用“剪枝后 MIP”还是“剪枝后直接生成解”。GUI 分别显示为“Rolling Horizon：剪枝”和“Rolling Horizon：剪枝 + 生成解”。
 
 对应说明：
 
@@ -25,11 +27,9 @@ GUI 中两个论文解法是独立复选框，可全选或只选其中一个，�
 GUI 的“测试数据”区域必须明确选择数据来源：
 
 - **生成数据**：使用 `OrderGenerationConfig` 和随机种子构造订单。
-- **真实数据**：选择 CFS 处理模块输出的 `cfs_model_orders.json`。
+- **真实数据**：直接加载带索引的 CFS SQLite。GUI 显示 shipments 列名，并提供双向城市 1/城市 2 联动选择。
 
-真实模式按实验种子从文件中确定性抽样 `order.num_orders` 条记录，重新编号并使用当前
-模型的 `penalty_lost`。若订单时间窗超出当前 `T`，程序会报错并提示使用相同规划期
-重新处理 CFS 数据，避免静默裁剪。
+真实模式从 SQLite 中筛选用户选择的两个 CFS Area，按 WGT_FACTOR 加权、双向平衡地抽样订单，并使用当前规划期构造时间窗。若所选城市对的合格记录不足或规划期短于运输最短完成时间，程序会在求解前明确报错。
 
 官方 2022 CFS PUMS 的处理方法见：
 
@@ -49,7 +49,7 @@ python -m intercity_delivery.data.cfs_processor `
 ```
 
 首次建库仍会顺序扫描一次 CSV；随后按 OD、方式和距离的重复筛选直接走 SQLite。
-GUI 的真实数据入口继续选择第二步生成的 `data/cfs_processed/cfs_model_orders.json`。
+GUI 可以直接选择第一步生成的 data/cfs_2022_pums.sqlite，无需预先生成固定城市对 JSON。
 
 论文解法核心文件：
 
@@ -90,7 +90,8 @@ conda activate pavane
 │   ├── data/
 │   │   ├── loader.py               # 时间弧、容量系数与订单结构
 │   │   ├── cfs_processor.py        # 官方 CFS 数据处理
-│   │   └── sqlite_store.py         # 大型 CFS CSV 的索引缓存
+│   │   ├── sqlite_store.py         # 大型 CFS CSV 的索引缓存
+│   │   └── cfs_catalog.py          # SQLite 列名、城市对和官方区域名称
 │   ├── models/
 │   │   ├── base_optimizer.py       # 基础 Gurobi 模型
 │   │   ├── flexible_direct_optimizer.py
@@ -198,7 +199,8 @@ python main.py --cli --scenario sensitivity --solver all --seeds 1 --dry-run
 - `--seeds`：每个参数水平的随机种子数
 - `--time-limit`：每次求解的总时间限制
 - `--data-source`：`generated` 或 `real`
-- `--real-data-path`：真实数据模式下的 `cfs_model_orders.json`
+- --real-data-path：真实数据模式下的 CFS SQLite 或兼容 JSON
+- --city-a、--city-b：CLI 使用 SQLite 时选择的两个 CFS Area
 - `--level KEY=JSON`：覆盖动态参数水平，可重复使用
 - `--list-parameters`：列出三类参数及默认水平
 - `--dry-run`：打印规格但不求解
@@ -207,9 +209,9 @@ python main.py --cli --scenario sensitivity --solver all --seeds 1 --dry-run
 
 输出目录为 `results/`：
 
-- `full_experiment_summary_*.csv`：一行对应一次实际求解。
-- `full_experiment_results_*.json`：参数、订单、多个求解器结果和详细解。
-- `detail_*.json`：需要保存明细的单个算例结果。
+- full_experiment_summary_<城市对>__<算法>__<时间戳>.csv：一行对应一次实际求解。
+- full_experiment_results_<城市对>__<算法>__<时间戳>.json：完整批次结果。
+- detail_<算例>_<城市对>__<算法>__<时间戳>.json：单算例详细结果。
 
 CSV 参数列按类别动态展开：
 
@@ -228,7 +230,7 @@ order_parameters
 generation_parameters
 ```
 
-结果格式版本当前为 `3`。Rolling Horizon 的 `Best_Bound` 和全局 `MIP_Gap` 留空，
+结果格式版本当前为 4。CSV 新增城市对代码和名称列；完整 JSON 新增 city_pair、city_names、real_data_metadata 和 result_context。Rolling Horizon 的 `Best_Bound` 和全局 `MIP_Gap` 留空，
 各窗口状态和窗口 Gap 位于 `detail.windows`。
 
 ## 相关文档
@@ -237,6 +239,13 @@ generation_parameters
 - [直送—换装协同模型实现说明](docs/flexible_direct_model.md)
 - [可视化界面操作说明](docs/gui_usage.md)
 - [实验结果字段说明](docs/result_fields.md)
+
+## SQLite 城市对 GUI 与结果命名（2026-08-18）
+
+- GUI 真实数据入口改为直接加载 SQLite，并异步显示列名。
+- 城市 1/城市 2 使用双向关系联动选择，显示两个方向的原始记录数。
+- 结果文件名包含城市区域名称、CFS Area 代码和所选 Solution Approach。
+- CSV/JSON 同步保存城市对名称、代码、抽样统计和模型建议。
 
 ## 修改记录
 

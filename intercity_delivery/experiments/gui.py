@@ -9,7 +9,7 @@ import io
 import threading
 from datetime import datetime
 from tkinter import filedialog
-from typing import List
+from typing import List, Optional, Tuple
 
 import customtkinter as ctk
 
@@ -22,6 +22,11 @@ from intercity_delivery.experiments.core import (
     parse_parameter_levels,
     planned_run_count,
     run_experiment_suite,
+)
+from intercity_delivery.data.cfs_catalog import (
+    CFSSQLiteCatalog,
+    cfs_area_name,
+    inspect_cfs_sqlite,
 )
 from intercity_delivery.experiments.solvers import SOLVER_REGISTRY, get_solver_display_name
 
@@ -66,6 +71,14 @@ class ExperimentApp(ctk.CTk):
         self.solver_vars = {}
         self.data_source_var = ctk.StringVar(value="generated")
         self.real_data_path_var = ctk.StringVar(value="")
+        self.sqlite_columns_var = ctk.StringVar(value="尚未加载 SQLite")
+        self.city_a_var = ctk.StringVar(value="")
+        self.city_b_var = ctk.StringVar(value="")
+        self.city_pair_stats_var = ctk.StringVar(value="尚未选择城市对")
+        self.city_label_to_code = {}
+        self.city_pair_records = {}
+        self.loaded_sqlite_path = ""
+        self.catalog_loading = False
         self.fields = {}
         self.sensitivity_fields = {}
 
@@ -183,36 +196,231 @@ class ExperimentApp(ctk.CTk):
 
         data_frame = ctk.CTkFrame(bar, fg_color="transparent")
         data_frame.grid(row=1, column=0, columnspan=4, sticky="ew", padx=12, pady=(0, 10))
+        data_frame.grid_columnconfigure(2, weight=1)
+
         ctk.CTkLabel(
             data_frame, text="测试数据", font=ctk.CTkFont(size=15, weight="bold")
         ).grid(row=0, column=0, sticky="w", padx=(0, 12))
         ctk.CTkRadioButton(
-            data_frame, text="生成数据", variable=self.data_source_var,
-            value="generated", command=self._refresh_preview,
+            data_frame,
+            text="生成数据",
+            variable=self.data_source_var,
+            value="generated",
+            command=self._refresh_preview,
         ).grid(row=0, column=1, sticky="w", padx=(0, 14))
         ctk.CTkRadioButton(
-            data_frame, text="真实数据（CFS 处理后 JSON）", variable=self.data_source_var,
-            value="real", command=self._refresh_preview,
-        ).grid(row=0, column=2, sticky="w", padx=(0, 10))
-        self.real_data_entry = ctk.CTkEntry(
-            data_frame, textvariable=self.real_data_path_var, width=440,
-            placeholder_text="选择 cfs_model_orders.json（仅真实数据模式需要）",
+            data_frame,
+            text="真实数据（CFS SQLite）",
+            variable=self.data_source_var,
+            value="real",
+            command=self._refresh_preview,
+        ).grid(row=0, column=2, sticky="w")
+
+        ctk.CTkLabel(data_frame, text="SQLite 文件").grid(
+            row=1, column=0, sticky="e", padx=(0, 8), pady=(7, 2)
         )
-        self.real_data_entry.grid(row=0, column=3, sticky="ew", padx=(0, 8))
+        self.real_data_entry = ctk.CTkEntry(
+            data_frame,
+            textvariable=self.real_data_path_var,
+            placeholder_text="选择 cfs_2022_pums.sqlite",
+        )
+        self.real_data_entry.grid(
+            row=1, column=1, columnspan=2, sticky="ew", padx=(0, 8), pady=(7, 2)
+        )
         self.real_data_entry.bind("<KeyRelease>", lambda _event: self._refresh_preview())
         ctk.CTkButton(
             data_frame, text="浏览", width=70, command=self._browse_real_data
-        ).grid(row=0, column=4, sticky="e")
-        data_frame.grid_columnconfigure(3, weight=1)
+        ).grid(row=1, column=3, sticky="e", padx=(0, 6), pady=(7, 2))
+        self.load_sqlite_button = ctk.CTkButton(
+            data_frame, text="加载", width=70, command=self._start_load_sqlite
+        )
+        self.load_sqlite_button.grid(row=1, column=4, sticky="e", pady=(7, 2))
 
+        ctk.CTkLabel(data_frame, text="shipments 列名").grid(
+            row=2, column=0, sticky="ne", padx=(0, 8), pady=4
+        )
+        ctk.CTkLabel(
+            data_frame,
+            textvariable=self.sqlite_columns_var,
+            anchor="w",
+            justify="left",
+            wraplength=1080,
+        ).grid(row=2, column=1, columnspan=4, sticky="ew", pady=4)
+
+        ctk.CTkLabel(data_frame, text="城市 1").grid(
+            row=3, column=0, sticky="e", padx=(0, 8), pady=(2, 0)
+        )
+        self.city_a_combo = ctk.CTkComboBox(
+            data_frame,
+            variable=self.city_a_var,
+            values=["请先加载 SQLite"],
+            state="readonly",
+            command=lambda _value: self._on_city_a_selected(),
+        )
+        self.city_a_combo.grid(
+            row=3, column=1, columnspan=2, sticky="ew", padx=(0, 8), pady=(2, 0)
+        )
+        ctk.CTkLabel(data_frame, text="城市 2").grid(
+            row=3, column=3, sticky="e", padx=(0, 8), pady=(2, 0)
+        )
+        self.city_b_combo = ctk.CTkComboBox(
+            data_frame,
+            variable=self.city_b_var,
+            values=["请先加载 SQLite"],
+            state="readonly",
+            command=lambda _value: self._on_city_pair_selected(),
+        )
+        self.city_b_combo.grid(row=3, column=4, sticky="ew", pady=(2, 0))
+        ctk.CTkLabel(
+            data_frame,
+            textvariable=self.city_pair_stats_var,
+            anchor="w",
+        ).grid(row=4, column=1, columnspan=4, sticky="w", pady=(3, 0))
+        self.city_a_combo.set("请先加载 SQLite")
+        self.city_b_combo.set("请先加载 SQLite")
     def _browse_real_data(self):
         path = filedialog.askopenfilename(
-            title="选择 CFS 处理后订单 JSON", filetypes=[("JSON", "*.json"), ("所有文件", "*.*")]
+            title="选择 CFS SQLite",
+            filetypes=[
+                ("SQLite", "*.sqlite *.sqlite3 *.db"),
+                ("所有文件", "*.*"),
+            ],
         )
         if path:
             self.real_data_path_var.set(path)
             self.data_source_var.set("real")
+            self._start_load_sqlite()
+
+    def _start_load_sqlite(self):
+        path = self.real_data_path_var.get().strip()
+        if not path:
+            self._append_log("\n[数据错误] 请先选择 SQLite 文件。\n")
+            return
+        if self.catalog_loading:
+            return
+        self.catalog_loading = True
+        self.load_sqlite_button.configure(state="disabled", text="加载中")
+        self.sqlite_columns_var.set("正在读取 shipments 表结构和双向城市对……")
+        self.city_label_to_code = {}
+        self.city_pair_records = {}
+        self.city_a_var.set("")
+        self.city_b_var.set("")
+        self.city_pair_stats_var.set("正在加载城市对……")
+        self._append_log(f"\n正在加载 CFS SQLite：{path}\n")
+        threading.Thread(
+            target=self._load_sqlite_worker,
+            args=(path,),
+            daemon=True,
+        ).start()
+
+    def _load_sqlite_worker(self, path: str):
+        try:
+            catalog = inspect_cfs_sqlite(path)
+        except Exception as exc:
+            self.after(0, self._on_sqlite_load_error, str(exc))
+            return
+        self.after(0, self._apply_sqlite_catalog, catalog)
+
+    def _apply_sqlite_catalog(self, catalog: CFSSQLiteCatalog):
+        self.catalog_loading = False
+        self.loaded_sqlite_path = catalog.database_path
+        self.real_data_path_var.set(catalog.database_path)
+        self.load_sqlite_button.configure(state="normal", text="重新加载")
+        columns_text = "，".join(
+            f"{name} ({sql_type or '未声明类型'})"
+            for name, sql_type in catalog.columns
+        )
+        self.sqlite_columns_var.set(
+            f"{len(catalog.columns)} 列：{columns_text}"
+        )
+        self.city_pair_records = {
+            (pair.city_a, pair.city_b): pair
+            for pair in catalog.city_pairs
+        }
+        city_codes = sorted(
+            {
+                code
+                for pair in catalog.city_pairs
+                for code in (pair.city_a, pair.city_b)
+            }
+        )
+        labels = {
+            code: f"{cfs_area_name(code)} [{code}]"
+            for code in city_codes
+        }
+        self.city_label_to_code = {
+            label: code for code, label in labels.items()
+        }
+        city_a_values = sorted(labels.values())
+        if not city_a_values:
+            self.city_a_combo.configure(values=["没有可选城市"])
+            self.city_b_combo.configure(values=["没有可选城市"])
+            self.city_a_combo.set("没有可选城市")
+            self.city_b_combo.set("没有可选城市")
+            self.city_pair_stats_var.set("SQLite 中没有双向都市区城市对")
+        else:
+            self.city_a_combo.configure(values=city_a_values)
+            self.city_a_combo.set(city_a_values[0])
+            self.city_a_var.set(city_a_values[0])
+            self._on_city_a_selected()
+        self._append_log(
+            f"SQLite 加载完成：{len(catalog.columns)} 列，"
+            f"{len(catalog.city_pairs)} 个双向都市区城市对。\n"
+        )
+        self._refresh_preview()
+
+    def _on_sqlite_load_error(self, message: str):
+        self.catalog_loading = False
+        self.loaded_sqlite_path = ""
+        self.load_sqlite_button.configure(state="normal", text="加载")
+        self.sqlite_columns_var.set("SQLite 加载失败")
+        self._append_log(f"[SQLite 错误] {message}\n")
+        self._refresh_preview()
+
+    def _on_city_a_selected(self):
+        city_a = self.city_label_to_code.get(self.city_a_var.get())
+        if city_a is None:
+            self.city_pair_stats_var.set("请选择城市 1")
             self._refresh_preview()
+            return
+        partner_codes = sorted(
+            city_b if city_a == pair_a else pair_a
+            for pair_a, city_b in self.city_pair_records
+            if city_a in {pair_a, city_b}
+        )
+        code_to_label = {
+            code: label for label, code in self.city_label_to_code.items()
+        }
+        values = sorted(code_to_label[code] for code in partner_codes)
+        self.city_b_combo.configure(values=values or ["没有双向城市"])
+        selected = values[0] if values else "没有双向城市"
+        self.city_b_combo.set(selected)
+        self.city_b_var.set(selected)
+        self._on_city_pair_selected()
+
+    def _on_city_pair_selected(self):
+        pair = self._selected_city_pair()
+        if pair is None:
+            self.city_pair_stats_var.set("请选择有效的双向城市对")
+        else:
+            record = self.city_pair_records[tuple(sorted(pair))]
+            if pair[0] == record.city_a:
+                forward, reverse = record.records_a_to_b, record.records_b_to_a
+            else:
+                forward, reverse = record.records_b_to_a, record.records_a_to_b
+            self.city_pair_stats_var.set(
+                f"原始记录数：城市 1→城市 2 {forward:,}，"
+                f"城市 2→城市 1 {reverse:,}"
+            )
+        self._refresh_preview()
+
+    def _selected_city_pair(self) -> Optional[Tuple[str, str]]:
+        city_a = self.city_label_to_code.get(self.city_a_var.get())
+        city_b = self.city_label_to_code.get(self.city_b_var.get())
+        if not city_a or not city_b:
+            return None
+        key = tuple(sorted((city_a, city_b)))
+        return (city_a, city_b) if key in self.city_pair_records else None
 
     def _compact_entry(self, parent, row, column, value):
         entry = ctk.CTkEntry(parent, width=90)
@@ -359,8 +567,13 @@ class ExperimentApp(ctk.CTk):
 
         lines = [
             f"算例规格数：{len(specs)}",
-            f"数据来源：{'真实 CFS 数据' if self.data_source_var.get() == 'real' else '程序生成数据'}",
-            f"数据文件：{self.real_data_path_var.get() or '未选择'}" if self.data_source_var.get() == "real" else "",
+            f"数据来源：{'真实 CFS SQLite' if self.data_source_var.get() == 'real' else '程序生成数据'}",
+            f"SQLite：{self.real_data_path_var.get() or '未选择'}" if self.data_source_var.get() == "real" else "",
+            (
+                f"城市对：{self.city_a_var.get() or '未选择'} → {self.city_b_var.get() or '未选择'}"
+                if self.data_source_var.get() == "real"
+                else ""
+            ),
             f"实际求解次数：{run_count}",
             (
                 "分类：模型 {model} / 算法 {algorithm} / 订单 {order}".format(
@@ -408,8 +621,18 @@ class ExperimentApp(ctk.CTk):
             solver_names = self._selected_solvers()
             if not solver_names:
                 raise ValueError("请至少选择一个求解方式。")
-            if self.data_source_var.get() == "real" and not self.real_data_path_var.get().strip():
-                raise ValueError("真实数据模式必须选择 cfs_model_orders.json。")
+            real_city_pair = None
+            if self.data_source_var.get() == "real":
+                path = self.real_data_path_var.get().strip()
+                if not path:
+                    raise ValueError("真实数据模式必须选择 CFS SQLite。")
+                if self.catalog_loading:
+                    raise ValueError("SQLite 仍在加载，请稍候。")
+                if self.loaded_sqlite_path != path:
+                    raise ValueError("SQLite 路径已改变，请点击“加载”。")
+                real_city_pair = self._selected_city_pair()
+                if real_city_pair is None:
+                    raise ValueError("请选择一个双向城市对。")
             if planned_run_count(specs, solver_names) <= 0:
                 raise ValueError("当前参数类别与所选求解器之间没有可执行组合。")
         except Exception as exc:
@@ -425,11 +648,24 @@ class ExperimentApp(ctk.CTk):
         )
         threading.Thread(
             target=self._run_worker,
-            args=(specs, solver_names, self.data_source_var.get(), self.real_data_path_var.get().strip()),
+            args=(
+                specs,
+                solver_names,
+                self.data_source_var.get(),
+                self.real_data_path_var.get().strip(),
+                real_city_pair,
+            ),
             daemon=True,
         ).start()
 
-    def _run_worker(self, specs, solver_names, data_source, real_data_path):
+    def _run_worker(
+        self,
+        specs,
+        solver_names,
+        data_source,
+        real_data_path,
+        real_city_pair,
+    ):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         writer = QueueWriter(self._append_log)
         try:
@@ -438,6 +674,7 @@ class ExperimentApp(ctk.CTk):
                     specs, solver_names, timestamp,
                     data_source=data_source,
                     real_data_path=real_data_path or None,
+                    real_city_pair=real_city_pair,
                 )
         except Exception as exc:
             self._append_log(f"\n[错误] {exc}\n")

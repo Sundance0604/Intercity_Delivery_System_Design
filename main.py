@@ -49,8 +49,10 @@ def parse_args():
     )
     parser.add_argument(
         "--real-data-path",
-        help="真实数据模式下的 cfs_model_orders.json 路径。",
+        help="真实数据模式下的 CFS SQLite 或兼容的 cfs_model_orders.json。",
     )
+    parser.add_argument("--city-a", help="SQLite 真实数据的城市 1 CFS Area。")
+    parser.add_argument("--city-b", help="SQLite 真实数据的城市 2 CFS Area。")
 
     parser.add_argument(
         "--time-limit",
@@ -132,6 +134,9 @@ def run_cli(args):
         _print_parameters()
         return
 
+    if bool(args.city_a) != bool(args.city_b):
+        raise ValueError("--city-a 和 --city-b 必须同时提供。")
+
     plan = _build_plan_from_args(args)
     scenarios = _expand_choice(args.scenario, ("quick", "sensitivity"))
     solver_names = _expand_choice(
@@ -163,6 +168,11 @@ def run_cli(args):
         timestamp,
         data_source=args.data_source,
         real_data_path=args.real_data_path,
+        real_city_pair=(
+            (args.city_a, args.city_b)
+            if args.city_a and args.city_b
+            else None
+        ),
     )
 
 

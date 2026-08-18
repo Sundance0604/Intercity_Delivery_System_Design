@@ -19,7 +19,15 @@ import pandas as pd
 
 from intercity_delivery.configuration import DeliveryConfig, OrderGenerationConfig, RollingHorizonConfig
 from intercity_delivery.data.loader import DataLoader, DeliveryData, OrderBatch
-from intercity_delivery.experiments.solvers import SOLVER_REGISTRY
+from intercity_delivery.data.cfs_catalog import (
+    cfs_area_filename_label,
+    cfs_area_name,
+)
+from intercity_delivery.data.sqlite_store import is_sqlite_path
+from intercity_delivery.experiments.solvers import (
+    SOLVER_REGISTRY,
+    get_solver_result_slug,
+)
 
 @dataclass(frozen=True)
 class SensitivityParameter:
@@ -281,29 +289,20 @@ def generate_random_orders(
     return pos_orders, neg_orders, all_orders
 
 
-def load_real_orders(
-    path: str,
+def _sample_order_batches(
+    source_orders: Dict[int, OrderBatch],
     config: DeliveryConfig,
     order_config: OrderGenerationConfig,
-    seed: int = 42,
+    seed: int,
 ):
-    """从 CFS 处理器 JSON 中确定性抽样，并适配当前算例参数。"""
+    """Deterministically sample and validate an existing model-order pool."""
 
-    from intercity_delivery.data.cfs_processor import load_processed_orders
-
-    input_path = Path(path).expanduser()
-    if not input_path.is_file():
-        raise FileNotFoundError(f"真实数据文件不存在：{input_path}")
-    _, _, source_orders = load_processed_orders(input_path)
     requested = order_config.num_orders
     if requested > len(source_orders):
         raise ValueError(
             f"真实数据只有 {len(source_orders)} 条订单，当前算例要求 {requested} 条。"
         )
-
-    selected_ids = sorted(
-        random.Random(seed).sample(list(source_orders), requested)
-    )
+    selected_ids = sorted(random.Random(seed).sample(list(source_orders), requested))
     all_orders = {}
     for new_id, source_id in enumerate(selected_ids, start=1):
         source = source_orders[source_id]
@@ -312,19 +311,144 @@ def load_real_orders(
         if not (0 <= source.earliest_start < source.latest_completion <= config.T):
             raise ValueError(
                 f"订单 {source_id} 的时间窗 [{source.earliest_start}, "
-                f"{source.latest_completion}] 超出当前 T={config.T}；请按相同规划期"
-                "重新运行 cfs_data_processor.py，或调整模型参数。"
+                f"{source.latest_completion}] 超出当前 T={config.T}。"
             )
         all_orders[new_id] = replace(
             source,
             batch_id=new_id,
             penalty_lost=config.penalty_lost,
         )
-
     pos_orders = {key: order for key, order in all_orders.items() if order.flow == "+"}
     neg_orders = {key: order for key, order in all_orders.items() if order.flow == "-"}
     return pos_orders, neg_orders, all_orders
 
+
+def resolve_real_city_pair(
+    path: str,
+    city_pair: Optional[Tuple[str, str]] = None,
+) -> Tuple[str, str]:
+    """Resolve and validate the city pair for either SQLite or legacy JSON."""
+
+    from intercity_delivery.data.cfs_processor import _normalize_area
+
+    input_path = Path(path).expanduser()
+    if not input_path.is_file():
+        raise FileNotFoundError(f"真实数据文件不存在：{input_path}")
+
+    if is_sqlite_path(input_path):
+        if city_pair is None or len(city_pair) != 2:
+            raise ValueError("SQLite 真实数据必须选择一个城市对。")
+        city_a, city_b = (_normalize_area(item) for item in city_pair)
+    else:
+        payload = json.loads(input_path.read_text(encoding="utf-8"))
+        payload_pair = payload.get("city_pair") or {}
+        city_a = payload_pair.get("city_1")
+        city_b = payload_pair.get("city_2")
+        if city_pair is not None:
+            city_a, city_b = city_pair
+        if not city_a or not city_b:
+            raise ValueError("真实数据 JSON 缺少 city_pair.city_1/city_2。")
+        city_a, city_b = _normalize_area(city_a), _normalize_area(city_b)
+
+    if city_a == city_b:
+        raise ValueError("城市对中的两个 CFS Area 必须不同。")
+    return city_a, city_b
+
+
+def load_real_orders_with_metadata(
+    path: str,
+    config: DeliveryConfig,
+    order_config: OrderGenerationConfig,
+    seed: int = 42,
+    city_pair: Optional[Tuple[str, str]] = None,
+):
+    """Load model orders directly from SQLite or from a processed JSON pool."""
+
+    from intercity_delivery.data.cfs_processor import (
+        ProcessorConfig,
+        build_model_orders,
+        load_processed_orders,
+        sample_pair_records,
+    )
+
+    input_path = Path(path).expanduser()
+    resolved_pair = resolve_real_city_pair(str(input_path), city_pair)
+    city_a, city_b = resolved_pair
+
+    if is_sqlite_path(input_path):
+        processor_config = ProcessorConfig(
+            num_orders=order_config.num_orders,
+            seed=seed,
+            planning_periods=config.T,
+            period_hours=config.t_0 / 60.0,
+            buffer_min_periods=order_config.buffer_range[0],
+            buffer_max_periods=order_config.buffer_range[1],
+            penalty_lost=config.penalty_lost,
+        )
+        processor_config.validate()
+        records, sample_stats = sample_pair_records(
+            input_path, city_a, city_b, processor_config
+        )
+        processed_orders, recommendations = build_model_orders(
+            records, city_a, city_b, processor_config
+        )
+        source_orders = {
+            item.batch_id: OrderBatch(**item.model_fields())
+            for item in processed_orders
+        }
+        orders_tuple = _sample_order_batches(
+            source_orders,
+            config,
+            replace(order_config, num_orders=len(source_orders)),
+            seed,
+        )
+        metadata = {
+            "source_kind": "sqlite",
+            "city_pair": {"city_1": city_a, "city_2": city_b},
+            "city_names": {
+                "city_1": cfs_area_name(city_a),
+                "city_2": cfs_area_name(city_b),
+            },
+            "sampling_statistics": sample_stats,
+            "model_recommendations": recommendations,
+        }
+        return orders_tuple, metadata
+
+    _, _, source_orders = load_processed_orders(input_path)
+    orders_tuple = _sample_order_batches(source_orders, config, order_config, seed)
+    payload = json.loads(input_path.read_text(encoding="utf-8"))
+    metadata = {
+        "source_kind": "processed_json",
+        "city_pair": {"city_1": city_a, "city_2": city_b},
+        "city_names": {
+            "city_1": cfs_area_name(city_a),
+            "city_2": cfs_area_name(city_b),
+        },
+        "model_recommendations": payload.get("model_recommendations", {}),
+    }
+    return orders_tuple, metadata
+
+
+def load_real_orders(
+    path: str,
+    config: DeliveryConfig,
+    order_config: OrderGenerationConfig,
+    seed: int = 42,
+    city_pair: Optional[Tuple[str, str]] = None,
+):
+    """Backward-compatible real-order loader returning only the order tuple."""
+
+    input_path = Path(path).expanduser()
+    if not is_sqlite_path(input_path) and city_pair is None:
+        from intercity_delivery.data.cfs_processor import load_processed_orders
+
+        _, _, source_orders = load_processed_orders(input_path)
+        return _sample_order_batches(source_orders, config, order_config, seed)
+
+    orders_tuple, _metadata = load_real_orders_with_metadata(
+        path, config, order_config, seed=seed, city_pair=city_pair
+    )
+    return orders_tuple
 
 def build_delivery_data(config: DeliveryConfig, orders_tuple) -> DeliveryData:
     """把订单和参数转换为优化模型需要的数据结构。"""
@@ -523,12 +647,39 @@ def planned_run_count(specs: List[ExperimentSpec], solver_names: List[str]) -> i
     return sum(len(applicable_solver_names(spec, solver_names)) for spec in specs)
 
 
+def _safe_filename_fragment(value: str, max_length: int = 180) -> str:
+    value = re.sub(r"[^A-Za-z0-9+_.-]+", "_", str(value)).strip("_.")
+    return (value or "experiment")[:max_length].rstrip("_.-")
+
+
+def build_result_context_tag(
+    data_source: str,
+    solver_names: List[str],
+    city_pair: Optional[Tuple[str, str]] = None,
+) -> str:
+    """Build the human-readable city-pair and approach segment of filenames."""
+
+    if data_source == "real":
+        if not city_pair:
+            raise ValueError("真实数据结果命名需要城市对。")
+        city_a, city_b = city_pair
+        data_label = (
+            f"{cfs_area_filename_label(city_a)}_{city_a}_to_"
+            f"{cfs_area_filename_label(city_b)}_{city_b}"
+        )
+    else:
+        data_label = "generated"
+
+    solver_label = "+".join(get_solver_result_slug(name) for name in solver_names)
+    return _safe_filename_fragment(f"{data_label}__{solver_label}")
+
 def run_experiment_suite(
     specs: List[ExperimentSpec],
     solver_names: List[str],
     timestamp: str = None,
     data_source: str = "generated",
     real_data_path: str = None,
+    real_city_pair: Optional[Tuple[str, str]] = None,
 ) -> pd.DataFrame:
     """批量运行实验，并同时保存完整 CSV 和结构化 JSON。
 
@@ -544,7 +695,16 @@ def run_experiment_suite(
     if data_source not in {"generated", "real"}:
         raise ValueError("data_source 必须为 generated 或 real。")
     if data_source == "real" and not real_data_path:
-        raise ValueError("选择真实数据时必须提供 CFS 处理后 JSON 文件。")
+        raise ValueError("选择真实数据时必须提供 CFS SQLite 或处理后 JSON 文件。")
+
+    selected_city_pair = (
+        resolve_real_city_pair(real_data_path, real_city_pair)
+        if data_source == "real"
+        else None
+    )
+    result_context = build_result_context_tag(
+        data_source, solver_names, selected_city_pair
+    )
 
     all_summaries = []
     json_experiments = []
@@ -554,8 +714,12 @@ def run_experiment_suite(
     for index, spec in enumerate(specs, start=1):
         print(f"\n[{index}/{len(specs)}] 构建算例 {spec.experiment_id}")
         if data_source == "real":
-            orders_tuple = load_real_orders(
-                real_data_path, spec.config, spec.order_config, seed=spec.seed
+            orders_tuple, real_data_metadata = load_real_orders_with_metadata(
+                real_data_path,
+                spec.config,
+                spec.order_config,
+                seed=spec.seed,
+                city_pair=selected_city_pair,
             )
         else:
             orders_tuple = generate_random_orders(
@@ -563,11 +727,13 @@ def run_experiment_suite(
                 spec.order_config,
                 seed=spec.seed,
             )
+            real_data_metadata = None
         data = build_delivery_data(spec.config, orders_tuple)
         total_demand = sum(order.quantity for order in orders_tuple[2].values())
         json_experiment = {
             "data_source": data_source,
             "real_data_path": str(Path(real_data_path).resolve()) if real_data_path else None,
+            "real_data_metadata": real_data_metadata,
             "scenario": spec.scenario,
             "experiment_id": spec.experiment_id,
             "sensitivity_parameter": spec.sensitivity_parameter or None,
@@ -602,6 +768,10 @@ def run_experiment_suite(
                 "Exp_ID": spec.experiment_id,
                 "Solver": result.solver_name,
                 "Data_Source": data_source,
+                "City_1_CFS_Area": selected_city_pair[0] if selected_city_pair else None,
+                "City_1_Name": cfs_area_name(selected_city_pair[0]) if selected_city_pair else None,
+                "City_2_CFS_Area": selected_city_pair[1] if selected_city_pair else None,
+                "City_2_Name": cfs_area_name(selected_city_pair[1]) if selected_city_pair else None,
                 "Seed": spec.seed,
                 "Sensitivity_Parameter": spec.sensitivity_parameter,
                 "Sensitivity_Value": _json_value(spec.sensitivity_value),
@@ -651,8 +821,12 @@ def run_experiment_suite(
             )
 
             if spec.save_detail:
+                detail_context = build_result_context_tag(
+                    data_source, [result.solver_name], selected_city_pair
+                )
                 detail_path = (
-                    f"results/detail_{spec.experiment_id}_{result.solver_name}_{timestamp}.json"
+                    f"results/detail_{spec.experiment_id}_{detail_context}__"
+                    f"{timestamp}.json"
                 )
                 detail_payload = {**json_experiment, "solver_results": [json_experiment["solver_results"][-1]]}
                 with open(detail_path, "w", encoding="utf-8") as file:
@@ -661,19 +835,37 @@ def run_experiment_suite(
         json_experiments.append(json_experiment)
 
     data_frame = pd.DataFrame(all_summaries)
-    csv_filename = f"results/full_experiment_summary_{timestamp}.csv"
-    json_filename = f"results/full_experiment_results_{timestamp}.json"
+    csv_filename = (
+        f"results/full_experiment_summary_{result_context}__{timestamp}.csv"
+    )
+    json_filename = (
+        f"results/full_experiment_results_{result_context}__{timestamp}.json"
+    )
     data_frame.to_csv(csv_filename, index=False, encoding="utf-8-sig")
     with open(json_filename, "w", encoding="utf-8") as file:
         json.dump(
             {
-                "format_version": 3,
+                "format_version": 4,
                 "generated_at": timestamp,
                 "experiment_count": len(specs),
                 "solver_run_count": len(all_summaries),
                 "solver_names": solver_names,
                 "data_source": data_source,
                 "real_data_path": str(Path(real_data_path).resolve()) if real_data_path else None,
+                "city_pair": (
+                    {"city_1": selected_city_pair[0], "city_2": selected_city_pair[1]}
+                    if selected_city_pair
+                    else None
+                ),
+                "city_names": (
+                    {
+                        "city_1": cfs_area_name(selected_city_pair[0]),
+                        "city_2": cfs_area_name(selected_city_pair[1]),
+                    }
+                    if selected_city_pair
+                    else None
+                ),
+                "result_context": result_context,
                 "experiments": json_experiments,
             },
             file,
