@@ -1,0 +1,90 @@
+{
+  "batch_id": "C_PLOW12",
+  "batch_directory_name": "C_PLOW12",
+  "created_at": "2026-08-19T11:39:02",
+  "project_root": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design",
+  "git": {
+    "commit": "57a61dad289ed4fb1bc7e631094ab5ff1e61375e",
+    "branch": "agent/paper-solution-approaches",
+    "status_short": [
+      "M simulation/run_protocol.py",
+      "?? .vscode/",
+      "?? Intercity_Operation.pdf",
+      "?? simulation/runs/C_PEN100/",
+      "?? simulation/runs/C_PEN100B/",
+      "?? simulation/runs/C_PLOW12/"
+    ]
+  },
+  "environment": {
+    "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+    "executable": "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "gurobi": [
+      10,
+      0,
+      3
+    ]
+  },
+  "database": {
+    "path": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\data\\cfs_2022_pums.sqlite",
+    "size_bytes": 4914769920,
+    "modified_at": "2026-08-18T09:39:42.604896",
+    "sha256": null
+  },
+  "city_pair_travel_time_calibration": {
+    "method": "full_eligible_pair_weighted_median",
+    "eligible_record_count": 30185,
+    "direction_counts": {
+      "a_to_b": 15177,
+      "b_to_a": 15008
+    },
+    "weight": "WGT_FACTOR",
+    "representative_gc_miles": 354.0,
+    "circuity_factor": 1.2,
+    "representative_route_miles": 424.8,
+    "truck_speed_mph": 50.0,
+    "representative_linehaul_hours": 8.496,
+    "period_hours": 1.0,
+    "travel_time_periods": 9
+  },
+  "arguments": {
+    "stage": "stage_c",
+    "batch_id": "C_PLOW12",
+    "database": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\data\\cfs_2022_pums.sqlite",
+    "city_a": "06-348",
+    "city_b": "06-488",
+    "order_counts": [
+      100
+    ],
+    "seeds": [
+      4101,
+      4102,
+      4103
+    ],
+    "solvers": [
+      "flexible_direct_mip",
+      "paper_candidate_mip"
+    ],
+    "time_limit": 120,
+    "planning_periods": 24,
+    "period_minutes": 60.0,
+    "penalty_lost": 10.0,
+    "penalty_values": [
+      1.0,
+      2.0
+    ],
+    "mechanisms": [
+      "flexible"
+    ],
+    "fleet_scales": [
+      1.0
+    ],
+    "travel_time": 9,
+    "prediction_horizon": 8,
+    "rolling_step": 2,
+    "extension_horizon": 6,
+    "buffer_min": 0,
+    "buffer_max": 5,
+    "hash_database": false
+  }
+}

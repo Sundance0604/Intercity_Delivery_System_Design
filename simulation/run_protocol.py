@@ -64,6 +64,12 @@ def parse_str_list(text: str) -> list[str]:
     return values
 
 
+def parse_float_list(text: str) -> list[float]:
+    values = [float(item.strip()) for item in text.split(",") if item.strip()]
+    if not values or any(value <= 0 for value in values):
+        raise argparse.ArgumentTypeError("列表必须包含正数。")
+    return values
+
 def json_ready(value: Any) -> Any:
     if isinstance(value, Path):
         return str(value)
@@ -117,13 +123,46 @@ def calibrate_city_pair_travel_time(args: argparse.Namespace) -> dict:
         Path(args.database), args.city_a, args.city_b, config
     )
 
-def build_configs(args: argparse.Namespace, num_orders: int):
+MECHANISM_RATIOS = {
+    "transshipment_only": (0.0, 0.0),
+    "flexible": (0.0, 1.0),
+    "direct_only": (1.0, 1.0),
+}
+
+MECHANISM_SLUGS = {
+    "transshipment_only": "T",
+    "flexible": "F",
+    "direct_only": "D",
+}
+
+
+def build_configs(
+    args: argparse.Namespace,
+    num_orders: int,
+    penalty_lost: float | None = None,
+    mechanism: str = "flexible",
+    fleet_scale: float = 1.0,
+):
+    ratio_min, ratio_max = MECHANISM_RATIOS[mechanism]
+    defaults = DeliveryConfig()
     model = DeliveryConfig(
         T=args.planning_periods,
         t_0=args.period_minutes,
         travel_time_periods=args.travel_time,
-        penalty_lost=args.penalty_lost,
+        penalty_lost=(
+            args.penalty_lost if penalty_lost is None else penalty_lost
+        ),
         direct_travel_time_periods=args.travel_time,
+        N_manual={
+            city: max(1, round(value * fleet_scale))
+            for city, value in defaults.N_manual.items()
+        },
+        N_auto={
+            city: max(1, round(value * fleet_scale))
+            for city, value in defaults.N_auto.items()
+        },
+        direct_ratio_min=ratio_min,
+        direct_ratio_max=ratio_max,
     )
     algorithm = RollingHorizonConfig(
         prediction_horizon=args.prediction_horizon,
@@ -141,25 +180,48 @@ def build_configs(args: argparse.Namespace, num_orders: int):
 
 def build_specs(args: argparse.Namespace) -> list[ExperimentSpec]:
     specs: list[ExperimentSpec] = []
+    penalties = args.penalty_values or [args.penalty_lost]
     for num_orders in args.order_counts:
         for seed in args.seeds:
-            model, algorithm, orders = build_configs(args, num_orders)
-            specs.append(
-                ExperimentSpec(
-                    experiment_id=(
-                        f"{args.stage.upper()}_REAL_N{num_orders}_S{seed}"
-                    ),
-                    scenario=f"simulation_{args.stage}",
-                    config=model,
-                    algorithm_config=algorithm,
-                    order_config=orders,
-                    seed=seed,
-                    time_limit=args.time_limit,
-                    save_detail=True,
-                )
-            )
+            for penalty_lost in penalties:
+                for mechanism in args.mechanisms:
+                    for fleet_scale in args.fleet_scales:
+                        model, algorithm, orders = build_configs(
+                            args,
+                            num_orders,
+                            penalty_lost=penalty_lost,
+                            mechanism=mechanism,
+                            fleet_scale=fleet_scale,
+                        )
+                        penalty_slug = str(penalty_lost).replace(".", "p")
+                        fleet_slug = round(fleet_scale * 100)
+                        if args.stage == "stage_c":
+                            experiment_id = (
+                                f"C_N{num_orders}_S{seed}_P{penalty_slug}_"
+                                f"M{MECHANISM_SLUGS[mechanism]}_F{fleet_slug}"
+                            )
+                            scenario = (
+                                f"simulation_{args.stage}_{mechanism}_"
+                                f"fleet_{fleet_scale:g}"
+                            )
+                        else:
+                            experiment_id = (
+                                f"{args.stage.upper()}_REAL_N{num_orders}_S{seed}"
+                            )
+                            scenario = f"simulation_{args.stage}"
+                        specs.append(
+                            ExperimentSpec(
+                                experiment_id=experiment_id,
+                                scenario=scenario,
+                                config=model,
+                                algorithm_config=algorithm,
+                                order_config=orders,
+                                seed=seed,
+                                time_limit=args.time_limit,
+                                save_detail=True,
+                            )
+                        )
     return specs
-
 
 def preflight(
     args: argparse.Namespace, batch_dir: Path, calibration: dict
@@ -172,7 +234,13 @@ def preflight(
         )
 
     preview_count = max(args.order_counts)
-    model, _algorithm, orders = build_configs(args, preview_count)
+    model, _algorithm, orders = build_configs(
+        args,
+        preview_count,
+        penalty_lost=(args.penalty_values or [args.penalty_lost])[0],
+        mechanism=args.mechanisms[0],
+        fleet_scale=args.fleet_scales[0],
+    )
     orders_tuple, metadata = load_real_orders_with_metadata(
         str(args.database),
         model,
@@ -287,7 +355,11 @@ def write_batch_readme(
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="运行可复现的 CFS 仿真批次。")
-    parser.add_argument("--stage", default="stage_a", choices=["stage_a", "stage_b"])
+    parser.add_argument(
+        "--stage",
+        default="stage_a",
+        choices=["stage_a", "stage_b", "stage_c"],
+    )
     parser.add_argument("--batch-id", required=True)
     parser.add_argument("--database", type=Path, required=True)
     parser.add_argument("--city-a", default="06-348")
@@ -301,6 +373,23 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--planning-periods", type=int, default=24)
     parser.add_argument("--period-minutes", type=float, default=60.0)
     parser.add_argument("--penalty-lost", type=float, default=10.0)
+    parser.add_argument(
+        "--penalty-values",
+        type=parse_float_list,
+        default=None,
+        help="可选罚金列表，用于修复后罚金校准。",
+    )
+    parser.add_argument(
+        "--mechanisms",
+        type=parse_str_list,
+        default=["flexible"],
+        help="transshipment_only,flexible,direct_only",
+    )
+    parser.add_argument(
+        "--fleet-scales",
+        type=parse_float_list,
+        default=[1.0],
+    )
     parser.add_argument(
         "--travel-time",
         type=int,
@@ -319,6 +408,9 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         parser.error(f"数据库不存在：{args.database}")
     if args.time_limit <= 0:
         parser.error("--time-limit 必须大于 0。")
+    unknown_mechanisms = set(args.mechanisms) - set(MECHANISM_RATIOS)
+    if unknown_mechanisms:
+        parser.error("未知机制：" + ", ".join(sorted(unknown_mechanisms)))
     return args
 
 
