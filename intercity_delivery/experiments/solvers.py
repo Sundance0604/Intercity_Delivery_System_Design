@@ -307,7 +307,7 @@ class FlexibleDirectMIPSolver(BaseSolver):
 
 
 class FlexibleDirectRollingSolver(BaseSolver):
-    """使用通用 Rolling Horizon 控制器求解直送/换装共存模型。"""
+    """使用论文窗口逻辑和未剪枝 MILP 的协同 Rolling Horizon 基准。"""
 
     name = "flexible_direct_rolling"
     display_name = "直送-换装协同 Rolling Horizon"
@@ -321,21 +321,27 @@ class FlexibleDirectRollingSolver(BaseSolver):
         time_limit: int,
         algorithm_config: RollingHorizonConfig,
     ) -> SolverResult:
-        from intercity_delivery.models.flexible_direct_optimizer import FlexibleDirectOptimizer
-        from intercity_delivery.algorithms.rolling_horizon import RollingHorizonController
+        from intercity_delivery.algorithms.full_window_mip import FullWindowMIPApproach
+        from intercity_delivery.algorithms.paper_rolling_horizon import PaperRollingHorizonController
 
         _, _, all_orders = orders_tuple
         total_demand = sum(order.quantity for order in all_orders.values())
-        outcome = RollingHorizonController(
-            config,
-            data,
+        outcome = PaperRollingHorizonController(
+            config=config,
+            data=data,
+            orders_tuple=orders_tuple,
             algorithm_config=algorithm_config,
-            optimizer_class=FlexibleDirectOptimizer,
+            approach=FullWindowMIPApproach(),
         ).run(time_limit=time_limit)
         solution_detail = (
             outcome.detail.get("solution", {}) if outcome.detail else {}
         )
-
+        served_volume = outcome.direct_volume + outcome.transshipment_volume
+        direct_ratio = (
+            outcome.direct_volume / served_volume
+            if served_volume > 0
+            else 0.0
+        )
         return SolverResult(
             solver_name=self.name,
             status=outcome.status,
@@ -351,7 +357,7 @@ class FlexibleDirectRollingSolver(BaseSolver):
             auto_usage=outcome.auto_usage,
             manual_usage=outcome.manual_usage,
             detail=outcome.detail,
-            direct_ratio=solution_detail.get("direct_ratio"),
+            direct_ratio=direct_ratio,
             direct_volume=solution_detail.get("direct_volume"),
             transshipment_volume=solution_detail.get("transshipment_volume"),
             message=outcome.message,
@@ -428,7 +434,7 @@ class PaperCandidateMIPSolver(_PaperRollingSolver):
 
 
 class PaperPriorityHeuristicSolver(_PaperRollingSolver):
-    """Algorithm 2：动态 BHH-aware 优先级构造启发式。"""
+    """Algorithm 2：BHH-aware 构造初解 + 候选弧削减 MILP。"""
 
     name = "paper_priority_heuristic"
     display_name = "Rolling Horizon：剪枝 + 生成解"
@@ -436,9 +442,9 @@ class PaperPriorityHeuristicSolver(_PaperRollingSolver):
 
     @property
     def approach_class(self):
-        from intercity_delivery.algorithms.bhh_priority_heuristic import DynamicBHHPriorityApproach
+        from intercity_delivery.algorithms.warm_started_mip import WarmStartedStateDependentMIPApproach
 
-        return DynamicBHHPriorityApproach
+        return WarmStartedStateDependentMIPApproach
 
 
 # 所有可选求解器都在这里注册。GUI 和命令行都会读取这个注册表。

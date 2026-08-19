@@ -274,6 +274,7 @@ class StateDependentMIPApproach:
     """Algorithm 1 候选网络上的滚动 MILP 窗口解法。"""
 
     name = "paper_candidate_mip"
+    _candidate_generator = StateDependentCandidateGenerator
 
     @staticmethod
     def _extract_decisions(optimizer) -> Dict[str, Dict[tuple, float]]:
@@ -287,7 +288,7 @@ class StateDependentMIPApproach:
         }
 
     def solve_window(self, context: PaperWindowContext) -> PaperWindowSolution:
-        network = StateDependentCandidateGenerator(context).generate()
+        network = self._candidate_generator(context).generate()
         optimizer = ReducedFlexibleDirectOptimizer(
             context.config, network.data, network.direct_arcs
         ).build_model()

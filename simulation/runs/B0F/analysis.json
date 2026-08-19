@@ -1,0 +1,62 @@
+{
+  "batch_id": "B0F",
+  "source_result": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\simulation\\runs\\B0F\\results\\full_experiment_results_Los_Angeles-Long_Beach_06-348_to_San_Jose-San_Francisco-Oakland_06-488__flexible_direct_mip+flexible_direct_rolling__20260819_100808.json",
+  "city_pair": {
+    "city_1": "06-348",
+    "city_2": "06-488"
+  },
+  "city_names": {
+    "city_1": "Los Angeles-Long Beach, CA",
+    "city_2": "San Jose-San Francisco-Oakland, CA"
+  },
+  "rows": [
+    {
+      "experiment_id": "STAGE_B_REAL_N10_S3001",
+      "seed": 3001,
+      "num_orders": 10,
+      "total_demand": 119.0,
+      "solver": "flexible_direct_mip",
+      "status": 2,
+      "solve_time_sec": 0.23,
+      "total_cost": 35000.0,
+      "unserved_rate": 0.5882,
+      "auto_usage": 1.0,
+      "manual_usage": 2.0,
+      "window_count": 0,
+      "window_time_mean_sec": null,
+      "window_time_p95_sec": null,
+      "window_time_max_sec": null,
+      "arc_reduction_mean": null,
+      "arc_reduction_min": null,
+      "arc_reduction_max": null,
+      "mip_gap_mean": null,
+      "variable_count_max": null,
+      "constraint_count_max": null,
+      "direct_ratio_violation_windows": 0
+    },
+    {
+      "experiment_id": "STAGE_B_REAL_N10_S3001",
+      "seed": 3001,
+      "num_orders": 10,
+      "total_demand": 119.0,
+      "solver": "flexible_direct_rolling",
+      "status": 2,
+      "solve_time_sec": 2.32,
+      "total_cost": 41650.0,
+      "unserved_rate": 1.0,
+      "auto_usage": 0.0,
+      "manual_usage": 0.0,
+      "window_count": 12,
+      "window_time_mean_sec": 0.009416666666666667,
+      "window_time_p95_sec": 0.01077,
+      "window_time_max_sec": 0.0111,
+      "arc_reduction_mean": null,
+      "arc_reduction_min": null,
+      "arc_reduction_max": null,
+      "mip_gap_mean": 0.0,
+      "variable_count_max": null,
+      "constraint_count_max": null,
+      "direct_ratio_violation_windows": 0
+    }
+  ]
+}

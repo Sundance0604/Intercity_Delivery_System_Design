@@ -80,7 +80,7 @@ Order_<OrderGenerationConfig 字段名>
 | `Model_travel_time_periods` | 城际行驶时间段数 |
 | `Model_N_manual`、`Model_N_auto` | 两类车辆数字典 |
 | `Model_capacity_manual`、`Model_capacity_auto` | 两类车辆容量 |
-| `Model_cost_manual`、`Model_cost_auto` | 两类车辆单位成本 |
+| `Model_cost_manual`、`Model_cost_auto` | 两类车辆每车小时成本 |
 | `Model_penalty_lost` | 单位未服务惩罚 |
 | `Algorithm_prediction_horizon` | Rolling Horizon 预测区间 |
 | `Algorithm_rolling_step` | Rolling Horizon 滚动步长 |
@@ -182,6 +182,19 @@ JSON 顶层结构：
 | `y_auto` | 自动驾驶车辆跨城运输变量 |
 | `z_unserved` | 各订单未服务货量 |
 
+### 3.5 论文 Rolling Horizon 窗口诊断
+
+`detail.windows` 对每个窗口保存起始窗、扩展完成窗、控制窗、可见订单数、目标值、最优界、MIP Gap 和 `diagnostics`。对 `paper_priority_heuristic`，`diagnostics` 还包含：
+
+| 字段 | 含义 |
+|---|---|
+| `heuristic_start_objective` | 动态优先级构造初解的目标值 |
+| `heuristic_start_unserved` | 构造初解的未服务货量 |
+| `heuristic_start_time_sec` | 初解构造时间；已计入窗口总预算 |
+| `heuristic_start_diagnostics` | 初解迭代数、直送比例和候选弧信息 |
+| `solution_count` | 最终剪枝 MIP 得到的可行解数量 |
+
+最终窗口的 `objective`、`best_bound` 和 `mip_gap` 属于剪枝 MIP，不是构造器单独结果。
 ## 4. 论文分析建议
 
 灵敏度分析不再依赖不同 `Scenario` 名称，而是按下列字段分组：

@@ -1,0 +1,252 @@
+{
+  "data_source": "real",
+  "real_data_path": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\data\\cfs_2022_pums.sqlite",
+  "real_data_metadata": {
+    "source_kind": "sqlite",
+    "city_pair": {
+      "city_1": "06-348",
+      "city_2": "06-488"
+    },
+    "city_names": {
+      "city_1": "Los Angeles-Long Beach, CA",
+      "city_2": "San Jose-San Francisco-Oakland, CA"
+    },
+    "sampling_statistics": {
+      "eligible_records_a_to_b": 15177,
+      "eligible_records_b_to_a": 15008,
+      "sampled_records_a_to_b": 5,
+      "sampled_records_b_to_a": 5,
+      "sampling_method": "weighted_without_replacement_reservoir",
+      "sampling_weight": "WGT_FACTOR"
+    },
+    "travel_calibration": {
+      "method": "full_eligible_pair_weighted_median",
+      "eligible_record_count": 30185,
+      "direction_counts": {
+        "a_to_b": 15177,
+        "b_to_a": 15008
+      },
+      "weight": "WGT_FACTOR",
+      "representative_gc_miles": 354.0,
+      "circuity_factor": 1.2,
+      "representative_route_miles": 424.8,
+      "truck_speed_mph": 50.0,
+      "representative_linehaul_hours": 8.496,
+      "period_hours": 1.0,
+      "travel_time_periods": 9
+    },
+    "model_recommendations": {
+      "city_1_cfs_area": "06-348",
+      "city_2_cfs_area": "06-488",
+      "representative_route_miles": 424.8,
+      "representative_linehaul_hours": 8.496,
+      "travel_calibration_method": "full_eligible_pair_weighted_median",
+      "travel_calibration_record_count": 30185,
+      "travel_time_periods": 9,
+      "direct_travel_time_periods": 9,
+      "T": 24,
+      "t_0_minutes": 60.0,
+      "capacity_interpretation": "1 model quantity unit = 50.0 pounds",
+      "minimum_completion_periods": 11
+    }
+  },
+  "scenario": "simulation_stage_b",
+  "experiment_id": "STAGE_B_REAL_N10_S3001",
+  "sensitivity_parameter": null,
+  "sensitivity_value": null,
+  "sensitivity_level": null,
+  "time_limit_sec": 120,
+  "model_parameters": {
+    "T": 24,
+    "t_0": 60.0,
+    "travel_time_periods": 9,
+    "N_manual": {
+      "1": 30,
+      "2": 30
+    },
+    "N_auto": {
+      "1": 15,
+      "2": 15
+    },
+    "capacity_manual": 1000.0,
+    "capacity_auto": 2000.0,
+    "cost_manual": 20.0,
+    "cost_auto": 15.0,
+    "penalty_lost": 350.0,
+    "service_a_1": 0.05,
+    "service_b_1": 0.1,
+    "service_a_2": 0.05,
+    "service_b_2": 0.1,
+    "direct_travel_time_periods": 9,
+    "capacity_direct": 1000.0,
+    "cost_direct": 25.0,
+    "transfer_time_periods": 0,
+    "transfer_cost_per_unit": 0.0,
+    "direct_ratio_min": 0.0,
+    "direct_ratio_max": 1.0
+  },
+  "algorithm_parameters": {
+    "prediction_horizon": 8,
+    "rolling_step": 2,
+    "extension_horizon": 6,
+    "priority_epsilon": 1e-06
+  },
+  "order_parameters": {
+    "num_orders": 10,
+    "buffer_range": [
+      0,
+      5
+    ],
+    "large_order_prob": 0.3,
+    "small_quantity_range": [
+      10,
+      50
+    ],
+    "large_quantity_range": [
+      100,
+      300
+    ]
+  },
+  "generation_parameters": {
+    "seed": 3001,
+    "num_orders": 10,
+    "buffer_range": [
+      0,
+      5
+    ],
+    "large_order_prob": 0.3,
+    "small_quantity_range": [
+      10,
+      50
+    ],
+    "large_quantity_range": [
+      100,
+      300
+    ]
+  },
+  "orders": {
+    "1": {
+      "batch_id": 1,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 19,
+      "penalty_lost": 350.0
+    },
+    "2": {
+      "batch_id": 2,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 17,
+      "penalty_lost": 350.0
+    },
+    "3": {
+      "batch_id": 3,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 16,
+      "penalty_lost": 350.0
+    },
+    "4": {
+      "batch_id": 4,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 22,
+      "penalty_lost": 350.0
+    },
+    "5": {
+      "batch_id": 5,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 23,
+      "penalty_lost": 350.0
+    },
+    "6": {
+      "batch_id": 6,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 11,
+      "penalty_lost": 350.0
+    },
+    "7": {
+      "batch_id": 7,
+      "flow": "+",
+      "quantity": 13,
+      "earliest_start": 2,
+      "latest_completion": 15,
+      "penalty_lost": 350.0
+    },
+    "8": {
+      "batch_id": 8,
+      "flow": "+",
+      "quantity": 26,
+      "earliest_start": 0,
+      "latest_completion": 15,
+      "penalty_lost": 350.0
+    },
+    "9": {
+      "batch_id": 9,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 19,
+      "penalty_lost": 350.0
+    },
+    "10": {
+      "batch_id": 10,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 16,
+      "penalty_lost": 350.0
+    }
+  },
+  "solver_results": [
+    {
+      "solver": "flexible_direct_mip",
+      "status": 2,
+      "solve_time_sec": 0.41,
+      "total_cost": 850.0,
+      "best_bound": 850.0,
+      "mip_gap": 0.0,
+      "unserved_rate": 0.0,
+      "auto_usage": 2.0,
+      "manual_usage": 6.0,
+      "direct_ratio": 0.42016806722689076,
+      "direct_volume": 50.0,
+      "transshipment_volume": 69.0,
+      "message": "直送-换装协同模型达到最优；直送比例 42.02%",
+      "detail": {
+        "solution": {
+          "w_direct": {
+            "(1, 11, '-')": 1.0,
+            "(7, 17, '-')": 1.0
+          },
+          "q_direct": {
+            "2": 10.0,
+            "3": 10.0,
+            "5": 10.0,
+            "6": 10.0,
+            "10": 10.0
+          },
+          "r_transshipment": {
+            "1": 10.0,
+            "4": 10.0,
+            "7": 13.0,
+            "8": 26.0,
+            "9": 10.0
+          },
+          "z_unserved": {},
+          "direct_volume": 50.0,
+          "transshipment_volume": 69.0,
+          "direct_ratio": 0.42016806722689076
+        }
+      }
+    }
+  ]
+}

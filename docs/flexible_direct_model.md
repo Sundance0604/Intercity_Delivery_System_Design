@@ -43,7 +43,7 @@ result = SOLVER_REGISTRY["flexible_direct_mip"].solve(
 |---|---|
 | `direct_travel_time_periods` | 人工直送跨城时间 |
 | `capacity_direct` | 直送车辆容量 |
-| `cost_direct` | 直送车辆单位时间成本 |
+| `cost_direct` | 直送车辆每车小时成本；目标函数用 `t_0 / 60` 换算 |
 | `transfer_time_periods` | 两端换装处理时间 |
 | `transfer_cost_per_unit` | 单位换装货量处理成本 |
 | `direct_ratio_min` | 已服务货量中的最低直送比例 |

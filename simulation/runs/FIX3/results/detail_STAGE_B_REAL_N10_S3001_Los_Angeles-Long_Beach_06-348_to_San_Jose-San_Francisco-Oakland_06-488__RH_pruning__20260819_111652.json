@@ -1,0 +1,601 @@
+{
+  "data_source": "real",
+  "real_data_path": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\data\\cfs_2022_pums.sqlite",
+  "real_data_metadata": {
+    "source_kind": "sqlite",
+    "city_pair": {
+      "city_1": "06-348",
+      "city_2": "06-488"
+    },
+    "city_names": {
+      "city_1": "Los Angeles-Long Beach, CA",
+      "city_2": "San Jose-San Francisco-Oakland, CA"
+    },
+    "sampling_statistics": {
+      "eligible_records_a_to_b": 15177,
+      "eligible_records_b_to_a": 15008,
+      "sampled_records_a_to_b": 5,
+      "sampled_records_b_to_a": 5,
+      "sampling_method": "weighted_without_replacement_reservoir",
+      "sampling_weight": "WGT_FACTOR"
+    },
+    "travel_calibration": {
+      "method": "full_eligible_pair_weighted_median",
+      "eligible_record_count": 30185,
+      "direction_counts": {
+        "a_to_b": 15177,
+        "b_to_a": 15008
+      },
+      "weight": "WGT_FACTOR",
+      "representative_gc_miles": 354.0,
+      "circuity_factor": 1.2,
+      "representative_route_miles": 424.8,
+      "truck_speed_mph": 50.0,
+      "representative_linehaul_hours": 8.496,
+      "period_hours": 1.0,
+      "travel_time_periods": 9
+    },
+    "model_recommendations": {
+      "city_1_cfs_area": "06-348",
+      "city_2_cfs_area": "06-488",
+      "representative_route_miles": 424.8,
+      "representative_linehaul_hours": 8.496,
+      "travel_calibration_method": "full_eligible_pair_weighted_median",
+      "travel_calibration_record_count": 30185,
+      "travel_time_periods": 9,
+      "direct_travel_time_periods": 9,
+      "T": 24,
+      "t_0_minutes": 60.0,
+      "capacity_interpretation": "1 model quantity unit = 50.0 pounds",
+      "minimum_completion_periods": 11
+    }
+  },
+  "scenario": "simulation_stage_b",
+  "experiment_id": "STAGE_B_REAL_N10_S3001",
+  "sensitivity_parameter": null,
+  "sensitivity_value": null,
+  "sensitivity_level": null,
+  "time_limit_sec": 120,
+  "model_parameters": {
+    "T": 24,
+    "t_0": 60.0,
+    "travel_time_periods": 9,
+    "N_manual": {
+      "1": 30,
+      "2": 30
+    },
+    "N_auto": {
+      "1": 15,
+      "2": 15
+    },
+    "capacity_manual": 1000.0,
+    "capacity_auto": 2000.0,
+    "cost_manual": 20.0,
+    "cost_auto": 15.0,
+    "penalty_lost": 350.0,
+    "service_a_1": 0.05,
+    "service_b_1": 0.1,
+    "service_a_2": 0.05,
+    "service_b_2": 0.1,
+    "direct_travel_time_periods": 9,
+    "capacity_direct": 1000.0,
+    "cost_direct": 25.0,
+    "transfer_time_periods": 0,
+    "transfer_cost_per_unit": 0.0,
+    "direct_ratio_min": 0.0,
+    "direct_ratio_max": 1.0
+  },
+  "algorithm_parameters": {
+    "prediction_horizon": 8,
+    "rolling_step": 2,
+    "extension_horizon": 6,
+    "priority_epsilon": 1e-06
+  },
+  "order_parameters": {
+    "num_orders": 10,
+    "buffer_range": [
+      0,
+      5
+    ],
+    "large_order_prob": 0.3,
+    "small_quantity_range": [
+      10,
+      50
+    ],
+    "large_quantity_range": [
+      100,
+      300
+    ]
+  },
+  "generation_parameters": {
+    "seed": 3001,
+    "num_orders": 10,
+    "buffer_range": [
+      0,
+      5
+    ],
+    "large_order_prob": 0.3,
+    "small_quantity_range": [
+      10,
+      50
+    ],
+    "large_quantity_range": [
+      100,
+      300
+    ]
+  },
+  "orders": {
+    "1": {
+      "batch_id": 1,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 19,
+      "penalty_lost": 350.0
+    },
+    "2": {
+      "batch_id": 2,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 17,
+      "penalty_lost": 350.0
+    },
+    "3": {
+      "batch_id": 3,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 16,
+      "penalty_lost": 350.0
+    },
+    "4": {
+      "batch_id": 4,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 22,
+      "penalty_lost": 350.0
+    },
+    "5": {
+      "batch_id": 5,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 23,
+      "penalty_lost": 350.0
+    },
+    "6": {
+      "batch_id": 6,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 11,
+      "penalty_lost": 350.0
+    },
+    "7": {
+      "batch_id": 7,
+      "flow": "+",
+      "quantity": 13,
+      "earliest_start": 2,
+      "latest_completion": 15,
+      "penalty_lost": 350.0
+    },
+    "8": {
+      "batch_id": 8,
+      "flow": "+",
+      "quantity": 26,
+      "earliest_start": 0,
+      "latest_completion": 15,
+      "penalty_lost": 350.0
+    },
+    "9": {
+      "batch_id": 9,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 19,
+      "penalty_lost": 350.0
+    },
+    "10": {
+      "batch_id": 10,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 16,
+      "penalty_lost": 350.0
+    }
+  },
+  "solver_results": [
+    {
+      "solver": "paper_candidate_mip",
+      "status": 2,
+      "solve_time_sec": 0.13,
+      "total_cost": 1750.0,
+      "best_bound": 1750.0,
+      "mip_gap": 0.0,
+      "unserved_rate": 0.0,
+      "auto_usage": 0,
+      "manual_usage": 7.0,
+      "direct_ratio": 1.0,
+      "direct_volume": 119.0,
+      "transshipment_volume": 0.0,
+      "message": "paper_candidate_mip 完成 12 个论文滚动窗口。",
+      "detail": {
+        "algorithm": {
+          "approach": "paper_candidate_mip",
+          "prediction_horizon": 8,
+          "rolling_step": 2,
+          "extension_horizon": 6,
+          "completed_horizon": 24,
+          "completed": true,
+          "committed_decision_counts": {
+            "x_manual": 0,
+            "y_auto": 0,
+            "g_manual": 0,
+            "g_auto": 0,
+            "w_direct": 7,
+            "h_direct": 10
+          }
+        },
+        "windows": [
+          {
+            "window_start": 0,
+            "start_window_end": 8,
+            "completion_window_end": 14,
+            "control_end": 2,
+            "known_orders": 3,
+            "status": 2,
+            "feasible": true,
+            "objective": 500.0,
+            "best_bound": 500.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.009,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 6,
+              "direct_arcs": 9,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 22,
+              "non_direct_arc_reduction_rate": 0.9642857142857143,
+              "variables": 164,
+              "constraints": 349,
+              "solution_count": 3
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 2,
+            "start_window_end": 10,
+            "completion_window_end": 16,
+            "control_end": 4,
+            "known_orders": 5,
+            "status": 2,
+            "feasible": true,
+            "objective": 750.0,
+            "best_bound": 750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.011,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 6,
+              "direct_arcs": 10,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 22,
+              "non_direct_arc_reduction_rate": 0.9642857142857143,
+              "variables": 239,
+              "constraints": 466,
+              "solution_count": 3
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 4,
+            "start_window_end": 12,
+            "completion_window_end": 18,
+            "control_end": 6,
+            "known_orders": 6,
+            "status": 2,
+            "feasible": true,
+            "objective": 1000.0,
+            "best_bound": 1000.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.0138,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 6,
+              "direct_arcs": 11,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 22,
+              "non_direct_arc_reduction_rate": 0.9642857142857143,
+              "variables": 282,
+              "constraints": 541,
+              "solution_count": 4
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 6,
+            "start_window_end": 14,
+            "completion_window_end": 20,
+            "control_end": 8,
+            "known_orders": 9,
+            "status": 2,
+            "feasible": true,
+            "objective": 1500.0,
+            "best_bound": 1500.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.0141,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 6,
+              "direct_arcs": 13,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 22,
+              "non_direct_arc_reduction_rate": 0.9642857142857143,
+              "variables": 412,
+              "constraints": 743,
+              "solution_count": 3
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 8,
+            "start_window_end": 16,
+            "completion_window_end": 22,
+            "control_end": 10,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.015,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 6,
+              "direct_arcs": 15,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 22,
+              "non_direct_arc_reduction_rate": 0.9642857142857143,
+              "variables": 474,
+              "constraints": 830,
+              "solution_count": 3
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 10,
+            "start_window_end": 18,
+            "completion_window_end": 24,
+            "control_end": 12,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.0131,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 6,
+              "direct_arcs": 13,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 22,
+              "non_direct_arc_reduction_rate": 0.9642857142857143,
+              "variables": 450,
+              "constraints": 829,
+              "solution_count": 3
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 12,
+            "start_window_end": 20,
+            "completion_window_end": 24,
+            "control_end": 14,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.012,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 4,
+              "direct_arcs": 9,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 20,
+              "non_direct_arc_reduction_rate": 0.9675324675324676,
+              "variables": 378,
+              "constraints": 798,
+              "solution_count": 3
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 14,
+            "start_window_end": 22,
+            "completion_window_end": 24,
+            "control_end": 16,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.0092,
+            "diagnostics": {
+              "manual_arcs_city_1": 8,
+              "manual_arcs_city_2": 8,
+              "auto_arcs": 2,
+              "direct_arcs": 7,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 18,
+              "non_direct_arc_reduction_rate": 0.9707792207792207,
+              "variables": 330,
+              "constraints": 786,
+              "solution_count": 1
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 16,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 18,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.009,
+            "diagnostics": {
+              "manual_arcs_city_1": 7,
+              "manual_arcs_city_2": 7,
+              "auto_arcs": 0,
+              "direct_arcs": 7,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 14,
+              "non_direct_arc_reduction_rate": 0.9772727272727273,
+              "variables": 282,
+              "constraints": 783,
+              "solution_count": 1
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 18,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 20,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.008,
+            "diagnostics": {
+              "manual_arcs_city_1": 5,
+              "manual_arcs_city_2": 5,
+              "auto_arcs": 0,
+              "direct_arcs": 7,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 10,
+              "non_direct_arc_reduction_rate": 0.9837662337662337,
+              "variables": 234,
+              "constraints": 764,
+              "solution_count": 1
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 20,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 22,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.008,
+            "diagnostics": {
+              "manual_arcs_city_1": 3,
+              "manual_arcs_city_2": 3,
+              "auto_arcs": 0,
+              "direct_arcs": 7,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 6,
+              "non_direct_arc_reduction_rate": 0.9902597402597403,
+              "variables": 186,
+              "constraints": 742,
+              "solution_count": 1
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          },
+          {
+            "window_start": 22,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 24,
+            "known_orders": 10,
+            "status": 2,
+            "feasible": true,
+            "objective": 1750.0,
+            "best_bound": 1750.0,
+            "mip_gap": 0.0,
+            "solve_time_sec": 0.007,
+            "diagnostics": {
+              "manual_arcs_city_1": 1,
+              "manual_arcs_city_2": 1,
+              "auto_arcs": 0,
+              "direct_arcs": 7,
+              "baseline_non_direct_arcs": 616,
+              "reduced_non_direct_arcs": 2,
+              "non_direct_arc_reduction_rate": 0.9967532467532467,
+              "variables": 138,
+              "constraints": 718,
+              "solution_count": 1
+            },
+            "message": "状态相关候选弧削减 MILP 获得可行解。"
+          }
+        ],
+        "solution": {
+          "unserved_by_order": {
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0,
+            "4": 0.0,
+            "5": 0.0,
+            "6": 0.0,
+            "7": 0.0,
+            "8": 0.0,
+            "9": 0.0,
+            "10": 0.0
+          },
+          "direct_volume": 119.0,
+          "transshipment_volume": 0.0,
+          "committed_decisions": {
+            "x_manual": {},
+            "y_auto": {},
+            "g_manual": {},
+            "g_auto": {},
+            "w_direct": {
+              "(0, 10, '-')": 1.0,
+              "(2, 12, '+')": 1.0,
+              "(4, 14, '+')": 1.0,
+              "(5, 15, '-')": 1.0,
+              "(6, 16, '+')": 1.0,
+              "(7, 17, '-')": 1.0,
+              "(12, 22, '-')": 1.0
+            },
+            "h_direct": {
+              "(0, 10, '-', 3)": 10.0,
+              "(0, 10, '-', 6)": 10.0,
+              "(2, 12, '+', 7)": 13.0,
+              "(2, 12, '+', 8)": 26.0,
+              "(4, 14, '+', 1)": 10.0,
+              "(5, 15, '-', 10)": 10.0,
+              "(6, 16, '+', 4)": 10.0,
+              "(6, 16, '+', 9)": 10.0,
+              "(7, 17, '-', 2)": 10.0,
+              "(12, 22, '-', 5)": 10.0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

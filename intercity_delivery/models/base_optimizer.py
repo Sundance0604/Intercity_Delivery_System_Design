@@ -37,17 +37,29 @@ class Optimizer:
         # 创建变量 g
         # 论文将人工车和自动车承运货量定义为非负连续变量 R+。
         # 即便当前随机算例中的订单需求量是整数，车辆也允许承运部分货量。
+        manual_load_indices = [
+            (*arc, order_id)
+            for arc in self.arcs_indices
+            for order_id, order in self.data.all_orders.items()
+            if order.flow == arc[3]
+        ]
         self.g_manual = self.model.addVars(
-            self.arcs_indices,
-            self.data.all_orders.keys(),
+            manual_load_indices,
             vtype=GRB.CONTINUOUS,
             lb=0.0,
             name="g_manual",
         )
+        auto_load_indices = [
+            (i, j, flow, order_id)
+            for i, j in self.data.arcs_auto
+            for flow, orders in (
+                ("+", self.data.pos_orders),
+                ("-", self.data.neg_orders),
+            )
+            for order_id in orders
+        ]
         self.g_auto = self.model.addVars(
-            self.data.arcs_auto,
-            self.flow,
-            self.data.all_orders.keys(),
+            auto_load_indices,
             vtype=GRB.CONTINUOUS,
             lb=0.0,
             name="g_auto",
@@ -64,11 +76,11 @@ class Optimizer:
         )    
         # 人工车辆成本
         self.cost_manual = gp.quicksum(
-            self.cfg.cost_manual * self.cfg.t_0 * (j-i) * self.x_manual[i, j, city, flow] 
+            self.cfg.cost_manual * self.cfg.period_hours * (j-i) * self.x_manual[i, j, city, flow]
             for (i, j, city, flow) in self.arcs_indices
         )
         # 自动驾驶车辆成本
-        self.cost_auto = self.cfg.cost_auto * self.cfg.travel_time_periods * self.cfg.t_0 * self.y_auto.sum()
+        self.cost_auto = self.cfg.cost_auto * self.cfg.travel_time_periods * self.cfg.period_hours * self.y_auto.sum()
         # 总目标函数
         self.model.setObjective(
             self.penalty_unserved + self.cost_manual + self.cost_auto,

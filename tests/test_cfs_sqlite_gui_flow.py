@@ -71,6 +71,13 @@ class CfsSqliteGuiFlowTests(unittest.TestCase):
             self.assertEqual({order.flow for order in orders[2].values()}, {"+", "-"})
             self.assertEqual(metadata["source_kind"], "sqlite")
             self.assertEqual(metadata["city_pair"]["city_1"], "06-348")
+            self.assertEqual(
+                metadata["travel_calibration"]["eligible_record_count"], 6
+            )
+            self.assertEqual(
+                metadata["model_recommendations"]["travel_time_periods"],
+                DeliveryConfig().travel_time_periods,
+            )
 
     def test_result_filename_tag_contains_pair_and_both_approaches(self):
         tag = build_result_context_tag(

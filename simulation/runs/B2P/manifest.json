@@ -1,0 +1,83 @@
+{
+  "batch_id": "B2P",
+  "created_at": "2026-08-19T10:16:40",
+  "project_root": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design",
+  "git": {
+    "commit": "369091116bddbfa49f85dc88c6a9dc5ec8d47930",
+    "branch": "agent/paper-solution-approaches",
+    "status_short": [
+      "?? .vscode/",
+      "?? Intercity_Operation.pdf",
+      "?? docs/numerical_experiment_protocol.md",
+      "?? simulation/"
+    ]
+  },
+  "environment": {
+    "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+    "executable": "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "gurobi": [
+      10,
+      0,
+      3
+    ]
+  },
+  "database": {
+    "path": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\data\\cfs_2022_pums.sqlite",
+    "size_bytes": 4914769920,
+    "modified_at": "2026-08-18T09:39:42.604896",
+    "sha256": null
+  },
+  "city_pair_travel_time_calibration": {
+    "method": "full_eligible_pair_weighted_median",
+    "eligible_record_count": 30185,
+    "direction_counts": {
+      "a_to_b": 15177,
+      "b_to_a": 15008
+    },
+    "weight": "WGT_FACTOR",
+    "representative_gc_miles": 354.0,
+    "circuity_factor": 1.2,
+    "representative_route_miles": 424.8,
+    "truck_speed_mph": 50.0,
+    "representative_linehaul_hours": 8.496,
+    "period_hours": 1.0,
+    "travel_time_periods": 9
+  },
+  "arguments": {
+    "stage": "stage_b",
+    "batch_id": "B2P",
+    "database": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\data\\cfs_2022_pums.sqlite",
+    "city_a": "06-348",
+    "city_b": "06-488",
+    "order_counts": [
+      10,
+      20,
+      40
+    ],
+    "seeds": [
+      3004,
+      3005,
+      3006,
+      3007,
+      3008,
+      3009,
+      3010
+    ],
+    "solvers": [
+      "paper_candidate_mip",
+      "paper_priority_heuristic"
+    ],
+    "time_limit": 120,
+    "planning_periods": 24,
+    "period_minutes": 60.0,
+    "penalty_lost": 350.0,
+    "travel_time": 9,
+    "prediction_horizon": 8,
+    "rolling_step": 2,
+    "extension_horizon": 6,
+    "buffer_min": 0,
+    "buffer_max": 5,
+    "hash_database": false
+  }
+}

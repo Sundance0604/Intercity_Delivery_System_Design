@@ -43,7 +43,7 @@ python main.py
 | GUI 名称 | 内部名称 | 窗口内处理 |
 |---|---|---|
 | Rolling Horizon：剪枝 | paper_candidate_mip | 生成状态相关候选网络并求解剪枝后的 MIP |
-| Rolling Horizon：剪枝 + 生成解 | paper_priority_heuristic | 先做相同剪枝，再由动态优先级启发式直接生成解 |
+| Rolling Horizon：剪枝 + 生成解 | paper_priority_heuristic | 动态优先级构造 MIP Start，再求解相同的剪枝 MIP |
 
 ### 4.2 真实 CFS SQLite 与城市对
 

@@ -99,8 +99,9 @@ class DeliveryConfig:
     capacity_auto: float = 2000.0   # 此应同上      
 
     # --- 3. 成本参数 ---
-    cost_manual: float = 20.0     # c: unit driving cost for manually driven vehicles
-    cost_auto: float = 15.0       # hat{c}: unit driving cost for automated vehicles
+    # Vehicle rates are hourly; objectives convert t_0 from minutes to hours.
+    cost_manual: float = 20.0     # c: hourly driving cost for manually driven vehicles
+    cost_auto: float = 15.0       # hat{c}: hourly driving cost for automated vehicles
     # delta_l: unity penalty cost for lost demand is in class OrderBatch
     penalty_lost: float = 10
     # --- 4. 服务效率函数参数 ---
@@ -164,3 +165,11 @@ class DeliveryConfig:
             "sensitivity_levels": [0.25, 0.5, 0.75, 1.0],
         },
     )
+
+    @property
+    def period_hours(self) -> float:
+        """Duration of one discrete period in hours for cost calculations."""
+
+        if self.t_0 <= 0:
+            raise ValueError("t_0 must be positive.")
+        return self.t_0 / 60.0

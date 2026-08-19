@@ -1,0 +1,83 @@
+﻿[
+    {
+        "Batch":  "A1",
+        "Penalty_Lost":  10,
+        "Total_Cost":  2010.0,
+        "Unserved_Rate":  1.0,
+        "Solve_Time_Sec":  0.19,
+        "Max_Window_Sec":  0.0226,
+        "Arc_Reduction_Mean":  0.9726731601731601
+    },
+    {
+        "Batch":  "P100",
+        "Penalty_Lost":  100,
+        "Total_Cost":  20100.0,
+        "Unserved_Rate":  1.0,
+        "Solve_Time_Sec":  0.2,
+        "Max_Window_Sec":  0.0231,
+        "Arc_Reduction_Mean":  0.9726731601731601
+    },
+    {
+        "Batch":  "P300",
+        "Penalty_Lost":  300,
+        "Total_Cost":  48300.0,
+        "Unserved_Rate":  0.3035,
+        "Solve_Time_Sec":  0.2,
+        "Max_Window_Sec":  0.0227,
+        "Arc_Reduction_Mean":  0.9726731601731601
+    },
+    {
+        "Batch":  "P350",
+        "Penalty_Lost":  350,
+        "Total_Cost":  59350.0,
+        "Unserved_Rate":  0.204,
+        "Solve_Time_Sec":  0.2,
+        "Max_Window_Sec":  0.0232,
+        "Arc_Reduction_Mean":  0.9726731601731601
+    },
+    {
+        "Batch":  "P400",
+        "Penalty_Lost":  400,
+        "Total_Cost":  60000.0,
+        "Unserved_Rate":  0.0,
+        "Solve_Time_Sec":  0.26,
+        "Max_Window_Sec":  0.0277,
+        "Arc_Reduction_Mean":  0.9572510822510822
+    },
+    {
+        "Batch":  "P450",
+        "Penalty_Lost":  450,
+        "Total_Cost":  60000.0,
+        "Unserved_Rate":  0.0,
+        "Solve_Time_Sec":  0.26,
+        "Max_Window_Sec":  0.0264,
+        "Arc_Reduction_Mean":  0.9572510822510822
+    },
+    {
+        "Batch":  "P500",
+        "Penalty_Lost":  500,
+        "Total_Cost":  60000.0,
+        "Unserved_Rate":  0.0,
+        "Solve_Time_Sec":  0.26,
+        "Max_Window_Sec":  0.027,
+        "Arc_Reduction_Mean":  0.9572510822510822
+    },
+    {
+        "Batch":  "P600",
+        "Penalty_Lost":  600,
+        "Total_Cost":  75000.0,
+        "Unserved_Rate":  0.0,
+        "Solve_Time_Sec":  0.27,
+        "Max_Window_Sec":  0.0338,
+        "Arc_Reduction_Mean":  0.9572510822510822
+    },
+    {
+        "Batch":  "P1000",
+        "Penalty_Lost":  1000,
+        "Total_Cost":  75000.0,
+        "Unserved_Rate":  0.0,
+        "Solve_Time_Sec":  0.28,
+        "Max_Window_Sec":  0.0369,
+        "Arc_Reduction_Mean":  0.9572510822510822
+    }
+]

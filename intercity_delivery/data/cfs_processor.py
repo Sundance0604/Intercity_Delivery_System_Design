@@ -418,22 +418,93 @@ def _weighted_median(values: Sequence[float], weights: Sequence[float]) -> float
     return float(ordered[-1][0])
 
 
+def calibrate_city_pair_travel_time(
+    input_path: Path,
+    city_a: str,
+    city_b: str,
+    config: ProcessorConfig,
+) -> dict:
+    """Estimate one seed-independent linehaul time from all eligible OD rows."""
+
+    city_a, city_b = _normalize_area(city_a), _normalize_area(city_b)
+    distances: List[float] = []
+    weights: List[float] = []
+    direction_counts = {"a_to_b": 0, "b_to_a": 0}
+    for chunk in _read_chunks(
+        input_path,
+        config.chunksize,
+        config=config,
+        city_pair=(city_a, city_b),
+    ):
+        filtered = _base_filter(chunk, config)
+        pair_rows = filtered.loc[
+            (
+                filtered["ORIG_CFS_AREA"].eq(city_a)
+                & filtered["DEST_CFS_AREA"].eq(city_b)
+            )
+            | (
+                filtered["ORIG_CFS_AREA"].eq(city_b)
+                & filtered["DEST_CFS_AREA"].eq(city_a)
+            )
+        ]
+        for row in pair_rows.itertuples(index=False):
+            distances.append(float(row.SHIPMT_DIST_GC))
+            weights.append(float(row.WGT_FACTOR))
+            key = "a_to_b" if row.ORIG_CFS_AREA == city_a else "b_to_a"
+            direction_counts[key] += 1
+
+    if not distances or min(direction_counts.values()) == 0:
+        raise ValueError(
+            f"城市对 {city_a} <-> {city_b} 没有满足筛选条件的双向记录。"
+        )
+    representative_gc_miles = _weighted_median(distances, weights)
+    representative_route_miles = representative_gc_miles * config.circuity_factor
+    linehaul_hours = representative_route_miles / config.truck_speed_mph
+    travel_time_periods = max(
+        1, math.ceil(linehaul_hours / config.period_hours)
+    )
+    return {
+        "method": "full_eligible_pair_weighted_median",
+        "eligible_record_count": len(distances),
+        "direction_counts": direction_counts,
+        "weight": "WGT_FACTOR",
+        "representative_gc_miles": round(representative_gc_miles, 3),
+        "circuity_factor": config.circuity_factor,
+        "representative_route_miles": round(representative_route_miles, 3),
+        "truck_speed_mph": config.truck_speed_mph,
+        "representative_linehaul_hours": round(linehaul_hours, 3),
+        "period_hours": config.period_hours,
+        "travel_time_periods": travel_time_periods,
+    }
+
 def build_model_orders(
     records: Sequence[dict],
     city_a: str,
     city_b: str,
     config: ProcessorConfig,
+    travel_calibration: Optional[dict] = None,
 ) -> Tuple[List[ProcessedOrder], dict]:
-    """将抽样记录转换成 OrderBatch 兼容订单，并给出推荐模型参数。"""
+    """将抽样记录转换成模型订单；物理行程时间可由全 OD 对校准固定。"""
 
-    route_miles = [
-        float(record["SHIPMT_DIST_GC"]) * config.circuity_factor
-        for record in records
-    ]
-    weights = [float(record["WGT_FACTOR"]) for record in records]
-    representative_route_miles = _weighted_median(route_miles, weights)
-    linehaul_hours = representative_route_miles / config.truck_speed_mph
-    linehaul_periods = max(1, math.ceil(linehaul_hours / config.period_hours))
+    if travel_calibration is None:
+        route_miles = [
+            float(record["SHIPMT_DIST_GC"]) * config.circuity_factor
+            for record in records
+        ]
+        weights = [float(record["WGT_FACTOR"]) for record in records]
+        representative_route_miles = _weighted_median(route_miles, weights)
+        linehaul_hours = representative_route_miles / config.truck_speed_mph
+        linehaul_periods = max(1, math.ceil(linehaul_hours / config.period_hours))
+        calibration_method = "sample_weighted_median"
+    else:
+        representative_route_miles = float(
+            travel_calibration["representative_route_miles"]
+        )
+        linehaul_hours = float(
+            travel_calibration["representative_linehaul_hours"]
+        )
+        linehaul_periods = int(travel_calibration["travel_time_periods"])
+        calibration_method = str(travel_calibration.get("method", "provided"))
     minimum_completion_periods = (
         linehaul_periods + 2 * config.local_service_periods_per_end
     )
@@ -500,6 +571,12 @@ def build_model_orders(
         "city_2_cfs_area": city_b,
         "representative_route_miles": round(representative_route_miles, 3),
         "representative_linehaul_hours": round(linehaul_hours, 3),
+        "travel_calibration_method": calibration_method,
+        "travel_calibration_record_count": (
+            travel_calibration.get("eligible_record_count")
+            if travel_calibration is not None
+            else len(records)
+        ),
         "travel_time_periods": linehaul_periods,
         "direct_travel_time_periods": linehaul_periods,
         "T": config.planning_periods,
@@ -680,11 +757,18 @@ def main(argv: Optional[Sequence[str]] = None) -> dict:
     else:
         city_a, city_b, pair_stats = select_city_pair(args.input, config)
 
+    travel_calibration = calibrate_city_pair_travel_time(
+        args.input, city_a, city_b, config
+    )
     records, sample_stats = sample_pair_records(
         args.input, city_a, city_b, config
     )
     orders, recommendations = build_model_orders(
-        records, city_a, city_b, config
+        records,
+        city_a,
+        city_b,
+        config,
+        travel_calibration=travel_calibration,
     )
     paths = write_outputs(
         args.output_dir,

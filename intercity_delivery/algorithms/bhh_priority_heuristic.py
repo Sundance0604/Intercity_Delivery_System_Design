@@ -416,21 +416,21 @@ class DynamicBHHPriorityApproach:
         )
         cost += sum(
             context.config.cost_manual
-            * context.config.t_0
+            * context.config.period_hours
             * (key[1] - key[0])
             * value
             for key, value in combined["x_manual"].items()
         )
         cost += sum(
             context.config.cost_auto
-            * context.config.t_0
+            * context.config.period_hours
             * context.config.travel_time_periods
             * value
             for value in combined["y_auto"].values()
         )
         cost += sum(
             context.config.cost_direct
-            * context.config.t_0
+            * context.config.period_hours
             * (key[1] - key[0])
             * value
             for key, value in combined["w_direct"].items()

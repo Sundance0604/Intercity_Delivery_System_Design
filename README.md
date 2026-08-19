@@ -9,18 +9,18 @@
 `Intercity_Operation.pdf` 的两个解法已经实现，并作为两个独立求解器接入实验框架：
 
 - paper_candidate_mip：Rolling Horizon + 状态相关候选网络剪枝；每个窗口求解剪枝后的 MIP。
-- paper_priority_heuristic：Rolling Horizon + 同样的候选网络剪枝 + 动态优先级生成可行解。
+- paper_priority_heuristic：Rolling Horizon + 同样的候选网络剪枝 + 动态优先级构造 MIP Start + 剪枝 MIP 改进。
 
 两者使用 `intercity_delivery/algorithms/paper_rolling_horizon.py`。该控制器支持控制窗口、预测起始窗口、
 扩展完成窗口、订单逐期揭示和已提交车辆/货流状态；原有算法位于 `intercity_delivery/algorithms/rolling_horizon.py`。
 GUI 中两个论文解法是独立复选框，可全选或只选其中一个，旧求解器保留为可选基准。
 
-因此两个 Solution Approach 的共同前提都是 Rolling Horizon；区别在于窗口内采用“剪枝后 MIP”还是“剪枝后直接生成解”。GUI 分别显示为“Rolling Horizon：剪枝”和“Rolling Horizon：剪枝 + 生成解”。
+因此两个 Solution Approach 的共同前提都是 Rolling Horizon。解法 1 直接求解剪枝 MIP；解法 2 先生成动态 BHH 优先级初解，再用它启动同一剪枝 MIP。GUI 分别显示为“Rolling Horizon：剪枝”和“Rolling Horizon：剪枝 + 生成解”。
 
 对应说明：
 
 - [解法 1：状态相关候选弧削减 MIP](docs/state_dependent_candidate_mip.md)
-- [解法 2：动态 BHH-aware 优先级启发式](docs/dynamic_bhh_priority_heuristic.md)
+- [解法 2：剪枝 + BHH 优先级生成初解](docs/dynamic_bhh_priority_heuristic.md)
 
 ### 生成数据与真实数据
 
@@ -29,7 +29,7 @@ GUI 的“测试数据”区域必须明确选择数据来源：
 - **生成数据**：使用 `OrderGenerationConfig` 和随机种子构造订单。
 - **真实数据**：直接加载带索引的 CFS SQLite。GUI 显示 shipments 列名，并提供双向城市 1/城市 2 联动选择。
 
-真实模式从 SQLite 中筛选用户选择的两个 CFS Area，按 WGT_FACTOR 加权、双向平衡地抽样订单，并使用当前规划期构造时间窗。若所选城市对的合格记录不足或规划期短于运输最短完成时间，程序会在求解前明确报错。
+真实模式从 SQLite 中筛选用户选择的两个 CFS Area，按 WGT_FACTOR 加权、双向平衡地抽样订单；城市对运输时间由全部合格 OD 记录加权校准并自动用于模型，随机种子只影响订单抽样。若合格记录不足或规划期短于运输最短完成时间，程序会在求解前明确报错。`cost_manual`、`cost_auto`、`cost_direct` 均为每车小时费率，目标函数用 `t_0 / 60` 把分钟换算为小时。
 
 官方 2022 CFS PUMS 的处理方法见：
 

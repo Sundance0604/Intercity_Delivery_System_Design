@@ -1,0 +1,62 @@
+{
+  "batch_id": "B0P",
+  "source_result": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\simulation\\runs\\B0P\\results\\full_experiment_results_Los_Angeles-Long_Beach_06-348_to_San_Jose-San_Francisco-Oakland_06-488__RH_pruning+RH_pruning_solution__20260819_100817.json",
+  "city_pair": {
+    "city_1": "06-348",
+    "city_2": "06-488"
+  },
+  "city_names": {
+    "city_1": "Los Angeles-Long Beach, CA",
+    "city_2": "San Jose-San Francisco-Oakland, CA"
+  },
+  "rows": [
+    {
+      "experiment_id": "STAGE_B_REAL_N10_S3001",
+      "seed": 3001,
+      "num_orders": 10,
+      "total_demand": 119.0,
+      "solver": "paper_candidate_mip",
+      "status": 2,
+      "solve_time_sec": 0.12,
+      "total_cost": 39500.0,
+      "unserved_rate": 0.5882,
+      "auto_usage": 0,
+      "manual_usage": 1.0,
+      "window_count": 12,
+      "window_time_mean_sec": 0.010008333333333333,
+      "window_time_p95_sec": 0.013824999999999999,
+      "window_time_max_sec": 0.0141,
+      "arc_reduction_mean": 0.9726731601731601,
+      "arc_reduction_min": 0.9642857142857143,
+      "arc_reduction_max": 0.9967532467532467,
+      "mip_gap_mean": 0.0,
+      "variable_count_max": 634,
+      "constraint_count_max": 794,
+      "direct_ratio_violation_windows": 0
+    },
+    {
+      "experiment_id": "STAGE_B_REAL_N10_S3001",
+      "seed": 3001,
+      "num_orders": 10,
+      "total_demand": 119.0,
+      "solver": "paper_priority_heuristic",
+      "status": 0,
+      "solve_time_sec": 0.0,
+      "total_cost": 120000.0,
+      "unserved_rate": 0.0,
+      "auto_usage": 0,
+      "manual_usage": 8.0,
+      "window_count": 12,
+      "window_time_mean_sec": 0.00016666666666666666,
+      "window_time_p95_sec": 0.001,
+      "window_time_max_sec": 0.001,
+      "arc_reduction_mean": 0.9726731601731601,
+      "arc_reduction_min": 0.9642857142857143,
+      "arc_reduction_max": 0.9967532467532467,
+      "mip_gap_mean": null,
+      "variable_count_max": null,
+      "constraint_count_max": null,
+      "direct_ratio_violation_windows": 0
+    }
+  ]
+}

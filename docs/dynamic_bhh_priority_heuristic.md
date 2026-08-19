@@ -1,32 +1,36 @@
-# 解法 2：动态 BHH-aware 优先级启发式
+# 解法 2：剪枝 + BHH 优先级生成初解
 
 ## 对应论文内容
 
-本实现对应 `Intercity_Operation.pdf` 的 Solution Approach / Algorithm 2。它复用解法 1 的状态相关候选网络，但不调用 MIP 求解器，而是按照订单紧迫度、拒单损失和剩余需求动态排序，逐单构造满足车辆、容量、方向和时间窗的直送或换装路径。
+本实现对应 `Intercity_Operation.pdf` 的 Solution Approach / Algorithm 2。论文中的动态 BHH-aware 优先级算法用于为削减后的弧模型生成可行初解，而不是替代 MILP 成为最终求解器。因此当前流程为：状态相关候选弧剪枝 → 动态优先级构造解 → 写入 Gurobi MIP Start → 在剩余时间内求解同一个削减 MILP。
 
-实现文件为 `intercity_delivery/algorithms/bhh_priority_heuristic.py`，统一注册名为 `paper_priority_heuristic`。它使用论文专用 `paper_rolling_horizon.py`。
+统一注册名仍为 `paper_priority_heuristic`，GUI 显示为“Rolling Horizon：剪枝 + 生成解”。入口实现位于 `intercity_delivery/algorithms/warm_started_mip.py`；构造器位于 `intercity_delivery/algorithms/bhh_priority_heuristic.py`；两者都通过论文专用 `paper_rolling_horizon.py` 运行。
 
-## 动态优先级
+## 动态优先级初解
 
-每轮按当前状态重新计算优先级。实现以剩余松弛时间除以订单经济重要度形成排序指标，经济重要度由 `penalty_lost × remaining_quantity` 表示，并用 `priority_epsilon` 避免除零。服务一个订单后，车辆状态与弧容量立即更新，下一轮重新排序，因此优先级不是一次性的静态列表。
+每轮按当前状态重新计算优先级。排序指标是剩余松弛时间除以 `penalty_lost × remaining_quantity + priority_epsilon`。每次分配后立即更新人工车、自动车、直送车辆和弧容量，再重新排序。
 
-## BHH 容量处理
+构造器同时检查：
 
-人工末端配送弧的货量上限使用项目中的 BHH 逆函数预计算系数。启发式在尝试路径时同时检查：
-
-- 人工弧的 BHH 货量上限及人工车辆占用；
+- 人工弧的 BHH 货量上限及车辆占用；
 - 自动驾驶弧的固定行驶时间、车辆数和容量；
-- 直送任务在起终点两端的 BHH 服务时间、车辆容量和城市间车辆转移；
-- 订单的最早开始与最晚完成时间。
+- 直送任务两端的 BHH 服务时间、车辆容量和跨城车辆转移；
+- 订单最早开始、最晚完成及已提交运输阶段。
 
-订单若已在前一控制窗口完成提货或干线运输，后续窗口只构造剩余阶段，不会从头重复服务。
+## MIP Start 与最终解
 
-## 路径选择与输出
+构造结果会为 `x_manual`、`y_auto`、`g_manual`、`g_auto`、`w_direct`、`h_direct`、`q_direct`、`r_transshipment` 和 `z_unserved` 设置初值。历史已提交变量使用固定历史值。构造时间从当前窗口总预算中扣除，MILP 只使用剩余时间。
 
-每个订单可比较两类方案：人工取货—自动干线—人工送达，或人工车辆直送。候选方案按完成时间和成本启发式排序，同时参考 `direct_ratio_min` / `direct_ratio_max`；比例约束在启发式中作为构造偏好和诊断项，而非全局最优保证。
+最终返回值来自削减 MILP，所以它严格执行模型中的直送比例和需求守恒约束，并提供最优界与 MIP Gap。JSON 的每窗 `diagnostics` 额外保存：
 
-输出包含每窗优先级迭代数、非零决策数、直送比例及比例越界标志。该方法没有最优界或 MIP Gap，但通常适合更大订单规模或需要快速在线响应的实验。
+- `heuristic_start_objective`；
+- `heuristic_start_unserved`；
+- `heuristic_start_time_sec`；
+- `heuristic_start_diagnostics`；
+- 最终模型变量数、约束数和解数量。
+
+在时间充足的小算例中，解法 1 与解法 2可能得到相同最优解和近似时间。Algorithm 2 的价值应在更大实例或严格限时下，用“首个可行解时间、限时目标值、Gap”检验，不能把构造器单独返回的时间作为最终算法速度。
 
 ## GUI 使用
 
-在“论文 Solution Approach”中勾选“论文解法 2：动态 BHH 优先级启发式”。可以只选该方法快速测试，也可与解法 1 全选对比。GUI 的“测试数据”区域可明确选择程序生成数据或 CFS 处理模块生成的真实 JSON。
+在 Solution Approach 区域选择“Rolling Horizon：剪枝 + 生成解”。可以单独选择，也可与“Rolling Horizon：剪枝”同时运行；同一实验规格和种子复用完全相同的订单。

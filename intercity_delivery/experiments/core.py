@@ -4,6 +4,7 @@
 图形界面与命令行只调用这里的公共函数，因此两种入口使用完全相同的实验定义。
 """
 
+import hashlib
 import json
 import os
 import random
@@ -361,12 +362,15 @@ def load_real_orders_with_metadata(
     order_config: OrderGenerationConfig,
     seed: int = 42,
     city_pair: Optional[Tuple[str, str]] = None,
+    travel_calibration: Optional[dict] = None,
+    use_calibrated_travel_time: bool = False,
 ):
     """Load model orders directly from SQLite or from a processed JSON pool."""
 
     from intercity_delivery.data.cfs_processor import (
         ProcessorConfig,
         build_model_orders,
+        calibrate_city_pair_travel_time,
         load_processed_orders,
         sample_pair_records,
     )
@@ -386,11 +390,27 @@ def load_real_orders_with_metadata(
             penalty_lost=config.penalty_lost,
         )
         processor_config.validate()
+        if travel_calibration is None:
+            travel_calibration = calibrate_city_pair_travel_time(
+                input_path, city_a, city_b, processor_config
+            )
+        order_calibration = dict(travel_calibration)
+        if not use_calibrated_travel_time:
+            order_calibration["travel_time_periods"] = (
+                config.travel_time_periods
+            )
+            order_calibration["method"] = (
+                "full_pair_physical_time_with_model_override"
+            )
         records, sample_stats = sample_pair_records(
             input_path, city_a, city_b, processor_config
         )
         processed_orders, recommendations = build_model_orders(
-            records, city_a, city_b, processor_config
+            records,
+            city_a,
+            city_b,
+            processor_config,
+            travel_calibration=order_calibration,
         )
         source_orders = {
             item.batch_id: OrderBatch(**item.model_fields())
@@ -410,6 +430,7 @@ def load_real_orders_with_metadata(
                 "city_2": cfs_area_name(city_b),
             },
             "sampling_statistics": sample_stats,
+            "travel_calibration": travel_calibration,
             "model_recommendations": recommendations,
         }
         return orders_tuple, metadata
@@ -427,7 +448,6 @@ def load_real_orders_with_metadata(
         "model_recommendations": payload.get("model_recommendations", {}),
     }
     return orders_tuple, metadata
-
 
 def load_real_orders(
     path: str,
@@ -647,9 +667,17 @@ def planned_run_count(specs: List[ExperimentSpec], solver_names: List[str]) -> i
     return sum(len(applicable_solver_names(spec, solver_names)) for spec in specs)
 
 
-def _safe_filename_fragment(value: str, max_length: int = 180) -> str:
-    value = re.sub(r"[^A-Za-z0-9+_.-]+", "_", str(value)).strip("_.")
-    return (value or "experiment")[:max_length].rstrip("_.-")
+def _safe_filename_fragment(value: str, max_length: int = 120) -> str:
+    """Return a readable but collision-resistant Windows-safe filename part."""
+
+    original = str(value)
+    sanitized = re.sub(r"[^A-Za-z0-9+_.-]+", "_", original).strip("_.")
+    sanitized = sanitized or "experiment"
+    if len(sanitized) <= max_length:
+        return sanitized
+    digest = hashlib.sha256(original.encode("utf-8")).hexdigest()[:10]
+    prefix_length = max(1, max_length - len(digest) - 1)
+    return f"{sanitized[:prefix_length].rstrip('_.-')}_{digest}"
 
 
 def build_result_context_tag(
@@ -711,7 +739,48 @@ def run_experiment_suite(
     os.makedirs("results", exist_ok=True)
     timestamp = timestamp or datetime.now().strftime("%Y%m%d_%H%M%S")
 
+    travel_calibration_cache = {}
     for index, spec in enumerate(specs, start=1):
+        travel_calibration = None
+        use_calibrated_travel_time = True
+        if data_source == "real" and is_sqlite_path(real_data_path):
+            from intercity_delivery.data.cfs_processor import (
+                ProcessorConfig,
+                calibrate_city_pair_travel_time,
+            )
+
+            cache_key = spec.config.t_0
+            if cache_key not in travel_calibration_cache:
+                calibration_config = ProcessorConfig(
+                    num_orders=max(2, spec.order_config.num_orders),
+                    planning_periods=spec.config.T,
+                    period_hours=spec.config.period_hours,
+                )
+                travel_calibration_cache[cache_key] = (
+                    calibrate_city_pair_travel_time(
+                        Path(real_data_path),
+                        selected_city_pair[0],
+                        selected_city_pair[1],
+                        calibration_config,
+                    )
+                )
+            travel_calibration = travel_calibration_cache[cache_key]
+            calibrated_periods = int(
+                travel_calibration["travel_time_periods"]
+            )
+            updates = {}
+            if spec.sensitivity_parameter != "model.travel_time_periods":
+                updates["travel_time_periods"] = calibrated_periods
+            if (
+                spec.sensitivity_parameter
+                != "model.direct_travel_time_periods"
+            ):
+                updates["direct_travel_time_periods"] = calibrated_periods
+            if updates:
+                spec = replace(spec, config=replace(spec.config, **updates))
+            use_calibrated_travel_time = (
+                spec.config.travel_time_periods == calibrated_periods
+            )
         print(f"\n[{index}/{len(specs)}] 构建算例 {spec.experiment_id}")
         if data_source == "real":
             orders_tuple, real_data_metadata = load_real_orders_with_metadata(
@@ -720,6 +789,8 @@ def run_experiment_suite(
                 spec.order_config,
                 seed=spec.seed,
                 city_pair=selected_city_pair,
+                travel_calibration=travel_calibration,
+                use_calibrated_travel_time=use_calibrated_travel_time,
             )
         else:
             orders_tuple = generate_random_orders(

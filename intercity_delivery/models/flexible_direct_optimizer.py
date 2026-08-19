@@ -114,24 +114,35 @@ class FlexibleDirectOptimizer:
         )
 
         # g_manual：选择换装机制的订单在两个城市人工服务弧上的货量。
+        manual_load_indices = [
+            (*arc, order_id)
+            for arc in self.arcs_indices
+            for order_id, order in self.data.all_orders.items()
+            if order.flow == arc[3]
+        ]
         self.g_manual = self.model.addVars(
-            self.arcs_indices,
-            self.data.all_orders.keys(),
+            manual_load_indices,
             vtype=GRB.CONTINUOUS,
             lb=0,
             name="g_manual",
         )
 
-        # g_auto：选择换装机制的订单在自动驾驶干线弧上的货量。
+        # g_auto：只创建与订单真实方向一致的干线货量变量。
+        auto_load_indices = [
+            (i, j, flow, order_id)
+            for i, j in self.data.arcs_auto
+            for flow, orders in (
+                ("+", self.data.pos_orders),
+                ("-", self.data.neg_orders),
+            )
+            for order_id in orders
+        ]
         self.g_auto = self.model.addVars(
-            self.data.arcs_auto,
-            self.flow,
-            self.data.all_orders.keys(),
+            auto_load_indices,
             vtype=GRB.CONTINUOUS,
             lb=0,
             name="g_auto",
         )
-
         # h_direct：订单在端到端直送弧上的货量。只创建订单真实方向上的变量。
         direct_load_indices = [
             (i, j, flow, order_id)
@@ -170,7 +181,7 @@ class FlexibleDirectOptimizer:
         )
         self.cost_manual = gp.quicksum(
             self.cfg.cost_manual
-            * self.cfg.t_0
+            * self.cfg.period_hours
             * (j - i)
             * self.x_manual[i, j, city, flow]
             for i, j, city, flow in self.arcs_indices
@@ -178,12 +189,12 @@ class FlexibleDirectOptimizer:
         self.cost_auto = (
             self.cfg.cost_auto
             * self.cfg.travel_time_periods
-            * self.cfg.t_0
+            * self.cfg.period_hours
             * self.y_auto.sum()
         )
         self.cost_direct = gp.quicksum(
             self.cfg.cost_direct
-            * self.cfg.t_0
+            * self.cfg.period_hours
             * (j - i)
             * self.w_direct[i, j, flow]
             for i, j in self.arcs_direct

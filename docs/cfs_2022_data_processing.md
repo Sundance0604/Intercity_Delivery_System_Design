@@ -136,7 +136,7 @@ q_l=\operatorname{clip}\left(
 
 ### 4.6 干线与最短完成时长
 
-先计算抽样订单估计路线距离的 `WGT_FACTOR` 加权中位数，再计算统一的双城干线时长：
+先使用所选城市对全部合格 OD 记录计算大圆距离的 `WGT_FACTOR` 加权中位数，再计算统一的双城干线时长。该物理参数独立于随后抽取订单的随机种子：
 
 \[
 \tau=\left\lceil
@@ -151,7 +151,7 @@ q_l=\operatorname{clip}\left(
 p^{min}=\tau+2.
 \]
 
-输出元数据中的 `travel_time_periods`、`direct_travel_time_periods`、`T` 和 `t_0_minutes` 是建议同步到 `DeliveryConfig` 的参数。
+输出元数据会同时保存 `travel_calibration_method` 和参与校准的记录数。GUI/批量实验从 SQLite 运行时会把该校准值自动用于 `travel_time_periods` 与 `direct_travel_time_periods`；若正在对其中一个参数做灵敏度分析，则保留用户指定水平并在元数据中标注覆盖。
 
 ### 4.7 构造时间窗
 
@@ -226,7 +226,7 @@ orders_tuple = load_processed_orders(
 data = build_delivery_data(config, orders_tuple)
 ```
 
-载入前应根据 `cfs_processing_metadata.json` 的 `model_recommendations` 同步设置 `DeliveryConfig.T`、`t_0`、`travel_time_periods` 和 `direct_travel_time_periods`。
+载入处理后 JSON 时，应根据 `cfs_processing_metadata.json` 的 `model_recommendations` 同步设置 `DeliveryConfig`。直接从 SQLite 运行 GUI/批量实验时，城市对运输时间会由完整 OD 对自动校准。
 
 ## 7. 论文中的数据表述
 
