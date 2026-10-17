@@ -447,6 +447,22 @@ class PaperPriorityHeuristicSolver(_PaperRollingSolver):
         return WarmStartedStateDependentMIPApproach
 
 
+class PaperLocalBranchingSolver(_PaperRollingSolver):
+    """Algorithm 3: adaptive integer neighborhood + full reduced MILP."""
+
+    name = "paper_local_branching"
+    display_name = "Rolling Horizon: pruning + local branching"
+    result_slug = "RH_pruning_local_branching"
+
+    @property
+    def approach_class(self):
+        from intercity_delivery.algorithms.local_branching_mip import (
+            LocalBranchingStateDependentMIPApproach,
+        )
+
+        return LocalBranchingStateDependentMIPApproach
+
+
 # 所有可选求解器都在这里注册。GUI 和命令行都会读取这个注册表。
 SOLVER_REGISTRY: Dict[str, BaseSolver] = {
     ExactMIPSolver.name: ExactMIPSolver(),
@@ -455,6 +471,7 @@ SOLVER_REGISTRY: Dict[str, BaseSolver] = {
     FlexibleDirectRollingSolver.name: FlexibleDirectRollingSolver(),
     PaperCandidateMIPSolver.name: PaperCandidateMIPSolver(),
     PaperPriorityHeuristicSolver.name: PaperPriorityHeuristicSolver(),
+    PaperLocalBranchingSolver.name: PaperLocalBranchingSolver(),
 }
 
 

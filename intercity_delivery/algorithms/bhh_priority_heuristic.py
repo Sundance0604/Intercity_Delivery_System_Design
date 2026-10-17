@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import time
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
@@ -76,6 +77,24 @@ class DynamicBHHPriorityApproach:
         addable = self._profile_capacity(profile, i, j)
         return residual + addable * capacity
 
+    def _additional_vehicles(
+        self,
+        quantity: float,
+        vehicle_key: tuple,
+        load_key: tuple,
+        capacity: float,
+        vehicle_group: str,
+        load_store: Dict[tuple, float],
+    ) -> int:
+        existing_vehicles = self.decisions[vehicle_group][vehicle_key]
+        residual = max(
+            0.0, existing_vehicles * capacity - load_store[load_key]
+        )
+        return max(
+            0,
+            math.ceil(max(0.0, quantity - residual) / capacity - 1e-12),
+        )
+
     def _allocate_arc(
         self,
         quantity: float,
@@ -108,6 +127,7 @@ class DynamicBHHPriorityApproach:
         network: CandidateNetwork,
         order_id: int,
         stage: str,
+        deadline: Optional[float] = None,
     ) -> List[ServiceOption]:
         order = context.all_orders[order_id]
         origin, destination = self._origin_destination(order)
@@ -126,6 +146,8 @@ class DynamicBHHPriorityApproach:
 
         if stage == "shipped":
             for destination_arc in destination_arcs:
+                if deadline is not None and time.perf_counter() >= deadline:
+                    return options
                 if (
                     destination_arc[0] >= context.current_time
                     and destination_arc[1] <= order.latest_completion
@@ -137,9 +159,13 @@ class DynamicBHHPriorityApproach:
 
         if stage in ("picked", "untouched"):
             for auto_arc in network.data.arcs_auto:
+                if deadline is not None and time.perf_counter() >= deadline:
+                    return options
                 if auto_arc[0] < context.current_time:
                     continue
                 for destination_arc in destination_arcs:
+                    if deadline is not None and time.perf_counter() >= deadline:
+                        return options
                     if (
                         destination_arc[0] < auto_arc[1] + theta
                         or destination_arc[1] > order.latest_completion
@@ -155,6 +181,8 @@ class DynamicBHHPriorityApproach:
                         )
                     else:
                         for origin_arc in origin_arcs:
+                            if deadline is not None and time.perf_counter() >= deadline:
+                                return options
                             if (
                                 origin_arc[0] < max(
                                     context.current_time, order.earliest_start
@@ -171,6 +199,8 @@ class DynamicBHHPriorityApproach:
                             )
             if stage == "untouched":
                 for direct_arc in network.direct_arcs:
+                    if deadline is not None and time.perf_counter() >= deadline:
+                        return options
                     if (
                         direct_arc[0] >= max(
                             context.current_time, order.earliest_start
@@ -205,6 +235,52 @@ class DynamicBHHPriorityApproach:
             helper._inverse_combined_service_time(service_minutes),
         )
 
+    def _direct_available_capacity(
+        self,
+        context: PaperWindowContext,
+        arc,
+        flow: str,
+        capacity: float,
+        manual_profiles,
+    ) -> float:
+        origin = 1 if flow == "+" else 2
+        vehicle_key = (arc[0], arc[1], flow)
+        existing_vehicles = self.decisions["w_direct"][vehicle_key]
+        residual = max(
+            0.0,
+            existing_vehicles * capacity - self.direct_load[vehicle_key],
+        )
+        addable = self._profile_capacity(
+            manual_profiles[origin],
+            arc[0],
+            context.config.T,
+        )
+        return residual + addable * capacity
+
+    @staticmethod
+    def _scarcity_cost(
+        context: PaperWindowContext,
+        profile: Dict[int, float],
+        i: int,
+        j: int,
+        vehicles: int,
+        hourly_rate: float,
+    ) -> float:
+        if vehicles <= 0:
+            return 0.0
+        weight = context.algorithm_config.heuristic_scarcity_weight
+        scarcity = sum(
+            1.0 / max(1.0, profile.get(t, 0.0))
+            for t in range(i, j)
+        )
+        return (
+            weight
+            * hourly_rate
+            * context.config.period_hours
+            * vehicles
+            * scarcity
+        )
+
     def _option_capacity(
         self,
         context: PaperWindowContext,
@@ -222,13 +298,8 @@ class DynamicBHHPriorityApproach:
             arc = option.arcs[0]
             capacity = self._direct_capacity(context, arc)
             capacities.append(
-                self._available_on_arc(
-                    (arc[0], arc[1], flow),
-                    (arc[0], arc[1], flow),
-                    capacity,
-                    manual_profiles[origin],
-                    "w_direct",
-                    self.direct_load,
+                self._direct_available_capacity(
+                    context, arc, flow, capacity, manual_profiles
                 )
             )
         else:
@@ -274,6 +345,161 @@ class DynamicBHHPriorityApproach:
             )
         return max(0.0, min(capacities)) if capacities else 0.0
 
+    def _option_economics(
+        self,
+        context: PaperWindowContext,
+        network: CandidateNetwork,
+        order_id: int,
+        option: ServiceOption,
+        amount: float,
+        manual_profiles,
+        auto_profile,
+    ) -> tuple:
+        """Return capacity, quantity, net benefit, cost, and scarcity cost."""
+
+        order = context.all_orders[order_id]
+        origin, destination = self._origin_destination(order)
+        flow = order.flow
+        option_capacity = self._option_capacity(
+            context,
+            network,
+            order_id,
+            option,
+            manual_profiles,
+            auto_profile,
+        )
+        quantity = min(amount, option_capacity)
+        if quantity <= 1e-8:
+            return option_capacity, 0.0, float("-inf"), 0.0, 0.0
+
+        vehicle_cost = 0.0
+        scarcity_cost = 0.0
+        if option.kind == "direct":
+            arc = option.arcs[0]
+            capacity = self._direct_capacity(context, arc)
+            vehicle_key = (arc[0], arc[1], flow)
+            vehicles = self._additional_vehicles(
+                quantity,
+                vehicle_key,
+                vehicle_key,
+                capacity,
+                "w_direct",
+                self.direct_load,
+            )
+            vehicle_cost += (
+                context.config.cost_direct
+                * context.config.period_hours
+                * (arc[1] - arc[0])
+                * vehicles
+            )
+            scarcity_cost += self._scarcity_cost(
+                context,
+                manual_profiles[origin],
+                arc[0],
+                context.config.T,
+                vehicles,
+                context.config.cost_manual,
+            )
+        else:
+            arc_index = 0
+            if option.kind == "transshipment":
+                arc = option.arcs[arc_index]
+                capacity = self._manual_capacity(network, origin, arc)
+                vehicle_key = (arc[0], arc[1], origin, flow)
+                vehicles = self._additional_vehicles(
+                    quantity,
+                    vehicle_key,
+                    vehicle_key,
+                    capacity,
+                    "x_manual",
+                    self.manual_load,
+                )
+                vehicle_cost += (
+                    context.config.cost_manual
+                    * context.config.period_hours
+                    * (arc[1] - arc[0])
+                    * vehicles
+                )
+                scarcity_cost += self._scarcity_cost(
+                    context,
+                    manual_profiles[origin],
+                    arc[0],
+                    arc[1],
+                    vehicles,
+                    context.config.cost_manual,
+                )
+                arc_index += 1
+            if option.kind in ("transshipment", "auto_destination"):
+                arc = option.arcs[arc_index]
+                vehicle_key = (arc[0], arc[1], flow)
+                vehicles = self._additional_vehicles(
+                    quantity,
+                    vehicle_key,
+                    vehicle_key,
+                    context.config.capacity_auto,
+                    "y_auto",
+                    self.auto_load,
+                )
+                vehicle_cost += (
+                    context.config.cost_auto
+                    * context.config.period_hours
+                    * (arc[1] - arc[0])
+                    * vehicles
+                )
+                scarcity_cost += self._scarcity_cost(
+                    context,
+                    auto_profile,
+                    arc[0],
+                    arc[1],
+                    vehicles,
+                    context.config.cost_auto,
+                )
+                arc_index += 1
+            arc = option.arcs[arc_index]
+            capacity = self._manual_capacity(network, destination, arc)
+            vehicle_key = (arc[0], arc[1], destination, flow)
+            vehicles = self._additional_vehicles(
+                quantity,
+                vehicle_key,
+                vehicle_key,
+                capacity,
+                "x_manual",
+                self.manual_load,
+            )
+            vehicle_cost += (
+                context.config.cost_manual
+                * context.config.period_hours
+                * (arc[1] - arc[0])
+                * vehicles
+            )
+            scarcity_cost += self._scarcity_cost(
+                context,
+                manual_profiles[destination],
+                arc[0],
+                arc[1],
+                vehicles,
+                context.config.cost_manual,
+            )
+
+        transfer_cost = (
+            context.config.transfer_cost_per_unit * quantity
+            if option.kind in ("transshipment", "auto_destination")
+            else 0.0
+        )
+        incremental_cost = vehicle_cost + transfer_cost
+        net_benefit = (
+            order.penalty_lost * quantity
+            - incremental_cost
+            - scarcity_cost
+        )
+        return (
+            option_capacity,
+            quantity,
+            net_benefit,
+            incremental_cost,
+            scarcity_cost,
+        )
+
     def _allocate_option(
         self,
         context: PaperWindowContext,
@@ -289,17 +515,32 @@ class DynamicBHHPriorityApproach:
         origin, destination = self._origin_destination(order)
         if option.kind == "direct":
             arc = option.arcs[0]
-            self._allocate_arc(
+            vehicle_key = (arc[0], arc[1], flow)
+            load_key = vehicle_key
+            capacity = self._direct_capacity(context, arc)
+            new_vehicles = self._additional_vehicles(
                 quantity,
-                (arc[0], arc[1], flow),
-                (arc[0], arc[1], flow),
-                (arc[0], arc[1], flow, order_id),
-                self._direct_capacity(context, arc),
-                manual_profiles[origin],
+                vehicle_key,
+                load_key,
+                capacity,
                 "w_direct",
-                "h_direct",
                 self.direct_load,
             )
+            if new_vehicles:
+                self.decisions["w_direct"][vehicle_key] += new_vehicles
+                for t in range(arc[0], context.config.T):
+                    manual_profiles[origin][t] = (
+                        manual_profiles[origin].get(t, 0.0) - new_vehicles
+                    )
+                for t in range(arc[1], context.config.T):
+                    manual_profiles[destination][t] = (
+                        manual_profiles[destination].get(t, 0.0)
+                        + new_vehicles
+                    )
+            self.direct_load[load_key] += quantity
+            self.decisions["h_direct"][
+                (arc[0], arc[1], flow, order_id)
+            ] += quantity
             return
 
         arc_index = 0
@@ -440,21 +681,46 @@ class DynamicBHHPriorityApproach:
         )
         return float(cost)
 
-    def solve_window(self, context: PaperWindowContext) -> PaperWindowSolution:
+    def solve_window(
+        self,
+        context: PaperWindowContext,
+        network: Optional[CandidateNetwork] = None,
+        max_time_sec: Optional[float] = None,
+    ) -> PaperWindowSolution:
         self.__init__()
-        network = StateDependentCandidateGenerator(context).generate()
+        started = time.perf_counter()
+        deadline = (
+            started + max(0.0, max_time_sec)
+            if max_time_sec is not None
+            else None
+        )
+        network = network or StateDependentCandidateGenerator(context).generate()
         manual_profiles = {
             city: dict(profile)
             for city, profile in network.manual_availability.items()
         }
         auto_profile = dict(network.auto_availability)
         known_ids = list(context.known_order_ids)
+        option_cache = {}
+        economically_rejected = set()
+        evaluated_options = 0
+        selected_net_benefit = 0.0
+        selected_incremental_cost = 0.0
+        selected_scarcity_cost = 0.0
         iterations = 0
+        ranked_orders = 0
+        time_limit_reached = False
         max_iterations = max(1, len(known_ids) * 20)
 
         while iterations < max_iterations:
+            if deadline is not None and time.perf_counter() >= deadline:
+                time_limit_reached = True
+                break
             ranked = []
             for order_id in known_ids:
+                if deadline is not None and time.perf_counter() >= deadline:
+                    time_limit_reached = True
+                    break
                 order = context.all_orders[order_id]
                 committed = self._committed_stage(context, order_id)
                 planned = self._planned_stage(order_id, order)
@@ -465,34 +731,75 @@ class DynamicBHHPriorityApproach:
                 delivered = totals["direct"] + totals["delivered"]
                 if delivered >= order.quantity - 1e-8 or amount <= 1e-8:
                     continue
-                options = self._candidate_options(
-                    context, network, order_id, stage
-                )
-                feasible = [
-                    (option, self._option_capacity(
+                cache_key = (order_id, stage)
+                if cache_key not in option_cache:
+                    option_cache[cache_key] = self._candidate_options(
+                        context, network, order_id, stage, deadline=deadline
+                    )
+                if deadline is not None and time.perf_counter() >= deadline:
+                    time_limit_reached = True
+                    break
+                options = option_cache[cache_key]
+                evaluated = [
+                    (option, *self._option_economics(
                         context,
                         network,
                         order_id,
                         option,
+                        amount,
                         manual_profiles,
                         auto_profile,
                     ))
                     for option in options
                 ]
-                feasible = [item for item in feasible if item[1] > 1e-8]
+                evaluated_options += len(evaluated)
+                capacitated = [item for item in evaluated if item[2] > 1e-8]
+                feasible = [
+                    item
+                    for item in capacitated
+                    if item[3]
+                    > context.algorithm_config.heuristic_min_net_benefit
+                ]
                 if not feasible:
+                    if capacitated:
+                        economically_rejected.add(order_id)
                     continue
-                best_completion = min(option.completion for option, _ in feasible)
-                slack = order.latest_completion - best_completion
-                priority = slack / (
-                    order.penalty_lost * amount
-                    + getattr(context.algorithm_config, "priority_epsilon", 1e-6)
+                ordered = sorted(
+                    feasible,
+                    key=lambda item: (-item[3], item[0].completion),
                 )
-                ranked.append((priority, order_id, stage, amount, feasible))
+                best = ordered[0]
+                second_net_benefit = (
+                    ordered[1][3] if len(ordered) > 1 else 0.0
+                )
+                slack = max(0, order.latest_completion - best[0].completion)
+                regret = (
+                    best[3] - max(0.0, second_net_benefit)
+                ) / (slack + 1.0)
+                ranked.append(
+                    (
+                        regret,
+                        best[3],
+                        -best[0].completion,
+                        order_id,
+                        stage,
+                        amount,
+                        feasible,
+                    )
+                )
+                ranked_orders += 1
 
             if not ranked:
                 break
-            _, order_id, stage, amount, feasible = min(ranked, key=lambda item: item[0])
+            (
+                _regret,
+                _best_net_benefit,
+                _negative_completion,
+                order_id,
+                stage,
+                amount,
+                feasible,
+            ) = max(ranked, key=lambda item: item[:3])
 
             # 默认遵循最短完成时间；比例下界未满足时优先直送，上界达到时优先换装。
             current_direct = sum(self.decisions["h_direct"].values()) + sum(
@@ -518,8 +825,17 @@ class DynamicBHHPriorityApproach:
                 pool = trans_options
             else:
                 pool = feasible
-            option, capacity = min(pool, key=lambda item: item[0].completion)
-            quantity = min(amount, capacity)
+            (
+                option,
+                _capacity,
+                quantity,
+                net_benefit,
+                incremental_cost,
+                scarcity_cost,
+            ) = max(
+                pool,
+                key=lambda item: (item[3], -item[0].completion),
+            )
             self._allocate_option(
                 context,
                 network,
@@ -529,6 +845,10 @@ class DynamicBHHPriorityApproach:
                 manual_profiles,
                 auto_profile,
             )
+            economically_rejected.discard(order_id)
+            selected_net_benefit += net_benefit
+            selected_incremental_cost += incremental_cost
+            selected_scarcity_cost += scarcity_cost
             iterations += 1
 
         unserved_by_order = {}
@@ -564,6 +884,17 @@ class DynamicBHHPriorityApproach:
             "constructed_nonzero_decisions": sum(
                 len(values) for values in decisions.values()
             ),
+            "economically_rejected_orders": len(economically_rejected),
+            "economically_rejected_order_ids": sorted(economically_rejected),
+            "evaluated_service_options": evaluated_options,
+            "cached_option_sets": len(option_cache),
+            "selected_net_benefit": selected_net_benefit,
+            "selected_incremental_cost": selected_incremental_cost,
+            "selected_scarcity_cost": selected_scarcity_cost,
+            "heuristic_time_limit_sec": max_time_sec,
+            "heuristic_time_limit_reached": time_limit_reached,
+            "ranked_orders_before_limit": ranked_orders,
+            "heuristic_elapsed_sec": time.perf_counter() - started,
         }
         return PaperWindowSolution(
             feasible=True,

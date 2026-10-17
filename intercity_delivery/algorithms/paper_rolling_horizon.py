@@ -116,13 +116,22 @@ class PaperRollingHorizonController:
         start: int,
         end: int,
     ) -> Dict[str, Dict[tuple, float]]:
+        vehicle_groups = {"x_manual", "y_auto", "w_direct"}
+        commit_tolerance = 1e-6
         committed = {}
         for group, values in solution.decisions.items():
-            committed[group] = {
-                tuple(key): float(value)
-                for key, value in values.items()
-                if start <= int(key[0]) < end and abs(value) > 1e-8
-            }
+            normalized = {}
+            for key, value in values.items():
+                key = tuple(key)
+                if not start <= int(key[0]) < end:
+                    continue
+                value = float(value)
+                if group in vehicle_groups:
+                    value = float(round(value))
+                if abs(value) <= commit_tolerance:
+                    continue
+                normalized[key] = value
+            committed[group] = normalized
         return committed
 
     def run(self, time_limit: int, output_flag: int = 0) -> PaperRollingOutcome:

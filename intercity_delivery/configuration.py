@@ -7,6 +7,7 @@ DIRECT_MODEL_SOLVERS = (
     "flexible_direct_rolling",
     "paper_candidate_mip",
     "paper_priority_heuristic",
+    "paper_local_branching",
 )
 
 
@@ -23,15 +24,73 @@ class RollingHorizonConfig:
     extension_horizon: int = field(
         default=6,
         metadata={
-            "solvers": ("paper_candidate_mip", "paper_priority_heuristic"),
+            "solvers": (
+                "paper_candidate_mip",
+                "paper_priority_heuristic",
+                "paper_local_branching",
+            ),
             "sensitivity_levels": [4, 6, 8],
         },
     )
     priority_epsilon: float = field(
         default=1e-6,
         metadata={
-            "solvers": ("paper_priority_heuristic",),
+            "solvers": (
+                "paper_priority_heuristic",
+                "paper_local_branching",
+            ),
             "sensitivity_levels": [1e-8, 1e-6, 1e-4],
+        },
+    )
+    heuristic_trigger_time_sec: float = field(
+        default=1.0,
+        metadata={
+            "solvers": (
+                "paper_priority_heuristic",
+                "paper_local_branching",
+            ),
+            "sensitivity_levels": [0.25, 0.5, 1.0],
+        },
+    )
+    heuristic_scarcity_weight: float = field(
+        default=0.25,
+        metadata={
+            "solvers": (
+                "paper_priority_heuristic",
+                "paper_local_branching",
+            ),
+            "sensitivity_levels": [0.0, 0.25, 0.5],
+        },
+    )
+    heuristic_min_net_benefit: float = field(
+        default=1e-6,
+        metadata={
+            "solvers": (
+                "paper_priority_heuristic",
+                "paper_local_branching",
+            ),
+            "sensitivity_levels": [0.0, 1e-6, 1e-3],
+        },
+    )
+    local_branching_radius: int = field(
+        default=8,
+        metadata={
+            "solvers": ("paper_local_branching",),
+            "sensitivity_levels": [4, 8, 16],
+        },
+    )
+    local_branching_time_fraction: float = field(
+        default=0.25,
+        metadata={
+            "solvers": ("paper_local_branching",),
+            "sensitivity_levels": [0.1, 0.25, 0.4],
+        },
+    )
+    local_branching_max_time_sec: float = field(
+        default=2.0,
+        metadata={
+            "solvers": ("paper_local_branching",),
+            "sensitivity_levels": [0.5, 1.0, 2.0],
         },
     )
 
@@ -44,6 +103,22 @@ class RollingHorizonConfig:
             raise ValueError("rolling_step 不能大于 prediction_horizon。")
         if self.extension_horizon < 0:
             raise ValueError("extension_horizon 不能小于 0。")
+        if self.heuristic_trigger_time_sec <= 0:
+            raise ValueError("heuristic_trigger_time_sec must be positive.")
+        if self.heuristic_scarcity_weight < 0:
+            raise ValueError("heuristic_scarcity_weight cannot be negative.")
+        if self.heuristic_min_net_benefit < 0:
+            raise ValueError("heuristic_min_net_benefit cannot be negative.")
+        if self.local_branching_radius <= 0:
+            raise ValueError("local_branching_radius must be positive.")
+        if not 0 < self.local_branching_time_fraction < 1:
+            raise ValueError(
+                "local_branching_time_fraction must be between 0 and 1."
+            )
+        if self.local_branching_max_time_sec <= 0:
+            raise ValueError(
+                "local_branching_max_time_sec must be positive."
+            )
         if self.priority_epsilon <= 0:
             raise ValueError("priority_epsilon 必须大于 0。")
 

@@ -137,7 +137,11 @@ class ExperimentApp(ctk.CTk):
             text="论文 Solution Approach（可单选或全选）",
             font=ctk.CTkFont(size=15, weight="bold"),
         ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 6))
-        paper_names = ("paper_candidate_mip", "paper_priority_heuristic")
+        paper_names = (
+            "paper_candidate_mip",
+            "paper_priority_heuristic",
+            "paper_local_branching",
+        )
         for column, name in enumerate(paper_names):
             variable = ctk.BooleanVar(value=True)
             self.solver_vars[name] = variable

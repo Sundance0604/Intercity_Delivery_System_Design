@@ -192,6 +192,39 @@ JSON 顶层结构：
 | `heuristic_start_unserved` | 构造初解的未服务货量 |
 | `heuristic_start_time_sec` | 初解构造时间；已计入窗口总预算 |
 | `heuristic_start_diagnostics` | 初解迭代数、直送比例和候选弧信息 |
+| heuristic_triggered | Whether the economic constructor ran in this window |
+| heuristic_trigger_reason | Previous-window difficulty, tight budget, or easy-window skip |
+| heuristic_trigger_time_sec | Adaptive activation threshold |
+| average_remaining_window_budget_sec | Remaining total budget divided by remaining windows |
+| previous_window_mip_time_sec | Measured MIP time in the preceding window |
+| preprocessing_time_sec | Candidate generation, model build, and optional construction time |
+| mip_solve_time_sec | Gurobi optimize time only |
+| partial_start_values | Number of nonzero partial MIP Start values |
+| first_stage_restricted_variables | Late origin-pickup flows disabled after T_start |
+| orders_with_transshipment_path | Known orders with at least one complete staged path |
+| economically_rejected_orders | Orders rejected because all service options have nonpositive net benefit |
+| selected_net_benefit | Avoided penalty minus incremental and scarcity costs in the constructed start |
+| selected_scarcity_cost | Future-resource proxy used by the constructor |
+| heuristic_budget_sec | Hard time budget assigned to Algorithm 2 construction |
+| heuristic_time_limit_reached | Whether Algorithm 2 stopped at its construction deadline |
+| ranked_orders_before_limit | Number of order rankings completed before the deadline |
+| heuristic_elapsed_sec | Measured Algorithm 2 construction time |
+| history_tolerance_retry_triggered | Whether an infeasible window retried with narrow committed-flow bounds |
+| history_tolerance_retry_time_sec | Time spent in the numerical history retry |
+| local_branching_triggered | Whether Algorithm 3 ran its local-neighborhood phase |
+| local_branching_trigger_reason | Difficulty signal that activated Algorithm 3 |
+| local_branching_radius | Configured maximum integer L1 radius |
+| local_branching_effective_radius | Adaptive radius used in the current window |
+| local_branching_budget_sec | Hard time budget assigned to the local phase |
+| local_branching_time_sec | Measured local-phase solve time |
+| local_branching_status | Gurobi status of the local model |
+| local_branching_solution_count | Number of local incumbents found |
+| local_branching_objective | Best local incumbent objective |
+| local_branching_best_bound | Best local-stage bound |
+| local_branching_mip_gap | Local-stage MIP gap |
+| local_branching_neighborhood_variables | Number of nonzero heuristic vehicle decisions included |
+| local_incumbent_transferred | Whether the local incumbent became the full-MIP start |
+| transferred_start_values | Number of variable values transferred to the full MIP |
 | `solution_count` | 最终剪枝 MIP 得到的可行解数量 |
 
 最终窗口的 `objective`、`best_bound` 和 `mip_gap` 属于剪枝 MIP，不是构造器单独结果。

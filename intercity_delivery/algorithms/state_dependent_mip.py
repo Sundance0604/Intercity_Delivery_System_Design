@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import time
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Sequence, Set, Tuple
 
@@ -95,6 +96,43 @@ class StateDependentCandidateGenerator:
                     arcs.add((int(key[0]), int(key[1])))
         return arcs
 
+    def _transshipment_path_available(
+        self,
+        order,
+        manual_arcs: Dict[int, Set[Arc]],
+        auto_arcs: Set[Arc],
+    ) -> bool:
+        """Return whether one complete staged path exists for an order.
+
+        Only the origin pickup must start in T_start. The line-haul and
+        destination stages may start in the extended window. This distinction
+        is required when the start window is shorter than the line-haul time.
+        """
+
+        origin = 1 if order.flow == "+" else 2
+        destination = 2 if order.flow == "+" else 1
+        theta = self.cfg.transfer_time_periods
+        origin_arcs = sorted(manual_arcs[origin])
+        destination_arcs = sorted(manual_arcs[destination])
+        for origin_arc in origin_arcs:
+            if not (
+                order.earliest_start <= origin_arc[0] < self.ctx.start_end
+                and origin_arc[1] <= order.latest_completion
+            ):
+                continue
+            for auto_arc in sorted(auto_arcs):
+                if auto_arc[0] < origin_arc[1] + theta:
+                    continue
+                if auto_arc[1] > order.latest_completion:
+                    continue
+                if any(
+                    destination_arc[0] >= auto_arc[1] + theta
+                    and destination_arc[1] <= order.latest_completion
+                    for destination_arc in destination_arcs
+                ):
+                    return True
+        return False
+
     def generate(self) -> CandidateNetwork:
         loader = DataLoader(self.cfg)
         manual_availability = self._manual_availability()
@@ -112,9 +150,12 @@ class StateDependentCandidateGenerator:
                 ),
             )
 
+        # Only origin pickup is restricted to T_start by the reduced model.
+        # Candidate manual arcs extend to T_ext so that destination delivery
+        # may begin after the start window.
         manual_arcs = {1: set(), 2: set()}
         for city in (1, 2):
-            for i in range(self.ctx.current_time, self.ctx.start_end):
+            for i in range(self.ctx.current_time, self.ctx.completion_end):
                 last_j = min(
                     self.ctx.completion_end,
                     i + maximum_manual_duration[city],
@@ -128,9 +169,11 @@ class StateDependentCandidateGenerator:
                         manual_arcs[city].add((i, j))
             manual_arcs[city].update(self._committed_arcs_by_city(city))
 
+        # Line-haul is a downstream stage. Keeping its departure in T_start
+        # makes a three-stage path impossible whenever H < tau.
         auto_arcs = set()
         tau = self.cfg.travel_time_periods
-        for i in range(self.ctx.current_time, self.ctx.start_end):
+        for i in range(self.ctx.current_time, self.ctx.completion_end):
             j = i + tau
             if j <= self.ctx.completion_end and self._positive_over_interval(
                 auto_availability, i, j
@@ -167,6 +210,13 @@ class StateDependentCandidateGenerator:
             direct_arcs.update(
                 self._vehicle_arcs(self.ctx.committed.decisions.get(group, {}))
             )
+
+        transshipment_path_available = {
+            int(order_id): self._transshipment_path_available(
+                order, manual_arcs, auto_arcs
+            )
+            for order_id, order in self.known_orders.items()
+        }
 
         known_pos = {
             order_id: order
@@ -218,6 +268,21 @@ class StateDependentCandidateGenerator:
             "non_direct_arc_reduction_rate": (
                 1.0 - reduced_count / full_count if full_count else 0.0
             ),
+            "first_stage_start_end": self.ctx.start_end,
+            "downstream_start_end": self.ctx.completion_end,
+            "transshipment_path_available_by_order": (
+                transshipment_path_available
+            ),
+            "orders_with_transshipment_path": sum(
+                transshipment_path_available.values()
+            ),
+            "extension_sufficient_for_transshipment": (
+                self.ctx.completion_end - self.ctx.start_end
+                >= maximum_manual_duration[1]
+                + self.cfg.travel_time_periods
+                + maximum_manual_duration[2]
+                + 2 * self.cfg.transfer_time_periods
+            ),
         }
         return CandidateNetwork(
             data=data,
@@ -231,8 +296,15 @@ class StateDependentCandidateGenerator:
 class ReducedFlexibleDirectOptimizer(FlexibleDirectOptimizer):
     """只在 Algorithm 1 生成的弧上创建变量的协同 MILP。"""
 
-    def __init__(self, config, data, direct_arcs: Sequence[Arc]):
+    def __init__(
+        self,
+        config,
+        data,
+        direct_arcs: Sequence[Arc],
+        first_stage_start_end: int | None = None,
+    ):
         self._candidate_direct_arcs = tuple(direct_arcs)
+        self._first_stage_start_end = first_stage_start_end
         super().__init__(config, data)
 
     def _prepare_indices(self):
@@ -255,6 +327,25 @@ class ReducedFlexibleDirectOptimizer(FlexibleDirectOptimizer):
                 self._inverse_combined_service_time(service_minutes),
             )
 
+    def build_model(self):
+        super().build_model()
+        if self._first_stage_start_end is None:
+            return self
+
+        # Manual arcs are shared by pickup and delivery. They are generated
+        # through T_ext for downstream delivery, but a new order's origin
+        # pickup must still start in T_start.
+        restricted = 0
+        for key, variable in self.g_manual.items():
+            i, _j, city, flow, _order_id = key
+            origin = 1 if flow == "+" else 2
+            if city == origin and i >= self._first_stage_start_end:
+                variable.ub = 0.0
+                restricted += 1
+        self.first_stage_restricted_variables = restricted
+        self.model.update()
+        return self
+
     def fix_committed_history(
         self,
         current_time: int,
@@ -267,6 +358,23 @@ class ReducedFlexibleDirectOptimizer(FlexibleDirectOptimizer):
                     value = float(history.get(tuple(key), 0.0))
                     variable.lb = value
                     variable.ub = value
+        self.model.update()
+
+    def relax_committed_flow_history(
+        self,
+        current_time: int,
+        committed: Dict[str, Dict[tuple, float]],
+        tolerance: float = 1e-5,
+    ) -> None:
+        for group in ("g_manual", "g_auto", "h_direct"):
+            variables = self.decision_variable_groups()[group]
+            for key, value in committed.get(group, {}).items():
+                key = tuple(key)
+                if int(key[0]) >= current_time or key not in variables:
+                    continue
+                value = float(value)
+                variables[key].lb = max(0.0, value - tolerance)
+                variables[key].ub = value + tolerance
         self.model.update()
 
 
@@ -288,16 +396,63 @@ class StateDependentMIPApproach:
         }
 
     def solve_window(self, context: PaperWindowContext) -> PaperWindowSolution:
+        preprocessing_started = time.time()
+        network_started = time.time()
         network = self._candidate_generator(context).generate()
+        network_time = time.time() - network_started
         optimizer = ReducedFlexibleDirectOptimizer(
-            context.config, network.data, network.direct_arcs
+            context.config, network.data, network.direct_arcs,
+            first_stage_start_end=context.start_end,
         ).build_model()
         optimizer.fix_committed_history(
             context.current_time, context.committed.decisions
         )
         optimizer.model.setParam("OutputFlag", context.output_flag)
-        optimizer.model.setParam("TimeLimit", max(0.01, context.remaining_time))
+        preprocessing_time = time.time() - preprocessing_started
+        optimizer.model.setParam(
+            "TimeLimit",
+            max(0.01, context.remaining_time - preprocessing_time),
+        )
+        mip_started = time.time()
         optimizer.model.optimize()
+        history_retry_triggered = False
+        history_retry_time = 0.0
+        if (
+            optimizer.model.SolCount <= 0
+            and optimizer.model.Status == 3
+        ):
+            history_retry_triggered = True
+            optimizer.relax_committed_flow_history(
+                context.current_time,
+                context.committed.decisions,
+            )
+            optimizer.model.reset()
+            optimizer.model.setParam(
+                "TimeLimit",
+                max(
+                    0.01,
+                    context.remaining_time
+                    - (time.time() - preprocessing_started),
+                ),
+            )
+            retry_started = time.time()
+            optimizer.model.optimize()
+            history_retry_time = time.time() - retry_started
+        mip_time = time.time() - mip_started
+        diagnostics = {
+            **network.diagnostics,
+            "network_generation_time_sec": round(network_time, 6),
+            "preprocessing_time_sec": round(preprocessing_time, 6),
+            "mip_solve_time_sec": round(mip_time, 6),
+            "first_stage_restricted_variables": getattr(
+                optimizer, "first_stage_restricted_variables", 0
+            ),
+            "history_tolerance_retry_triggered": history_retry_triggered,
+            "history_tolerance_retry_time_sec": round(history_retry_time, 6),
+            "variables": optimizer.model.NumVars,
+            "constraints": optimizer.model.NumConstrs,
+            "solution_count": optimizer.model.SolCount,
+        }
         if optimizer.model.SolCount <= 0:
             return PaperWindowSolution(
                 feasible=False,
@@ -305,7 +460,7 @@ class StateDependentMIPApproach:
                 objective=None,
                 decisions={},
                 unserved_by_order={},
-                diagnostics=network.diagnostics,
+                diagnostics=diagnostics,
                 message=f"削减 MILP 未找到可行解，状态 {optimizer.model.Status}。",
             )
 
@@ -326,11 +481,6 @@ class StateDependentMIPApproach:
             },
             direct_volume=direct_volume,
             transshipment_volume=transshipment_volume,
-            diagnostics={
-                **network.diagnostics,
-                "variables": optimizer.model.NumVars,
-                "constraints": optimizer.model.NumConstrs,
-                "solution_count": optimizer.model.SolCount,
-            },
+            diagnostics=diagnostics,
             message="状态相关候选弧削减 MILP 获得可行解。",
         )

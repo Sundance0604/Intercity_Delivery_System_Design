@@ -25,7 +25,11 @@ class PaperSolutionApproachTests(unittest.TestCase):
         self.data = build_delivery_data(self.config, self.orders)
 
     def test_both_paper_approaches_run_through_registry(self):
-        for name in ("paper_candidate_mip", "paper_priority_heuristic"):
+        for name in (
+            "paper_candidate_mip",
+            "paper_priority_heuristic",
+            "paper_local_branching",
+        ):
             with self.subTest(name=name):
                 result = SOLVER_REGISTRY[name].solve(
                     self.config, self.data, self.orders, 20, self.algorithm_config
