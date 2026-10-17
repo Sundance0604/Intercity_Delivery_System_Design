@@ -1,0 +1,7 @@
+# Project-scoped Codex settings. Codex only loads this configuration when
+# this directory is trusted. The primary Codex is the coordinator.
+web_search = "live"
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 4
