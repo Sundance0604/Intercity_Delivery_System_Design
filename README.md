@@ -1,328 +1,153 @@
-# Intercity Delivery System Design
+# BHH / Intercity 多 Agent 科研分支
 
-基于混合整数规划（MIP）的城际配送系统优化与仿真实验平台。系统协同调度城市内
-人工驾驶车辆和城际自动驾驶车辆，在车辆、容量、换装时序和订单时间窗约束下最小化
-车辆成本与未服务惩罚。
+当前分支：`research/qvi-multiagent`。更新日期：2026-10-17。
 
-## 论文 Solution Approach（2026-07-14）
+本分支用于梳理 BHH / Intercity 城际配送研究中的数学模型、Python 实现与理论扩展，建立可追溯的科研协作和模型迁移流程。核心工作是核对最新论文实际定义的模型，找出现有程序的差距，经过独立审查后形成实施计划。
 
-`Intercity_Operation.pdf` 的两个解法已经实现，并作为两个独立求解器接入实验框架：
+目前已完成一轮模型同步审计。**实际代码迁移尚未开始，稳态数值验证和完整随机 QVI 理论也尚未完成。** 当前 Python 程序保留原有模型与算法，审计报告的提交不表示新模型已经实现。
 
-- paper_candidate_mip：Rolling Horizon + 状态相关候选网络剪枝；每个窗口求解剪枝后的 MIP。
-- paper_priority_heuristic：Rolling Horizon + 同样的候选网络剪枝 + 动态优先级构造 MIP Start + 剪枝 MIP 改进。
+## 1. 分支用途与模型边界
 
-两者使用 `intercity_delivery/algorithms/paper_rolling_horizon.py`。该控制器支持控制窗口、预测起始窗口、
-扩展完成窗口、订单逐期揭示和已提交车辆/货流状态；原有算法位于 `intercity_delivery/algorithms/rolling_horizon.py`。
-GUI 中两个论文解法是独立复选框，可全选或只选其中一个，旧求解器保留为可选基准。
+系统包含两个城市、城市内人工驾驶车辆、城际自动驾驶车辆及两端换装枢纽，研究取货、干线运输、配送、直送与车辆调度之间的关系。本分支区分：
 
-因此两个 Solution Approach 的共同前提都是 Rolling Horizon。解法 1 直接求解剪枝 MIP；解法 2 先生成动态 BHH 优先级初解，再用它启动同一剪枝 MIP。GUI 分别显示为“Rolling Horizon：剪枝”和“Rolling Horizon：剪枝 + 生成解”。
+| 对象 | 含义 | 首要依据 |
+|---|---|---|
+| V0 | 现有 Python 实际实现，包括强制换装、灵活直送及对应滚动算法 | `intercity_delivery/` 下的源码 |
+| V1 | 新论文的有限时域 wave 容量与调度模型 | 本地 `research/paper/main_v2_BHH.tex` |
+| 稳态变体 | 共同 timetable 下的批量、载量、成本与期限分析；两稿单列比较 | 本地 `steady_state_model.tex`、`steady_state_model_v1_linear.tex` |
+| V2 | 随机订单抵达、内生 wave 与动态发车决策的 QVI 研究目标 | 用户研究定义与本地理论笔记 |
 
-对应说明：
+V0 以实际代码为准，旧论文不能替代代码审计。V1、稳态变体和 V2 不默认等价。本地 QVI 笔记目前主要处理确定性常率或时变需求率，尚不能代表完整随机到达模型。
 
-- [解法 1：状态相关候选弧削减 MIP](docs/state_dependent_candidate_mip.md)
-- [解法 2：剪枝 + BHH 优先级生成初解](docs/dynamic_bhh_priority_heuristic.md)
+本分支的产出是数学比较、代码映射、文献核验、独立审查、模型合同及迁移计划。实际实现和实验须按依赖与批准范围推进。
 
-### 生成数据与真实数据
+## 2. 建议阅读顺序
 
-GUI 的“测试数据”区域必须明确选择数据来源：
+| 顺序 | 路径 | 作用 |
+|---|---|---|
+| 1 | [coordination/PROGRESS.md](coordination/PROGRESS.md) | 当前完成事项、限制及下一步 |
+| 2 | [coordination/MODEL_CONTRACT.md](coordination/MODEL_CONTRACT.md) | 模型命名、来源、假设边界及输入散列 |
+| 3 | [coordination/MODEL_DIFF.md](coordination/MODEL_DIFF.md) | V0、V1、稳态与 QVI 的差异索引 |
+| 4 | [coordination/reviews/model_alignment_review.md](coordination/reviews/model_alignment_review.md) | 独立审查、严重问题及结论 |
+| 5 | [coordination/MIGRATION_PLAN.md](coordination/MIGRATION_PLAN.md) | 待确认问题、实施依赖、验证与完成标准 |
 
-- **生成数据**：使用 `OrderGenerationConfig` 和随机种子构造订单。
-- **真实数据**：直接加载带索引的 CFS SQLite。GUI 显示 shipments 列名，并提供双向城市 1/城市 2 联动选择。
+具体结论的证据位于三份专业报告：
 
-真实模式从 SQLite 中筛选用户选择的两个 CFS Area，按 WGT_FACTOR 加权、双向平衡地抽样订单；城市对运输时间由全部合格 OD 记录加权校准并自动用于模型，随机种子只影响订单抽样。若合格记录不足或规划期短于运输最短完成时间，程序会在求解前明确报错。`cost_manual`、`cost_auto`、`cost_direct` 均为每车小时费率，目标函数用 `t_0 / 60` 把分钟换算为小时。
+| 路径 | 负责 Agent | 内容 |
+|---|---|---|
+| [research/theory/model_comparison.md](research/theory/model_comparison.md) | Theorist | 逐公式比较、代码结构映射、假设与证明缺口、QVI 边界 |
+| [experiments/reports/model_code_gap.md](experiments/reports/model_code_gap.md) | Experiment | 文件/函数/行号对应、可复用部分、迁移与测试设计 |
+| [research/literature/model_positioning.md](research/literature/model_positioning.md) | Literature | 研究定位、公开引文核验及其实际支持范围 |
 
-官方 2022 CFS PUMS 的处理方法见：
+## 3. 文件结构
 
-- [CFS 2022 数据内容与处理](docs/cfs_2022_data_processing.md)
+以下目录树描述当前本地工作区。标注“本地输入”的文件未纳入本轮审计提交，远端克隆不会自动获得；工作目录也不表示已有新实验实现。
 
-对于 2GB 以上的官方 CSV，推荐先建立一次带索引的 SQLite 缓存，再从缓存生成模型订单：
-
-```powershell
-conda activate pavane
-python -m intercity_delivery.data.sqlite_store `
-  --input data\cfs_2022_pums.csv `
-  --output data\cfs_2022_pums.sqlite
-
-python -m intercity_delivery.data.cfs_processor `
-  --input data\cfs_2022_pums.sqlite `
-  --output-dir data\cfs_processed --num-orders 100 --seed 42
-```
-
-首次建库仍会顺序扫描一次 CSV；随后按 OD、方式和距离的重复筛选直接走 SQLite。
-GUI 可以直接选择第一步生成的 data/cfs_2022_pums.sqlite，无需预先生成固定城市对 JSON。
-
-论文解法核心文件：
-
-```text
-intercity_delivery/algorithms/paper_rolling_horizon.py      # 论文专用滚动时域接口
-intercity_delivery/algorithms/state_dependent_mip.py        # Algorithm 1
-intercity_delivery/algorithms/bhh_priority_heuristic.py     # Algorithm 2
-intercity_delivery/data/cfs_processor.py                    # 官方 CFS PUMS 转换
-```
-
-## 主要功能
-
-- 精确 MIP 与 Rolling Horizon 两种求解方式。
-- 模型参数、算法参数、订单参数三类动态单因素灵敏度分析。
-- GUI 与 CLI 使用同一个实验规格生成、求解和结果输出链路。
-- CSV 汇总结果与可复现实验输入、订单和详细解的 JSON 结果。
-
-## 环境
-
-- Python 3.11+
-- Gurobi Optimizer 与有效许可证
-- `numpy`、`pandas`
-- `customtkinter`
-
-推荐使用项目环境：
-
-```bash
-conda activate pavane
-```
-
-## 项目结构
-
-```text
+~~~text
 .
-├── main.py                         # GUI 与 CLI 统一入口（根目录唯一 Python 文件）
-├── intercity_delivery/
-│   ├── configuration.py            # 模型、算法、订单配置
-│   ├── data/
-│   │   ├── loader.py               # 时间弧、容量系数与订单结构
-│   │   ├── cfs_processor.py        # 官方 CFS 数据处理
-│   │   ├── sqlite_store.py         # 大型 CFS CSV 的索引缓存
-│   │   └── cfs_catalog.py          # SQLite 列名、城市对和官方区域名称
-│   ├── models/
-│   │   ├── base_optimizer.py       # 基础 Gurobi 模型
-│   │   ├── flexible_direct_optimizer.py
-│   │   └── gurobi_results.py       # 状态相关属性安全读取
-│   ├── algorithms/
-│   │   ├── rolling_horizon.py
-│   │   ├── paper_rolling_horizon.py
-│   │   ├── state_dependent_mip.py
-│   │   └── bhh_priority_heuristic.py
-│   └── experiments/
-│       ├── solvers.py               # 统一求解器注册表
-│       ├── core.py                  # 实验规格与结果输出
-│       └── gui.py                   # 可视化界面
-├── tests/                            # 回归测试
-├── docs/                             # 使用与实现说明
-└── results/                          # CSV、JSON 输出
-```
+├── README.md                            # 本分支用途、结构与阅读入口
+├── AGENTS.md                            # 科研协作、证据等级与修改规则
+├── .codex/
+│   ├── config.toml                      # 项目级 Agent 配置
+│   └── agents/
+│       ├── literature.toml              # 文献与写作职责
+│       ├── experiment.toml              # 优化程序与实验职责
+│       ├── theorist.toml                # 数学模型与理论职责
+│       └── referee.toml                 # 独立审查职责
+├── coordination/
+│   ├── MODEL_CONTRACT.md                # 模型来源、定义与对齐合同
+│   ├── MODEL_DIFF.md                    # 模型差异索引
+│   ├── MIGRATION_PLAN.md                # 迁移阶段与作者确认清单
+│   ├── CLAIMS.md                        # 主张、假设与证据状态
+│   ├── TASKS.md                         # 有界任务、依赖与验收
+│   ├── PROGRESS.md                      # 已核实进度和开放问题
+│   ├── FIRST_RUN_PROMPT.md              # 初始四 Agent 演练模板
+│   └── reviews/
+│       └── model_alignment_review.md    # 本轮独立审查报告
+├── research/
+│   ├── paper/                           # 论文数学来源；本地输入
+│   │   ├── main_BHH.tex                 # 旧论文
+│   │   ├── main_v2_BHH.tex              # 新有限时域模型
+│   │   ├── steady_state_model.tex       # deadline / sorting 稳态稿
+│   │   └── steady_state_model_v1_linear.tex # 较早线性时间成本稳态稿
+│   ├── theory/
+│   │   ├── model_comparison.md          # 已提交的数学比较报告
+│   │   └── Common Wave 的内生化与非均匀需求扩展.md # 本地 QVI 输入
+│   ├── literature/
+│   │   └── model_positioning.md         # 已提交的文献定位报告
+│   └── toy_models/                      # 独立小型理论测试工作目录
+├── experiments/
+│   ├── reports/
+│   │   └── model_code_gap.md            # 已提交的模型—代码审计
+│   └── specs/                           # 实验方案工作目录
+├── intercity_delivery/                  # 现有 V0 优化程序
+│   ├── configuration.py                # 模型、算法及订单配置
+│   ├── models/                         # 强制换装和灵活直送优化器
+│   ├── algorithms/                     # 滚动时域、候选网络、启发式
+│   ├── data/                           # 订单、CFS 处理和 SQLite
+│   └── experiments/                    # 求解器注册、实验核心、GUI
+├── main.py                             # 现有 GUI / CLI 入口
+├── tests/                              # 现有回归测试
+├── simulation/                         # 原有实验协议、运行与对比记录
+├── docs/                               # 原有算法、数据与操作说明
+├── data/                               # 本地原始/缓存数据，Git 忽略
+└── results/                            # 本地程序输出，Git 忽略
+~~~
 
-## 三类动态参数
+本轮未在 `research/toy_models/` 或 `experiments/specs/` 新增实验程序或方案。计划中的 `intercity_delivery/v1/` 尚未创建。
 
-参数全部定义在 `intercity_delivery/configuration.py`：
+## 4. 关键路径与职责
 
-| 类别 | 配置类 | 参数键前缀 | 适用范围 |
-|---|---|---|---|
-| 模型参数 | `DeliveryConfig` | `model.*` | 精确 MIP、Rolling Horizon |
-| 算法参数 | `RollingHorizonConfig` | `algorithm.*` | Rolling Horizon |
-| 订单参数 | `OrderGenerationConfig` | `order.*` | 订单生成及全部求解器 |
+### 科研协调
 
-实验核心通过 dataclass 字段反射自动发现参数。以后向这三个配置类新增字段，无需同步
-修改 GUI 参数列表、CLI 参数列表或 CSV 配置列。
+- [AGENTS.md](AGENTS.md)：主 Agent 协调职责、专业角色分工和修改边界。
+- [.codex/agents/](.codex/agents/)：四个专业角色的实际配置。各自写独立报告，Referee 在交付后审查，主 Agent 负责综合。
+- [coordination/CLAIMS.md](coordination/CLAIMS.md)：记录重要主张的假设、来源、证明/实验证据及审查状态；静态核实不等于定理成立。
+- [coordination/TASKS.md](coordination/TASKS.md)：记录交付、待批准实施阶段和独立研究任务。
 
-默认灵敏度水平按基准值自动生成。GUI 和 CLI 都可以用 JSON 数组覆盖水平，例如：
+### 现有程序
 
-```text
-[6,8,10]
-[[0,2],[0,5],[0,8]]
-[{"1":10,"2":10},{"1":30,"2":30}]
-```
+| 路径 | 作用 |
+|---|---|
+| [intercity_delivery/models/base_optimizer.py](intercity_delivery/models/base_optimizer.py) | V0 强制换装模型 |
+| [intercity_delivery/models/flexible_direct_optimizer.py](intercity_delivery/models/flexible_direct_optimizer.py) | V0 直送/换装共存及人工车辆迁移 |
+| [intercity_delivery/data/loader.py](intercity_delivery/data/loader.py) | BHH 函数、时间弧、容量系数与订单结构 |
+| [intercity_delivery/algorithms/paper_rolling_horizon.py](intercity_delivery/algorithms/paper_rolling_horizon.py) | 滚动窗口控制和历史决策 |
+| [intercity_delivery/algorithms/state_dependent_mip.py](intercity_delivery/algorithms/state_dependent_mip.py) | 状态相关候选网络与窗口模型 |
+| [intercity_delivery/algorithms/bhh_priority_heuristic.py](intercity_delivery/algorithms/bhh_priority_heuristic.py) | BHH 优先级构造初解 |
+| [intercity_delivery/experiments/solvers.py](intercity_delivery/experiments/solvers.py) | 求解器注册与结果适配 |
+| [main.py](main.py) | GUI / CLI 入口 |
 
-算法参数灵敏度规格只交给支持算法参数的 Rolling Horizon。选择全部求解器时，精确
-MIP 会自动跳过算法参数规格，避免记录参数变化但算法实际未使用的重复结果。
+原有操作说明见 [GUI](docs/gui_usage.md)、[滚动时域](docs/rolling_horizon.md)、[直送模型](docs/flexible_direct_model.md)及[实验协议](docs/numerical_experiment_protocol.md)。它们描述现有实现，不能作为 V1 已迁移的证据。
 
-## 可视化界面
+### 本地数学来源
 
-直接运行：
+当前审计工作区根目录：
 
-```bash
-python main.py
-```
+~~~text
+D:/mycodelife/workshop/AI/multiagent-test
+~~~
 
-界面结构：
+四份 TeX 位于该目录下的 `research/paper/`，QVI 笔记位于 `research/theory/Common Wave 的内生化与非均匀需求扩展.md`。V1 的完整路径为：
 
-- 顶部：实验场景、求解器、种子数、时间限制与运行按钮。
-- 中部：模型参数、算法参数、订单参数三个宽幅标签页。
-- 底部：实验计划预览和运行日志并排显示。
+~~~text
+D:/mycodelife/workshop/AI/multiagent-test/research/paper/main_v2_BHH.tex
+~~~
 
-参数不再集中在左侧窄区域。每个标签页自动读取对应配置类字段，并使用左右两组布局
-充分利用窗口宽度。
+审计提交 `93b2dcb` 仅包含 10 份审计与协调文档，未包含上述本地 TeX 和 QVI 输入。散列已登记在模型合同中；其他机器复核时须取得相同版本。两份 main 稿所需的 `导出的条目.bib` 及部分稿称校准脚本尚未在可读工作树找到，具体限制见专业报告。
 
-## 命令行
+## 5. 当前状态与下一步
 
-CLI 与 GUI 调用相同的 `ExperimentPlan`、`build_specs()` 和
-`run_experiment_suite()`。
+本轮结论：**三份专业报告可作为静态审计依据接受，模型与算法同步仍需重大修订。**
 
-查看全部动态参数：
+主要差距包括 wave 联合容量与 stem 未落入代码、论文求解章节保留旧容量逻辑、空返和终端恢复缺失、候选弧及窗口定义不一致。CFS 重量单位不能直接当作 V1 的停靠点数。
 
-```bash
-python main.py --list-parameters
-```
+自动复核确定的下一步优先级：
 
-快速比较两个求解器：
+1. **G0-M：先整理 V1 强制换装最小决策规格。** 建立公式—代码—验收矩阵；将 wave 分组、单位、信息及窗口等选择留给作者确认。
+2. **G1：批准后实现独立容量表与弧模块。** 验证公式代回、零容量、物理上限、取整和单位。
+3. **G2＋对应 G4：实现最小 V1 强制换装模型与独立核算。** 公式可追溯、成本/可行性独立检查；微型求解有预算，V0 保持原样。
 
-```bash
-python main.py --cli --scenario quick --solver all --time-limit 60
-```
+`coordination/V1_M_DECISION_SPEC.md` 是下一项拟议交付，当前尚未创建。直送、滚动时域、剪枝、启发式及稳态/QVI 研究按迁移计划的依赖分别推进。
 
-运行灵敏度分析：
-
-```bash
-python main.py --cli --scenario sensitivity --solver all --seeds 3 --time-limit 300
-```
-
-覆盖一个或多个参数水平：
-
-```bash
-python main.py --cli --scenario sensitivity --solver all --seeds 1 \
-  --level "algorithm.prediction_horizon=[6,8,10]" \
-  --level "order.num_orders=[20,50,100]"
-```
-
-PowerShell 中也可以给 `KEY=JSON` 整体加单引号。
-
-只检查实验矩阵：
-
-```bash
-python main.py --cli --scenario sensitivity --solver all --seeds 1 --dry-run
-```
-
-主要参数：
-
-- `--scenario`：`quick`、`sensitivity`、`all`
-- `--solver`：`exact_mip`、`rolling_horizon`、`flexible_direct_mip`、
-  `flexible_direct_rolling`、`paper_candidate_mip`、
-  `paper_priority_heuristic`、`all`
-- `--seeds`：每个参数水平的随机种子数
-- `--time-limit`：每次求解的总时间限制
-- `--data-source`：`generated` 或 `real`
-- --real-data-path：真实数据模式下的 CFS SQLite 或兼容 JSON
-- --city-a、--city-b：CLI 使用 SQLite 时选择的两个 CFS Area
-- `--level KEY=JSON`：覆盖动态参数水平，可重复使用
-- `--list-parameters`：列出三类参数及默认水平
-- `--dry-run`：打印规格但不求解
-
-## 结果
-
-输出目录为 `results/`：
-
-- full_experiment_summary_<城市对>__<算法>__<时间戳>.csv：一行对应一次实际求解。
-- full_experiment_results_<城市对>__<算法>__<时间戳>.json：完整批次结果。
-- detail_<算例>_<城市对>__<算法>__<时间戳>.json：单算例详细结果。
-
-CSV 参数列按类别动态展开：
-
-```text
-Model_T
-Algorithm_prediction_horizon
-Order_num_orders
-```
-
-JSON 分别保存：
-
-```text
-model_parameters
-algorithm_parameters
-order_parameters
-generation_parameters
-```
-
-结果格式版本当前为 4。CSV 新增城市对代码和名称列；完整 JSON 新增 city_pair、city_names、real_data_metadata 和 result_context。Rolling Horizon 的 `Best_Bound` 和全局 `MIP_Gap` 留空，
-各窗口状态和窗口 Gap 位于 `detail.windows`。
-
-## 相关文档
-
-- [Rolling Horizon 实现与修改说明](docs/rolling_horizon.md)
-- [直送—换装协同模型实现说明](docs/flexible_direct_model.md)
-- [可视化界面操作说明](docs/gui_usage.md)
-- [实验结果字段说明](docs/result_fields.md)
-
-## SQLite 城市对 GUI 与结果命名（2026-08-18）
-
-- GUI 真实数据入口改为直接加载 SQLite，并异步显示列名。
-- 城市 1/城市 2 使用双向关系联动选择，显示两个方向的原始记录数。
-- 结果文件名包含城市区域名称、CFS Area 代码和所选 Solution Approach。
-- CSV/JSON 同步保存城市对名称、代码、抽样统计和模型建议。
-
-## 修改记录
-
-### 2026-07-01
-
-#### Rolling Horizon
-
-- 实现“外部一次调用、内部多窗口求解”的 Rolling Horizon 控制器。
-- 增加预测区间 `prediction_horizon` 和滚动步长 `rolling_step`。
-- 固定已经提交的历史弧，关闭预测区间外的决策，并保留跨窗口车辆与货物流状态。
-- 将 Rolling Horizon 正式接入统一求解器注册表、GUI、CLI、CSV 和 JSON。
-- 修正自动驾驶车辆城市库存平衡约束符号。
-
-#### 三类动态参数
-
-- 将参数明确拆分为 `DeliveryConfig`、`RollingHorizonConfig` 和
-  `OrderGenerationConfig`。
-- 删除订单参数硬编码字典，三类灵敏度参数统一通过 dataclass 字段动态发现。
-- 实验规格同时携带模型、算法、订单三类配置。
-- CSV 和 JSON 分类别动态记录全部参数。
-- 精确 MIP 自动跳过不适用的算法参数灵敏度规格。
-
-#### GUI 与 CLI
-
-- GUI 改为顶部控制栏、中部三类参数宽幅标签页、底部预览/日志双栏布局。
-- CLI 新增 `--list-parameters` 和可重复使用的 `--level KEY=JSON`。
-- GUI 与 CLI 统一使用同一实验核心，并显示真实的适用求解次数。
-- 已通过 CLI 同时运行精确 MIP 和 Rolling Horizon 的快速回归测试。
-
-#### 直送—换装协同模型
-
-- 新增独立的 `FlexibleDirectOptimizer`，允许自动化换装运输与人工跨城直送共存。
-- 直送车辆与城市人工车共享库存，并在跨城后进入目的城市车队。
-- 新增直送容量、成本、换装时间/成本和直送比例边界参数。
-- 新增完整 MIP 与 Rolling Horizon 两个统一求解器接口。
-- 新增求解级单元测试，覆盖自由直送选择和固定 50% 直送比例。
-
-### 2026-06-27 动态灵敏度实验与完整结果输出
-
-- 将实验类别精简为快速测试和灵敏度分析；订单规模水平同时承担基准与规模扩展实验。
-- 灵敏度分析改为动态发现 `DeliveryConfig` 的全部 dataclass 字段，新增配置字段后无需修改 GUI。
-- 将订单数、时间窗缓冲、大订单概率及大小订单货量范围全部纳入单因素灵敏度分析。
-- GUI 的参数水平统一采用 JSON 数组，支持数值、布尔值、区间、列表和城市字典。
-- CSV 自动输出全部 `Config_*` 参数列，并新增明确的灵敏度参数、水平及完整订单生成字段。
-- 新增完整批次 JSON，同一算例的订单只保存一次，并集中记录多个求解器的结果。
-
-### 2026-06-27 模型公式一致性修正
-
-- 将人工车辆和自动驾驶车辆的承运货量变量由整数变量调整为非负连续变量，与模型中的 \(\mathbb{R}^+\) 定义一致。
-- 将自动驾驶车辆容量约束（7）由“同一弧全部订单货量求和”调整为模型原式中的逐订单约束。
-- 为约束（2）—（11）补充业务含义、累计时序关系和容量计算方式的详细代码注释。
-
-### 2026-06-26 模型一致性修正
-
-- 修正随机订单生成中的未服务惩罚成本：`OrderBatch.penalty_lost` 现在保存单位未服务惩罚成本，避免在目标函数中重复乘以订单需求量。
-- 修正人工车辆时间弧生成逻辑：时间弧现在包含 `j <= i + f^k(M)` 的边界情况，并限制 `j` 不超过规划期末。
-- 修正自动驾驶车辆跨城平衡约束：约束 (4)(5) 现在按模型区分车辆出发时间 `i <= t` 和到达时间 `j <= t`。
-- 修正转运节点流守恒约束：约束 (9)(10) 现在按订单 `l` 分别建立，避免不同订单之间的货量相互抵消。
-- 暂未调整货量变量类型与自动驾驶车辆容量约束，保持当前整数货量变量和总容量约束实现不变。
-
-### 2026-06-26 论文仿真实验框架
-
-- 将主程序由交互式选择改为命令行实验套件，支持快速测试、基准测试、规模扩展测试、灵敏度分析和全量实验。
-- 随机订单生成器新增时间窗缓冲区间和大订单比例参数，便于研究时间窗紧迫程度与需求结构变化。
-- 实验结果新增随机种子、总需求量、时间窗参数、大订单比例、MIP Gap 和 Best Bound 等论文分析字段。
-- 支持 `--dry-run` 查看实验计划，便于在正式长时间求解前确认仿真矩阵。
-
-### 2026-06-26 可视化与求解器接口重构
-
-- 将 `main.py` 拆分为入口、实验核心、求解器接口和可视化界面四层结构。
-- 新增 `customtkinter` 可视化实验界面，可在窗口中选择实验场景、求解方式和参数范围。
-- 新增统一求解器接口，当前支持 `exact_mip`，并预留 `rolling_horizon` 扩展入口。
-- 保证同一个算例的订单数据只生成一次，再传给不同求解器，便于后续算法公平对比。
-- 新增可视化界面操作说明和运行结果字段说明文档。
-
-## 阶段 C 先导仿真（2026-08-19）
-
-阶段 C 已加入可复现的罚金列表、运营机制和车队规模全因子入口，并完成 LA–SF 的 100/200/500 单先导测试。成本单位修复后的当前 100 单基准罚金为 1；500 单精确 MIP 可在约 125 秒证得最优，剪枝 Rolling Horizon 可缩短到约 4.6 秒，但存在明显目标质量损失；“剪枝 + 生成解”暂未显示额外价值。
-
-详见 [阶段 C 先导仿真报告](simulation/stage_c_pilot_20260819.md) 和 [统一机器可读汇总](simulation/stage_c_20260819/stage_c_summary.csv)。
+本轮审计没有运行测试或求解，没有修改论文、生产代码及历史实验数据。提交和推送用于保存审计成果，不表示模型歧义已解决或实际迁移已获批准。
