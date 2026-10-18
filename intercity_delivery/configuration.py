@@ -8,6 +8,11 @@ DIRECT_MODEL_SOLVERS = (
     "paper_candidate_mip",
     "paper_priority_heuristic",
     "paper_local_branching",
+    "flexible_direct_empty_mip",
+    "flexible_direct_empty_rolling",
+    "v1_flexible_mip",
+    "v1_flexible_rolling",
+    "v1_flexible_pruned_rolling",
 )
 
 
@@ -28,6 +33,9 @@ class RollingHorizonConfig:
                 "paper_candidate_mip",
                 "paper_priority_heuristic",
                 "paper_local_branching",
+                "flexible_direct_empty_rolling",
+                "v1_flexible_rolling",
+                "v1_flexible_pruned_rolling",
             ),
             "sensitivity_levels": [4, 6, 8],
         },
@@ -187,6 +195,16 @@ class DeliveryConfig:
 
     service_a_2: float = 0.05
     service_b_2: float = 0.1
+
+    # V1 stem travel rho in minutes, independently visible in CLI/GUI.
+    v1_rho_1: float = field(default=0.0, metadata={
+        "solvers": ("v1_flexible_mip", "v1_flexible_rolling", "v1_flexible_pruned_rolling"),
+        "sensitivity_levels": [0.0, 5.0, 10.0],
+    })
+    v1_rho_2: float = field(default=0.0, metadata={
+        "solvers": ("v1_flexible_mip", "v1_flexible_rolling", "v1_flexible_pruned_rolling"),
+        "sensitivity_levels": [0.0, 5.0, 10.0],
+    })
 
     # --- 5. 直送变种模型参数 ---
     # 以下参数仅供 flexible_direct_mip / flexible_direct_rolling 使用。

@@ -8,7 +8,7 @@
 
 import time
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 from intercity_delivery.configuration import DeliveryConfig, RollingHorizonConfig
 from intercity_delivery.data.loader import DeliveryData
@@ -23,7 +23,7 @@ class SolverResult:
     """
 
     solver_name: str
-    status: Optional[int]
+    status: Optional[Union[int, str]]
     solve_time_sec: float
     total_cost: Optional[float]
     best_bound: Optional[float]
@@ -463,6 +463,99 @@ class PaperLocalBranchingSolver(_PaperRollingSolver):
         return LocalBranchingStateDependentMIPApproach
 
 
+class ExplicitEmptyMIPSolver(BaseSolver):
+    """Isolated V0-F extension; independent empty trips, no default reset."""
+
+    name = "flexible_direct_empty_mip"
+    display_name = "独立空车调拨：完整 MIP"
+    result_slug = "explicit_empty_mip"
+
+    @staticmethod
+    def _result(name, payload):
+        return SolverResult(
+            solver_name=name,
+            status=payload.get("status"),
+            solve_time_sec=payload.get("solve_time_sec", 0.0),
+            total_cost=payload.get("total_cost"),
+            best_bound=payload.get("best_bound"),
+            mip_gap=payload.get("mip_gap"),
+            unserved_rate=payload.get("unserved_rate"),
+            auto_usage=payload.get("auto_usage", 0.0),
+            manual_usage=payload.get("manual_usage", 0.0),
+            detail=payload.get("detail"),
+            direct_ratio=payload.get("direct_ratio"),
+            direct_volume=payload.get("direct_volume"),
+            transshipment_volume=payload.get("transshipment_volume"),
+            message=payload.get("message", ""),
+        )
+
+    def solve(self, config, data, orders_tuple, time_limit, algorithm_config):
+        from intercity_delivery.repositioning.runner import run_full
+
+        return self._result(self.name, run_full(config, data, time_limit))
+
+
+class ExplicitEmptyRollingSolver(ExplicitEmptyMIPSolver):
+    """Rolling variant; computed window ends never require repatriation."""
+
+    name = "flexible_direct_empty_rolling"
+    display_name = "独立空车调拨：Rolling Horizon"
+    result_slug = "explicit_empty_rolling"
+    sensitivity_sources = frozenset({"model", "algorithm", "order"})
+
+    def solve(self, config, data, orders_tuple, time_limit, algorithm_config):
+        from intercity_delivery.repositioning.rolling import run_rolling
+
+        return self._result(
+            self.name, run_rolling(config, data, algorithm_config, time_limit)
+        )
+
+
+class V1FlexibleMIPSolver(ExplicitEmptyMIPSolver):
+    """Author-profile V1-F with joint BHH waves and independent empty moves."""
+
+    name = "v1_flexible_mip"
+    display_name = "V1-F 联合 wave MIP"
+    result_slug = "v1_flexible_mip"
+
+    def solve(self, config, data, orders_tuple, time_limit, algorithm_config):
+        from intercity_delivery.v1.adapter import adapt_delivery_config, adapt_order_batches, adapt_solver_payload
+        from intercity_delivery.v1.flexible_configuration import flexible_profile
+        from intercity_delivery.v1.flexible_runner import run_flexible
+
+        payload = run_flexible(adapt_delivery_config(config), adapt_order_batches(orders_tuple),
+                               flexible_profile(), time_limit)
+        return self._result(self.name, adapt_solver_payload(payload, getattr(data, "v1_metadata", None)))
+
+
+class V1FlexibleRollingSolver(V1FlexibleMIPSolver):
+    name = "v1_flexible_rolling"
+    display_name = "V1-F Rolling Horizon"
+    result_slug = "v1_flexible_rolling"
+    sensitivity_sources = frozenset({"model", "algorithm", "order"})
+    prune = False
+
+    def solve(self, config, data, orders_tuple, time_limit, algorithm_config):
+        from intercity_delivery.v1.adapter import adapt_delivery_config, adapt_order_batches, adapt_solver_payload
+        from intercity_delivery.v1.flexible_rolling import RollingOptions
+        from intercity_delivery.v1.flexible_runner import run_flexible_rolling
+
+        options = RollingOptions(prediction_horizon=algorithm_config.prediction_horizon,
+                                 rolling_step=algorithm_config.rolling_step,
+                                 extension_horizon=algorithm_config.extension_horizon,
+                                 prune=self.prune)
+        payload = run_flexible_rolling(adapt_delivery_config(config), adapt_order_batches(orders_tuple),
+                                       options, time_limit)
+        return self._result(self.name, adapt_solver_payload(payload, getattr(data, "v1_metadata", None)))
+
+
+class V1FlexiblePrunedRollingSolver(V1FlexibleRollingSolver):
+    name = "v1_flexible_pruned_rolling"
+    display_name = "V1-F Rolling Horizon：剪枝"
+    result_slug = "v1_flexible_pruned_rolling"
+    prune = True
+
+
 # 所有可选求解器都在这里注册。GUI 和命令行都会读取这个注册表。
 SOLVER_REGISTRY: Dict[str, BaseSolver] = {
     ExactMIPSolver.name: ExactMIPSolver(),
@@ -472,6 +565,11 @@ SOLVER_REGISTRY: Dict[str, BaseSolver] = {
     PaperCandidateMIPSolver.name: PaperCandidateMIPSolver(),
     PaperPriorityHeuristicSolver.name: PaperPriorityHeuristicSolver(),
     PaperLocalBranchingSolver.name: PaperLocalBranchingSolver(),
+    ExplicitEmptyMIPSolver.name: ExplicitEmptyMIPSolver(),
+    ExplicitEmptyRollingSolver.name: ExplicitEmptyRollingSolver(),
+    V1FlexibleMIPSolver.name: V1FlexibleMIPSolver(),
+    V1FlexibleRollingSolver.name: V1FlexibleRollingSolver(),
+    V1FlexiblePrunedRollingSolver.name: V1FlexiblePrunedRollingSolver(),
 }
 
 

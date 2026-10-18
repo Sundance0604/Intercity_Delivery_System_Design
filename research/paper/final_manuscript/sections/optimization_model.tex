@@ -1,0 +1,181 @@
+\section{Finite-horizon scheduling and rolling implementation}
+\label{sec:model}
+
+The capacity tables from Section~\ref{sec:capacity} determine a time-expanded
+MILP for fixed initial fleets and given order windows. The same formulation
+is then used with revealed orders and inherited commitments in rolling execution.
+
+\subsection{Decisions and objective}
+
+For each applicable arc and direction, let $x_{ij}^{kd}$ count the human-driven
+vehicles assigned to a local wave, $y_{ij}^d$ the automated vehicles,
+$w_{ij}^d$ the human-driven vehicles assigned to a direct wave, and
+$e_{ij}^d$ the independent empty transfers. All four are nonnegative integers. Binary selectors
+$u_{ijv}^{kd}$ and $\widetilde u_{ijv}^d$ identify a positive local or
+direct vehicle count $v$. Zero vehicles are represented by selecting no positive
+size. For $\ell\in\mathcal L^d$, the nonnegative continuous variables
+$g_{ij}^{k\ell}$, $\widehat g_{ij}^{\ell}$, and $h_{ij}^{\ell}$ are the
+local, automated, and direct quantities of that order. The unserved quantity
+is $0\leq z_\ell\leq D_\ell$.
+
+Let $c_H,c_A,c_D,c_E\geq0$ be costs in currency per vehicle-minute.
+When hourly rates are supplied to the implementation, they are divided by
+$60$ once. With zero hub-transfer delay and no separate transfer fee, the
+objective is
+\begin{align}
+ \min\quad &\sum_{\ell\in\mathcal L}p_\ell z_\ell
+ +c_H\Delta t\sum_{k,d}\sum_{(i,j)\in\mathcal A_k}(j-i)x_{ij}^{kd}
+ +c_A\Delta t\sum_d\sum_{(i,j)\in\mathcal A_A}(j-i)y_{ij}^d
+ \nonumber\\
+ &+c_D\Delta t\sum_d\sum_{(i,j)\in\mathcal A_D}(j-i)w_{ij}^d
+ +c_E\Delta t\sum_d\sum_{(i,j)\in\mathcal A_E}(j-i)e_{ij}^d.
+ \label{mod:objective}
+\end{align}
+The default empty-transfer cost is $c_E=c_D$, although it can be specified
+separately. The unit of $p_\ell$ is currency per stop equivalent, so
+both rejection and vehicle-time terms are monetary costs. The objective
+prices vehicle operation and rejection; accumulation waiting, shipment
+lead time, and sorting delay are outside this finite-horizon objective.
+Vehicle cost is charged for the entire assigned task duration,
+including any slack within that interval. Unserved-demand penalties allow
+rejection, rather than imposing compulsory acceptance of every order.
+
+\subsection{Wave and line-haul capacity}
+
+The local constraints, for every $k,d,(i,j)\in\mathcal A_k$, are
+\begin{equation}
+ \begin{aligned}
+ x_{ij}^{kd}&=\sum_{v=1}^N v u_{ijv}^{kd},\qquad
+ \sum_{v=1}^N u_{ijv}^{kd}\leq1,\\
+ \sum_{\ell\in\mathcal L^d}g_{ij}^{k\ell}
+ &\leq\sum_{v=1}^N K^k_{ij}(v)u_{ijv}^{kd}.
+ \end{aligned}
+ \label{mod:local-links}
+\end{equation}
+For each $d,(i,j)\in\mathcal A_D$, impose
+\begin{equation}
+ \begin{aligned}
+ w_{ij}^d&=\sum_{v=1}^N v\widetilde u_{ijv}^d,\qquad
+ \sum_{v=1}^N\widetilde u_{ijv}^d\leq1,\\
+ \sum_{\ell\in\mathcal L^d}h_{ij}^{\ell}
+ &\leq\sum_{v=1}^N\widetilde K^d_{ij}(v)\widetilde u_{ijv}^d.
+ \end{aligned}
+ \label{mod:direct-links}
+\end{equation}
+Automated capacity is shared across all orders on an arc:
+\begin{equation}
+ \sum_{\ell\in\mathcal L^d}\widehat g_{ij}^{\ell}
+ \leq M_A y_{ij}^d,
+ \qquad d\in\mathcal D,\ (i,j)\in\mathcal A_A.
+ \label{mod:auto-capacity}
+\end{equation}
+Both selector ranges use the total human-driven fleet $N$, not just its
+initial city allocation $N_k$: a vehicle can migrate and subsequently join
+a local wave. The inventory constraints below enforce the actual
+availability in each city. Neither $e$ nor $y$ requires a positive customer
+load. Nor does \eqref{mod:direct-links} force $w$ to carry cargo: a
+$\tau$-period zero-cargo direct movement remains admissible under the above
+convention. The separate variable $e$ makes empty relocation available
+independently of customer candidates and permits a distinct cost or duration.
+
+\subsection{Vehicle conservation in time and space}
+
+Let $d_k$ be the direction leaving city $k$ and $\bar d_k$ its opposite.
+For every $k$ and $t\in\mathcal T$, define the idle human-driven inventory
+\begin{align}
+ I^H_k(t)={}&N_k
+ -\sum_{(i,j)\in\mathcal A_D:i\leq t}w_{ij}^{d_k}
+ -\sum_{(i,j)\in\mathcal A_E:i\leq t}e_{ij}^{d_k}
+ +\sum_{(i,j)\in\mathcal A_D:j\leq t}w_{ij}^{\bar d_k}
+ +\sum_{(i,j)\in\mathcal A_E:j\leq t}e_{ij}^{\bar d_k}
+ \nonumber\\
+ &-\sum_{d\in\mathcal D}\sum_{(i,j)\in\mathcal A_k:i\leq t<j}x_{ij}^{kd}
+ \ \geq0.
+ \label{mod:human-inventory}
+\end{align}
+The corresponding automated inventory is
+\begin{equation}
+ I^A_k(t)=A_k-
+ \sum_{(i,j)\in\mathcal A_A:i\leq t}y_{ij}^{d_k}
+ +\sum_{(i,j)\in\mathcal A_A:j\leq t}y_{ij}^{\bar d_k}
+ \geq0.
+ \label{mod:auto-inventory}
+\end{equation}
+Local occupancy is half-open, $i\leq t<j$, so a vehicle completing at $j$
+can start a new task at that same node. The same convention allows an
+intercity arrival and a departure at the same node. Summing the two
+automated inventory inequalities also gives the implied fleet bound
+\begin{equation}
+ \sum_d\sum_{(i,j)\in\mathcal A_A:i\leq t<j}y_{ij}^d\leq A.
+ \label{mod:auto-busy}
+\end{equation}
+For human-driven vehicles, \eqref{mod:human-inventory} simultaneously
+accounts for local occupancy, migration, and independent empty transfers;
+a fixed per-city busy-vehicle bound alone would not do so.
+
+\subsection{Order windows, precedence, and demand balance}
+
+For $\ell\in\mathcal L^d$, impose the forbidden combinations
+\begin{align}
+ g_{ij}^{o(d)\ell}&=0 &&\text{if }i<s_\ell,
+ &g_{ij}^{r(d)\ell}&=0 &&\text{if }j>e_\ell,
+ \label{mod:local-windows}\\
+ h_{ij}^{\ell}&=0 &&\text{if }i<s_\ell\text{ or }j>e_\ell.
+ \label{mod:direct-windows}
+\end{align}
+Delivery is credited at the end of the destination tour or direct trip.
+For each $t\in\mathcal T$, cumulative precedence requires
+\begin{align}
+ \sum_{(i,j)\in\mathcal A_A:i\leq t}\widehat g_{ij}^{\ell}
+ &\leq\sum_{(i,j)\in\mathcal A_{o(d)}:j\leq t}g_{ij}^{o(d)\ell},
+ \label{mod:pickup-before-auto}\\
+ \sum_{(i,j)\in\mathcal A_{r(d)}:i\leq t}g_{ij}^{r(d)\ell}
+ &\leq\sum_{(i,j)\in\mathcal A_A:j\leq t}\widehat g_{ij}^{\ell}.
+ \label{mod:auto-before-delivery}
+\end{align}
+Goods can wait at either hub, but cannot depart before arrival. Equality
+of event times permits immediate handover; no sorting queue is modeled in
+this finite-horizon formulation. Finally, require
+\begin{equation}
+ \sum_{(i,j)\in\mathcal A_k}g_{ij}^{k\ell}
+ +\sum_{(i,j)\in\mathcal A_D}h_{ij}^{\ell}+z_\ell=D_\ell,
+ \qquad k\in\{o(d),r(d)\},\quad \ell\in\mathcal L^d.
+ \label{mod:demand}
+\end{equation}
+At $t=T$, \eqref{mod:pickup-before-auto}--\eqref{mod:demand} imply that
+the total transshipment quantity is identical at collection, automated
+line-haul, and distribution. Consequently, an order cannot receive rejection
+credit for goods that have already been collected and left unfinished.
+The direct and transshipment quantities are separate portions of the same
+demand and are not counted twice.
+
+Equations \eqref{mod:objective}--\eqref{mod:demand}, the arc domains, binary
+selectors, nonnegative integer vehicle counts, and nonnegative continuous
+goods and rejection variables define a mixed-integer linear program once
+the capacity tables have been computed. Transfer-only operation with city-dedicated human-driven fleets is the
+restriction $w=e=h=0$; the direct-wave selectors are then zero as well.
+This restriction closes both direct freight service and human-driven empty
+intercity repositioning. Comparing it with the flexible model therefore
+changes both freight routing and human-driven fleet mobility.
+The core formulation places no prescribed lower or upper share on direct
+service. Positive transfer delays, transfer fees, and direct-share bounds
+are optional implementation extensions and are not used in the model
+analyzed here.
+
+\subsection{Service variants and the physical endpoint}
+
+The default model leaves the final city allocation free. This is a distinct
+choice from allowing unfinished tasks: every modeled arc still ends by
+$T$. If an actual shutdown requires human-driven terminal stocks
+$\bar N_1+\bar N_2=N$, it can instead impose
+\begin{equation}
+ I^H_k(T)=\bar N_k,\qquad k=1,2.
+ \label{mod:optional-terminal}
+\end{equation}
+Such a constraint must account for both $w$ and $e$. A computational
+rolling-window boundary is not an operating shutdown and does not justify
+\eqref{mod:optional-terminal}. The rolling implementation described in
+Section~\ref{sec:method}
+uses the free terminal allocation; enforcing a genuine future terminal
+target would additionally require a feasible completion policy for all
+previous commitments.

@@ -1,0 +1,287 @@
+\section{Calendar-time optimality and dispatch verification}
+\label{app:dispatch}
+
+\subsection{Existence and calendar-horizon optimality}
+
+We first record regularity and growth properties needed in both verification
+arguments. The clipped loads are continuous and locally Lipschitz for
+$q>0$. Thus $C$ and $J$ are continuous and locally Lipschitz there, including
+across load and highway-capacity switches. Since $n_i\le q$, the stem terms
+in the batch service cost imply
+\begin{equation}
+ C(q)\ge4c_H\rho>0,
+ \qquad
+ J(q)\ge\frac{4c_H\rho\Lambda}q+\frac{\omega q}2.
+ \label{eq:proof-growth-lower}
+\end{equation}
+In particular $J$ diverges at zero and at infinity. It attains its minimum
+$g$ on a compact subset of $(0,\infty)$, and its minimizer set
+$\mathcal B$ is nonempty and compact. This argument does not require
+convexity of the reduced objective or uniqueness of its minimizer.
+
+There is also a constant $K_0<\infty$ such that
+\begin{equation}
+ 0\le C(q)\le K_0(1+q),\qquad q>0.
+ \label{eq:proof-growth-upper}
+\end{equation}
+For $q\ge1$, evaluate the unoptimized service cost at the fixed feasible
+loads $n_1=n_2=\min(M,1)$. Then $s(q)\le a+b$, and the per-shipment
+service cost is bounded. For $0<q\le1$, the feasible choice
+$n_1=n_2=\min(M,q)$ gives a bounded batch cost after multiplication by
+$q$: the stems are bounded, $qs(q)=aq+b\sqrt q$ is bounded, and
+$q/\min(q,M_A)$ is bounded. Optimizing the loads can only reduce this
+upper bound. In fact, the clipped optimizers equal $q$ for sufficiently
+small $q$, and
+\begin{equation}
+ \lim_{q\downarrow0}C(q)=4c_H\rho+c_A\tau_{\mathrm{phys}}.
+ \label{eq:proof-zero-limit}
+\end{equation}
+
+For a policy in Section~\ref{subsec:dynamic-wave}, let $r$ be the elapsed
+time since its last dispatch by $T$. The calendar-time bound is
+\begin{equation}
+ A_\pi(T)-gT
+ =\sum_{k:t_k\le T}\frac{q_k}{\Lambda}[J(q_k)-g]
+     +\frac{\omega\Lambda r^2}2-gr
+ \ge-\frac{g^2}{2\omega\Lambda}.
+ \label{eq:analysis-calendar-bound}
+\end{equation}
+
+\begin{proof}[Proof of Theorem~\ref{thm:analysis-consistency}]
+Starting immediately after a dispatch, the backlog grows from zero to $q$
+in $q/\Lambda$ minutes. Its holding cost over that cycle is
+$\omega q^2/(2\Lambda)$. Adding $C(q)$ and dividing by the cycle length
+proves \eqref{eq:analysis-consistency}. Existence and compactness follow
+from \eqref{eq:proof-growth-lower}.
+
+Consider any admissible policy and a calendar time $T$. Admissibility
+ensures that the number $N=N(T)$ of dispatches by $T$ is finite. Write
+$r=T-t_N$, taking $t_0=0$ if $N=0$. Each complete cycle contributes
+$(q_k/\Lambda)J(q_k)$; the unfinished cycle contributes
+$\omega\Lambda r^2/2$. Subtracting $gT$ gives
+\eqref{eq:analysis-calendar-bound}, because all completed-cycle excesses
+are nonnegative and
+\[
+ \frac{\omega\Lambda r^2}2-gr
+ =\frac{\omega\Lambda}2
+        \left(r-\frac g{\omega\Lambda}\right)^2
+       -\frac{g^2}{2\omega\Lambda}.
+\]
+This uniform lower bound proves the limiting inferior claim. If a threshold
+$b\in\mathcal B$ is repeated, all complete-cycle excesses vanish and
+$0\le r<b/\Lambda$. The residual term divided by $T$ tends to zero, so
+the complete calendar-time average converges to $g$. Multiplication by
+the positive constant $\Lambda$ preserves the static minimizer set.
+\end{proof}
+
+\subsection{A verified average-cost QVI on the reduced state space}
+\label{subsec:qvi}
+
+Normalize the relative value by $V(0)=0$. For $q>0$, the intervention
+operator is $\mathcal MV(q)=C(q)+V(0)$. The average-cost
+quasi-variational inequality is
+\begin{equation}
+ \min\left\{\omega q-g+\Lambda V'(q),\ C(q)-V(q)\right\}=0.
+ \label{eq:analysis-qvi}
+\end{equation}
+This is complementarity notation: the waiting cost-rate residual and
+the intervention cost residual are both nonnegative, with at least one
+zero. At $q=0$
+dispatch is unavailable, and the waiting equation supplies the boundary
+condition $\Lambda V'(0+)=g$. The link with impulse control is the
+intervention operator; QVI terminology alone does not supply verification
+or an optimal policy \cite{LionsPerthame1986,Belak2017}.
+
+In the construction below, $F$ denotes an excess-cost function, distinct
+from the city routing inverse $F_k$ in Section~\ref{sec:capacity}.
+
+\begin{theorem}[Global relative-value construction and verification]
+\label{thm:analysis-qvi}
+Let $g$ be as in Theorem~\ref{thm:analysis-consistency} and define
+\begin{align}
+ F(q)&=C(q)+\frac{\omega q^2}{2\Lambda}-\frac{gq}{\Lambda},
+ &m(q)&=\inf_{z\ge q}F(z),\qquad q>0,
+ \label{eq:analysis-tail-envelope}\\
+ V(q)&=\frac{gq-\omega q^2/2}{\Lambda}+m(q),
+ &V(0)&=0.
+ \label{eq:analysis-value}
+\end{align}
+The tail infima are attained. The function $V$ is locally absolutely
+continuous, satisfies \eqref{eq:analysis-qvi} almost everywhere on
+$(0,\infty)$, and has $V'(0+)=g/\Lambda$. Along every admissible policy,
+\begin{equation}
+ A_\pi(T)-gT\ge V(Q(0))-V(Q(T)).
+ \label{eq:analysis-verification-bound}
+\end{equation}
+Moreover $V(q)=O(1+q)$ in absolute value. On every sequence $T_j\uparrow\infty$
+with bounded $A_\pi(T_j)/T_j$, the transversality term
+$V(Q(T_j))/T_j$ tends to zero. This verifies the same average-cost lower
+bound and the optimal repeated thresholds.
+\end{theorem}
+
+The tail envelope is needed for a statement on all initial backlog states.
+The cycle minimizer alone does not show that immediately dispatching at
+every state above its smallest value is an optimal first action. Equivalently,
+the constructed relative value is the first-dispatch excess-cost envelope
+\begin{equation}
+ V(q)=\inf_{z\ge q}\left\{C(z)
+       +\frac{\omega(z^2-q^2)}{2\Lambda}
+       -\frac{g(z-q)}{\Lambda}\right\}.
+ \label{eq:analysis-first-dispatch}
+\end{equation}
+If $b_*:=\min\mathcal B$, then $m(q)=0$ on $[0,b_*]$. At a differentiable
+interior optimum $b_*$, value matching and the stationary first-order
+condition give $V(b_*)=C(b_*)$ and
+$C'(b_*)=(g-\omega b_*)/\Lambda$. At a load or capacity kink these
+identities must be interpreted using the available one-sided derivatives;
+classical smooth fit is not imposed. No uniqueness of a QVI solution or
+general viscosity comparison theorem is asserted here.
+
+\begin{proof}[Proof of Theorem~\ref{thm:analysis-qvi}]
+The definition of $g$ gives
+\[
+ F(q)=\frac q\Lambda[J(q)-g]\ge0,
+ \qquad \{q>0:F(q)=0\}=\mathcal B.
+\]
+The function $F$ is locally Lipschitz on $(0,\infty)$, has the finite
+right limit in \eqref{eq:proof-zero-limit}, and tends to infinity as
+$q\to\infty$. Its tail infima are therefore attained. It is not
+necessary, and generally not correct, to assert that $F$ is Lipschitz
+at zero: BHH terms may contribute $\sqrt q$ to $C(q)$.
+
+The tail minimum $m$ is nondecreasing. It is also locally Lipschitz on
+$(0,\infty)$. To see this, take a compact interval $[r,R]$ with $r>0$.
+Coercivity of $F$ allows all tail minimizers for arguments in $[r,R]$
+to be chosen in a fixed compact interval $[r,Z]$. Let $L_F$ be a
+Lipschitz constant of $F$ there. For $r\le x<y\le R$, if a minimizer
+for $m(x)$ lies at or above $y$, then $m(x)=m(y)$. Otherwise choose
+one $z_x\in[x,y)$; since $m(y)\le F(y)$,
+\[
+ 0\le m(y)-m(x)\le F(y)-F(z_x)\le L_F(y-x).
+\]
+At every point with $F(q)>m(q)$, a tail minimizer lies strictly to its
+right. Continuity then makes $m$ constant on a neighborhood of $q$:
+a small change in the lower tail boundary neither removes that minimizer
+nor admits a smaller value. Hence $m'=0$ almost everywhere on the strict
+noncontact region.
+
+Let $b_* =\min\mathcal B>0$. Nonnegativity of $F$ and $F(b_*)=0$ imply
+$m(q)=0$ for $0<q\le b_*$. Set $m(0)=0$. The resulting $V$ is a smooth
+polynomial near zero, is locally absolutely continuous elsewhere, and
+has $V(0)=0$ and $V'(0+)=g/\Lambda$. Almost everywhere on $(0,\infty)$,
+\[
+ C(q)-V(q)=F(q)-m(q)\ge0,
+ \qquad
+ \omega q-g+\Lambda V'(q)=\Lambda m'(q)\ge0.
+\]
+If the first quantity is positive, local constancy of $m$ makes the
+second zero. If it is zero, complementarity already holds. This proves
+the QVI in the stated almost-everywhere sense. Algebraically expanding
+the tail-infimum definition also gives
+\eqref{eq:analysis-first-dispatch}.
+
+Integrate the waiting inequality along each uninterrupted drift segment.
+At an intervention from backlog $q$ to zero, use
+$C(q)\ge V(q)-V(0)$. Summing over the finitely many interventions
+before $T$ telescopes all intermediate values of $V$ and proves
+\eqref{eq:analysis-verification-bound}. This argument is valid for
+locally absolutely continuous $V$, since backlog grows linearly on each
+drift segment and thus spends zero time in the exceptional set of
+nondifferentiability.
+
+To verify transversality rather than presume it, first use immediate
+dispatch in \eqref{eq:analysis-first-dispatch} to obtain $V(q)\le C(q)$.
+The same formula and $C\ge0$ imply
+\[
+ V(q)\ge \inf_{z\ge q}
+      \int_q^z\frac{\omega u-g}{\Lambda}\,du
+      \ge-\frac{g^2}{2\omega\Lambda}.
+\]
+Together with \eqref{eq:proof-growth-upper}, this gives
+$|V(q)|\le K_1+K_2q$ for finite constants. At any calendar time, the
+unfinished cycle alone has incurred holding cost
+$\omega Q(T)^2/(2\Lambda)$. All other costs are nonnegative. Therefore,
+on any sequence with bounded $A_\pi(T_j)/T_j$,
+\[
+ Q(T_j)=O(\sqrt{T_j}),\qquad
+ \frac{|V(Q(T_j))|}{T_j}\longrightarrow0.
+\]
+If the limiting inferior average cost is finite, choose such a sequence
+realizing it and apply \eqref{eq:analysis-verification-bound}; if it is
+infinite, the lower bound is immediate. For a repeated optimal threshold
+the backlog is bounded, all relevant inequalities are equalities along
+the regenerative path, and the same bound verifies its average cost $g$.
+\end{proof}
+
+The construction also describes optimal first-dispatch excess costs from
+arbitrary positive backlogs: wait until a point attaining the tail minimum
+in \eqref{eq:analysis-first-dispatch}, dispatch, and then repeat any
+threshold in $\mathcal B$. For states above $b_*$, immediate dispatch
+requires an additional shape property of $F$; for example, it follows if
+$F$ is nondecreasing on $[b_*,\infty)$. Merely minimizing $J$ at $b_*$
+does not establish that property. At a differentiable interior minimizer,
+$F'(b_*)=0$ gives the derivative statement above. At a
+nondifferentiable local minimum the valid one-sided statement is
+$F'_-(b_*)\le0\le F'_+(b_*)$, when these derivatives exist.
+
+\subsection{Unit Poisson arrivals within the integer-threshold class}
+\label{subsec:analysis-limits}
+
+There is one useful exact stochastic comparison. Let arrivals instead be a
+unit-jump Poisson process of rate $\Lambda$, with its natural filtration,
+and restrict decisions to dispatching all shipments immediately when the
+backlog reaches a fixed positive integer $B$. Retain the same $C(B)$ and
+linear holding cost. Renewal accounting gives the following result.
+
+\begin{proposition}[A common integer-threshold comparison]
+\label{prop:analysis-poisson}
+For these Poisson threshold policies,
+\begin{equation}
+ J_P(B)=\frac{\Lambda C(B)}B+\frac{\omega(B-1)}2
+       =J(B)-\frac\omega2,\qquad B\in\{1,2,\ldots\}.
+ \label{eq:analysis-poisson}
+\end{equation}
+Consequently the Poisson and deterministic-fluid problems have the same
+minimizing thresholds when both are restricted to this same integer set.
+Their optimal cost rates differ by $\omega/2$.
+\end{proposition}
+
+This restricted result is not an optimality theorem over all adapted
+stochastic intervention policies. The Poisson waiting generator is
+$\Lambda[V(n+1)-V(n)]$, rather than $\Lambda V'(q)$; a general stochastic
+verification requires integrability and expected transversality conditions.
+The continuous-wave and integer-wave domains also need not have the same
+optimizer. For $B>1$, the time required to collect the remaining Poisson
+arrivals has no deterministic upper bound, whereas $B=1$ dispatches at
+arrival and creates no consolidation wait.
+
+\begin{proof}[Proof of Proposition~\ref{prop:analysis-poisson}]
+For a fixed integer $B\ge1$, the dispatch cycle contains exactly $B$
+independent exponential interarrival times of mean $1/\Lambda$. Its
+mean duration is $B/\Lambda$. The backlog spends expected time
+$1/\Lambda$ in each state $0,1,\ldots,B-1$, so expected holding cost
+per cycle is
+\[
+ \frac\omega\Lambda\sum_{n=0}^{B-1}n
+       =\frac{\omega B(B-1)}{2\Lambda}.
+\]
+The service cost per cycle is $C(B)$. The renewal-reward ratio is
+therefore \eqref{eq:analysis-poisson}. The difference from the fluid
+criterion is the same constant for every admissible integer threshold,
+which preserves its minimizer set. Both integer minima exist, since
+the holding term tends to infinity with $B$. This calculation proves
+the claim within the stated threshold class and makes no comparison
+with other adapted intervention rules.
+\end{proof}
+
+The restriction to a common action domain is substantive. For example,
+in a separate setup-cost illustration with $C(q)=9/8$ and
+$\Lambda=\omega=1$, the continuous-fluid optimum is $q=3/2$ with cost
+rate $3/2$. The same fluid criterion restricted to positive integers
+has its unique minimum at $B=2$, with cost rate $25/16$. The Poisson
+threshold criterion also chooses $B=2$ and has cost rate $17/16$.
+Thus equality of mean arrival rates alone implies neither equality
+with the continuous optimizer nor equality of cost rates. This example
+illustrates the action-domain issue; its constant setup cost is not
+the BHH service cost in \eqref{eq:analysis-dispatch-cost}.
+

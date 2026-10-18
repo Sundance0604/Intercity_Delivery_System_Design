@@ -1,0 +1,1325 @@
+{
+  "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+  "solver_runs": 2,
+  "budget_per_run_sec": 2,
+  "runs": [
+    {
+      "case": "cost_and_handoffs",
+      "expected_objective": 12,
+      "result": {
+        "schema_version": "v1_mandatory_result/1",
+        "model_id": "v1_mandatory_arc_wave_v1",
+        "semantic_status": "author_confirmed_profile",
+        "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+        "profile": {
+          "information": "offline",
+          "wave": "arc",
+          "demand": "continuous_stops_zero_allowed",
+          "units": "minutes_hourly",
+          "service": "tour_end_same_time",
+          "input_domain": "integer_windows_within_horizon"
+        },
+        "provenance": {
+          "input": {
+            "config": {
+              "T": 3,
+              "t0_minutes": 30,
+              "tau_periods": 1,
+              "N_manual": {
+                "1": 1,
+                "2": 1
+              },
+              "N_auto": {
+                "1": 1,
+                "2": 0
+              },
+              "a": {
+                "1": 30,
+                "2": 30
+              },
+              "b": {
+                "1": 0,
+                "2": 0
+              },
+              "rho": {
+                "1": 0,
+                "2": 0
+              },
+              "M": 1,
+              "M_auto": 1,
+              "c_manual_hour": 10,
+              "c_auto_hour": 4
+            },
+            "orders": [
+              {
+                "order_id": "order-A",
+                "flow": "+",
+                "quantity": 1,
+                "earliest_start": 0,
+                "latest_completion": 3,
+                "penalty": 100
+              }
+            ],
+            "profile": {
+              "information": "offline",
+              "wave": "arc",
+              "demand": "continuous_stops_zero_allowed",
+              "units": "minutes_hourly",
+              "service": "tour_end_same_time",
+              "input_domain": "integer_windows_within_horizon"
+            }
+          },
+          "input_sha256": "7a890043f3613f59675d8b9720c127b71a28e4cf58bcfdab45a80b6e87b54fde",
+          "source_sha256": {
+            "research/paper/main_v2_BHH.tex": "500be1ada854317be79c358e0ff1269786dd4c7ea8e1102b501354eff04a3457",
+            "coordination/V1_M_IMPLEMENTATION_PROFILE.md": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+            "intercity_delivery/v1/capacity.py": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+            "intercity_delivery/v1/network.py": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+            "intercity_delivery/v1/configuration.py": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+            "intercity_delivery/v1/mandatory_optimizer.py": "8def82b611df4204d8039580379b06a61d33b94344f1f0c768d2586b0e795caa",
+            "intercity_delivery/v1/runner.py": "434d90112dcdd1bcb1bc64d10f851a0ded32429863a71801e13adda555567a57",
+            "intercity_delivery/v1/validation.py": "07febddb0645c6fe27b1db10bf5df3e4be5cff604c9e3cc75600cb205216b043"
+          },
+          "git_revision": "f26b4c96907082c2ebb7b0104263831e7100aa26",
+          "git_revision_scope": "HEAD only; source hashes identify uncommitted implementation",
+          "timestamp_utc": "2026-10-18T02:00:39.646310+00:00",
+          "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+          "platform": "Windows-10-10.0.26200-SP0",
+          "gurobipy_version": "10.0.3"
+        },
+        "status": 2,
+        "status_name": "OPTIMAL",
+        "has_incumbent": true,
+        "optimal": true,
+        "schedule_valid": true,
+        "total_cost": 12,
+        "incumbent_objective": 12,
+        "best_bound": 12,
+        "mip_gap": 0,
+        "bound_scope": "full_horizon_adopted_V1_M_profile_only",
+        "schedule": {
+          "x_manual": {
+            "(0, 1, 1, '+')": 1,
+            "(0, 1, 1, '-')": 0,
+            "(1, 2, 1, '+')": 0,
+            "(1, 2, 1, '-')": 0,
+            "(2, 3, 1, '+')": 0,
+            "(2, 3, 1, '-')": 0,
+            "(0, 1, 2, '+')": 0,
+            "(0, 1, 2, '-')": 0,
+            "(1, 2, 2, '+')": 0,
+            "(1, 2, 2, '-')": 0,
+            "(2, 3, 2, '+')": 1,
+            "(2, 3, 2, '-')": 0
+          },
+          "y_auto": {
+            "(0, 1, '+')": 0,
+            "(0, 1, '-')": 0,
+            "(1, 2, '+')": 1,
+            "(1, 2, '-')": 0,
+            "(2, 3, '+')": 0,
+            "(2, 3, '-')": 0
+          },
+          "u_wave": {
+            "(0, 1, 1, '+', 1)": 1,
+            "(0, 1, 1, '-', 1)": 0,
+            "(1, 2, 1, '+', 1)": 0,
+            "(1, 2, 1, '-', 1)": 0,
+            "(2, 3, 1, '+', 1)": 0,
+            "(2, 3, 1, '-', 1)": 0,
+            "(0, 1, 2, '+', 1)": 0,
+            "(0, 1, 2, '-', 1)": 0,
+            "(1, 2, 2, '+', 1)": 0,
+            "(1, 2, 2, '-', 1)": 0,
+            "(2, 3, 2, '+', 1)": 1,
+            "(2, 3, 2, '-', 1)": 0
+          },
+          "g_manual": {
+            "(0, 1, 1, '+', 'order-A')": 1,
+            "(1, 2, 1, '+', 'order-A')": 0,
+            "(2, 3, 1, '+', 'order-A')": 0,
+            "(0, 1, 2, '+', 'order-A')": 0,
+            "(1, 2, 2, '+', 'order-A')": 0,
+            "(2, 3, 2, '+', 'order-A')": 1
+          },
+          "g_auto": {
+            "(0, 1, '+', 'order-A')": 0,
+            "(1, 2, '+', 'order-A')": 1,
+            "(2, 3, '+', 'order-A')": 0
+          },
+          "z_unserved": {
+            "('order-A',)": 0
+          }
+        },
+        "indices": {
+          "x_manual": [
+            [
+              0,
+              1,
+              1,
+              "+"
+            ],
+            [
+              0,
+              1,
+              1,
+              "-"
+            ],
+            [
+              1,
+              2,
+              1,
+              "+"
+            ],
+            [
+              1,
+              2,
+              1,
+              "-"
+            ],
+            [
+              2,
+              3,
+              1,
+              "+"
+            ],
+            [
+              2,
+              3,
+              1,
+              "-"
+            ],
+            [
+              0,
+              1,
+              2,
+              "+"
+            ],
+            [
+              0,
+              1,
+              2,
+              "-"
+            ],
+            [
+              1,
+              2,
+              2,
+              "+"
+            ],
+            [
+              1,
+              2,
+              2,
+              "-"
+            ],
+            [
+              2,
+              3,
+              2,
+              "+"
+            ],
+            [
+              2,
+              3,
+              2,
+              "-"
+            ]
+          ],
+          "y_auto": [
+            [
+              0,
+              1,
+              "+"
+            ],
+            [
+              0,
+              1,
+              "-"
+            ],
+            [
+              1,
+              2,
+              "+"
+            ],
+            [
+              1,
+              2,
+              "-"
+            ],
+            [
+              2,
+              3,
+              "+"
+            ],
+            [
+              2,
+              3,
+              "-"
+            ]
+          ],
+          "u_wave": [
+            [
+              0,
+              1,
+              1,
+              "+",
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              "-",
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              "+",
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              "-",
+              1
+            ],
+            [
+              2,
+              3,
+              1,
+              "+",
+              1
+            ],
+            [
+              2,
+              3,
+              1,
+              "-",
+              1
+            ],
+            [
+              0,
+              1,
+              2,
+              "+",
+              1
+            ],
+            [
+              0,
+              1,
+              2,
+              "-",
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              "+",
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              "-",
+              1
+            ],
+            [
+              2,
+              3,
+              2,
+              "+",
+              1
+            ],
+            [
+              2,
+              3,
+              2,
+              "-",
+              1
+            ]
+          ],
+          "g_manual": [
+            [
+              0,
+              1,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              2,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              2,
+              3,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              0,
+              1,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              2,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              2,
+              3,
+              2,
+              "+",
+              "order-A"
+            ]
+          ],
+          "g_auto": [
+            [
+              0,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              2,
+              3,
+              "+",
+              "order-A"
+            ]
+          ],
+          "z_unserved": [
+            [
+              "order-A"
+            ]
+          ]
+        },
+        "validation": {
+          "schedule_valid": true,
+          "validator": "independent_original_f_v1_m",
+          "semantic_status": "author_confirmed_profile",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "tolerance": 0.000001,
+          "comparison": "absolute",
+          "integer_tolerance": 0.000001,
+          "costs": {
+            "manual": 10,
+            "auto": 2,
+            "penalty": 0,
+            "total": 12
+          },
+          "objective": 12,
+          "orders": {
+            "order-A": {
+              "pickup": 1,
+              "delivery": 1,
+              "linehaul": 1,
+              "served": 1,
+              "unserved": 0
+            }
+          },
+          "peak_manual": {
+            "1": 1,
+            "2": 1
+          },
+          "peak_auto": 1,
+          "min_AV_hub_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "checks": [
+            "mother_arc_domains",
+            "variable_domains",
+            "one_hot",
+            "wave_vehicle_link",
+            "original_f_joint_wave_capacity",
+            "shared_AV_capacity",
+            "manual_occupancy",
+            "AV_occupancy",
+            "AV_hub_inventory",
+            "order_windows",
+            "cargo_causality",
+            "all_three_leg_totals",
+            "objective_hour_conversion"
+          ]
+        },
+        "cost_components": {
+          "manual": 10,
+          "auto": 2,
+          "penalty": 0,
+          "total": 12
+        },
+        "requested_time_limit_sec": 2,
+        "solver_time_limit_sec": 1.8440000000409782,
+        "threads": 1,
+        "solver_seed": 0,
+        "feasibility_tolerance": 1e-8,
+        "integrality_tolerance": 1e-8,
+        "validation_tolerance": 0.000001,
+        "cost_units": "currency; minute durations divided by 60 exactly once",
+        "traceability": {
+          "M01": "main_v2_BHH.tex:74",
+          "M02": "main_v2_BHH.tex:82",
+          "M03": "eq:num man veh",
+          "M04": "num auto veh",
+          "M05": "bal auto +; bal auto -",
+          "M06": "BHH",
+          "M07": "wave link",
+          "M08": "auto vol",
+          "M09": "violate; E",
+          "M10": "transfer step 1",
+          "M11": "transfer step 2",
+          "M12": "unserved",
+          "M13": "domain",
+          "M14": "eq:obj",
+          "M15": "implementation requirement: complete export"
+        },
+        "scope": "offline V1-M arc-wave adopted benchmark; excludes F/RH/S/QVI",
+        "warnings": [
+          "Author adoption applies to this benchmark; manuscript F/RH/S/QVI remain separate."
+        ],
+        "build_elapsed_sec": 0.1559999999590218,
+        "solver_runtime_sec": 0,
+        "variable_count": 40,
+        "constraint_count": 72,
+        "elapsed_sec": 0.1559999999590218,
+        "budget_exceeded": false
+      }
+    },
+    {
+      "case": "joint_wave",
+      "expected_objective": 5,
+      "result": {
+        "schema_version": "v1_mandatory_result/1",
+        "model_id": "v1_mandatory_arc_wave_v1",
+        "semantic_status": "author_confirmed_profile",
+        "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+        "profile": {
+          "information": "offline",
+          "wave": "arc",
+          "demand": "continuous_stops_zero_allowed",
+          "units": "minutes_hourly",
+          "service": "tour_end_same_time",
+          "input_domain": "integer_windows_within_horizon"
+        },
+        "provenance": {
+          "input": {
+            "config": {
+              "T": 3,
+              "t0_minutes": 1,
+              "tau_periods": 1,
+              "N_manual": {
+                "1": 2,
+                "2": 2
+              },
+              "N_auto": {
+                "1": 1,
+                "2": 0
+              },
+              "a": {
+                "1": 1,
+                "2": 1
+              },
+              "b": {
+                "1": 1,
+                "2": 1
+              },
+              "rho": {
+                "1": 0,
+                "2": 0
+              },
+              "M": 1,
+              "M_auto": 1,
+              "c_manual_hour": 60,
+              "c_auto_hour": 60
+            },
+            "orders": [
+              {
+                "order_id": "order-A",
+                "flow": "+",
+                "quantity": 1,
+                "earliest_start": 0,
+                "latest_completion": 3,
+                "penalty": 100
+              }
+            ],
+            "profile": {
+              "information": "offline",
+              "wave": "arc",
+              "demand": "continuous_stops_zero_allowed",
+              "units": "minutes_hourly",
+              "service": "tour_end_same_time",
+              "input_domain": "integer_windows_within_horizon"
+            }
+          },
+          "input_sha256": "8c9ea1394d1924c517aed2d1864d70a59203d8d9134e1eb31f5de2b58c72e709",
+          "source_sha256": {
+            "research/paper/main_v2_BHH.tex": "500be1ada854317be79c358e0ff1269786dd4c7ea8e1102b501354eff04a3457",
+            "coordination/V1_M_IMPLEMENTATION_PROFILE.md": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+            "intercity_delivery/v1/capacity.py": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+            "intercity_delivery/v1/network.py": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+            "intercity_delivery/v1/configuration.py": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+            "intercity_delivery/v1/mandatory_optimizer.py": "8def82b611df4204d8039580379b06a61d33b94344f1f0c768d2586b0e795caa",
+            "intercity_delivery/v1/runner.py": "434d90112dcdd1bcb1bc64d10f851a0ded32429863a71801e13adda555567a57",
+            "intercity_delivery/v1/validation.py": "07febddb0645c6fe27b1db10bf5df3e4be5cff604c9e3cc75600cb205216b043"
+          },
+          "git_revision": "f26b4c96907082c2ebb7b0104263831e7100aa26",
+          "git_revision_scope": "HEAD only; source hashes identify uncommitted implementation",
+          "timestamp_utc": "2026-10-18T02:00:39.793880+00:00",
+          "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+          "platform": "Windows-10-10.0.26200-SP0",
+          "gurobipy_version": "10.0.3"
+        },
+        "status": 2,
+        "status_name": "OPTIMAL",
+        "has_incumbent": true,
+        "optimal": true,
+        "schedule_valid": true,
+        "total_cost": 5,
+        "incumbent_objective": 5,
+        "best_bound": 5,
+        "mip_gap": 0,
+        "bound_scope": "full_horizon_adopted_V1_M_profile_only",
+        "schedule": {
+          "x_manual": {
+            "(0, 1, 1, '+')": 2,
+            "(0, 1, 1, '-')": 0,
+            "(0, 2, 1, '+')": 0,
+            "(0, 2, 1, '-')": 0,
+            "(1, 2, 1, '+')": 0,
+            "(1, 2, 1, '-')": 0,
+            "(1, 3, 1, '+')": 0,
+            "(1, 3, 1, '-')": 0,
+            "(2, 3, 1, '+')": 0,
+            "(2, 3, 1, '-')": 0,
+            "(0, 1, 2, '+')": 0,
+            "(0, 1, 2, '-')": 0,
+            "(0, 2, 2, '+')": 0,
+            "(0, 2, 2, '-')": 0,
+            "(1, 2, 2, '+')": 0,
+            "(1, 2, 2, '-')": 0,
+            "(1, 3, 2, '+')": 0,
+            "(1, 3, 2, '-')": 0,
+            "(2, 3, 2, '+')": 2,
+            "(2, 3, 2, '-')": 0
+          },
+          "y_auto": {
+            "(0, 1, '+')": 0,
+            "(0, 1, '-')": 0,
+            "(1, 2, '+')": 1,
+            "(1, 2, '-')": 0,
+            "(2, 3, '+')": 0,
+            "(2, 3, '-')": 0
+          },
+          "u_wave": {
+            "(0, 1, 1, '+', 1)": 0,
+            "(0, 1, 1, '+', 2)": 1,
+            "(0, 1, 1, '-', 1)": 0,
+            "(0, 1, 1, '-', 2)": 0,
+            "(0, 2, 1, '+', 1)": 0,
+            "(0, 2, 1, '+', 2)": 0,
+            "(0, 2, 1, '-', 1)": 0,
+            "(0, 2, 1, '-', 2)": 0,
+            "(1, 2, 1, '+', 1)": 0,
+            "(1, 2, 1, '+', 2)": 0,
+            "(1, 2, 1, '-', 1)": 0,
+            "(1, 2, 1, '-', 2)": 0,
+            "(1, 3, 1, '+', 1)": 0,
+            "(1, 3, 1, '+', 2)": 0,
+            "(1, 3, 1, '-', 1)": 0,
+            "(1, 3, 1, '-', 2)": 0,
+            "(2, 3, 1, '+', 1)": 0,
+            "(2, 3, 1, '+', 2)": 0,
+            "(2, 3, 1, '-', 1)": 0,
+            "(2, 3, 1, '-', 2)": 0,
+            "(0, 1, 2, '+', 1)": 0,
+            "(0, 1, 2, '+', 2)": 0,
+            "(0, 1, 2, '-', 1)": 0,
+            "(0, 1, 2, '-', 2)": 0,
+            "(0, 2, 2, '+', 1)": 0,
+            "(0, 2, 2, '+', 2)": 0,
+            "(0, 2, 2, '-', 1)": 0,
+            "(0, 2, 2, '-', 2)": 0,
+            "(1, 2, 2, '+', 1)": 0,
+            "(1, 2, 2, '+', 2)": 0,
+            "(1, 2, 2, '-', 1)": 0,
+            "(1, 2, 2, '-', 2)": 0,
+            "(1, 3, 2, '+', 1)": 0,
+            "(1, 3, 2, '+', 2)": 0,
+            "(1, 3, 2, '-', 1)": 0,
+            "(1, 3, 2, '-', 2)": 0,
+            "(2, 3, 2, '+', 1)": 0,
+            "(2, 3, 2, '+', 2)": 1,
+            "(2, 3, 2, '-', 1)": 0,
+            "(2, 3, 2, '-', 2)": 0
+          },
+          "g_manual": {
+            "(0, 1, 1, '+', 'order-A')": 1,
+            "(0, 2, 1, '+', 'order-A')": 0,
+            "(1, 2, 1, '+', 'order-A')": 0,
+            "(1, 3, 1, '+', 'order-A')": 0,
+            "(2, 3, 1, '+', 'order-A')": 0,
+            "(0, 1, 2, '+', 'order-A')": 0,
+            "(0, 2, 2, '+', 'order-A')": 0,
+            "(1, 2, 2, '+', 'order-A')": 0,
+            "(1, 3, 2, '+', 'order-A')": 0,
+            "(2, 3, 2, '+', 'order-A')": 1
+          },
+          "g_auto": {
+            "(0, 1, '+', 'order-A')": 0,
+            "(1, 2, '+', 'order-A')": 1,
+            "(2, 3, '+', 'order-A')": 0
+          },
+          "z_unserved": {
+            "('order-A',)": 0
+          }
+        },
+        "indices": {
+          "x_manual": [
+            [
+              0,
+              1,
+              1,
+              "+"
+            ],
+            [
+              0,
+              1,
+              1,
+              "-"
+            ],
+            [
+              0,
+              2,
+              1,
+              "+"
+            ],
+            [
+              0,
+              2,
+              1,
+              "-"
+            ],
+            [
+              1,
+              2,
+              1,
+              "+"
+            ],
+            [
+              1,
+              2,
+              1,
+              "-"
+            ],
+            [
+              1,
+              3,
+              1,
+              "+"
+            ],
+            [
+              1,
+              3,
+              1,
+              "-"
+            ],
+            [
+              2,
+              3,
+              1,
+              "+"
+            ],
+            [
+              2,
+              3,
+              1,
+              "-"
+            ],
+            [
+              0,
+              1,
+              2,
+              "+"
+            ],
+            [
+              0,
+              1,
+              2,
+              "-"
+            ],
+            [
+              0,
+              2,
+              2,
+              "+"
+            ],
+            [
+              0,
+              2,
+              2,
+              "-"
+            ],
+            [
+              1,
+              2,
+              2,
+              "+"
+            ],
+            [
+              1,
+              2,
+              2,
+              "-"
+            ],
+            [
+              1,
+              3,
+              2,
+              "+"
+            ],
+            [
+              1,
+              3,
+              2,
+              "-"
+            ],
+            [
+              2,
+              3,
+              2,
+              "+"
+            ],
+            [
+              2,
+              3,
+              2,
+              "-"
+            ]
+          ],
+          "y_auto": [
+            [
+              0,
+              1,
+              "+"
+            ],
+            [
+              0,
+              1,
+              "-"
+            ],
+            [
+              1,
+              2,
+              "+"
+            ],
+            [
+              1,
+              2,
+              "-"
+            ],
+            [
+              2,
+              3,
+              "+"
+            ],
+            [
+              2,
+              3,
+              "-"
+            ]
+          ],
+          "u_wave": [
+            [
+              0,
+              1,
+              1,
+              "+",
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              "+",
+              2
+            ],
+            [
+              0,
+              1,
+              1,
+              "-",
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              "-",
+              2
+            ],
+            [
+              0,
+              2,
+              1,
+              "+",
+              1
+            ],
+            [
+              0,
+              2,
+              1,
+              "+",
+              2
+            ],
+            [
+              0,
+              2,
+              1,
+              "-",
+              1
+            ],
+            [
+              0,
+              2,
+              1,
+              "-",
+              2
+            ],
+            [
+              1,
+              2,
+              1,
+              "+",
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              "+",
+              2
+            ],
+            [
+              1,
+              2,
+              1,
+              "-",
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              "-",
+              2
+            ],
+            [
+              1,
+              3,
+              1,
+              "+",
+              1
+            ],
+            [
+              1,
+              3,
+              1,
+              "+",
+              2
+            ],
+            [
+              1,
+              3,
+              1,
+              "-",
+              1
+            ],
+            [
+              1,
+              3,
+              1,
+              "-",
+              2
+            ],
+            [
+              2,
+              3,
+              1,
+              "+",
+              1
+            ],
+            [
+              2,
+              3,
+              1,
+              "+",
+              2
+            ],
+            [
+              2,
+              3,
+              1,
+              "-",
+              1
+            ],
+            [
+              2,
+              3,
+              1,
+              "-",
+              2
+            ],
+            [
+              0,
+              1,
+              2,
+              "+",
+              1
+            ],
+            [
+              0,
+              1,
+              2,
+              "+",
+              2
+            ],
+            [
+              0,
+              1,
+              2,
+              "-",
+              1
+            ],
+            [
+              0,
+              1,
+              2,
+              "-",
+              2
+            ],
+            [
+              0,
+              2,
+              2,
+              "+",
+              1
+            ],
+            [
+              0,
+              2,
+              2,
+              "+",
+              2
+            ],
+            [
+              0,
+              2,
+              2,
+              "-",
+              1
+            ],
+            [
+              0,
+              2,
+              2,
+              "-",
+              2
+            ],
+            [
+              1,
+              2,
+              2,
+              "+",
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              "+",
+              2
+            ],
+            [
+              1,
+              2,
+              2,
+              "-",
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              "-",
+              2
+            ],
+            [
+              1,
+              3,
+              2,
+              "+",
+              1
+            ],
+            [
+              1,
+              3,
+              2,
+              "+",
+              2
+            ],
+            [
+              1,
+              3,
+              2,
+              "-",
+              1
+            ],
+            [
+              1,
+              3,
+              2,
+              "-",
+              2
+            ],
+            [
+              2,
+              3,
+              2,
+              "+",
+              1
+            ],
+            [
+              2,
+              3,
+              2,
+              "+",
+              2
+            ],
+            [
+              2,
+              3,
+              2,
+              "-",
+              1
+            ],
+            [
+              2,
+              3,
+              2,
+              "-",
+              2
+            ]
+          ],
+          "g_manual": [
+            [
+              0,
+              1,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              0,
+              2,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              2,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              3,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              2,
+              3,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              0,
+              1,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              0,
+              2,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              2,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              3,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              2,
+              3,
+              2,
+              "+",
+              "order-A"
+            ]
+          ],
+          "g_auto": [
+            [
+              0,
+              1,
+              "+",
+              "order-A"
+            ],
+            [
+              1,
+              2,
+              "+",
+              "order-A"
+            ],
+            [
+              2,
+              3,
+              "+",
+              "order-A"
+            ]
+          ],
+          "z_unserved": [
+            [
+              "order-A"
+            ]
+          ]
+        },
+        "validation": {
+          "schedule_valid": true,
+          "validator": "independent_original_f_v1_m",
+          "semantic_status": "author_confirmed_profile",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "tolerance": 0.000001,
+          "comparison": "absolute",
+          "integer_tolerance": 0.000001,
+          "costs": {
+            "manual": 4,
+            "auto": 1,
+            "penalty": 0,
+            "total": 5
+          },
+          "objective": 5,
+          "orders": {
+            "order-A": {
+              "pickup": 1,
+              "delivery": 1,
+              "linehaul": 1,
+              "served": 1,
+              "unserved": 0
+            }
+          },
+          "peak_manual": {
+            "1": 2,
+            "2": 2
+          },
+          "peak_auto": 1,
+          "min_AV_hub_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "checks": [
+            "mother_arc_domains",
+            "variable_domains",
+            "one_hot",
+            "wave_vehicle_link",
+            "original_f_joint_wave_capacity",
+            "shared_AV_capacity",
+            "manual_occupancy",
+            "AV_occupancy",
+            "AV_hub_inventory",
+            "order_windows",
+            "cargo_causality",
+            "all_three_leg_totals",
+            "objective_hour_conversion"
+          ]
+        },
+        "cost_components": {
+          "manual": 4,
+          "auto": 1,
+          "penalty": 0,
+          "total": 5
+        },
+        "requested_time_limit_sec": 2,
+        "solver_time_limit_sec": 1.952999999979511,
+        "threads": 1,
+        "solver_seed": 0,
+        "feasibility_tolerance": 1e-8,
+        "integrality_tolerance": 1e-8,
+        "validation_tolerance": 0.000001,
+        "cost_units": "currency; minute durations divided by 60 exactly once",
+        "traceability": {
+          "M01": "main_v2_BHH.tex:74",
+          "M02": "main_v2_BHH.tex:82",
+          "M03": "eq:num man veh",
+          "M04": "num auto veh",
+          "M05": "bal auto +; bal auto -",
+          "M06": "BHH",
+          "M07": "wave link",
+          "M08": "auto vol",
+          "M09": "violate; E",
+          "M10": "transfer step 1",
+          "M11": "transfer step 2",
+          "M12": "unserved",
+          "M13": "domain",
+          "M14": "eq:obj",
+          "M15": "implementation requirement: complete export"
+        },
+        "scope": "offline V1-M arc-wave adopted benchmark; excludes F/RH/S/QVI",
+        "warnings": [
+          "Author adoption applies to this benchmark; manuscript F/RH/S/QVI remain separate."
+        ],
+        "build_elapsed_sec": 0.0470000000204891,
+        "solver_runtime_sec": 0.0009999275207519531,
+        "variable_count": 80,
+        "constraint_count": 96,
+        "elapsed_sec": 0.0470000000204891,
+        "budget_exceeded": false
+      }
+    }
+  ]
+}

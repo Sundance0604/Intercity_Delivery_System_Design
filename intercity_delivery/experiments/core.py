@@ -6,6 +6,7 @@
 
 import hashlib
 import json
+import math
 import os
 import random
 import re
@@ -432,6 +433,9 @@ def load_real_orders_with_metadata(
             "sampling_statistics": sample_stats,
             "travel_calibration": travel_calibration,
             "model_recommendations": recommendations,
+            "source_records_by_batch": {
+                str(item.batch_id): asdict(item) for item in processed_orders
+            },
         }
         return orders_tuple, metadata
 
@@ -447,7 +451,85 @@ def load_real_orders_with_metadata(
         },
         "model_recommendations": payload.get("model_recommendations", {}),
     }
+    source_rows = {row.get("batch_id"): row for row in payload.get("orders_with_source", [])}
+    selected_ids = sorted(random.Random(seed).sample(list(source_orders), order_config.num_orders))
+    metadata["source_records_by_batch"] = {
+        str(new_id): source_rows[source_id]
+        for new_id, source_id in enumerate(selected_ids, 1) if source_id in source_rows
+    }
     return orders_tuple, metadata
+
+
+def _solver_orders_and_metadata(solver_name, orders_tuple, real_data_metadata=None):
+    """Isolate V1 shipment-stop mapping before data build and summary metrics.
+
+    Mixed V0/V1 suites retain each solver's own units. No shared order object
+    is mutated; source weights and the old weight-derived quantities survive
+    in provenance. Generated V1 quantities are explicit synthetic stop loads.
+    """
+    from intercity_delivery.v1.adapter import V1_F_SOLVERS
+
+    if solver_name not in V1_F_SOLVERS:
+        return orders_tuple, None
+    originals = orders_tuple[2]
+    if real_data_metadata is not None:
+        mapped = {key: replace(order, quantity=1.0) for key, order in originals.items()}
+        local_orders = ({key: row for key, row in mapped.items() if row.flow == "+"},
+                        {key: row for key, row in mapped.items() if row.flow == "-"}, mapped)
+        semantics = "shipment_stop"
+        caveat = "one CFS record = one shipment-stop for execution; no calibrated weight-to-stop conversion"
+    else:
+        local_orders = orders_tuple
+        semantics = "synthetic_continuous_stops"
+        caveat = "generated quantities are synthetic stop loads, not CFS demand"
+    metadata = {
+        "demand_semantics": semantics, "quantity_units": "stops",
+        "total_demand": sum(order.quantity for order in local_orders[2].values()),
+        "original_quantities": {str(key): order.quantity for key, order in originals.items()},
+        "source_metadata": real_data_metadata, "conversion_caveat": caveat,
+        "source_weights_used_as_demand": False,
+    }
+    return local_orders, metadata
+
+
+def _solver_model_config(solver_name, config, real_data_metadata=None, sensitivity_parameter=""):
+    """Adopt processed CFS travel calibration only in the new V1 branch."""
+    from intercity_delivery.v1.adapter import V1_F_SOLVERS
+
+    if (solver_name not in V1_F_SOLVERS or not real_data_metadata
+            or real_data_metadata.get("source_kind") != "processed_json"):
+        return config, None
+    recommendations = real_data_metadata.get("model_recommendations", {})
+    if "travel_time_periods" not in recommendations:
+        raise ValueError("V1 CFS JSON requires source travel_time_periods calibration")
+    tau = recommendations["travel_time_periods"]
+    if isinstance(tau, bool) or not isinstance(tau, int) or tau <= 0:
+        raise ValueError("CFS source travel_time_periods must be a positive integer")
+    source_minutes = recommendations.get("t_0_minutes", config.t_0)
+    if (isinstance(source_minutes, bool) or not isinstance(source_minutes, (int, float))
+            or not math.isfinite(source_minutes) or source_minutes <= 0):
+        raise ValueError("CFS source t_0_minutes must be positive and finite")
+    duration_minutes = tau * source_minutes
+    hours = recommendations.get("representative_linehaul_hours")
+    if hours is not None:
+        if (isinstance(hours, bool) or not isinstance(hours, (int, float))
+                or not math.isfinite(hours) or hours <= 0):
+            raise ValueError("CFS source representative_linehaul_hours must be positive and finite")
+        duration_minutes = hours*60.0
+    if not math.isfinite(duration_minutes):
+        raise ValueError("CFS source travel duration exceeds supported numeric domain")
+    if isinstance(config.t_0, bool) or not math.isfinite(config.t_0) or config.t_0 <= 0:
+        raise ValueError("configured t_0 must be positive and finite")
+    adopted_tau = max(1, math.ceil(duration_minutes/config.t_0))
+    explicit_override = sensitivity_parameter == "model.travel_time_periods"
+    metadata = {
+        "source_tau_periods": tau, "source_t0_minutes": source_minutes,
+        "source_duration_minutes": duration_minutes,
+        "policy": "explicit travel sensitivity preserved" if explicit_override else "source CFS calibration adopted before V1 data build",
+        "original_config_tau_periods": config.travel_time_periods,
+    }
+    new_tau = config.travel_time_periods if explicit_override else adopted_tau
+    return replace(config, travel_time_periods=new_tau, direct_travel_time_periods=new_tau), metadata
 
 def load_real_orders(
     path: str,
@@ -824,11 +906,22 @@ def run_experiment_suite(
             print("  -> 当前所选求解器均不适用于该参数类别，跳过。")
         for solver_name in spec_solver_names:
             solver = SOLVER_REGISTRY[solver_name]
+            solver_orders, solver_metadata = _solver_orders_and_metadata(
+                solver_name, orders_tuple, real_data_metadata)
+            solver_config, travel_metadata = _solver_model_config(
+                solver_name, spec.config, real_data_metadata, spec.sensitivity_parameter)
+            if solver_metadata is not None:
+                solver_metadata["travel_calibration"] = travel_metadata
+            solver_data = data
+            if solver_metadata is not None:
+                solver_data = build_delivery_data(solver_config, solver_orders)
+                solver_data.v1_metadata = solver_metadata
+            solver_total_demand = sum(order.quantity for order in solver_orders[2].values())
             print(f"  -> 使用求解器：{solver.display_name}")
             result = solver.solve(
-                spec.config,
-                data,
-                orders_tuple,
+                solver_config,
+                solver_data,
+                solver_orders,
                 spec.time_limit,
                 spec.algorithm_config,
             )
@@ -856,8 +949,9 @@ def run_experiment_suite(
                     else None
                 ),
                 "Num_Orders": spec.order_config.num_orders,
-                "Total_Demand": total_demand,
-                **_dataclass_csv_fields("Model", spec.config),
+                "Total_Demand": solver_total_demand,
+                "Demand_Units": "stops" if solver_metadata is not None else "legacy_quantity",
+                **_dataclass_csv_fields("Model", solver_config),
                 **_dataclass_csv_fields("Algorithm", spec.algorithm_config),
                 **_dataclass_csv_fields("Order", spec.order_config),
                 "Total_Cost": result.total_cost,
@@ -888,6 +982,9 @@ def run_experiment_suite(
                     "transshipment_volume": result.transshipment_volume,
                     "message": result.message,
                     "detail": result.detail,
+                    "input_metadata": solver_metadata,
+                    "input_orders": {str(key): asdict(value) for key, value in solver_orders[2].items()},
+                    "input_model_parameters": asdict(solver_config),
                 }
             )
 
@@ -899,7 +996,11 @@ def run_experiment_suite(
                     f"results/detail_{spec.experiment_id}_{detail_context}__"
                     f"{timestamp}.json"
                 )
-                detail_payload = {**json_experiment, "solver_results": [json_experiment["solver_results"][-1]]}
+                detail_payload = {**json_experiment,
+                                  "orders": {str(key): asdict(value) for key, value in solver_orders[2].items()},
+                                  "solver_input_metadata": solver_metadata,
+                                  "model_parameters": asdict(solver_config),
+                                  "solver_results": [json_experiment["solver_results"][-1]]}
                 with open(detail_path, "w", encoding="utf-8") as file:
                     json.dump(detail_payload, file, indent=2, ensure_ascii=False)
 

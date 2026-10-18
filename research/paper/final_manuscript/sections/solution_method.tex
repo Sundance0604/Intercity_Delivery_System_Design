@@ -1,0 +1,87 @@
+\subsection{Rolling-horizon implementation}
+\label{sec:method}
+
+The offline model uses all given orders. Rolling execution instead uses
+revealed orders and commits near-term actions. Its inputs are the model
+data, a prediction length $H\ge1$, a control step $h\in\{1,\ldots,H\}$,
+a completion extension $E\ge0$ (all in periods), and a total run budget.
+At decision node $t$, define
+\begin{equation}
+ b_t=\min\{T,t+H\},\qquad c_t=\min\{T,b_t+E\},\qquad
+ a_t=\min\{T,t+h\}.
+ \label{alg:window}
+\end{equation}
+The revealed set $\mathcal L(t)=\{\ell:s_\ell\le t\}$ retains orders after
+their deadlines so that collected goods and vehicle commitments remain
+accounted for. All times are absolute.
+
+Every task started before $t$ is fixed in full, including vehicle counts,
+selectors, and cargo. Missing historical starts are fixed to zero.
+Completed trips remain in cumulative balances. New tasks satisfy
+\begin{align}
+ t\leq i<b_t,\quad j\leq c_t
+ &\qquad\text{for origin collection, direct trips, and empty transfers},
+ \label{alg:origin-cut}\\
+ t\leq i<c_t,\quad j\leq c_t
+ &\qquad\text{for automated line-haul and destination distribution}.
+ \label{alg:downstream-cut}
+\end{align}
+The extension allows downstream completion beyond the new-origin admission
+window. These restrictions apply after history has been fixed: ongoing
+tasks are not truncated at $b_t$ or $c_t$, and every task respects the
+physical endpoint $T$ (Figure~\ref{fig:rolling-timeline}).
+
+\begin{enumerate}
+ \item Reveal orders and reconstruct absolute vehicle and cargo history;
+       optionally filter new cargo candidates.
+ \item Build the MILP for known orders, fix historical starts and zeros,
+       and apply \eqref{alg:origin-cut}--\eqref{alg:downstream-cut} to new
+       tasks. Solve within the remaining total budget.
+ \item With an incumbent, commit all vehicle, selector, and cargo decisions
+       starting in $[t,a_t)$, retaining whole durations and every positive
+       cargo quantity. Advance to $a_t$.
+ \item With no incumbent or an exhausted budget, report partial execution.
+       At $t=T$, reconstruct final rejection from completed deliveries.
+\end{enumerate}
+
+Each incumbent must complete the goods it collects, as required by
+\eqref{mod:demand}; provisional rejection is not a committed physical
+event. Computational window endpoints impose no city-return condition.
+The procedure preserves past commitments but has no general
+recursive-feasibility guarantee: if a continuation cannot be found, its
+partial status remains visible.
+
+Appendix~\ref{app:implementation} gives the cargo filter and independent
+replay. Filtering retains vehicle domains and historical cargo, while replay
+checks original service-time inequalities, inventories, and goods balances.
+Costs count each initiated task once. Window bounds and gaps apply to
+individual subproblems, not to the full rolling execution; partial execution
+has no certified complete-horizon objective.
+
+\begin{figure}[tbp]
+\centering
+\setlength{\unitlength}{1mm}
+\begin{picture}(146,44)
+\put(0,10){\vector(1,0){146}}
+\multiput(17,9)(0,2){15}{\line(0,1){1}}
+\multiput(44,9)(0,2){15}{\line(0,1){1}}
+\multiput(105,9)(0,2){15}{\line(0,1){1}}
+\put(140,8){\line(0,1){31}}
+\put(5,4){\makebox(0,4){$i$}}
+\put(17,4){\makebox(0,4){$t$}}
+\put(44,4){\makebox(0,4){$b_t$}}
+\put(74,4){\makebox(0,4){$j$}}
+\put(105,4){\makebox(0,4){$c_t$}}
+\put(140,4){\makebox(0,4){$T$}}
+\put(5,25){\line(1,0){69}}
+\put(5,23){\line(0,1){4}}
+\put(74,23){\line(0,1){4}}
+\put(5,28){\makebox(69,5){\small Inherited task, fixed in full}}
+\put(76,17){\makebox(29,6){\small Vehicle available}}
+\put(5,0){\makebox(136,3){\scriptsize Schematic absolute times: $i<t<b_t<j\le c_t\le T$}}
+\end{picture}
+\caption{An inherited task continues beyond the current origin-admission
+window $b_t$ until its fixed completion time $j$. The real operating
+endpoint is $T$. This is a mechanism diagram, not an experimental schedule.}
+\label{fig:rolling-timeline}
+\end{figure}

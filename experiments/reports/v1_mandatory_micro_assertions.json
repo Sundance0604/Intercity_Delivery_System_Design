@@ -1,0 +1,78 @@
+{
+  "evidence_kind": "primary_unittest_assertion_record",
+  "command": "C:/Users/32599/.conda/envs/pavane/python.exe -B experiments/specs/run_v1_mandatory_micro_validation.py",
+  "date": "2026-10-18",
+  "semantic_status": "conditional_not_author_confirmed",
+  "tests_run": 74,
+  "unittest_result": "OK",
+  "suite_elapsed_sec": 0.5,
+  "solver_run_attempts": 8,
+  "per_run_time_limit_sec": 2,
+  "threads": 1,
+  "solver_seed": 0,
+  "orchestration_exit_code": 1,
+  "orchestration_error": "PermissionError while creating JSON output after all tests passed; not a solver/test failure",
+  "raw_solver_payloads_saved": false,
+  "script_followup": "Changed default evidence destination to stdout and preflights explicit output files before solving. Help smoke test exit0; full suite not repeated.",
+  "asserted_optima": [
+    {
+      "case": "F2_shared_AV_two_orders",
+      "cost": 0.5
+    },
+    {
+      "case": "F3_continuous_unserved",
+      "cost": 0.5
+    },
+    {
+      "case": "F4_units_same_time",
+      "cost": 12
+    },
+    {
+      "case": "F4_deadline_rejection",
+      "cost": 100
+    },
+    {
+      "case": "F5_zero_fleet_fractional_z",
+      "cost": 0.1
+    },
+    {
+      "case": "joint_wave_two_HV_per_city",
+      "cost": 5
+    },
+    {
+      "case": "F1_stem_zero_capacity",
+      "cost": 100
+    },
+    {
+      "case": "reverse_order_needs_empty_AV_direction",
+      "cost": 4
+    }
+  ],
+  "assertions": "Each real run had has_incumbent=true, schedule_valid=true, status=OPTIMAL, independent objective matching the hand oracle, full six-group JSON export and valid input/source hashes. These facts are recorded from passing assertions, not reconstructed raw schedules.",
+  "implementation_sha256": [
+    {
+      "path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\intercity_delivery\\v1\\configuration.py",
+      "sha256": "0CE602BD17F67622AA2238A8F1767F8FCE728301D745CAB4F25A6663FF463489"
+    },
+    {
+      "path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\intercity_delivery\\v1\\mandatory_optimizer.py",
+      "sha256": "6258834E359CAA10CC21308302C9663FEAC4D61B653F66B675233067D947CCF3"
+    },
+    {
+      "path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\intercity_delivery\\v1\\runner.py",
+      "sha256": "1125D1310BFC295D82FDA6165013C6F515F19118B4157ED16955CFB3B4365321"
+    },
+    {
+      "path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\intercity_delivery\\v1\\validation.py",
+      "sha256": "F754DB7B9DC7FAE68F037BF9CDDFB83B29A6CF5EEAB9B68B30961D6D8324C8C7"
+    },
+    {
+      "path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\tests\\test_v1_mandatory.py",
+      "sha256": "4983A9D35B06B10ACBFBEB3F62FEEE2048FE1CCD11BAE77BC21FAC446C9FBDB7"
+    },
+    {
+      "path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\tests\\test_v1_validation.py",
+      "sha256": "03A7074D830381A1553A9AA208FC82EE8FF6D2B905FCF4F1E1E801AF14E87DF7"
+    }
+  ]
+}

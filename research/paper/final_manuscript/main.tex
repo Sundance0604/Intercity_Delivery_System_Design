@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+% Final-manuscript source for the currently agreed model-and-theory scope.
+% Numerical experiments and the numerical experiment plan are deferred.
+% Original manuscript sources are preserved. Compilation is checked separately.
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\DeclareMathOperator*{\argmin}{arg\,min}
+\title{Wave-Based Intercity Freight Scheduling with Fleet Circulation}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Intercity freight scheduling requires coordinating local collection, line-haul transport, and distribution with the locations and availability of a finite fleet. We develop a time-expanded mixed-integer model in which local service capacity depends on the total stop quantity pooled into a wave and the number of vehicles assigned to it. Precomputed capacity tables represent a continuous routing approximation, while cumulative inventories track vehicles across cities and enforce freight precedence. The model permits direct transportation and independent empty repositioning. Within the local approximation, capacity per vehicle is nondecreasing and pooled capacity is superadditive for a fixed service interval. A rolling-horizon procedure implements the schedule while preserving initiated tasks and inherited inventories. To interpret wave and load decisions, we also study a stationary common-wave benchmark with constant arrivals, full-backlog dispatch, and separable batch-service costs. We derive optimal collection and distribution loads conditional on wave size and establish that repeating a cost-minimizing wave is average-cost optimal among admissible successive complete-wave sizes. The benchmark shares the local routing primitive with the scheduling model, while using a different objective and resource assumptions. A calendar-time argument and a relative-value construction verify its dispatch interpretation.
+\end{abstract}
+
+\noindent\textbf{Keywords:} intercity freight; wave-dependent capacity;
+continuous routing approximation; mixed-integer scheduling;
+vehicle circulation; rolling horizon.
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/service_capacities}
+\input{sections/optimization_model}
+\input{sections/solution_method}
+\input{sections/mathematical_analysis}
+\input{sections/discussion}
+
+\appendix
+\input{sections/proofs}
+\input{sections/dispatch_verification}
+\input{sections/implementation_details}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

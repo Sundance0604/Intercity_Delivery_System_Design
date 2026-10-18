@@ -1,0 +1,30 @@
+\section{Discussion and conclusions}
+\label{sec:discussion}
+
+The model connects a local routing approximation to finite-fleet intercity
+scheduling. Wave-capacity tables feed a time-expanded MILP, whose vehicle
+inventories and freight precedence constraints coordinate collection,
+line-haul, distribution, direct service, and independent empty repositioning.
+Rolling execution preserves the resulting whole-task commitments and their
+inventory consequences across computational windows. A physical terminal
+fleet target is a separate operating requirement.
+
+The analytical results explain two different choices. Pooling vehicles on
+the same local arc weakly increases modeled capacity, while the conditional
+load formulas balance repeated stem travel against shipment lead time.
+The collection and distribution loads differ because their delivery-time
+exposure differs. In the stationary benchmark, a per-shipment cost minimizer
+also determines an average-cost-optimal repeated wave among the stated
+successive complete-wave policies. The full calendar-time argument and QVI
+verification are retained in Appendix~\ref{app:dispatch}.
+
+These interpretations depend on the declared approximations. Balanced
+zoning and stop-equivalent demand require appropriate calibration for an
+application; the aggregate direct duration must represent the vehicle's
+complete task before it is credited to the destination inventory. The
+stationary results additionally require common waves and separable batch
+costs, whereas shared fleets, finite sorting, and independently timed
+stages can couple batches. Table~\ref{tab:model-scope} keeps these analytical
+assumptions distinct from the scheduling model. The implementation reports
+partial execution when continuation fails and uses window-level solver
+certificates with the scope stated in Appendix~\ref{app:replay}.

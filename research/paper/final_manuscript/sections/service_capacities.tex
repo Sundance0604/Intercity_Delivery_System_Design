@@ -1,0 +1,218 @@
+\section{Service system and wave-dependent capacities}
+\label{sec:capacity}
+
+We first translate local service times into capacities for dated tasks.
+These capacities are the inputs to the finite-fleet scheduling model in
+Section~\ref{sec:model}. Figure~\ref{fig:service-architecture} distinguishes
+the shipment stages from the spatial pooling within a local wave.
+
+\subsection{Service architecture and operational decisions}
+
+Cities $k\in\{1,2\}$ are connected by a bidirectional corridor. Let
+$\mathcal D=\{+,-\}$ be the direction set, with
+$o(+)=r(-)=1$ and $o(-)=r(+)=2$. The order set is
+$\mathcal L=\bigcup_{d\in\mathcal D}\mathcal L^d$, where each class has
+one direction. An order class
+$\ell\in\mathcal L^d$ travels from $o(d)$ to $r(d)$ and has quantity
+$D_\ell\geq0$, release time $s_\ell$, completion deadline $e_\ell$, and
+rejection penalty $p_\ell\geq0$ per unit. Quantities are continuous and
+divisible: one unit denotes one pickup-stop and one delivery-stop equivalent.
+Thus, the formulation does not assert that a particular indivisible parcel
+can be split. We use the time nodes $\mathcal T=\{0,\ldots,T\}$,
+where $0\leq s_\ell\leq e_\ell\leq T$ are integers and a period lasts
+$\Delta t>0$ minutes. Corridor travel takes $\tau\in\mathbb Z_{>0}$
+periods, or $\tau_{\mathrm{phys}}=\tau\Delta t$ minutes.
+
+Initially city $k$ contains $N_k$ human-driven vehicles and $A_k$ automated
+vehicles, where $N_k,A_k\in\mathbb Z_{\geq0}$. Write $N=N_1+N_2$ and
+$A=A_1+A_2$. The respective capacities are
+$M>0$ and $M_A>0$. Human-driven vehicles perform local tours and may also
+cross the corridor; automated vehicles operate between hubs. A local tour
+starts and ends at its city's hub. A three-leg shipment is collected to
+the origin hub, transported between hubs, and distributed from the
+destination hub. Direct service keeps the shipment on a human-driven
+vehicle across cities. The city-inventory model credits that vehicle to
+the other city's available fleet at its modeled trip-completion time. Independent empty
+human-driven transfers are also permitted, whether or not there is an order
+requiring service.
+
+\begin{table}[tbp]
+\centering\small
+\caption{Main notation and units for finite-horizon scheduling.}
+\label{tab:notation}
+\begin{tabular}{@{}p{0.25\linewidth}p{0.69\linewidth}@{}}
+\toprule
+Symbol & Meaning and unit\\
+\midrule
+\multicolumn{2}{@{}l}{\textit{Sets and inputs}}\\
+$\mathcal L^d,\mathcal T$ & Order classes in direction $d$; discrete time nodes\\
+$D_\ell,s_\ell,e_\ell$ & Stop-equivalent demand; release and deadline in periods\\
+$N_k,A_k;M,M_A$ & Initial human-driven and automated fleets; load limits in stop equivalents\\
+$\Delta t,\tau,\tau_E$ & Minutes per period; loaded and empty intercity travel in periods\\
+$a_k,b_k,\rho_k$ & In-zone time coefficients; one-way local stem time in minutes\\
+$c_H,c_A,c_D,c_E;p_\ell$ & Currency per vehicle-minute; currency per unserved stop equivalent\\
+\midrule
+\multicolumn{2}{@{}l}{\textit{Wave and scheduling quantities}}\\
+$q,v,n=q/v$ & Total wave stops, vehicle count, and average load per vehicle\\
+$x,y,w,e$ & Local, automated, direct, and empty vehicle counts on service arcs\\
+$u,\widetilde u$ & Binary selectors for local and direct vehicle counts\\
+$g,\widehat g,h,z$ & Local, automated, direct, and unserved stop-equivalent quantities\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[tbp]
+\centering
+\setlength{\unitlength}{1mm}
+\begin{picture}(146,65)
+\put(0,56){\makebox(146,5)[l]{\small\textbf{Service tasks for one order direction}}}
+\put(0,43){\framebox(40,9){\small Collection to hub 1}}
+\put(53,43){\framebox(40,9){\small AV hub 1 to hub 2}}
+\put(106,43){\framebox(40,9){\small Distribution at city 2}}
+\put(40,47.5){\vector(1,0){13}}
+\put(93,47.5){\vector(1,0){13}}
+\put(0,34){\makebox(146,5)[l]{\small Direct: one human-driven vehicle collects, crosses cities, and delivers.}}
+\put(0,26){\makebox(146,5)[l]{\small Direct and empty tasks move vehicles between city inventories at completion.}}
+\put(0,17){\makebox(146,5)[l]{\small\textbf{Local wave geometry}}}
+\put(0,2){\framebox(57,10){\small Total area $S_k$, total stops $q$}}
+\put(57,7){\vector(1,0){20}}
+\put(77,2){\framebox(69,10){\small $v$ balanced zones: area $S_k/v$, stops $q/v$}}
+\end{picture}
+\caption{Service architecture and the balanced local-wave approximation.
+The direct description specifies tasks and inventory accounting; it does
+not specify unresolved hub-to-service-region connections. Reverse-direction
+tasks use the same architecture.}
+\label{fig:service-architecture}
+\end{figure}
+
+\subsection{Local routing approximation and wave geometry}
+
+For $q\geq0$, define
+\begin{equation}
+ f_k(q)=a_kq+b_k\sqrt q,\qquad a_k>0,\quad b_k\geq0,
+ \qquad
+ F_k(\theta)=\left(\frac{\sqrt{b_k^2+4a_k\theta}-b_k}{2a_k}\right)^2,
+ \quad \theta\geq0.
+ \label{mod:local-function}
+\end{equation}
+The first term represents handling and the second approximates routing time
+under the spatial scaling associated with the BHH limit
+\cite{Beardwood1959}. The function $F_k$ is the inverse of $f_k$.
+Let $\rho_k\geq0$ denote the average one-way stem time between a hub
+and a local service region. Our local wave approximation
+assumes that a wave of $v$ vehicles shares a total load $q$ across equal-area
+zones, giving per-vehicle duration $2\rho_k+f_k(q)/v$.
+This zoning rule is an engineering approximation for finite customer
+samples, motivated by the asymptotic routing relation rather than a
+finite-sample theorem. For $v>0$, the average vehicle load is $n=q/v$;
+the wave quantity $q$ and the vehicle count $v$ are distinct.
+Quantities $q,D_\ell,M,M_A$ share the same stop-equivalent unit.
+The coefficients $a_k$ and $b_k$ have units of minutes per stop equivalent
+and minutes per square root of a stop equivalent, respectively;
+$\rho_k$ is in minutes, and $f_k(q)$ is aggregate in-zone service time
+in minutes. Period durations are converted to physical time by $\Delta t$.
+
+\paragraph{Why the wave quantity enters the routing term.}
+For the balanced zoning approximation, let $S_k$ be the fixed service
+area and $\bar\beta_k$ a routing-time coefficient incorporating speed
+and the distance metric. Assigning each of $v$ vehicles an area $S_k/v$
+and $q/v$ uniformly distributed stops gives the per-vehicle in-zone time
+\begin{equation}
+ a_k\frac qv+\bar\beta_k\sqrt{\frac{S_k}{v}\frac qv}
+ =\frac{a_kq+b_k\sqrt q}{v},\qquad
+ b_k=\bar\beta_k\sqrt{S_k}.
+ \label{eq:wave-geometry}
+\end{equation}
+This explains the adopted $f_k(q)/v$ expression. By contrast, $f_k(q/v)$
+assigns each vehicle's load to the full service area, producing a routing
+term $b_k\sqrt{q/v}$. The distinction concerns spatial pooling, not just
+load allocation. The area representation explains an aggregate coefficient;
+$b_k$ is an input to the model, not an estimate of area or speed reported
+here. The separation of stem, in-zone routing, and stop service follows
+the continuous-approximation approach illustrated by
+\citet{Banerjee2022}, whose fixed single-vehicle zones serve a
+different design problem.
+
+\subsection{Service-arc capacities and pooling properties}
+\label{subsec:capacity-analysis}
+
+A local wave is indexed by its start, end, city, and order direction,
+$(i,j,k,d)$. Waves that share a start but have different end times are
+separate waves; their loads are not pooled to obtain an extra routing
+economy. Define the mother arc sets
+\begin{align}
+ L_k&=\left\lceil\frac{2\rho_k+f_k(M)}{\Delta t}\right\rceil,
+ &\mathcal A_k&=\{(i,j)\in\mathcal T^2:1\leq j-i\leq L_k\},
+ \label{mod:local-arcs}\\
+ \mathcal A_A&=\{(i,j)\in\mathcal T^2:j-i=\tau\},
+ &\mathcal A_E&=\{(i,j)\in\mathcal T^2:j-i=\tau_E\},
+ \label{mod:movement-arcs}\\
+ L_D&=\tau+\left\lceil
+ \frac{2\max_k\rho_k+f_1(M)+f_2(M)}{\Delta t}\right\rceil,
+ &\mathcal A_D&=\{(i,j)\in\mathcal T^2:\tau\leq j-i\leq L_D\}.
+ \label{mod:direct-arcs}
+\end{align}
+Here $\tau_E\in\mathbb Z_{>0}$ is the empty-transfer duration; its default
+is $\tau$. These finite domains are part of the dispatch model. In
+particular, all tasks finish within the actual operating horizon $T$.
+
+For $v=1,\ldots,N$, precompute the local capacity
+\begin{equation}
+ K^k_{ij}(v)=\min\{vM,F_k(v[(j-i)\Delta t-2\rho_k]^+)\},
+ \qquad [x]^+=\max\{x,0\}.
+ \label{mod:local-capacity}
+\end{equation}
+Fix a local arc and suppress its city index. Write $D=(j-i)\Delta t$,
+$B=(D-2\rho)^+$, and $K(v)=\min\{vM,f^{-1}(vB)\}$, extended to
+$v>0$, with $K(0)=0$. The load constraint $q/v\le M$ and the duration
+constraint $2\rho+f(q)/v\le D$ define the same capacity for positive $q$.
+
+\begin{proposition}[Capacity economies within a fixed service arc]
+\label{prop:analysis-capacity}
+For fixed $D,\rho,M$, the ratio $K(v)/v$ is nondecreasing for $v>0$.
+Consequently,
+\begin{equation}
+ K(v_1+v_2)\ge K(v_1)+K(v_2),\qquad v_1,v_2\ge0.
+ \label{eq:analysis-superadditive}
+\end{equation}
+These statements apply in particular to integer fleet sizes. They do not
+imply that $K$ is convex or that either inequality is strict.
+\end{proposition}
+
+Pooling within the same city, direction, start, and end time weakly
+increases modeled capacity relative to separate waves of equal duration.
+The gain can disappear when load limits bind. The derivation and proof
+are in Appendix~\ref{app:proofs}.
+
+\subsection{Direct-service capacity and route conventions}
+
+For a direct wave in direction $d$, the origin collection is zoned, whereas
+each vehicle's destination load is spread over the destination service
+area. We adopt the following aggregate direct-service duration approximation:
+\begin{equation}
+ \Psi_d(q,v)=2\rho_{o(d)}+
+ \frac{f_{o(d)}(q)}{v}+\tau\Delta t+f_{r(d)}(q/v).
+ \label{mod:direct-duration}
+\end{equation}
+Set $\widetilde K^d_{ij}(v)$ equal to the largest $q\in[0,vM]$ satisfying
+$\Psi_d(q,v)\leq(j-i)\Delta t$, or zero if this set is empty. We retain
+the convention $\widetilde K^d_{ij}(v)=0$ when $j-i=\tau$.
+The table also has a closed form. For
+\begin{equation}
+ B_{ij}^d=(j-i-\tau)\Delta t-2\rho_{o(d)},\qquad
+ \alpha_{dv}=\frac{a_{o(d)}+a_{r(d)}}{v},\qquad
+ \beta_{dv}=\frac{b_{o(d)}}{v}+\frac{b_{r(d)}}{\sqrt v},
+ \label{mod:direct-coefficients}
+\end{equation}
+if $j-i>\tau$ and $B_{ij}^d>0$, then
+\begin{equation}
+ \widetilde K^d_{ij}(v)=\min\left\{vM,
+ \left(\frac{\sqrt{\beta_{dv}^2+4\alpha_{dv}B_{ij}^d}
+                   -\beta_{dv}}{2\alpha_{dv}}\right)^2\right\};
+ \label{mod:direct-capacity}
+\end{equation}
+otherwise the capacity is zero. Unlike a symmetric pooled-tour formula,
+\eqref{mod:direct-duration} generally gives different capacities in the two
+directions.
+
+

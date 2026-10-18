@@ -1,0 +1,955 @@
+{
+  "checked_at": "2026-08-19T11:44:29",
+  "database": "D:\\mycodelife\\workshop\\Intercity_Delivery_System_Design\\data\\cfs_2022_pums.sqlite",
+  "columns": [
+    {
+      "name": "SHIPMT_ID",
+      "type": "TEXT"
+    },
+    {
+      "name": "ORIG_CFS_AREA",
+      "type": "TEXT"
+    },
+    {
+      "name": "DEST_CFS_AREA",
+      "type": "TEXT"
+    },
+    {
+      "name": "MODE",
+      "type": "TEXT"
+    },
+    {
+      "name": "SCTG",
+      "type": "TEXT"
+    },
+    {
+      "name": "SHIPMT_VALUE",
+      "type": "REAL"
+    },
+    {
+      "name": "SHIPMT_WGHT",
+      "type": "REAL"
+    },
+    {
+      "name": "SHIPMT_DIST_GC",
+      "type": "REAL"
+    },
+    {
+      "name": "TEMP_CNTL_YN",
+      "type": "TEXT"
+    },
+    {
+      "name": "EXPORT_YN",
+      "type": "TEXT"
+    },
+    {
+      "name": "HAZMAT",
+      "type": "TEXT"
+    },
+    {
+      "name": "WGT_FACTOR",
+      "type": "REAL"
+    }
+  ],
+  "bidirectional_city_pair_count": 3619,
+  "selected_pair": {
+    "city_a": "06-348",
+    "city_a_name": "Los Angeles-Long Beach, CA",
+    "city_b": "06-488",
+    "city_b_name": "San Jose-San Francisco-Oakland, CA",
+    "records_a_to_b": 80493,
+    "records_b_to_a": 36158
+  },
+  "preview": {
+    "seed": 4101,
+    "num_orders": 100,
+    "direction_counts": {
+      "+": 50,
+      "-": 50
+    },
+    "total_quantity": 1591,
+    "earliest_start_min": 0,
+    "earliest_start_max": 8,
+    "latest_completion_min": 12,
+    "latest_completion_max": 24,
+    "window_width_min": 11,
+    "window_width_max": 16
+  },
+  "sampling_metadata": {
+    "source_kind": "sqlite",
+    "city_pair": {
+      "city_1": "06-348",
+      "city_2": "06-488"
+    },
+    "city_names": {
+      "city_1": "Los Angeles-Long Beach, CA",
+      "city_2": "San Jose-San Francisco-Oakland, CA"
+    },
+    "sampling_statistics": {
+      "eligible_records_a_to_b": 15177,
+      "eligible_records_b_to_a": 15008,
+      "sampled_records_a_to_b": 50,
+      "sampled_records_b_to_a": 50,
+      "sampling_method": "weighted_without_replacement_reservoir",
+      "sampling_weight": "WGT_FACTOR"
+    },
+    "travel_calibration": {
+      "method": "full_eligible_pair_weighted_median",
+      "eligible_record_count": 30185,
+      "direction_counts": {
+        "a_to_b": 15177,
+        "b_to_a": 15008
+      },
+      "weight": "WGT_FACTOR",
+      "representative_gc_miles": 354.0,
+      "circuity_factor": 1.2,
+      "representative_route_miles": 424.8,
+      "truck_speed_mph": 50.0,
+      "representative_linehaul_hours": 8.496,
+      "period_hours": 1.0,
+      "travel_time_periods": 9
+    },
+    "model_recommendations": {
+      "city_1_cfs_area": "06-348",
+      "city_2_cfs_area": "06-488",
+      "representative_route_miles": 424.8,
+      "representative_linehaul_hours": 8.496,
+      "travel_calibration_method": "full_pair_physical_time_with_model_override",
+      "travel_calibration_record_count": 30185,
+      "travel_time_periods": 9,
+      "direct_travel_time_periods": 9,
+      "T": 24,
+      "t_0_minutes": 60.0,
+      "capacity_interpretation": "1 model quantity unit = 50.0 pounds",
+      "minimum_completion_periods": 11
+    }
+  },
+  "city_pair_travel_time_calibration": {
+    "method": "full_eligible_pair_weighted_median",
+    "eligible_record_count": 30185,
+    "direction_counts": {
+      "a_to_b": 15177,
+      "b_to_a": 15008
+    },
+    "weight": "WGT_FACTOR",
+    "representative_gc_miles": 354.0,
+    "circuity_factor": 1.2,
+    "representative_route_miles": 424.8,
+    "truck_speed_mph": 50.0,
+    "representative_linehaul_hours": 8.496,
+    "period_hours": 1.0,
+    "travel_time_periods": 9
+  },
+  "checks": {
+    "has_both_directions": true,
+    "all_time_windows_valid": true,
+    "travel_time_matches_full_pair_calibration": true
+  },
+  "diagnostics": {
+    "configured_travel_time_periods": 9,
+    "sample_based_recommended_travel_time_periods": 9,
+    "sample_recommendation_matches_fixed_calibration": true
+  },
+  "preview_orders": {
+    "1": {
+      "batch_id": 1,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 23,
+      "penalty_lost": 1.0
+    },
+    "2": {
+      "batch_id": 2,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "3": {
+      "batch_id": 3,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 4,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "4": {
+      "batch_id": 4,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 4,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "5": {
+      "batch_id": 5,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 12,
+      "penalty_lost": 1.0
+    },
+    "6": {
+      "batch_id": 6,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "7": {
+      "batch_id": 7,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "8": {
+      "batch_id": 8,
+      "flow": "-",
+      "quantity": 300,
+      "earliest_start": 3,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "9": {
+      "batch_id": 9,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "10": {
+      "batch_id": 10,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "11": {
+      "batch_id": 11,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 19,
+      "penalty_lost": 1.0
+    },
+    "12": {
+      "batch_id": 12,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "13": {
+      "batch_id": 13,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "14": {
+      "batch_id": 14,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "15": {
+      "batch_id": 15,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "16": {
+      "batch_id": 16,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "17": {
+      "batch_id": 17,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "18": {
+      "batch_id": 18,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 19,
+      "penalty_lost": 1.0
+    },
+    "19": {
+      "batch_id": 19,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "20": {
+      "batch_id": 20,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "21": {
+      "batch_id": 21,
+      "flow": "+",
+      "quantity": 100,
+      "earliest_start": 3,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "22": {
+      "batch_id": 22,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "23": {
+      "batch_id": 23,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 12,
+      "penalty_lost": 1.0
+    },
+    "24": {
+      "batch_id": 24,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "25": {
+      "batch_id": 25,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "26": {
+      "batch_id": 26,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "27": {
+      "batch_id": 27,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 19,
+      "penalty_lost": 1.0
+    },
+    "28": {
+      "batch_id": 28,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 4,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "29": {
+      "batch_id": 29,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "30": {
+      "batch_id": 30,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 12,
+      "penalty_lost": 1.0
+    },
+    "31": {
+      "batch_id": 31,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "32": {
+      "batch_id": 32,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 24,
+      "penalty_lost": 1.0
+    },
+    "33": {
+      "batch_id": 33,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "34": {
+      "batch_id": 34,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "35": {
+      "batch_id": 35,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "36": {
+      "batch_id": 36,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "37": {
+      "batch_id": 37,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "38": {
+      "batch_id": 38,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 19,
+      "penalty_lost": 1.0
+    },
+    "39": {
+      "batch_id": 39,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "40": {
+      "batch_id": 40,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "41": {
+      "batch_id": 41,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 22,
+      "penalty_lost": 1.0
+    },
+    "42": {
+      "batch_id": 42,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 23,
+      "penalty_lost": 1.0
+    },
+    "43": {
+      "batch_id": 43,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "44": {
+      "batch_id": 44,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "45": {
+      "batch_id": 45,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "46": {
+      "batch_id": 46,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "47": {
+      "batch_id": 47,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "48": {
+      "batch_id": 48,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "49": {
+      "batch_id": 49,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "50": {
+      "batch_id": 50,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 23,
+      "penalty_lost": 1.0
+    },
+    "51": {
+      "batch_id": 51,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "52": {
+      "batch_id": 52,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 22,
+      "penalty_lost": 1.0
+    },
+    "53": {
+      "batch_id": 53,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "54": {
+      "batch_id": 54,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "55": {
+      "batch_id": 55,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 23,
+      "penalty_lost": 1.0
+    },
+    "56": {
+      "batch_id": 56,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 13,
+      "penalty_lost": 1.0
+    },
+    "57": {
+      "batch_id": 57,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "58": {
+      "batch_id": 58,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "59": {
+      "batch_id": 59,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "60": {
+      "batch_id": 60,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 13,
+      "penalty_lost": 1.0
+    },
+    "61": {
+      "batch_id": 61,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "62": {
+      "batch_id": 62,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 23,
+      "penalty_lost": 1.0
+    },
+    "63": {
+      "batch_id": 63,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "64": {
+      "batch_id": 64,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "65": {
+      "batch_id": 65,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "66": {
+      "batch_id": 66,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 22,
+      "penalty_lost": 1.0
+    },
+    "67": {
+      "batch_id": 67,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "68": {
+      "batch_id": 68,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "69": {
+      "batch_id": 69,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 17,
+      "penalty_lost": 1.0
+    },
+    "70": {
+      "batch_id": 70,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "71": {
+      "batch_id": 71,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "72": {
+      "batch_id": 72,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 22,
+      "penalty_lost": 1.0
+    },
+    "73": {
+      "batch_id": 73,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "74": {
+      "batch_id": 74,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 19,
+      "penalty_lost": 1.0
+    },
+    "75": {
+      "batch_id": 75,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 21,
+      "penalty_lost": 1.0
+    },
+    "76": {
+      "batch_id": 76,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "77": {
+      "batch_id": 77,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "78": {
+      "batch_id": 78,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "79": {
+      "batch_id": 79,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "80": {
+      "batch_id": 80,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "81": {
+      "batch_id": 81,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 23,
+      "penalty_lost": 1.0
+    },
+    "82": {
+      "batch_id": 82,
+      "flow": "+",
+      "quantity": 221,
+      "earliest_start": 8,
+      "latest_completion": 23,
+      "penalty_lost": 1.0
+    },
+    "83": {
+      "batch_id": 83,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 2,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "84": {
+      "batch_id": 84,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "85": {
+      "batch_id": 85,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 19,
+      "penalty_lost": 1.0
+    },
+    "86": {
+      "batch_id": 86,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 8,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "87": {
+      "batch_id": 87,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 0,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "88": {
+      "batch_id": 88,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "89": {
+      "batch_id": 89,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "90": {
+      "batch_id": 90,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 7,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "91": {
+      "batch_id": 91,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 5,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "92": {
+      "batch_id": 92,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "93": {
+      "batch_id": 93,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 15,
+      "penalty_lost": 1.0
+    },
+    "94": {
+      "batch_id": 94,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 19,
+      "penalty_lost": 1.0
+    },
+    "95": {
+      "batch_id": 95,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 20,
+      "penalty_lost": 1.0
+    },
+    "96": {
+      "batch_id": 96,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "97": {
+      "batch_id": 97,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 6,
+      "latest_completion": 18,
+      "penalty_lost": 1.0
+    },
+    "98": {
+      "batch_id": 98,
+      "flow": "+",
+      "quantity": 10,
+      "earliest_start": 3,
+      "latest_completion": 14,
+      "penalty_lost": 1.0
+    },
+    "99": {
+      "batch_id": 99,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    },
+    "100": {
+      "batch_id": 100,
+      "flow": "-",
+      "quantity": 10,
+      "earliest_start": 1,
+      "latest_completion": 16,
+      "penalty_lost": 1.0
+    }
+  }
+}

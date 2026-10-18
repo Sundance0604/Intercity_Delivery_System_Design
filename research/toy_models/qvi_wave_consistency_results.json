@@ -1,0 +1,342 @@
+{
+  "scope": "deterministic fluid common-wave, no sorting, delta=0, no deadline; per direction",
+  "cost_units": "time=hour, q=shipment; rate=currency/hour, G=currency/shipment",
+  "runtime": {
+    "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3"
+  },
+  "source_sha256": {
+    "research/toy_models/qvi_wave_consistency_check.py": "901BD18CD811FB320962BA1303A76824F4466598294D30D84F6581B35EE989AF",
+    "research/paper/steady_state_model.tex": "980CFAEF58AC3DD25712205A673599A74E52BE53BFE8D4DCCAC1B78065AC7083",
+    "research/paper/steady_state_model_v1_linear.tex": "05F09EEBD5D3ADE1BB8B7022E460878A37C2A3C4566138852C62CC94F737DF80",
+    "research/theory/Common Wave 的内生化与非均匀需求扩展.md": "A508B86D981F89CC57EAEDD58FE9071D9D884025C0370A36D99504EE39226CCA"
+  },
+  "cases": {
+    "small_wave_load_bounded_by_wave": {
+      "parameters": {
+        "arrival_rate": 0.1,
+        "a": 0.02,
+        "b": 0.3,
+        "rho": 0.2,
+        "c": 10,
+        "c_auto": 4,
+        "tau": 2,
+        "omega": 1,
+        "manual_capacity": 8,
+        "auto_capacity": 20,
+        "theta": 0.05,
+        "handling": 0.1
+      },
+      "steady": {
+        "q": 1.9735154703550035,
+        "per_shipment": 26.23732489882575,
+        "rate": 2.6237324898825753,
+        "loads": [
+          1.9735154703550035,
+          1.9735154703550035
+        ]
+      },
+      "fluid_bellman": [
+        {
+          "step": 0.2,
+          "upper": 160,
+          "threshold": 2,
+          "rate": 2.623903679018718,
+          "per_shipment": 26.23903679018718,
+          "normalization_abs": 2.6645352591003757e-15,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        },
+        {
+          "step": 0.1,
+          "upper": 160,
+          "threshold": 2,
+          "rate": 2.623903679018718,
+          "per_shipment": 26.23903679018718,
+          "normalization_abs": 2.220446049250313e-15,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        },
+        {
+          "step": 0.05,
+          "upper": 160,
+          "threshold": 1.9500000000000002,
+          "rate": 2.623870825133441,
+          "per_shipment": 26.23870825133441,
+          "normalization_abs": 9.547918011776346e-15,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        }
+      ],
+      "enlarged_boundary": {
+        "step": 0.05,
+        "upper": 320,
+        "threshold": 1.9500000000000002,
+        "rate": 2.623870825133441,
+        "per_shipment": 26.23870825133441,
+        "normalization_abs": 9.547918011776346e-15,
+        "discrete_qvi_max_abs": 0,
+        "minimum_obstacle": 0,
+        "minimum_wait_gap": 0,
+        "forced_boundary": true
+      },
+      "independent_cost_path_max_error": 5.684341886080802e-14
+    },
+    "linehaul_capacity_kink": {
+      "parameters": {
+        "arrival_rate": 2,
+        "a": 0.02,
+        "b": 0.3,
+        "rho": 0.2,
+        "c": 10,
+        "c_auto": 4,
+        "tau": 2,
+        "omega": 1,
+        "manual_capacity": 8,
+        "auto_capacity": 8,
+        "theta": 0.05,
+        "handling": 0.1
+      },
+      "steady": {
+        "q": 8,
+        "per_shipment": 10.84580642358381,
+        "rate": 21.69161284716762,
+        "loads": [
+          5.632886142441168,
+          7.966104097844809
+        ]
+      },
+      "fluid_bellman": [
+        {
+          "step": 0.2,
+          "upper": 160,
+          "threshold": 8,
+          "rate": 21.69161284716762,
+          "per_shipment": 10.84580642358381,
+          "normalization_abs": 2.220446049250313e-15,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        },
+        {
+          "step": 0.1,
+          "upper": 160,
+          "threshold": 8,
+          "rate": 21.69161284716762,
+          "per_shipment": 10.84580642358381,
+          "normalization_abs": 1.1102230246251565e-15,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        },
+        {
+          "step": 0.05,
+          "upper": 160,
+          "threshold": 8,
+          "rate": 21.69161284716762,
+          "per_shipment": 10.84580642358381,
+          "normalization_abs": 2.4646951146678475e-14,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        }
+      ],
+      "enlarged_boundary": {
+        "step": 0.05,
+        "upper": 320,
+        "threshold": 8,
+        "rate": 21.69161284716762,
+        "per_shipment": 10.84580642358381,
+        "normalization_abs": 2.4646951146678475e-14,
+        "discrete_qvi_max_abs": 0,
+        "minimum_obstacle": 0,
+        "minimum_wait_gap": 0,
+        "forced_boundary": true
+      },
+      "independent_cost_path_max_error": 2.842170943040401e-14
+    },
+    "large_wave_manual_capacity": {
+      "parameters": {
+        "arrival_rate": 50,
+        "a": 0.02,
+        "b": 0.3,
+        "rho": 0.2,
+        "c": 10,
+        "c_auto": 4,
+        "tau": 2,
+        "omega": 1,
+        "manual_capacity": 8,
+        "auto_capacity": 20,
+        "theta": 0.05,
+        "handling": 0.1
+      },
+      "steady": {
+        "q": 61.30475281174747,
+        "per_shipment": 6.779142637744528,
+        "rate": 338.9571318872264,
+        "loads": [
+          8,
+          8
+        ]
+      },
+      "fluid_bellman": [
+        {
+          "step": 0.2,
+          "upper": 160,
+          "threshold": 61.400000000000006,
+          "rate": 338.9571873068187,
+          "per_shipment": 6.7791437461363735,
+          "normalization_abs": 1.9984014443252818e-15,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        },
+        {
+          "step": 0.1,
+          "upper": 160,
+          "threshold": 61.300000000000004,
+          "rate": 338.95713202551667,
+          "per_shipment": 6.779142640510333,
+          "normalization_abs": 8.815170815523743e-14,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        },
+        {
+          "step": 0.05,
+          "upper": 160,
+          "threshold": 61.300000000000004,
+          "rate": 338.95713202551656,
+          "per_shipment": 6.779142640510331,
+          "normalization_abs": 1.0702549957386509e-13,
+          "discrete_qvi_max_abs": 0,
+          "minimum_obstacle": 0,
+          "minimum_wait_gap": 0,
+          "forced_boundary": true
+        }
+      ],
+      "enlarged_boundary": {
+        "step": 0.05,
+        "upper": 320,
+        "threshold": 61.300000000000004,
+        "rate": 338.95713202551656,
+        "per_shipment": 6.779142640510331,
+        "normalization_abs": 1.0702549957386509e-13,
+        "discrete_qvi_max_abs": 0,
+        "minimum_obstacle": 0,
+        "minimum_wait_gap": 0,
+        "forced_boundary": true
+      },
+      "independent_cost_path_max_error": 2.842170943040401e-14
+    }
+  },
+  "passed": true,
+  "unit_poisson_integer_comparison": {
+    "parameters": {
+      "arrival_rate": 10,
+      "a": 0.02,
+      "b": 0.3,
+      "rho": 0.2,
+      "c": 10,
+      "c_auto": 4,
+      "tau": 2,
+      "omega": 1,
+      "manual_capacity": 8,
+      "auto_capacity": 20,
+      "theta": 0.05,
+      "handling": 0.1
+    },
+    "fluid_integer": {
+      "step": 1,
+      "upper": 160,
+      "threshold": 20,
+      "rate": 80.7035558774322,
+      "per_shipment": 8.070355587743219,
+      "normalization_abs": 2.4868995751603507e-14,
+      "discrete_qvi_max_abs": 0,
+      "minimum_obstacle": 0,
+      "minimum_wait_gap": 0,
+      "forced_boundary": true
+    },
+    "poisson": {
+      "step": 1,
+      "upper": 160,
+      "threshold": 20,
+      "rate": 80.2035558774322,
+      "per_shipment": 8.02035558774322,
+      "normalization_abs": 1.9539925233402755e-14,
+      "discrete_qvi_max_abs": 0,
+      "minimum_obstacle": 0,
+      "minimum_wait_gap": 0,
+      "forced_boundary": true
+    },
+    "rate_difference_expected": 0.5,
+    "note": "Same integer action domain and same C; mean rates differ by constant omega/2."
+  },
+  "objective_mismatch_counterexample": {
+    "parameters": {
+      "arrival_rate": 10,
+      "a": 0.02,
+      "b": 0.3,
+      "rho": 0.2,
+      "c": 10,
+      "c_auto": 4,
+      "tau": 2,
+      "omega": 1,
+      "manual_capacity": 8,
+      "auto_capacity": 20,
+      "theta": 0.05,
+      "handling": 0.1
+    },
+    "matched": {
+      "step": 0.1,
+      "upper": 80,
+      "threshold": 20.400000000000002,
+      "rate": 80.70005540739135,
+      "per_shipment": 8.070005540739135,
+      "normalization_abs": 5.440092820663267e-15,
+      "discrete_qvi_max_abs": 0,
+      "minimum_obstacle": 0,
+      "minimum_wait_gap": 0,
+      "forced_boundary": true
+    },
+    "holding_omitted": {
+      "step": 0.1,
+      "upper": 80,
+      "threshold": 80,
+      "rate": 60.13312629199987,
+      "per_shipment": 6.013312629199987,
+      "normalization_abs": 1.2931877790833823e-12,
+      "discrete_qvi_max_abs": 0,
+      "minimum_obstacle": 0,
+      "minimum_wait_gap": 0,
+      "forced_boundary": true
+    },
+    "holding_omitted_larger_boundary": {
+      "step": 0.1,
+      "upper": 160,
+      "threshold": 160,
+      "rate": 56.98946638440532,
+      "per_shipment": 5.698946638440532,
+      "normalization_abs": 1.3358203432289883e-11,
+      "discrete_qvi_max_abs": 0,
+      "minimum_obstacle": 0,
+      "minimum_wait_gap": 0,
+      "forced_boundary": true
+    },
+    "note": "Different objective, not QVI failure: removing accumulation holding pushes the bounded optimum to 80, then 160; these are artificial truncation boundaries, not unbounded finite optima."
+  },
+  "elapsed_sec": 2.1321374000399373
+}

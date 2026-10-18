@@ -1,0 +1,2456 @@
+{
+  "schema_version": "v1_f_cfs_execution_smoke/1",
+  "started_at_utc": "2026-10-18T02:18:31.341235+00:00",
+  "command": [
+    "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "experiments/specs/run_v1f_cfs_smoke.py",
+    "--run"
+  ],
+  "git_revision": "f26b4c96907082c2ebb7b0104263831e7100aa26",
+  "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "source": {
+    "source_path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\data\\cfs_processed_sqlite\\cfs_model_orders.json",
+    "source_kind": "processed_json",
+    "source_dataset": "2022 CFS PUMS",
+    "source_sha256": "e5cc5fb58711dcdea4fa36fa2169ff8f4f74eaac8ef93d4c9128644263eae911",
+    "source_size_bytes": 86745,
+    "source_mtime_ns": 1787017452893861000,
+    "source_hash_scope": "entire processed JSON",
+    "sampled_at_utc": "2026-10-18T02:18:31.311331+00:00",
+    "seed": 4101,
+    "city_pair": {
+      "city_1": "06-348",
+      "city_2": "06-488"
+    },
+    "demand_semantics": "shipment_stop",
+    "stop_units_per_source_shipment": 1,
+    "calibration_status": "execution smoke assumption; no calibrated weight-to-stops conversion",
+    "source_weights_used_as_demand": false,
+    "time_window_method": "retained old synthesized integer windows from processed JSON",
+    "sampling": {
+      "sampling_method": "seeded balanced sample from existing processed pool",
+      "pool_records": 100,
+      "seed": 4101
+    },
+    "model_recommendations": {
+      "city_1_cfs_area": "06-348",
+      "city_2_cfs_area": "06-488",
+      "representative_route_miles": 424.8,
+      "representative_linehaul_hours": 8.496,
+      "travel_time_periods": 9,
+      "direct_travel_time_periods": 9,
+      "T": 24,
+      "t_0_minutes": 60,
+      "capacity_interpretation": "1 model quantity unit = 50.0 pounds",
+      "minimum_completion_periods": 11
+    },
+    "source_records": [
+      {
+        "batch_id": 37,
+        "flow": "-",
+        "quantity": 10,
+        "earliest_start": 5,
+        "latest_completion": 21,
+        "penalty_lost": 10,
+        "source_shipmt_id": "25497732",
+        "origin_cfs_area": "06-488",
+        "destination_cfs_area": "06-348",
+        "source_mode": "112",
+        "source_sctg": "21",
+        "source_weight_pounds": 20,
+        "source_value_dollars": 158,
+        "source_distance_gc_miles": 327,
+        "source_weight_factor": 78707.2,
+        "source_temperature_controlled": "N",
+        "source_hazmat": "N",
+        "estimated_route_miles": 392.4,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      },
+      {
+        "batch_id": 25,
+        "flow": "+",
+        "quantity": 10,
+        "earliest_start": 0,
+        "latest_completion": 11,
+        "penalty_lost": 10,
+        "source_shipmt_id": "22057082",
+        "origin_cfs_area": "06-348",
+        "destination_cfs_area": "06-488",
+        "source_mode": "112",
+        "source_sctg": "30",
+        "source_weight_pounds": 1,
+        "source_value_dollars": 18,
+        "source_distance_gc_miles": 367,
+        "source_weight_factor": 393020,
+        "source_temperature_controlled": "N",
+        "source_hazmat": "N",
+        "estimated_route_miles": 440.4,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      },
+      {
+        "batch_id": 6,
+        "flow": "-",
+        "quantity": 10,
+        "earliest_start": 0,
+        "latest_completion": 15,
+        "penalty_lost": 10,
+        "source_shipmt_id": "27687185",
+        "origin_cfs_area": "06-488",
+        "destination_cfs_area": "06-348",
+        "source_mode": "112",
+        "source_sctg": "40",
+        "source_weight_pounds": 30,
+        "source_value_dollars": 231,
+        "source_distance_gc_miles": 265,
+        "source_weight_factor": 95784,
+        "source_temperature_controlled": "N",
+        "source_hazmat": "N",
+        "estimated_route_miles": 318,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      },
+      {
+        "batch_id": 77,
+        "flow": "+",
+        "quantity": 10,
+        "earliest_start": 5,
+        "latest_completion": 18,
+        "penalty_lost": 10,
+        "source_shipmt_id": "31804248",
+        "origin_cfs_area": "06-348",
+        "destination_cfs_area": "06-488",
+        "source_mode": "111",
+        "source_sctg": "40",
+        "source_weight_pounds": 29,
+        "source_value_dollars": 200,
+        "source_distance_gc_miles": 380,
+        "source_weight_factor": 80433.8,
+        "source_temperature_controlled": "N",
+        "source_hazmat": "N",
+        "estimated_route_miles": 456,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      },
+      {
+        "batch_id": 14,
+        "flow": "-",
+        "quantity": 10,
+        "earliest_start": 2,
+        "latest_completion": 17,
+        "penalty_lost": 10,
+        "source_shipmt_id": "28513226",
+        "origin_cfs_area": "06-488",
+        "destination_cfs_area": "06-348",
+        "source_mode": "112",
+        "source_sctg": "40",
+        "source_weight_pounds": 19,
+        "source_value_dollars": 321,
+        "source_distance_gc_miles": 282,
+        "source_weight_factor": 136911.1,
+        "source_temperature_controlled": "N",
+        "source_hazmat": "N",
+        "estimated_route_miles": 338.4,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      },
+      {
+        "batch_id": 20,
+        "flow": "-",
+        "quantity": 10,
+        "earliest_start": 0,
+        "latest_completion": 12,
+        "penalty_lost": 10,
+        "source_shipmt_id": "35280262",
+        "origin_cfs_area": "06-488",
+        "destination_cfs_area": "06-348",
+        "source_mode": "112",
+        "source_sctg": "43",
+        "source_weight_pounds": 47,
+        "source_value_dollars": 212,
+        "source_distance_gc_miles": 338,
+        "source_weight_factor": 129.7,
+        "source_temperature_controlled": "Y",
+        "source_hazmat": "N",
+        "estimated_route_miles": 405.6,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      },
+      {
+        "batch_id": 100,
+        "flow": "+",
+        "quantity": 10,
+        "earliest_start": 0,
+        "latest_completion": 16,
+        "penalty_lost": 10,
+        "source_shipmt_id": "12755088",
+        "origin_cfs_area": "06-348",
+        "destination_cfs_area": "06-488",
+        "source_mode": "112",
+        "source_sctg": "43",
+        "source_weight_pounds": 1,
+        "source_value_dollars": 11,
+        "source_distance_gc_miles": 316,
+        "source_weight_factor": 411404.9,
+        "source_temperature_controlled": "N",
+        "source_hazmat": "N",
+        "estimated_route_miles": 379.2,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      },
+      {
+        "batch_id": 82,
+        "flow": "+",
+        "quantity": 11,
+        "earliest_start": 3,
+        "latest_completion": 14,
+        "penalty_lost": 10,
+        "source_shipmt_id": "02756637",
+        "origin_cfs_area": "06-348",
+        "destination_cfs_area": "06-488",
+        "source_mode": "111",
+        "source_sctg": "36",
+        "source_weight_pounds": 544,
+        "source_value_dollars": 5,
+        "source_distance_gc_miles": 277,
+        "source_weight_factor": 227082.6,
+        "source_temperature_controlled": "N",
+        "source_hazmat": "N",
+        "estimated_route_miles": 332.4,
+        "estimated_linehaul_periods": 9,
+        "minimum_completion_periods": 11
+      }
+    ]
+  },
+  "config": {
+    "T": 24,
+    "t0_minutes": 60,
+    "tau_periods": 9,
+    "N_manual": {
+      "1": 2,
+      "2": 2
+    },
+    "N_auto": {
+      "1": 1,
+      "2": 1
+    },
+    "a": {
+      "1": 0.05,
+      "2": 0.05
+    },
+    "b": {
+      "1": 0.1,
+      "2": 0.1
+    },
+    "rho": {
+      "1": 5,
+      "2": 5
+    },
+    "M": 4,
+    "M_auto": 8,
+    "c_manual_hour": 20,
+    "c_auto_hour": 15,
+    "c_direct_hour": 25,
+    "empty_tau_periods": null,
+    "c_empty_hour": null,
+    "terminal_target": null,
+    "transfer_time_periods": 0,
+    "transfer_cost_per_unit": 0,
+    "direct_ratio_min": 0,
+    "direct_ratio_max": 1
+  },
+  "orders": [
+    {
+      "order_id": "25497732",
+      "flow": "-",
+      "quantity": 1,
+      "earliest_start": 5,
+      "latest_completion": 21,
+      "penalty": 1000
+    },
+    {
+      "order_id": "22057082",
+      "flow": "+",
+      "quantity": 1,
+      "earliest_start": 0,
+      "latest_completion": 11,
+      "penalty": 1000
+    },
+    {
+      "order_id": "27687185",
+      "flow": "-",
+      "quantity": 1,
+      "earliest_start": 0,
+      "latest_completion": 15,
+      "penalty": 1000
+    },
+    {
+      "order_id": "31804248",
+      "flow": "+",
+      "quantity": 1,
+      "earliest_start": 5,
+      "latest_completion": 18,
+      "penalty": 1000
+    },
+    {
+      "order_id": "28513226",
+      "flow": "-",
+      "quantity": 1,
+      "earliest_start": 2,
+      "latest_completion": 17,
+      "penalty": 1000
+    },
+    {
+      "order_id": "35280262",
+      "flow": "-",
+      "quantity": 1,
+      "earliest_start": 0,
+      "latest_completion": 12,
+      "penalty": 1000
+    },
+    {
+      "order_id": "12755088",
+      "flow": "+",
+      "quantity": 1,
+      "earliest_start": 0,
+      "latest_completion": 16,
+      "penalty": 1000
+    },
+    {
+      "order_id": "02756637",
+      "flow": "+",
+      "quantity": 1,
+      "earliest_start": 3,
+      "latest_completion": 14,
+      "penalty": 1000
+    }
+  ],
+  "options": {
+    "prediction_horizon": 8,
+    "rolling_step": 2,
+    "extension_horizon": 6
+  },
+  "time_limit_per_run_sec": 15,
+  "max_solver_budget_sec": 45,
+  "threads": 1,
+  "solver_seed": 0,
+  "interpretation": "CFS execution smoke only; parameters and shipment-stop convention are not calibrated",
+  "penalty_reason": "1000 per shipment-stop intentionally encourages positive service in smoke",
+  "run_requested": true,
+  "runs": [
+    {
+      "solver": "v1_flexible_mip",
+      "result": {
+        "schema_version": "v1_flexible_result/1",
+        "model_id": "v1_flexible_arc_wave_empty_v1",
+        "semantic_status": "author_confirmed_profile_with_disclosed_vehicle_extensions",
+        "status": 2,
+        "status_name": "OPTIMAL",
+        "completed": true,
+        "has_incumbent": true,
+        "optimal": true,
+        "schedule_valid": true,
+        "total_cost": 1100,
+        "best_bound": 1100,
+        "mip_gap": 0,
+        "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+        "elapsed_sec": 0.18799999996554106,
+        "requested_time_limit_sec": 15,
+        "schedule": {
+          "x_manual": {
+            "(0, 1, 1, '+')": 1,
+            "(15, 16, 1, '-')": 1,
+            "(5, 6, 2, '-')": 1,
+            "(10, 11, 2, '+')": 1
+          },
+          "y_auto": {
+            "(1, 10, '+')": 1,
+            "(6, 15, '-')": 1
+          },
+          "w_direct": {
+            "(2, 12, '-')": 1,
+            "(4, 14, '+')": 1,
+            "(8, 18, '+')": 1
+          },
+          "empty_vehicles": {},
+          "u_wave": {
+            "(0, 1, 1, '+', 1)": 1,
+            "(15, 16, 1, '-', 1)": 1,
+            "(5, 6, 2, '-', 1)": 1,
+            "(10, 11, 2, '+', 1)": 1
+          },
+          "u_direct": {
+            "(2, 12, '-', 1)": 1,
+            "(4, 14, '+', 1)": 1,
+            "(8, 18, '+', 1)": 1
+          },
+          "g_manual": {
+            "(15, 16, 1, '-', '25497732')": 1,
+            "(5, 6, 2, '-', '25497732')": 1,
+            "(0, 1, 1, '+', '22057082')": 1,
+            "(10, 11, 2, '+', '22057082')": 1
+          },
+          "g_auto": {
+            "(6, 15, '-', '25497732')": 1,
+            "(1, 10, '+', '22057082')": 1
+          },
+          "h_direct": {
+            "(2, 12, '-', '27687185')": 1,
+            "(8, 18, '+', '31804248')": 1,
+            "(2, 12, '-', '28513226')": 1,
+            "(2, 12, '-', '35280262')": 1,
+            "(4, 14, '+', '12755088')": 1,
+            "(4, 14, '+', '02756637')": 1
+          },
+          "z_unserved": {}
+        },
+        "validation": {
+          "schedule_valid": true,
+          "validator": "independent_original_f_v1_f",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "completed": true,
+          "completed_horizon": 24,
+          "tolerance": 0.000001,
+          "comparison": "absolute",
+          "costs": {
+            "manual": 80,
+            "auto": 270,
+            "direct": 750,
+            "empty": 0,
+            "transfer": 0,
+            "penalty": 0,
+            "committed_total": 1100,
+            "total": 1100
+          },
+          "objective": 1100,
+          "orders": {
+            "12755088": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            },
+            "22057082": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "25497732": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "27687185": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            },
+            "28513226": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            },
+            "31804248": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            },
+            "35280262": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            },
+            "02756637": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            }
+          },
+          "served_quantity": 8,
+          "unserved_quantity": 0,
+          "direct_quantity": 6,
+          "transfer_quantity": 2,
+          "empty_trip_count": 0,
+          "direct_trip_count": 3,
+          "min_manual_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "min_AV_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "checks": [
+            "domains",
+            "one_hot",
+            "global_fleet_selector_bound",
+            "original_f_local_and_directional_direct",
+            "physical_cap",
+            "manual_migration_and_occupancy",
+            "AV_inventory",
+            "empty_duration",
+            "windows",
+            "cargo_causality",
+            "demand_reservations",
+            "costs"
+          ],
+          "deferred_checks": [],
+          "cost_scope": "initiated whole tasks charged once; transfer on actual delivery; penalties final or expired; partial is not full-day objective"
+        },
+        "windows": [],
+        "metadata": {
+          "provenance": {
+            "input": {
+              "config": {
+                "T": 24,
+                "t0_minutes": 60,
+                "tau_periods": 9,
+                "N_manual": {
+                  "1": 2,
+                  "2": 2
+                },
+                "N_auto": {
+                  "1": 1,
+                  "2": 1
+                },
+                "a": {
+                  "1": 0.05,
+                  "2": 0.05
+                },
+                "b": {
+                  "1": 0.1,
+                  "2": 0.1
+                },
+                "rho": {
+                  "1": 5,
+                  "2": 5
+                },
+                "M": 4,
+                "M_auto": 8,
+                "c_manual_hour": 20,
+                "c_auto_hour": 15,
+                "c_direct_hour": 25,
+                "empty_tau_periods": null,
+                "c_empty_hour": null,
+                "terminal_target": null,
+                "transfer_time_periods": 0,
+                "transfer_cost_per_unit": 0,
+                "direct_ratio_min": 0,
+                "direct_ratio_max": 1
+              },
+              "orders": [
+                {
+                  "order_id": "25497732",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 5,
+                  "latest_completion": 21,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "22057082",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 11,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "27687185",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 15,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "31804248",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 5,
+                  "latest_completion": 18,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "28513226",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 2,
+                  "latest_completion": 17,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "35280262",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 12,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "12755088",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 16,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "02756637",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 3,
+                  "latest_completion": 14,
+                  "penalty": 1000
+                }
+              ],
+              "profile": {
+                "information": "offline",
+                "wave": "arc",
+                "demand": "continuous_stops_zero_allowed",
+                "units": "minutes_hourly",
+                "service": "tour_end_same_time",
+                "input_domain": "integer_windows_within_horizon"
+              }
+            },
+            "input_sha256": "e0571da4fd690d7300cfaebd7e5c2cf94f778b10d92ce5060a7d3c792c26863c",
+            "source_sha256": {
+              "research/paper/main_v2_BHH.tex": "500be1ada854317be79c358e0ff1269786dd4c7ea8e1102b501354eff04a3457",
+              "coordination/V1_F_RUNTIME_CONTRACT.md": "e78e616eaa7416e8b059d030e065741591c88299ce9461b031a7a8e650314b59",
+              "coordination/V1_M_IMPLEMENTATION_PROFILE.md": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+              "intercity_delivery/v1/capacity.py": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+              "intercity_delivery/v1/network.py": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+              "intercity_delivery/v1/configuration.py": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+              "intercity_delivery/v1/flexible_configuration.py": "e54e58fb1af2745151622f52375be3c429dd5319a29b3af9512a9567c623c8ed",
+              "intercity_delivery/v1/flexible_capacity.py": "1b46bb68f54dd8ad12f8e91e8fe506ff9d295f21dd351a011c4a39de1b179a19",
+              "intercity_delivery/v1/flexible_optimizer.py": "4c845b7a7389e4f42e46881bd44254486237909b911824e979b921a286bb0ffe",
+              "intercity_delivery/v1/flexible_validation.py": "100487c18c5003aa8a3c7165788cbc132ad0854566f1caf1a607e29ed165aab7",
+              "intercity_delivery/v1/flexible_runner.py": "36613a8b152436d920693056fbf076a7298e22ef3e6aa006f5540c7234d9e983",
+              "intercity_delivery/v1/flexible_rolling.py": "facf6e2f03296f9bc1c25f31999126920d8d3a7994212ff9abeda1ac2216a0f1",
+              "intercity_delivery/v1/pruning.py": "8f22445ac044d889ed0ed2dc5f141ef7e1e6df9cfc843741df213af8971cf9d7",
+              "intercity_delivery/v1/adapter.py": "345f38a143ec3c9ecb00f1323d145a5956bf3d8d6e542d87e0c6ba6185fdc545"
+            },
+            "git_revision": "f26b4c96907082c2ebb7b0104263831e7100aa26",
+            "git_revision_scope": "HEAD only; SHA256 includes uncommitted implementation",
+            "timestamp_utc": "2026-10-18T02:18:31.495704+00:00",
+            "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+            "platform": "Windows-10-10.0.26200-SP0",
+            "gurobipy_version": "10.0.3"
+          },
+          "model_scope": "adopted V1-F arc-wave + independent empty; excludes S/QVI",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "profile": {
+            "information": "offline",
+            "wave": "arc",
+            "demand": "continuous_stops_zero_allowed",
+            "units": "minutes_hourly",
+            "service": "tour_end_same_time",
+            "input_domain": "integer_windows_within_horizon"
+          },
+          "information": "offline",
+          "run_mode": "full",
+          "wave_grouping": "absolute (start,end,city,direction)",
+          "selector_bound": "global_manual_fleet",
+          "selector_bound_reason": "migrated vehicles can serve local waves",
+          "quantity_units": "continuous stops; adapter provenance must identify any shipment-stop proxy",
+          "time_units": "minutes",
+          "vehicle_rate_units": "currency/hour",
+          "cost_units": "currency; minutes divided by 60 exactly once",
+          "window_terminal_reset": false,
+          "terminal_target": null,
+          "terminal_default": "none; no forced real-T city reset unless explicit full-run target",
+          "empty_tau_periods": 9,
+          "empty_duration_source": "tau_periods fallback",
+          "c_empty_hour": 25,
+          "empty_cost_source": "c_direct_hour fallback",
+          "compatibility_extensions": {
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1
+          },
+          "candidate_scope": "full mother domains",
+          "completion_policy": "new tasks finish within completion window; prior commitments persist",
+          "rolling_options": null,
+          "threads": 1,
+          "solver_seed": 0,
+          "validation_tolerance": 0.000001,
+          "pruning_evidence_scope": "finite checks do not prove general pruning equivalence",
+          "vehicle_usage_scope": "dispatched vehicle-task counts, not unique vehicles"
+        },
+        "served_quantity": 8,
+        "unserved_quantity": 0,
+        "direct_quantity": 6,
+        "transshipment_quantity": 2,
+        "empty_trip_count": 0,
+        "auto_usage": 2,
+        "manual_usage": 7,
+        "warnings": [],
+        "build_elapsed_sec": 0.0779999999795109,
+        "solver_time_limit_sec": 14.922000000020489,
+        "solver_runtime_sec": 0.09599995613098145,
+        "variable_count": 1622,
+        "constraint_count": 1049,
+        "cost_components": {
+          "manual": 80,
+          "auto": 270,
+          "direct": 750,
+          "empty": 0,
+          "transfer": 0,
+          "penalty": 0,
+          "committed_total": 1100,
+          "total": 1100
+        },
+        "incumbent_objective": 1100,
+        "budget_exceeded": false,
+        "schedule_export": {
+          "format": "nonzero values; all omitted admissible mother-domain keys equal zero",
+          "rounding_applied": false,
+          "original_entry_count": 1622,
+          "exported_entry_count": 28,
+          "reconstruction": "rebuild domains from config/orders/profile; assign missing decisions zero"
+        }
+      }
+    },
+    {
+      "solver": "v1_flexible_rolling",
+      "result": {
+        "schema_version": "v1_flexible_result/1",
+        "model_id": "v1_flexible_arc_wave_empty_v1",
+        "semantic_status": "author_confirmed_profile_with_disclosed_vehicle_extensions",
+        "status": "COMPLETED",
+        "status_name": "COMPLETED",
+        "completed": true,
+        "has_incumbent": true,
+        "optimal": false,
+        "schedule_valid": true,
+        "total_cost": 2025,
+        "best_bound": null,
+        "mip_gap": null,
+        "bound_scope": "none_window_local_only",
+        "elapsed_sec": 0.4220000000204891,
+        "requested_time_limit_sec": 15,
+        "schedule": {
+          "x_manual": {
+            "(0, 1, 1, '+')": 1,
+            "(1, 2, 2, '-')": 1,
+            "(6, 7, 2, '-')": 1,
+            "(11, 12, 1, '-')": 1,
+            "(10, 11, 2, '+')": 1,
+            "(20, 21, 1, '-')": 1
+          },
+          "y_auto": {
+            "(1, 10, '+')": 1,
+            "(2, 11, '-')": 1,
+            "(10, 19, '-')": 1
+          },
+          "u_wave": {
+            "(0, 1, 1, '+', 1)": 1,
+            "(1, 2, 2, '-', 1)": 1,
+            "(6, 7, 2, '-', 1)": 1,
+            "(11, 12, 1, '-', 1)": 1,
+            "(10, 11, 2, '+', 1)": 1,
+            "(20, 21, 1, '-', 1)": 1
+          },
+          "g_manual": {
+            "(0, 1, 1, '+', '22057082')": 1,
+            "(1, 2, 2, '-', '27687185')": 1,
+            "(1, 2, 2, '-', '35280262')": 1,
+            "(0, 1, 1, '+', '12755088')": 1,
+            "(6, 7, 2, '-', '25497732')": 1,
+            "(10, 11, 2, '+', '22057082')": 1,
+            "(11, 12, 1, '-', '27687185')": 1,
+            "(11, 12, 1, '-', '35280262')": 1,
+            "(10, 11, 2, '+', '12755088')": 1,
+            "(20, 21, 1, '-', '25497732')": 1
+          },
+          "g_auto": {
+            "(1, 10, '+', '22057082')": 1,
+            "(1, 10, '+', '12755088')": 1,
+            "(2, 11, '-', '27687185')": 1,
+            "(2, 11, '-', '35280262')": 1,
+            "(10, 19, '-', '25497732')": 1
+          },
+          "z_unserved": {
+            "('31804248',)": 1
+          },
+          "w_direct": {
+            "(4, 14, '+')": 1,
+            "(4, 14, '-')": 1
+          },
+          "u_direct": {
+            "(4, 14, '+', 1)": 1,
+            "(4, 14, '-', 1)": 1
+          },
+          "empty_vehicles": {},
+          "h_direct": {
+            "(4, 14, '-', '28513226')": 1,
+            "(4, 14, '+', '02756637')": 1
+          }
+        },
+        "validation": {
+          "schedule_valid": true,
+          "validator": "independent_original_f_v1_f",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "completed": true,
+          "completed_horizon": 24,
+          "tolerance": 0.000001,
+          "comparison": "absolute",
+          "costs": {
+            "manual": 120,
+            "auto": 405,
+            "direct": 500,
+            "empty": 0,
+            "transfer": 0,
+            "penalty": 1000,
+            "committed_total": 2025,
+            "total": 2025
+          },
+          "objective": 2025,
+          "orders": {
+            "12755088": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "22057082": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "25497732": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "27687185": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "28513226": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            },
+            "31804248": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 0,
+              "served": 0,
+              "unserved": 1,
+              "penalized_unserved": 1,
+              "delivered_transfer": 0,
+              "delivered_direct": 0
+            },
+            "35280262": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "02756637": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            }
+          },
+          "served_quantity": 7,
+          "unserved_quantity": 1,
+          "direct_quantity": 2,
+          "transfer_quantity": 5,
+          "empty_trip_count": 0,
+          "direct_trip_count": 2,
+          "min_manual_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "min_AV_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "checks": [
+            "domains",
+            "one_hot",
+            "global_fleet_selector_bound",
+            "original_f_local_and_directional_direct",
+            "physical_cap",
+            "manual_migration_and_occupancy",
+            "AV_inventory",
+            "empty_duration",
+            "windows",
+            "cargo_causality",
+            "demand_reservations",
+            "costs"
+          ],
+          "deferred_checks": [],
+          "cost_scope": "initiated whole tasks charged once; transfer on actual delivery; penalties final or expired; partial is not full-day objective"
+        },
+        "windows": [
+          {
+            "window_start": 0,
+            "start_window_end": 8,
+            "completion_window_end": 14,
+            "control_end": 2,
+            "known_order_ids": [
+              "12755088",
+              "22057082",
+              "27687185",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 350,
+            "best_bound": 350,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 380
+          },
+          {
+            "window_start": 2,
+            "start_window_end": 10,
+            "completion_window_end": 16,
+            "control_end": 4,
+            "known_order_ids": [
+              "12755088",
+              "22057082",
+              "27687185",
+              "28513226",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 600,
+            "best_bound": 600,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 475
+          },
+          {
+            "window_start": 4,
+            "start_window_end": 12,
+            "completion_window_end": 18,
+            "control_end": 6,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "27687185",
+              "28513226",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 850,
+            "best_bound": 850,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 570
+          },
+          {
+            "window_start": 6,
+            "start_window_end": 14,
+            "completion_window_end": 20,
+            "control_end": 8,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 8,
+            "start_window_end": 16,
+            "completion_window_end": 22,
+            "control_end": 10,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 10,
+            "start_window_end": 18,
+            "completion_window_end": 24,
+            "control_end": 12,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 12,
+            "start_window_end": 20,
+            "completion_window_end": 24,
+            "control_end": 14,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 14,
+            "start_window_end": 22,
+            "completion_window_end": 24,
+            "control_end": 16,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 16,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 18,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 18,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 20,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 20,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 22,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          },
+          {
+            "window_start": 22,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 24,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": null,
+            "cargo_variable_count": 760
+          }
+        ],
+        "metadata": {
+          "provenance": {
+            "input": {
+              "config": {
+                "T": 24,
+                "t0_minutes": 60,
+                "tau_periods": 9,
+                "N_manual": {
+                  "1": 2,
+                  "2": 2
+                },
+                "N_auto": {
+                  "1": 1,
+                  "2": 1
+                },
+                "a": {
+                  "1": 0.05,
+                  "2": 0.05
+                },
+                "b": {
+                  "1": 0.1,
+                  "2": 0.1
+                },
+                "rho": {
+                  "1": 5,
+                  "2": 5
+                },
+                "M": 4,
+                "M_auto": 8,
+                "c_manual_hour": 20,
+                "c_auto_hour": 15,
+                "c_direct_hour": 25,
+                "empty_tau_periods": null,
+                "c_empty_hour": null,
+                "terminal_target": null,
+                "transfer_time_periods": 0,
+                "transfer_cost_per_unit": 0,
+                "direct_ratio_min": 0,
+                "direct_ratio_max": 1
+              },
+              "orders": [
+                {
+                  "order_id": "25497732",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 5,
+                  "latest_completion": 21,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "22057082",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 11,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "27687185",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 15,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "31804248",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 5,
+                  "latest_completion": 18,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "28513226",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 2,
+                  "latest_completion": 17,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "35280262",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 12,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "12755088",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 16,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "02756637",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 3,
+                  "latest_completion": 14,
+                  "penalty": 1000
+                }
+              ],
+              "profile": {
+                "information": "release_revealed",
+                "wave": "arc",
+                "demand": "continuous_stops_zero_allowed",
+                "units": "minutes_hourly",
+                "service": "tour_end_same_time",
+                "input_domain": "integer_windows_within_horizon"
+              }
+            },
+            "input_sha256": "c0232be72360b20501802985532842da2000399bb0d78ff3c41092a41d9ae2b1",
+            "source_sha256": {
+              "research/paper/main_v2_BHH.tex": "500be1ada854317be79c358e0ff1269786dd4c7ea8e1102b501354eff04a3457",
+              "coordination/V1_F_RUNTIME_CONTRACT.md": "e78e616eaa7416e8b059d030e065741591c88299ce9461b031a7a8e650314b59",
+              "coordination/V1_M_IMPLEMENTATION_PROFILE.md": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+              "intercity_delivery/v1/capacity.py": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+              "intercity_delivery/v1/network.py": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+              "intercity_delivery/v1/configuration.py": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+              "intercity_delivery/v1/flexible_configuration.py": "e54e58fb1af2745151622f52375be3c429dd5319a29b3af9512a9567c623c8ed",
+              "intercity_delivery/v1/flexible_capacity.py": "1b46bb68f54dd8ad12f8e91e8fe506ff9d295f21dd351a011c4a39de1b179a19",
+              "intercity_delivery/v1/flexible_optimizer.py": "4c845b7a7389e4f42e46881bd44254486237909b911824e979b921a286bb0ffe",
+              "intercity_delivery/v1/flexible_validation.py": "100487c18c5003aa8a3c7165788cbc132ad0854566f1caf1a607e29ed165aab7",
+              "intercity_delivery/v1/flexible_runner.py": "36613a8b152436d920693056fbf076a7298e22ef3e6aa006f5540c7234d9e983",
+              "intercity_delivery/v1/flexible_rolling.py": "facf6e2f03296f9bc1c25f31999126920d8d3a7994212ff9abeda1ac2216a0f1",
+              "intercity_delivery/v1/pruning.py": "8f22445ac044d889ed0ed2dc5f141ef7e1e6df9cfc843741df213af8971cf9d7",
+              "intercity_delivery/v1/adapter.py": "345f38a143ec3c9ecb00f1323d145a5956bf3d8d6e542d87e0c6ba6185fdc545"
+            },
+            "git_revision": "f26b4c96907082c2ebb7b0104263831e7100aa26",
+            "git_revision_scope": "HEAD only; SHA256 includes uncommitted implementation",
+            "timestamp_utc": "2026-10-18T02:18:31.680702+00:00",
+            "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+            "platform": "Windows-10-10.0.26200-SP0",
+            "gurobipy_version": "10.0.3"
+          },
+          "model_scope": "adopted V1-F arc-wave + independent empty; excludes S/QVI",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "profile": {
+            "information": "release_revealed",
+            "wave": "arc",
+            "demand": "continuous_stops_zero_allowed",
+            "units": "minutes_hourly",
+            "service": "tour_end_same_time",
+            "input_domain": "integer_windows_within_horizon"
+          },
+          "information": "release_revealed",
+          "run_mode": "rolling",
+          "wave_grouping": "absolute (start,end,city,direction)",
+          "selector_bound": "global_manual_fleet",
+          "selector_bound_reason": "migrated vehicles can serve local waves",
+          "quantity_units": "continuous stops; adapter provenance must identify any shipment-stop proxy",
+          "time_units": "minutes",
+          "vehicle_rate_units": "currency/hour",
+          "cost_units": "currency; minutes divided by 60 exactly once",
+          "window_terminal_reset": false,
+          "terminal_target": null,
+          "terminal_default": "none; no forced real-T city reset unless explicit full-run target",
+          "empty_tau_periods": 9,
+          "empty_duration_source": "tau_periods fallback",
+          "c_empty_hour": 25,
+          "empty_cost_source": "c_direct_hour fallback",
+          "compatibility_extensions": {
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1
+          },
+          "candidate_scope": "full mother domains",
+          "completion_policy": "new tasks finish within completion window; prior commitments persist",
+          "rolling_options": {
+            "prediction_horizon": 8,
+            "rolling_step": 2,
+            "extension_horizon": 6,
+            "prune": false
+          },
+          "threads": 1,
+          "solver_seed": 0,
+          "validation_tolerance": 0.000001,
+          "pruning_evidence_scope": "finite checks do not prove general pruning equivalence",
+          "vehicle_usage_scope": "dispatched vehicle-task counts, not unique vehicles"
+        },
+        "served_quantity": 7,
+        "unserved_quantity": 1,
+        "direct_quantity": 2,
+        "transshipment_quantity": 5,
+        "empty_trip_count": 0,
+        "auto_usage": 3,
+        "manual_usage": 8,
+        "warnings": [],
+        "cost_components": {
+          "manual": 120,
+          "auto": 405,
+          "direct": 500,
+          "empty": 0,
+          "transfer": 0,
+          "penalty": 1000,
+          "committed_total": 2025,
+          "total": 2025
+        },
+        "current_time": 24,
+        "message": "Rolling execution reached the real horizon.",
+        "budget_exceeded": false,
+        "schedule_export": {
+          "format": "nonzero values; all omitted admissible mother-domain keys equal zero",
+          "rounding_applied": false,
+          "original_entry_count": 44,
+          "exported_entry_count": 37,
+          "reconstruction": "rebuild domains from config/orders/profile; assign missing decisions zero"
+        }
+      }
+    },
+    {
+      "solver": "v1_flexible_pruned_rolling",
+      "result": {
+        "schema_version": "v1_flexible_result/1",
+        "model_id": "v1_flexible_arc_wave_empty_v1",
+        "semantic_status": "author_confirmed_profile_with_disclosed_vehicle_extensions",
+        "status": "COMPLETED",
+        "status_name": "COMPLETED",
+        "completed": true,
+        "has_incumbent": true,
+        "optimal": false,
+        "schedule_valid": true,
+        "total_cost": 2025,
+        "best_bound": null,
+        "mip_gap": null,
+        "bound_scope": "none_window_local_only",
+        "elapsed_sec": 0.34299999999348074,
+        "requested_time_limit_sec": 15,
+        "schedule": {
+          "x_manual": {
+            "(0, 1, 1, '+')": 1,
+            "(1, 2, 2, '-')": 1,
+            "(6, 7, 2, '-')": 1,
+            "(11, 12, 1, '-')": 1,
+            "(10, 11, 2, '+')": 1,
+            "(20, 21, 1, '-')": 1
+          },
+          "y_auto": {
+            "(1, 10, '+')": 1,
+            "(2, 11, '-')": 1,
+            "(10, 19, '-')": 1
+          },
+          "u_wave": {
+            "(0, 1, 1, '+', 1)": 1,
+            "(1, 2, 2, '-', 1)": 1,
+            "(6, 7, 2, '-', 1)": 1,
+            "(11, 12, 1, '-', 1)": 1,
+            "(10, 11, 2, '+', 1)": 1,
+            "(20, 21, 1, '-', 1)": 1
+          },
+          "g_manual": {
+            "(0, 1, 1, '+', '22057082')": 1,
+            "(1, 2, 2, '-', '27687185')": 1,
+            "(1, 2, 2, '-', '35280262')": 1,
+            "(0, 1, 1, '+', '12755088')": 1,
+            "(6, 7, 2, '-', '25497732')": 1,
+            "(10, 11, 2, '+', '22057082')": 1,
+            "(11, 12, 1, '-', '27687185')": 1,
+            "(11, 12, 1, '-', '35280262')": 1,
+            "(10, 11, 2, '+', '12755088')": 1,
+            "(20, 21, 1, '-', '25497732')": 1
+          },
+          "g_auto": {
+            "(1, 10, '+', '22057082')": 1,
+            "(1, 10, '+', '12755088')": 1,
+            "(2, 11, '-', '27687185')": 1,
+            "(2, 11, '-', '35280262')": 1,
+            "(10, 19, '-', '25497732')": 1
+          },
+          "z_unserved": {
+            "('31804248',)": 1
+          },
+          "w_direct": {
+            "(4, 14, '+')": 1,
+            "(4, 14, '-')": 1
+          },
+          "u_direct": {
+            "(4, 14, '+', 1)": 1,
+            "(4, 14, '-', 1)": 1
+          },
+          "empty_vehicles": {},
+          "h_direct": {
+            "(4, 14, '-', '28513226')": 1,
+            "(4, 14, '+', '02756637')": 1
+          }
+        },
+        "validation": {
+          "schedule_valid": true,
+          "validator": "independent_original_f_v1_f",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "completed": true,
+          "completed_horizon": 24,
+          "tolerance": 0.000001,
+          "comparison": "absolute",
+          "costs": {
+            "manual": 120,
+            "auto": 405,
+            "direct": 500,
+            "empty": 0,
+            "transfer": 0,
+            "penalty": 1000,
+            "committed_total": 2025,
+            "total": 2025
+          },
+          "objective": 2025,
+          "orders": {
+            "12755088": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "22057082": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "25497732": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "27687185": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "28513226": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            },
+            "31804248": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 0,
+              "served": 0,
+              "unserved": 1,
+              "penalized_unserved": 1,
+              "delivered_transfer": 0,
+              "delivered_direct": 0
+            },
+            "35280262": {
+              "pickup": 1,
+              "linehaul": 1,
+              "delivery": 1,
+              "direct": 0,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 1,
+              "delivered_direct": 0
+            },
+            "02756637": {
+              "pickup": 0,
+              "linehaul": 0,
+              "delivery": 0,
+              "direct": 1,
+              "served": 1,
+              "unserved": 0,
+              "penalized_unserved": 0,
+              "delivered_transfer": 0,
+              "delivered_direct": 1
+            }
+          },
+          "served_quantity": 7,
+          "unserved_quantity": 1,
+          "direct_quantity": 2,
+          "transfer_quantity": 5,
+          "empty_trip_count": 0,
+          "direct_trip_count": 2,
+          "min_manual_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "min_AV_inventory": {
+            "1": 0,
+            "2": 0
+          },
+          "checks": [
+            "domains",
+            "one_hot",
+            "global_fleet_selector_bound",
+            "original_f_local_and_directional_direct",
+            "physical_cap",
+            "manual_migration_and_occupancy",
+            "AV_inventory",
+            "empty_duration",
+            "windows",
+            "cargo_causality",
+            "demand_reservations",
+            "costs"
+          ],
+          "deferred_checks": [],
+          "cost_scope": "initiated whole tasks charged once; transfer on actual delivery; penalties final or expired; partial is not full-day objective"
+        },
+        "windows": [
+          {
+            "window_start": 0,
+            "start_window_end": 8,
+            "completion_window_end": 14,
+            "control_end": 2,
+            "known_order_ids": [
+              "12755088",
+              "22057082",
+              "27687185",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 350,
+            "best_bound": 350,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 192,
+                "g_auto": 64,
+                "h_direct": 124
+              },
+              "after": {
+                "g_manual": 22,
+                "g_auto": 11,
+                "h_direct": 15
+              },
+              "removed_by_group": {
+                "g_manual": 170,
+                "g_auto": 53,
+                "h_direct": 109
+              },
+              "removed": 332,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 48
+          },
+          {
+            "window_start": 2,
+            "start_window_end": 10,
+            "completion_window_end": 16,
+            "control_end": 4,
+            "known_order_ids": [
+              "12755088",
+              "22057082",
+              "27687185",
+              "28513226",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 600,
+            "best_bound": 600,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 240,
+                "g_auto": 80,
+                "h_direct": 155
+              },
+              "after": {
+                "g_manual": 31,
+                "g_auto": 16,
+                "h_direct": 15
+              },
+              "removed_by_group": {
+                "g_manual": 209,
+                "g_auto": 64,
+                "h_direct": 140
+              },
+              "removed": 413,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 62
+          },
+          {
+            "window_start": 4,
+            "start_window_end": 12,
+            "completion_window_end": 18,
+            "control_end": 6,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "27687185",
+              "28513226",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 850,
+            "best_bound": 850,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 288,
+                "g_auto": 96,
+                "h_direct": 186
+              },
+              "after": {
+                "g_manual": 25,
+                "g_auto": 12,
+                "h_direct": 10
+              },
+              "removed_by_group": {
+                "g_manual": 263,
+                "g_auto": 84,
+                "h_direct": 176
+              },
+              "removed": 523,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 47
+          },
+          {
+            "window_start": 6,
+            "start_window_end": 14,
+            "completion_window_end": 20,
+            "control_end": 8,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 30,
+                "g_auto": 12,
+                "h_direct": 13
+              },
+              "removed_by_group": {
+                "g_manual": 354,
+                "g_auto": 116,
+                "h_direct": 235
+              },
+              "removed": 705,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 55
+          },
+          {
+            "window_start": 8,
+            "start_window_end": 16,
+            "completion_window_end": 22,
+            "control_end": 10,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 24,
+                "g_auto": 8,
+                "h_direct": 7
+              },
+              "removed_by_group": {
+                "g_manual": 360,
+                "g_auto": 120,
+                "h_direct": 241
+              },
+              "removed": 721,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 39
+          },
+          {
+            "window_start": 10,
+            "start_window_end": 18,
+            "completion_window_end": 24,
+            "control_end": 12,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 20,
+                "g_auto": 6,
+                "h_direct": 4
+              },
+              "removed_by_group": {
+                "g_manual": 364,
+                "g_auto": 122,
+                "h_direct": 244
+              },
+              "removed": 730,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 30
+          },
+          {
+            "window_start": 12,
+            "start_window_end": 20,
+            "completion_window_end": 24,
+            "control_end": 14,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 18,
+                "g_auto": 5,
+                "h_direct": 2
+              },
+              "removed_by_group": {
+                "g_manual": 366,
+                "g_auto": 123,
+                "h_direct": 246
+              },
+              "removed": 735,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 25
+          },
+          {
+            "window_start": 14,
+            "start_window_end": 22,
+            "completion_window_end": 24,
+            "control_end": 16,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 14,
+                "g_auto": 5,
+                "h_direct": 2
+              },
+              "removed_by_group": {
+                "g_manual": 370,
+                "g_auto": 123,
+                "h_direct": 246
+              },
+              "removed": 739,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 21
+          },
+          {
+            "window_start": 16,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 18,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 11,
+                "g_auto": 5,
+                "h_direct": 2
+              },
+              "removed_by_group": {
+                "g_manual": 373,
+                "g_auto": 123,
+                "h_direct": 246
+              },
+              "removed": 742,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 18
+          },
+          {
+            "window_start": 18,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 20,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 11,
+                "g_auto": 5,
+                "h_direct": 2
+              },
+              "removed_by_group": {
+                "g_manual": 373,
+                "g_auto": 123,
+                "h_direct": 246
+              },
+              "removed": 742,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 18
+          },
+          {
+            "window_start": 20,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 22,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 10,
+                "g_auto": 5,
+                "h_direct": 2
+              },
+              "removed_by_group": {
+                "g_manual": 374,
+                "g_auto": 123,
+                "h_direct": 246
+              },
+              "removed": 743,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 17
+          },
+          {
+            "window_start": 22,
+            "start_window_end": 24,
+            "completion_window_end": 24,
+            "control_end": 24,
+            "known_order_ids": [
+              "02756637",
+              "12755088",
+              "22057082",
+              "25497732",
+              "27687185",
+              "28513226",
+              "31804248",
+              "35280262"
+            ],
+            "status": 2,
+            "feasible": true,
+            "objective": 2025,
+            "best_bound": 2025,
+            "mip_gap": 0,
+            "bound_scope": "window_local_only",
+            "pruning": {
+              "scope": "cargo_variables_only",
+              "rule": "time_support_positive_capacity",
+              "before": {
+                "g_manual": 384,
+                "g_auto": 128,
+                "h_direct": 248
+              },
+              "after": {
+                "g_manual": 10,
+                "g_auto": 5,
+                "h_direct": 2
+              },
+              "removed_by_group": {
+                "g_manual": 374,
+                "g_auto": 123,
+                "h_direct": 246
+              },
+              "removed": 743,
+              "vehicle_arcs_retained": true,
+              "selector_bound": "global_manual_fleet",
+              "global_safety_proof": false
+            },
+            "cargo_variable_count": 17
+          }
+        ],
+        "metadata": {
+          "provenance": {
+            "input": {
+              "config": {
+                "T": 24,
+                "t0_minutes": 60,
+                "tau_periods": 9,
+                "N_manual": {
+                  "1": 2,
+                  "2": 2
+                },
+                "N_auto": {
+                  "1": 1,
+                  "2": 1
+                },
+                "a": {
+                  "1": 0.05,
+                  "2": 0.05
+                },
+                "b": {
+                  "1": 0.1,
+                  "2": 0.1
+                },
+                "rho": {
+                  "1": 5,
+                  "2": 5
+                },
+                "M": 4,
+                "M_auto": 8,
+                "c_manual_hour": 20,
+                "c_auto_hour": 15,
+                "c_direct_hour": 25,
+                "empty_tau_periods": null,
+                "c_empty_hour": null,
+                "terminal_target": null,
+                "transfer_time_periods": 0,
+                "transfer_cost_per_unit": 0,
+                "direct_ratio_min": 0,
+                "direct_ratio_max": 1
+              },
+              "orders": [
+                {
+                  "order_id": "25497732",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 5,
+                  "latest_completion": 21,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "22057082",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 11,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "27687185",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 15,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "31804248",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 5,
+                  "latest_completion": 18,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "28513226",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 2,
+                  "latest_completion": 17,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "35280262",
+                  "flow": "-",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 12,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "12755088",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 0,
+                  "latest_completion": 16,
+                  "penalty": 1000
+                },
+                {
+                  "order_id": "02756637",
+                  "flow": "+",
+                  "quantity": 1,
+                  "earliest_start": 3,
+                  "latest_completion": 14,
+                  "penalty": 1000
+                }
+              ],
+              "profile": {
+                "information": "release_revealed",
+                "wave": "arc",
+                "demand": "continuous_stops_zero_allowed",
+                "units": "minutes_hourly",
+                "service": "tour_end_same_time",
+                "input_domain": "integer_windows_within_horizon"
+              }
+            },
+            "input_sha256": "c0232be72360b20501802985532842da2000399bb0d78ff3c41092a41d9ae2b1",
+            "source_sha256": {
+              "research/paper/main_v2_BHH.tex": "500be1ada854317be79c358e0ff1269786dd4c7ea8e1102b501354eff04a3457",
+              "coordination/V1_F_RUNTIME_CONTRACT.md": "e78e616eaa7416e8b059d030e065741591c88299ce9461b031a7a8e650314b59",
+              "coordination/V1_M_IMPLEMENTATION_PROFILE.md": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+              "intercity_delivery/v1/capacity.py": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+              "intercity_delivery/v1/network.py": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+              "intercity_delivery/v1/configuration.py": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+              "intercity_delivery/v1/flexible_configuration.py": "e54e58fb1af2745151622f52375be3c429dd5319a29b3af9512a9567c623c8ed",
+              "intercity_delivery/v1/flexible_capacity.py": "1b46bb68f54dd8ad12f8e91e8fe506ff9d295f21dd351a011c4a39de1b179a19",
+              "intercity_delivery/v1/flexible_optimizer.py": "4c845b7a7389e4f42e46881bd44254486237909b911824e979b921a286bb0ffe",
+              "intercity_delivery/v1/flexible_validation.py": "100487c18c5003aa8a3c7165788cbc132ad0854566f1caf1a607e29ed165aab7",
+              "intercity_delivery/v1/flexible_runner.py": "36613a8b152436d920693056fbf076a7298e22ef3e6aa006f5540c7234d9e983",
+              "intercity_delivery/v1/flexible_rolling.py": "facf6e2f03296f9bc1c25f31999126920d8d3a7994212ff9abeda1ac2216a0f1",
+              "intercity_delivery/v1/pruning.py": "8f22445ac044d889ed0ed2dc5f141ef7e1e6df9cfc843741df213af8971cf9d7",
+              "intercity_delivery/v1/adapter.py": "345f38a143ec3c9ecb00f1323d145a5956bf3d8d6e542d87e0c6ba6185fdc545"
+            },
+            "git_revision": "f26b4c96907082c2ebb7b0104263831e7100aa26",
+            "git_revision_scope": "HEAD only; SHA256 includes uncommitted implementation",
+            "timestamp_utc": "2026-10-18T02:18:32.105542+00:00",
+            "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+            "platform": "Windows-10-10.0.26200-SP0",
+            "gurobipy_version": "10.0.3"
+          },
+          "model_scope": "adopted V1-F arc-wave + independent empty; excludes S/QVI",
+          "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+          "profile": {
+            "information": "release_revealed",
+            "wave": "arc",
+            "demand": "continuous_stops_zero_allowed",
+            "units": "minutes_hourly",
+            "service": "tour_end_same_time",
+            "input_domain": "integer_windows_within_horizon"
+          },
+          "information": "release_revealed",
+          "run_mode": "rolling",
+          "wave_grouping": "absolute (start,end,city,direction)",
+          "selector_bound": "global_manual_fleet",
+          "selector_bound_reason": "migrated vehicles can serve local waves",
+          "quantity_units": "continuous stops; adapter provenance must identify any shipment-stop proxy",
+          "time_units": "minutes",
+          "vehicle_rate_units": "currency/hour",
+          "cost_units": "currency; minutes divided by 60 exactly once",
+          "window_terminal_reset": false,
+          "terminal_target": null,
+          "terminal_default": "none; no forced real-T city reset unless explicit full-run target",
+          "empty_tau_periods": 9,
+          "empty_duration_source": "tau_periods fallback",
+          "c_empty_hour": 25,
+          "empty_cost_source": "c_direct_hour fallback",
+          "compatibility_extensions": {
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1
+          },
+          "candidate_scope": "conservative release/deadline/capacity/shortest-chain cargo filtering",
+          "completion_policy": "new tasks finish within completion window; prior commitments persist",
+          "rolling_options": {
+            "prediction_horizon": 8,
+            "rolling_step": 2,
+            "extension_horizon": 6,
+            "prune": true
+          },
+          "threads": 1,
+          "solver_seed": 0,
+          "validation_tolerance": 0.000001,
+          "pruning_evidence_scope": "finite checks do not prove general pruning equivalence",
+          "vehicle_usage_scope": "dispatched vehicle-task counts, not unique vehicles"
+        },
+        "served_quantity": 7,
+        "unserved_quantity": 1,
+        "direct_quantity": 2,
+        "transshipment_quantity": 5,
+        "empty_trip_count": 0,
+        "auto_usage": 3,
+        "manual_usage": 8,
+        "warnings": [],
+        "cost_components": {
+          "manual": 120,
+          "auto": 405,
+          "direct": 500,
+          "empty": 0,
+          "transfer": 0,
+          "penalty": 1000,
+          "committed_total": 2025,
+          "total": 2025
+        },
+        "current_time": 24,
+        "message": "Rolling execution reached the real horizon.",
+        "budget_exceeded": false,
+        "schedule_export": {
+          "format": "nonzero values; all omitted admissible mother-domain keys equal zero",
+          "rounding_applied": false,
+          "original_entry_count": 44,
+          "exported_entry_count": 37,
+          "reconstruction": "rebuild domains from config/orders/profile; assign missing decisions zero"
+        }
+      }
+    }
+  ],
+  "elapsed_sec": 0.9529999999795109,
+  "finished_at_utc": "2026-10-18T02:18:32.403616+00:00",
+  "all_completed_with_positive_service": true
+}

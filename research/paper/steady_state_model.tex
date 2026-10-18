@@ -1,0 +1,367 @@
+\documentclass[10pt, reqno]{amsart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{xcolor,hyperref}
+\hypersetup{colorlinks=true, linkcolor=cyan, urlcolor=blue}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{corollary}[proposition]{Corollary}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{remark}{Remark}
+
+\begin{document}
+\title{Batching and synchronization in three-leg same-day intercity freight: a steady-state model}
+\author{Working draft, 2026-09-30}
+\maketitle
+
+% Status of each claim (see steady_state_check.py for numerical checks and steady_state_symbolic.py
+% for sympy checks of the derivatives, closed forms and identities):
+%   Lemma 1, Propositions 2-6 and Corollary 7: proved below; all but the corollary are also checked
+%   numerically, and the algebra in the proofs is checked symbolically.
+%   Remark 2 (deadline-bound regime with loads below capacity): numerical observation only.
+%   The tour-time formula (eq:zonetour) and the factor delta: from a simulation (bhh_tour_check.py,
+%   kept with the working files, not in the Overleaf project); see Open issues 1.
+%
+% Decisions taken on 2026-09-30 (do not reopen without the author):
+%   - Business: intercity SAME-DAY freight; one shipment = one pickup stop and one delivery stop.
+%   - Scope: operations. Demand is given; no pricing, no demand response. The companion paper
+%     (Intercity_Ride_pooling.pdf) owns the question of when the three-stage structure beats the
+%     point-to-point mode; direct shipping is only a reference line here (Section 6).
+%   - Operating mode: waves on a timetable, zoned tours. Vehicle-by-vehicle dispatch is a
+%     dominated special case (Proposition 2) and is not developed.
+%   - Time: mixed formulation. A hard deadline on the longest lead time, plus a linear cost of the
+%     mean lead time (which may be zero).
+%   - Sorting capacity at the hubs is part of the base model.
+%   - The vehicles of a wave do not return together (simulation, 2026-10-01). The line-haul waits
+%     for the slowest collection vehicle, whose tour is (1 + delta) times the average tour; delta is
+%     a constant fitted from the simulation (decided 2026-10-02: factor rather than a cut-off policy).
+% The earlier draft with a linear time cost only (three independent square-root laws, critical
+% distance against direct shipping) is kept in archive/steady_state_model_v1_linear.tex.
+
+\section{Positioning}
+
+We study a same-day intercity freight system with three legs: collection by human-driven vehicles (HVs) in the origin city, line-haul by automated vehicles (AVs) on the highway, and distribution by HVs in the destination city, with a transshipment hub at each highway entrance. Every shipment must be delivered within a service deadline. The question this model is built to answer is: \emph{how often should the system dispatch, how much should each vehicle carry, and what determines these choices---the deadline, the cities, or the highway leg?} The Beardwood--Halton--Hammersley (BHH) approximation is the engine of the analysis: it makes the routing time of a set of stops a concave function of their number, so that dispatching less often saves vehicle-hours per shipment and costs time. Demand is taken as given; pricing and the response of demand to service quality are outside the scope. The model delivers three results.
+\begin{enumerate}
+\item \textbf{What synchronization buys.} In a chain of three batching stages, the time spent waiting for batches to fill is governed by the largest batch only, whereas sorting time is paid at each hub. When sorting is not a constraint, running the three legs on a common wave is optimal, and dispatching vehicles one by one over the whole city is dominated (Lemma~\ref{lem:delay}, Proposition~\ref{prop:common}).
+\item \textbf{Vehicle loads.} For any wave, the distribution load is between one and $\sqrt{2(1+\delta)}$ times the collection load, where $\delta$ measures how much longer the slowest collection vehicle of a wave takes than the average one. The ratio is set by the shadow price of the deadline: it is at its upper end when the deadline is slack and tends to one as the deadline tightens (Proposition~\ref{prop:loads}).
+\item \textbf{Two regimes.} A threshold in demand density separates a deadline-bound regime from a cost-bound regime (Proposition~\ref{prop:regimes}). Below the threshold the headway is pinned by the deadline: the wave is roughly proportional to demand, it shrinks as the highway leg gets longer, and with full vehicles it does not depend on any cost parameter (Proposition~\ref{prop:deadline}). Above the threshold the wave follows a two-thirds-power law in demand whose constant is set by the cities (Proposition~\ref{prop:cost}). In neither regime does the cost or the capacity of the AV shape the batching decisions to any significant extent; the highway leg matters mainly through the time it takes out of the deadline.
+\end{enumerate}
+The time-expanded mixed-integer program in \texttt{main\_v2.tex} is the finite-horizon counterpart of this model and is meant to be used as its numerical validation.
+
+\section{Setting}
+
+Two cities are connected by a highway; each city has a hub at the highway entrance. A shipment is released at a point in one city and must be delivered to a point in the other city on the same day; it requires one pickup stop and one delivery stop.
+
+\begin{assumption}[Demand]\label{as:demand}
+During the operating day, shipments in each direction are released at a constant rate $\Lambda$ (shipments per unit time). Origins and destinations are independent and uniformly distributed over the two cities, which are identical.
+\end{assumption}
+
+\begin{assumption}[Timetable and zoned tours]\label{as:bhh}
+The three legs run on a common timetable with headway $H$, so that each leg handles the shipments in waves of $W=\Lambda H$. The vehicles of a wave leave the hub together, the city is split into $z=W/n$ zones of equal area, and each vehicle visits the $n$ stops of its zone. A tour with $n$ stops in a wave of $W$ shipments takes
+\begin{equation}\label{eq:zonetour}
+2\rho+s(W)\,n,\qquad s(W):=a+\frac{b}{\sqrt W},
+\end{equation}
+where $a\ge0$ is the handling time per stop, $b>0$ is proportional to the square root of the city area, and $\rho>0$ is the average travel time between the hub and a zone. The zones of a wave hold the same number of stops but lie at different distances from the hub, so its vehicles do not return together: the slowest vehicle of a wave takes $(1+\delta)$ times the tour time \eqref{eq:zonetour}, with $\delta\ge0$ a constant.
+\end{assumption}
+
+Expression \eqref{eq:zonetour} rests on the partitioning property of the BHH limit: a single tour through $W$ uniformly distributed stops takes $b\sqrt W$ of travel, and the tours of the zones add up to the same total, so a vehicle with $n$ of the $W$ stops travels $b\,n/\sqrt W$ inside its zone. The time per stop $s(W)$ thus falls with the size of the wave and not with the load of the vehicle. For the small zones considered here, $b$ is to be read as a fitted constant rather than the BHH limit, and $\delta$ is between $0.15$ and $0.5$ and grows with the number of vehicles per wave (see Open issues 1); we treat it as a constant.
+% Literature to position against, all to be verified before citing: Karp (1977) on partitioning
+% algorithms for the TSP; Daganzo (1984) on the distance to visit N points with C stops per vehicle;
+% Burns, Hall, Blumenfeld and Daganzo (1985) on transport-inventory trade-offs; Daganzo (1987) on
+% break-bulk terminals in many-to-many networks; Newell (1971) on dispatching policies;
+% Bertsimas and van Ryzin (1991, 1993) on dynamic vehicle routing in the plane; Roundy (1985, 1986)
+% on nested batching policies; Daganzo's Logistics Systems Analysis for the -1/3 power of headways.
+
+\begin{assumption}[Vehicles]\label{as:veh}
+An HV carries at most $M$ shipments and costs $c$ per unit time in service. An AV carries at most $\hat M\ge M$ shipments, costs $\hat c\le c$ per unit time, and is used on the highway only. The highway takes $\tau$ in either direction. A wave larger than $\hat M$ is carried by several AVs that leave together. Fleets are sized to the offered load, and queueing for vehicles is ignored.
+\end{assumption}
+
+\begin{assumption}[Hubs]\label{as:hub}
+At each hub a wave is sorted at rate $\mu=\kappa\Lambda$ with $\kappa>2$, so that a wave takes $W/\mu=H/\kappa$ to sort, and it leaves the hub when it has been sorted. At the origin hub, sorting starts when the slowest collection vehicle of the wave has returned. Each transfer takes a further $\theta$ for loading and unloading and costs $h$ per shipment.
+\end{assumption}
+
+\begin{assumption}[Service]\label{as:time}
+Every shipment must be delivered within $L$ of its release. In addition, each shipment incurs a cost $\omega\ge0$ per unit of lead time, measured from release to delivery.
+\end{assumption}
+
+The operator chooses the wave $W$ (equivalently, the headway $H=W/\Lambda$), the collection load $n_1$, and the distribution load $n_2$, with $n_i\le\min\{M,W\}$. Batch sizes are treated as continuous variables.
+
+\section{Lead times}
+
+\begin{lemma}[Consolidation delay is paid once]\label{lem:delay}
+Consider three stages in series. Stage $k$ forwards shipments in batches of size $q_k$: it releases a batch as soon as $q_k$ shipments are waiting, and every batch of a stage takes the same time to reach the next stage. Let $\bar q:=\max\{q_1,q_2,q_3\}$. If each $q_k$ divides $\bar q$, the time that a shipment spends waiting for batches to fill is $(\bar q-1)/(2\Lambda)$ on average and $(\bar q-1)/\Lambda$ at most. For arbitrary batch sizes the average is at least $(\bar q-1)/(2\Lambda)$.
+\end{lemma}
+
+\begin{proof}
+Number the shipments in order of release and call shipment $j\bar q$ ($j=1,2,\dots$) a closing shipment. Batches of a given stage are forwarded in order and take the same time, so shipments stay in order of release. When a closing shipment is released, the number of shipments released so far is a multiple of every batch size; hence, at each stage, the batch that contains the closing shipment is complete the moment the closing shipment joins it, and the closing shipment never waits. At the stage with the largest batch, the shipments $(j-1)\bar q+1,\dots,j\bar q$ form one batch, which leaves when the closing shipment arrives. Downstream of that stage the $\bar q$ shipments arrive together and are split into full batches at once. Every shipment of the block therefore finishes together with its closing shipment, and its waiting time equals the time between its own release and the release of the closing shipment. For the $i$-th shipment of the block this is $(\bar q-i)/\Lambda$; the largest value is $(\bar q-1)/\Lambda$ and the average over $i=1,\dots,\bar q$ is $(\bar q-1)/(2\Lambda)$. For arbitrary batch sizes, a shipment cannot leave the stage with the largest batch before the last shipment of its batch has been released, which gives the same expression as a lower bound.
+\end{proof}
+
+The argument uses only the expected time between releases, so the averages also hold in expectation for Poisson releases. In the continuous model we use $\bar q/(2\Lambda)$ and $\bar q/\Lambda$.
+
+\begin{proposition}[A common wave]\label{prop:common}
+Suppose that sorting is not a constraint ($\kappa=\infty$) and let the three legs use nested waves $W_1$, $m$, $W_2$ with loads $n_1\le W_1$ and $n_2\le W_2$ and the same $\delta$. Replacing the three waves by their maximum does not raise the vehicle cost, the mean lead time, or the longest lead time. In particular, if $\delta=0$, dispatching vehicles one by one, each on a tour over the whole city ($W_1=n_1$, $W_2=n_2$), is weakly dominated.
+\end{proposition}
+
+\begin{proof}
+The vehicle cost per shipment is $c\,[s(W_1)+2\rho/n_1+s(W_2)+2\rho/n_2]+\hat c\tau/\min\{m,\hat M\}$. By Lemma~\ref{lem:delay}, the mean and the longest lead times depend on the waves through $\max\{W_1,m,W_2\}$ and through the tour times $s(W_1)n_1$ and $s(W_2)n_2$. Raising $W_1$ and $W_2$ to the maximum lowers $s(W_1)$ and $s(W_2)$, and raising $m$ lowers the line-haul cost; none of these changes the maximum. A vehicle that tours the whole city alone serves a wave of its own load, with tour time $2\rho+s(n)n=2\rho+an+b\sqrt n$, so vehicle-by-vehicle dispatch is one of the nested policies.
+\end{proof}
+
+The statement needs two qualifications. With a finite sorting rate, collecting in several smaller waves per line-haul departure would spread the sorting work at the origin hub, at the price of sparser zones. And a vehicle that is dispatched alone waits for no other vehicle, so with $\delta>0$ one-by-one dispatch avoids a delay that a wave incurs; this is the cost of synchronization. In the illustration of Section~\ref{sec:illustration} the wave remains cheaper except in the thinnest market. We keep the common timetable of Assumption~\ref{as:bhh}.
+
+On the common timetable, a shipment waits for its wave, is collected, sorted and transferred at the origin hub, line-hauled, sorted and transferred at the destination hub, and distributed. With
+\[
+\bar\gamma:=\frac12+\frac2\kappa,\qquad \hat\gamma:=1+\frac2\kappa,\qquad \bar F:=(3+2\delta)\rho+\tau+2\theta,\qquad \hat F:=3(1+\delta)\rho+\tau+2\theta,
+\]
+the mean and the longest lead times are
+\begin{align}
+\bar T(W;n_1,n_2)&=\bar\gamma\,\frac W\Lambda+s(W)\Big((1+\delta)\,n_1+\frac{n_2}2\Big)+\bar F,\label{eq:Tmean}\\
+T^{\max}(W;n_1,n_2)&=\hat\gamma\,\frac W\Lambda+(1+\delta)\,s(W)\,(n_1+n_2)+\hat F.\label{eq:Tmax}
+\end{align}
+Every collected shipment waits at the origin hub until the slowest collection vehicle has returned, which takes $(1+\delta)(2\rho+s(W)n_1)$ from the dispatch of the wave. At the destination hub the wave splits and no vehicle waits for another: a distributed shipment is delivered after the stem and half of the in-zone part of the tour on average, $\rho+s(W)n_2/2$, and the last shipment on the slowest vehicle after $(1+\delta)(\rho+s(W)n_2)$. The consolidation delay is paid once, whereas the sorting time $W/\mu$ is paid at each hub; this is why $\bar\gamma$ and $\hat\gamma$ exceed $1/2$ and $1$.
+
+\section{The batching problem}
+
+The generalized cost per shipment is the vehicle cost plus the cost of the mean lead time plus the handling cost:
+\begin{equation}\label{eq:G}
+G(W;n_1,n_2)=c\Big[2s(W)+\frac{2\rho}{n_1}+\frac{2\rho}{n_2}\Big]+\frac{\hat c\,\tau}{\min\{W,\hat M\}}+\omega\,\bar T(W;n_1,n_2)+2h .
+\end{equation}
+A collection vehicle is in service for $2\rho+s(W)n_1$ and carries $n_1$ shipments, and similarly for distribution; an AV trip of duration $\tau$ carries $\min\{W,\hat M\}$ shipments and returns with the wave of the opposite direction. The operator solves
+\begin{equation}\label{eq:P}
+\min_{W,\,n_1,\,n_2}\ G(W;n_1,n_2)\quad\text{subject to}\quad T^{\max}(W;n_1,n_2)\le L,\qquad n_1,n_2\le M .
+\end{equation}
+
+\begin{proposition}[Vehicle loads]\label{prop:loads}
+For a given wave $W$, the optimal loads are unique and
+\begin{equation}\label{eq:loads}
+n_1=\min\Big\{M,\sqrt{\frac{2c\rho}{(1+\delta)(\omega+\lambda)\,s(W)}}\Big\},\qquad
+n_2=\min\Big\{M,\sqrt{\frac{2c\rho}{(\omega/2+(1+\delta)\lambda)\,s(W)}}\Big\},
+\end{equation}
+where $\lambda\ge0$ is the multiplier of the deadline, with $\lambda=0$ if the deadline is slack at these loads. Consequently, when neither load is at capacity,
+\begin{equation}\label{eq:ratio}
+1\ \le\ \frac{n_2}{n_1}=\sqrt{\frac{(1+\delta)(\omega+\lambda)}{\omega/2+(1+\delta)\lambda}}\ \le\ \sqrt{2(1+\delta)} ,
+\end{equation}
+the ratio decreases in $\lambda$, it equals $\sqrt{2(1+\delta)}$ if and only if the deadline is slack, and $n_1=n_2$ if $\omega=0$.
+\end{proposition}
+
+\begin{proof}
+For a given $W$, the loads minimize $2c\rho\,(1/n_1+1/n_2)+\omega s(W)((1+\delta)n_1+n_2/2)$ subject to $(1+\delta)s(W)(n_1+n_2)\le L-\hat F-\hat\gamma W/\Lambda$ and $n_i\le M$. The objective is strictly convex and separable and the constraints are linear, so the minimizer is unique and is characterized by the first-order conditions with a multiplier $\lambda$ on the deadline, which give \eqref{eq:loads}. The square of the ratio in \eqref{eq:ratio} has derivative $-(1+\delta)\,\omega\,(\tfrac12+\delta)/(\omega/2+(1+\delta)\lambda)^2$ with respect to $\lambda$, equals $2(1+\delta)$ at $\lambda=0$, and tends to $1$ as $\lambda\to\infty$.
+\end{proof}
+
+The load of a vehicle trades the stem, which is paid once per tour, against the time that the shipments on board spend on the tour. Two things make time on a collection tour more expensive than time on a distribution tour. A collected shipment stays on the vehicle until the tour ends, whereas a distributed shipment leaves it halfway on average: this is the factor $2$. And the collection tours merge at the origin hub, so every shipment of the wave waits for the slowest vehicle, whereas the distribution tours split at the destination hub: this is the factor $1+\delta$. The deadline, in contrast, is set by the last shipment on the slowest vehicle at either end and treats the two tours alike. The tighter the deadline, the more the two loads are governed by it and the closer they are to each other.
+
+\section{Two regimes}
+
+\subsection{The cost-bound wave}
+
+Suppose $\omega>0$ and ignore the deadline. By Proposition~\ref{prop:loads} with $\lambda=0$, the cost of a wave $W$ is
+\begin{equation}\label{eq:G0}
+G^\circ(W)=2c\,s(W)+\varphi_1(s(W))+\varphi_2(s(W))+\frac{\hat c\,\tau}{\min\{W,\hat M\}}+\frac{\omega\bar\gamma W}{\Lambda}+\omega\bar F+2h,
+\end{equation}
+where $\varphi_i(s):=\min_{n\le M}\{2c\rho/n+\omega_i s\,n\}$ with $\omega_1:=(1+\delta)\omega$ and $\omega_2:=\omega/2$ the costs of a unit of tour time per shipment on board at the two ends. When neither load is at capacity, $\varphi_1(s)+\varphi_2(s)=2\big(1+\sqrt{2(1+\delta)}\big)\sqrt{c\rho\,\omega\,s}$.
+
+\begin{proposition}[The cost-bound wave]\label{prop:cost}
+$G^\circ$ is convex and has a unique minimizer $W^\circ$. Moreover:
+\begin{enumerate}
+\item if $W^\circ<\hat M$, then
+\begin{equation}\label{eq:wavebounds}
+W^\circ\ \ge\ \max\Big\{\sqrt{\frac{\Lambda\hat c\,\tau}{\omega\bar\gamma}},\ \Big(\frac{\Lambda c\,b}{\omega\bar\gamma}\Big)^{2/3}\Big\};
+\end{equation}
+\item $W^\circ$ increases in $\Lambda$, $\tau$, $\hat c$, $c$, $b$, $\rho$, $\kappa$, and $\delta$; beyond $\hat M$ the AVs run full and $W^\circ$ does not depend on $\tau$ or $\hat c$;
+\item if $a>0$ and $\sqrt{4c\rho/(\omega a)}\le M$, then, as $\Lambda\to\infty$,
+\begin{equation}\label{eq:asym}
+W^\circ\sim\Big(\frac{K\Lambda}{2\omega\bar\gamma}\Big)^{2/3},\qquad K:=b\Big[2c+\Big(1+\sqrt{2(1+\delta)}\Big)\sqrt{\frac{c\rho\,\omega}{a}}\Big].
+\end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Let $n_i(W)$ denote the loads of \eqref{eq:loads} with $\lambda=0$. By the envelope theorem, the derivative of $\varphi_i(s(W))$ with respect to $W$ is $\omega_i n_i(W)s'(W)$. Where the load is at capacity this is $\omega_iMs'(W)$, which increases in $W$ because $s$ is convex. Where it is not, $\varphi_i(s(W))$ is a multiple of $\sqrt{s(W)}$, and a direct computation gives
+\[
+\frac{d^2}{dW^2}\sqrt{s(W)}=\frac{b}{16}\,W^{-3}s(W)^{-3/2}\big(6a\sqrt W+5b\big)>0 .
+\]
+The derivative is continuous where the load reaches capacity, so $\varphi_i(s(W))$ is convex. The terms $2c\,s(W)$ and $1/\min\{W,\hat M\}$ are convex and the last variable term is linear; $G^\circ$ is therefore strictly convex, and it is unbounded at both ends, so the minimizer is unique. For (1), on $(0,\hat M)$ write $G^\circ$ as the sum of $\hat c\tau/W+\omega\bar\gamma W/\Lambda$, which is decreasing to the left of its minimizer $\sqrt{\Lambda\hat c\tau/(\omega\bar\gamma)}$, and a decreasing function; a minimizer in $(0,\hat M)$ then lies to the right of that point. The same argument with $2cb/\sqrt W+\omega\bar\gamma W/\Lambda$ gives the second bound. For (2), the derivative of $G^\circ$ with respect to $W$ decreases pointwise in each of the listed parameters ($\bar\gamma$ decreases in $\kappa$, and $\omega_1n_1(W)$ increases in $\delta$), so the minimizer of the convex function moves to the right. For (3), the first-order condition is $\omega\bar\gamma/\Lambda=-D'(W^\circ)$ with
+\[
+-D'(W)=\frac b2\,W^{-3/2}\Big[2c+\omega_1\,n_1(W)+\omega_2\,n_2(W)\Big]+\hat c\,\tau\,W^{-2}\,\mathbf 1\{W<\hat M\}.
+\]
+By (1), $W^\circ\to\infty$ as $\Lambda\to\infty$; then $n_i(W)\to\sqrt{2c\rho/(\omega_i a)}$, the bracket tends to $K/b$, and the last term is of smaller order, which gives \eqref{eq:asym}.
+\end{proof}
+
+The exponent $2/3$ is the familiar one for the trade-off between routing density and waiting. What is specific to the three-leg chain is the constant: the second term of $K$ comes from the stems, because a larger wave shortens the time per stop, lets each vehicle carry more, and spreads the stem over more shipments. The line-haul enters only through the first bound in \eqref{eq:wavebounds}, which grows with $\sqrt\Lambda$ and is overtaken by the second as demand grows: \emph{in a dense market the wave is set by the cities, and the highway leg follows.}
+
+\subsection{When the deadline binds}
+
+Let $(W^\circ;n_1^\circ,n_2^\circ)$ be the cost-bound policy and let
+\begin{equation}\label{eq:L0}
+L^\circ:=T^{\max}(W^\circ;n_1^\circ,n_2^\circ)
+\end{equation}
+be the longest lead time that it produces. If $\omega=0$ the cost-bound wave is unbounded and we set $L^\circ:=\infty$.
+
+\begin{proposition}[Two regimes]\label{prop:regimes}
+\begin{enumerate}
+\item If $L\ge L^\circ$, the cost-bound policy solves \eqref{eq:P}.
+\item If $L<L^\circ$, the deadline holds with equality at every solution of \eqref{eq:P}.
+\item For given $\kappa$, $L^\circ$ is decreasing in $\Lambda$. Hence, for a given deadline $L$, there is a threshold $\Lambda^\circ(L)$ such that the deadline binds if and only if $\Lambda<\Lambda^\circ(L)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) The cost-bound policy minimizes $G$ without the deadline and is feasible. (2) Suppose that a solution $(W^*;n^*)$ satisfies the deadline strictly. Then it minimizes $G$ locally. Since $G$ is strictly convex in the loads, $n^*$ are the loads of \eqref{eq:loads} with $\lambda=0$; these are continuous in $W$, so they remain feasible for $W$ near $W^*$, and $G^\circ(W)\ge G^\circ(W^*)$ there. A local minimizer of the convex function $G^\circ$ is its global minimizer, so the solution is the cost-bound policy, whose longest lead time $L^\circ$ exceeds $L$: a contradiction. (3) Write $H^\circ=W^\circ/\Lambda$. From the first-order condition in the proof of Proposition~\ref{prop:cost}, $H^\circ=-W^\circ D'(W^\circ)/(\omega\bar\gamma)$, and
+\[
+-W\,D'(W)=\frac b2\Big[\frac{2c}{\sqrt W}+\frac{\omega_1\,n_1(W)}{\sqrt W}+\frac{\omega_2\,n_2(W)}{\sqrt W}\Big]+\frac{\hat c\,\tau}{W}\,\mathbf 1\{W<\hat M\}
+\]
+is decreasing in $W$, because $n_i(W)/\sqrt W=\min\{M/\sqrt W,\ \sqrt{2c\rho/(\omega_i(aW+b\sqrt W))}\}$ is. Since $W^\circ$ increases in $\Lambda$, $H^\circ$ decreases in $\Lambda$ (if $W^\circ=\hat M$ over a range of $\Lambda$, then $H^\circ=\hat M/\Lambda$ there). The tour times $s(W)n_i(W)=\min\{Ms(W),\sqrt{2c\rho\,s(W)/\omega_i}\}$ are decreasing in $W$ as well. By \eqref{eq:Tmax}, $L^\circ=\hat\gamma H^\circ+(1+\delta)\,s(W^\circ)(n_1^\circ+n_2^\circ)+\hat F$ is therefore decreasing in $\Lambda$.
+\end{proof}
+
+A sparse market wants long headways to build density, and long headways breach the deadline; a dense market reaches its routing economies within a short headway. The threshold $\Lambda^\circ(L)$ is the density at which the cost-bound headway just fits within the deadline. It is high when the cost of time $\omega$ is low, so that freight with a low value of time is deadline-bound over a wide range of densities.
+
+\begin{proposition}[Deadline-bound regime with full vehicles]\label{prop:deadline}
+Suppose that the deadline binds and that the optimal loads are $n_1=n_2=M$. Let $G_M(W):=G(W;M,M)$, let $W_M^\circ$ be its minimizer, and let $W_-\le W_+$ be the roots of
+\begin{equation}\label{eq:deadline}
+\hat\gamma\,\frac W\Lambda+2(1+\delta)M\,s(W)=L-\hat F .
+\end{equation}
+Then the optimal wave is $W_+$ if $W_M^\circ\ge W_+$, and $W_-$ if $W_M^\circ\le W_-$. In the first case:
+\begin{enumerate}
+\item $W_+$ does not depend on $c$, $\hat c$, $\omega$, $h$, or $\hat M$;
+\item $W_+$ increases in $L$, $\Lambda$, and $\kappa$, and decreases in $\tau$, $\theta$, $\rho$, $a$, $b$, $M$, and $\delta$;
+\item the headway $H_+=W_+/\Lambda$ increases in $\Lambda$ and is bounded above by $(L-\hat F-2(1+\delta)Ma)/\hat\gamma$, to which it converges as $\Lambda$ grows;
+\item full loads require $(1+\delta)(\omega+\lambda^D)\,s(W_+)\le 2c\rho/M^2$, where $\lambda^D:=-G_M'(W_+)/g_M'(W_+)\ge0$ and $g_M(W)$ denotes the left-hand side of \eqref{eq:deadline}.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+With the loads at $M$, the deadline reads $g_M(W)\le L-\hat F$. The function $g_M$ is convex, so the feasible waves form the interval $[W_-,W_+]$, and $G_M$ is convex by the argument of Proposition~\ref{prop:cost}. Since the deadline binds, $W_M^\circ$ is not interior to the interval, and the minimizer of a convex function over an interval is the endpoint nearest to its unconstrained minimizer. Equation \eqref{eq:deadline} involves none of the parameters in (1). At the larger root $g_M'(W_+)>0$, and $g_M+\hat F$ increases in $\tau$, $\theta$, $\rho$, $a$, $b$, $M$, $\delta$ and decreases in $\Lambda$ and $\kappa$, which gives (2) by the implicit function theorem. In terms of the headway, \eqref{eq:deadline} reads $\hat\gamma H+2(1+\delta)M(a+b/\sqrt{\Lambda H})=L-\hat F$, whose left-hand side decreases in $\Lambda$ and exceeds $\hat\gamma H+2(1+\delta)Ma$, which gives (3). For (4), the first-order condition of \eqref{eq:P} in $W$ with multiplier $\lambda^D$ on the deadline gives $\lambda^D=-G_M'(W_+)/g_M'(W_+)$, and the first-order condition in $n_1$ at the capacity $M$ reads $-2c\rho/M^2+(1+\delta)(\omega+\lambda^D)s(W_+)\le0$; the condition for $n_2$ is weaker.
+\end{proof}
+
+In this regime the timetable is an exercise in fitting the legs into the deadline. The headway is what is left of the deadline after the fixed times and two full tours, divided by $\hat\gamma$; the wave is that headway times the demand rate, so it is roughly proportional to demand rather than following the two-thirds-power law. A longer highway leg leaves less time and \emph{shortens} the wave, the opposite of what it does in the cost-bound regime. No cost parameter appears: neither the cost nor the capacity of the AV affects the timetable. In the instances we computed, the condition in (4) was also sufficient for full loads to be optimal.
+
+\begin{remark}[Deadline-bound regime with loads below capacity]\label{rem:interior}
+When the deadline binds and the condition in (4) fails, the loads are given by \eqref{eq:loads} with $\lambda>0$, their ratio lies strictly between $1$ and $\sqrt{2(1+\delta)}$, and the wave solves a one-dimensional problem that we treat numerically. In all the instances we computed the wave decreases in $\tau$ and moves only slightly with $\hat c$; we have no proof.
+\end{remark}
+
+\begin{corollary}[Fleet sizes and sorting capacity]\label{cor:fleet}
+A policy $(W;n_1,n_2)$ keeps $\Lambda\,[2s(W)+2\rho/n_1+2\rho/n_2]$ HVs busy in each city on average and $2\Lambda\tau/\min\{W,\hat M\}$ AVs on the highway; a wave uses $W/n_1$ collection vehicles and $W/n_2$ distribution vehicles at a time. Each hub sorts at rate $\kappa\Lambda$ and is busy a fraction $2/\kappa$ of the time.
+\end{corollary}
+
+\section{Reference line: direct shipping}\label{sec:bench}
+
+Direct shipping is the conventional point-to-point operation. It is used here only as a reference line in the numerical study. A wave of $W$ shipments is carried by $W/n$ HVs with $n\le\min\{M,W\}$; each vehicle collects the $n$ shipments of its zone in the origin city, drives the highway, and delivers them. Its shipments are scattered over the whole destination city, so the distribution tour cannot be zoned and takes $f(n):=an+b\sqrt n$. There is no sorting and no transfer. The cost and the longest lead time are
+\begin{align}
+G_D(W;n)&=c\Big[s(W)+a+\frac{b}{\sqrt n}+\frac{2\rho+\tau}{n}\Big]+\omega\Big[\frac{W}{2\Lambda}+2\rho+s(W)\,n+\tau+\frac{f(n)}{2}\Big],\label{eq:GD}\\
+T_D^{\max}(W;n)&=\frac W\Lambda+(1+\delta)\big(2\rho+s(W)\,n\big)+\tau+f(n).\label{eq:TD}
+\end{align}
+A direct vehicle waits for no other vehicle, so $\delta$ enters only the longest lead time, through the slowest vehicle. Let $R(W,n):=f(n)-s(W)\,n-2\rho$ be the time that zoning saves on a tour of $n$ stops in a wave of $W$, and let $\Theta(W,n):=2h+\omega\,(2\theta+2W/\mu)+\omega\delta\,(2\rho+s(W)n)$ be the cost of the two transfers, including the wait for the slowest collection vehicle. Direct subtraction gives, for every $W$ and $n\le\min\{M,W\}$,
+\begin{align}
+G_D(W;n)&=G(W;n,n)-\Theta(W,n)+\Big(\frac cn-\frac{\hat c}{\min\{W,\hat M\}}\Big)\tau+\Big(\frac cn+\frac\omega2\Big)R(W,n),\label{eq:identity}\\
+T_D^{\max}(W;n)&=T^{\max}(W;n,n)-\Big(2\theta+\frac{2W}{\mu}\Big)+\rho+R(W,n)-\delta\big(\rho+s(W)\,n\big).\label{eq:identityT}
+\end{align}
+The first identity splits the cost advantage of the three-leg chain into a line-haul part (a cheaper vehicle that carries the whole wave) and a re-sorting part (the hubs re-sort the shipments, so both ends are zoned, whereas a direct vehicle can be zoned at one end only), against the cost of the transfers and of synchronization. The second shows that the two systems also differ in how much of the deadline they consume: the transfers take time that direct shipping does not spend, and zoning both ends gives time back.
+
+\section{Illustration}\label{sec:illustration}
+
+The parameters are illustrative and uncalibrated: $c=40$, $\hat c=15$, $a=0.05$, $b=0.6$, $\rho=0.2$, $M=12$, $\hat M=120$, $\theta=0.25$, $h=1$, $\kappa=8$, $\delta=0.3$, and a deadline $L=8$, with time in hours and loads of at least one shipment.
+
+Table~\ref{tab:tau} varies the highway time for $\Lambda=30$. With $\omega=1$ the deadline binds throughout: the cost-bound wave would be about $115$ to $120$ with a longest lead time of ten to thirteen hours. The wave falls from $80$ to $33$ as $\tau$ rises from half an hour to four hours, and the two loads move closer together. With $\omega=5$ the cost-bound policy fits within the deadline up to $\tau=2$; the wave then rises slightly with $\tau$ and $n_2/n_1=\sqrt{2(1+\delta)}\approx1.61$.
+
+\begin{table}[h]
+\centering
+\caption{Optimal policy against highway time ($\Lambda=30$, $L=8$, $\kappa=8$, $\delta=0.3$).}\label{tab:tau}
+\begin{tabular}{rrrrrrl}
+\toprule
+$\omega$ & $\tau$ & $W$ & headway & $n_1$ & $n_2$ & regime\\
+\midrule
+1 & 0.5 & 79.8 & 2.66 & 8.3 & 10.7 & deadline\\
+1 & 1 & 73.0 & 2.43 & 7.6 & 9.5 & deadline\\
+1 & 2 & 59.4 & 1.98 & 6.3 & 7.2 & deadline\\
+1 & 3 & 45.8 & 1.53 & 4.8 & 5.2 & deadline\\
+1 & 4 & 32.5 & 1.08 & 3.3 & 3.5 & deadline\\
+\midrule
+5 & 0.5 & 45.5 & 1.52 & 4.2 & 6.8 & cost\\
+5 & 1 & 46.4 & 1.55 & 4.2 & 6.8 & cost\\
+5 & 2 & 48.1 & 1.60 & 4.2 & 6.8 & cost\\
+5 & 3 & 45.7 & 1.52 & 4.0 & 6.1 & deadline\\
+5 & 4 & 32.8 & 1.09 & 3.0 & 3.7 & deadline\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:lambda} varies the demand rate for $\tau=2$. The threshold $\Lambda^\circ$ is about $260$ shipments per hour for $\omega=1$ and about $14$ for $\omega=5$. Below the threshold the headway stays between $1.7$ and $2.3$ hours, so the wave grows roughly in proportion to demand; above it the headway shortens as demand grows.
+
+\begin{table}[h]
+\centering
+\caption{Optimal policy against the demand rate ($\tau=2$, $L=8$, $\kappa=8$, $\delta=0.3$).}\label{tab:lambda}
+\begin{tabular}{rrrrrrl}
+\toprule
+$\omega$ & $\Lambda$ & $W$ & headway & $n_1$ & $n_2$ & regime\\
+\midrule
+1 & 3 & 6.8 & 2.28 & 2.5 & 2.6 & deadline\\
+1 & 10 & 21.3 & 2.13 & 4.2 & 4.6 & deadline\\
+1 & 30 & 59.4 & 1.98 & 6.3 & 7.2 & deadline\\
+1 & 100 & 173.6 & 1.74 & 9.0 & 11.5 & deadline\\
+1 & 300 & 529.7 & 1.77 & 12.0 & 12.0 & cost\\
+1 & 1000 & 1182.0 & 1.18 & 12.0 & 12.0 & cost\\
+\midrule
+5 & 3 & 6.9 & 2.29 & 2.3 & 2.8 & deadline\\
+5 & 10 & 21.3 & 2.13 & 3.5 & 5.3 & deadline\\
+5 & 30 & 48.1 & 1.60 & 4.2 & 6.8 & cost\\
+5 & 100 & 107.8 & 1.08 & 4.8 & 7.7 & cost\\
+5 & 300 & 218.9 & 0.73 & 5.2 & 8.4 & cost\\
+5 & 1000 & 499.6 & 0.50 & 5.7 & 9.1 & cost\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:hub} compares three levers for $\omega=1$, $\Lambda=30$, $\tau=2$. Lowering the sorting rate from unlimited to three times the demand rate cuts the wave from $74$ to $45$. Raising $\delta$ from zero to one half cuts it from $67$ to $56$ and the collection load from $8.0$ to $5.4$. Raising the AV cost eightfold moves the wave from $58$ to $62$. \emph{The hubs and the synchronization of the collection tours shape the timetable far more than the highway vehicle does.}
+
+\begin{table}[h]
+\centering
+\caption{Sorting capacity, the wait for the slowest vehicle, and AV cost ($\omega=1$, $\Lambda=30$, $\tau=2$, $L=8$; the other parameters at their base values).}\label{tab:hub}
+\begin{tabular}{rrrr@{\hskip 2.5em}rrrr@{\hskip 2.5em}rr}
+\toprule
+$\kappa$ & $W$ & $n_1$ & $n_2$ & $\delta$ & $W$ & $n_1$ & $n_2$ & $\hat c$ & $W$\\
+\midrule
+$\infty$ & 74.2 & 6.7 & 7.8 & 0 & 66.6 & 8.0 & 9.2 & 5 & 58.1\\
+20 & 67.4 & 6.5 & 7.6 & 0.15 & 62.7 & 7.0 & 8.1 & 15 & 59.4\\
+8 & 59.4 & 6.3 & 7.2 & 0.3 & 59.4 & 6.3 & 7.2 & 30 & 61.1\\
+4 & 49.7 & 5.9 & 6.8 & 0.5 & 55.5 & 5.4 & 6.2 & 40 & 62.1\\
+3 & 44.9 & 5.7 & 6.5 & & & & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:sync} sets the wave against vehicle-by-vehicle dispatch, in which each vehicle tours the whole city alone, pays the same stem, and waits for no other vehicle. The wave is cheaper by a wide and growing margin as demand grows; only in the thinnest market, and only with a large $\delta$, does one-by-one dispatch come out ahead. Synchronization has a cost, but density pays for it.
+
+\begin{table}[h]
+\centering
+\caption{Generalized cost per shipment: waves against vehicle-by-vehicle dispatch ($\tau=2$, $L=8$, $\kappa=8$).}\label{tab:sync}
+\begin{tabular}{rrrrr}
+\toprule
+$\omega$ & $\Lambda$ & waves, $\delta=0.3$ & waves, $\delta=0.5$ & one by one\\
+\midrule
+1 & 3 & 47.39 & 50.10 & 48.89\\
+1 & 10 & 31.32 & 32.84 & 38.82\\
+1 & 30 & 23.71 & 24.65 & 35.08\\
+1 & 100 & 19.25 & 19.82 & 33.02\\
+\midrule
+5 & 3 & 72.13 & 74.68 & 74.77\\
+5 & 10 & 55.97 & 57.30 & 65.09\\
+5 & 30 & 47.87 & 48.83 & 61.47\\
+5 & 100 & 41.89 & 42.79 & 59.51\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Open issues}
+
+\begin{enumerate}
+\item \textbf{The tour-time formula and the factor $\delta$.} Expression \eqref{eq:zonetour} combines an asymptotic routing approximation with an average stem time, and the model recommends only three to twelve stops per zone. A simulation with optimal tours on uniformly scattered stops (unit square, hub at the middle of one edge; script \texttt{bhh\_tour\_check.py}, kept outside this project) gives three findings for five to twelve stops per zone and forty to a hundred stops per wave. First, the functional form holds: with fitted constants the error of \eqref{eq:zonetour} is within $2\%$ for compact zones redrawn at each wave and for fixed territories. Second, the BHH constant must be fitted, not taken from the limit: with the limiting constant the formula overestimates tour lengths by four to eight percent for compact zones and by seven to eleven percent for fixed territories, because the zone tours add up to only $0.8$ to $0.9$ of a single tour through all stops; the fitted $b$ is about $0.85$ of the limiting value, while the fitted stem matches the hub-to-zone distance. Third, the vehicles of a wave do not return together: the slowest vehicle takes $15$ to $50\%$ longer than the average, because zones lie at different distances from the hub (random stop counts in fixed territories add only a few points). Balancing zones by tour time does not repair this: it brings the slowest vehicle to within $2$ to $13\%$ of the average only by giving the near zones eleven to sixteen stops and the far zones one, which raises the total tour time of the wave by $4$ to $28\%$. The vehicle that serves the farthest stops must travel at least twice their distance, and the tour of a compact zone is only $5$ to $37\%$ above that floor. This is why the model carries the factor $1+\delta$. Two things remain to be done: $\delta$ grows with the number of vehicles per wave, $W/n_1$, and should be fitted as a function of it rather than held constant; and the alternative of dispatching the line-haul on schedule and carrying late shipments on the next wave has not been modelled.
+\item \textbf{Sorting and the common timetable.} With a finite sorting rate, collecting in several smaller waves per line-haul departure may beat the common wave (see the remark after Proposition~\ref{prop:common}). The sorting rate is also a natural design variable: adding its cost to \eqref{eq:G} gives a joint problem of capacity and timetable.
+\item \textbf{Alignment with the time-expanded program.} The program in \texttt{main\_v2.tex} has time windows and a penalty for unserved demand but no cost of lead time, no sorting rate, and no timetable. The two models must be put on the same footing before one can validate the other; the comparison should then be run under stationary demand and under demand that varies over the day, where the steady-state rules are applied with the local demand rate.
+\item \textbf{The deadline-bound regime with loads below capacity} (Remark~\ref{rem:interior}) has no comparative statics yet.
+\item \textbf{Calibration.} The deadline and the timetable can be read from same-day service offers; the cost of time $\omega$, the stem time, and the routing constants need a documented corridor. The illustration should also cover an AV cost close to the HV cost, which is the near-term case.
+\item \textbf{Stops versus pieces.} One shipment is one stop at each end. Where a shipper hands over many pieces at one stop, the collection tour has fewer stops than shipments, and capacity binds in volume.
+\item \textbf{Imbalanced demand, heterogeneous goods, asymmetric cities, and random tour times} are left as extensions. Random tour times would add to $\delta$ at the origin hub, where the collection tours merge, but not at the destination hub, where the wave splits.
+\end{enumerate}
+
+\end{document}

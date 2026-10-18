@@ -1,8 +1,8 @@
-# MIGRATION_PLAN — 条件化代码迁移计划，等待批准
+# MIGRATION_PLAN — 模型迁移依赖与当前交付
 
 2026-10-17。负责人：Principal Investigator。
 
-**只完成审计与设计，未批准或启动代码迁移。** Referee接受静态审计，源模型/算法同步为MAJOR REVISION。下列实现路径、参数和阶段均为建议，不表示已有模块或已解决数学歧义。先由作者确认G0，再由用户批准具体实施范围及测试预算。
+**2026-10-18更新：V1-F、RH、货流剪枝与三个实验入口已实现，CFS小样本执行检查完成。** V1-M已完成。旧阶段保留历史，最新交付与剩余依赖见文末；warm start/local branching、真实终点RH尾计划、大型实验和QVI尚未完成。
 
 依据：[模型合同](MODEL_CONTRACT.md)、[差异索引](MODEL_DIFF.md)、[代码报告](../experiments/reports/model_code_gap.md)、[独立审查](reviews/model_alignment_review.md)。
 
@@ -16,14 +16,14 @@
 
 ## 2. G0：作者需确认的定义
 
-所有回答当前为 **OPEN**；选项/建议不视为默认决定。
+以下保留原始决策清单；未标为作者已确认的项目仍为 **OPEN**，选项/建议不视为默认决定。最新Q4已有两项确认，见该行与车辆调拨分支。
 
 | 编号 | 需要确认的问题 | 影响 |
 |---|---|---|
 | Q1 | 是否先迁移main_v2正文V1-M/F，S-current独立作解析目标、S-linear历史参照？sorting/ω/δ是否另阶段处理？ | 冻结实施模型，避免三稿混成新问题 |
 | Q2 | wave按同城市/方向/开始期定义，还是按完整(i,j,k,d)？同起点不同终点能否各用独立全城分区？ | 变量和容量耦合；R1 |
 | Q3 | direct迁入后库存超过初始N^k时，local单波是否仍限N^k？迁入车能否做local？ | u枚举域；不可自行改成总车队 |
-| Q4 | τ期空返是否跳过stem/tours、仅干线计费？人工复位是否仅在全日T，rolling怎样保存未来返程义务？ | 空返/成本/terminal账本；不自动要求AV复位 |
+| Q4 | 最新作者已确认计算窗不强制复位，空调拨独立且无订单也能决策。真实T_op目标、空行时长/费率、边界状态仍待定义 | 已确认部分见[车辆修正规格](VEHICLE_REPOSITIONING_SPEC.md)，不再重复询问窗口是否回归；不自动要求全日或AV复位 |
 | Q5 | d/M/Mhat是否按stops；连续流是否为订单类近似？CFS如何取得stop映射？s_l是否同时是揭示时刻？ | 数据和信息集；合成stops仅为先行验证建议 |
 | Q6 | period index、分钟物理时间、每小时费率是否为统一规范？ρ/a/b单位是什么？正文整数域是否含0？ | 弧、表、目标量纲与零车状态 |
 | Q7 | start-window限所有腿还是仅首次pickup/direct？control/start/ext半开端点是什么？completion保证存在路径还是任意option？ | 母弧域、off-by-one、延后任务与证明；R8 |
@@ -34,6 +34,8 @@
 | Q12 | V2先完善确定性时变模型还是另建Poisson/marked到达？terminal/admissibility是什么？ | 独立理论任务，非本轮迁移内容 |
 
 G0完成标准：对批准范围内影响可行域/目标的Q1–Q9有书面决定并更新公式、数据、窗口追溯矩阵；Q10–Q12可以明确延期。源TeX修订仍需另行授权。Q2/Q3/Q4/Q5/Q6/Q7未解决时，不标记“精确实现V1”。
+
+状态更新：上表“均OPEN”仅指初次审计时；现Q4的两项作者决定已被记录，不再视作未知。其余项不因该意见自动采用推荐方案。新修正将e从w拆出，因此真实恢复目标若启用也须使用w+e，而不是保留旧Σw+=Σw−原式。
 
 ## 3. 按依赖顺序实施
 
@@ -89,8 +91,62 @@ G4的完整成本从相应口径全部已执行决策核算；预算中止只报
 | QV1 V2形式化 | Q12 | state/filtration/control/intervention/cost/horizon/boundary/no-Zeno合同；选随机过程后建立生成元 |
 | QV2 V2验证 | QV1 | 明确existence/verification/threshold命题与独立证明；不用MIP/玩具观察代替理论 |
 
-## 6. 下一步批准建议
+## 6. 初期批准建议（历史，现况见第10节）
 
-建议先确认G0，再批准**G1–G2独立V1-M实现及相应G4结果验证**；直送待Q2/Q3/Q4确认后推进G3。这只是建议，未执行。每阶段交付可审查diff、公式追溯矩阵、实际测试结果及局限，再推进有依赖阶段。
+G0-M的[决策规格包](V1_M_DECISION_SPEC.md)已准备并经[Referee接受](reviews/v1_m_decision_spec_review.md)，该接受仅针对文档准备。D1–D6均OPEN：offline强制换装范围、arc-wave解释、单位、连续/零域、tour-end服务、受限合成输入。作者确认与代码实施授权仍PENDING。
 
-本轮止于四份专员/审查报告与六份协调文档。实际迁移等待用户确认重要歧义并批准具体范围；没有自动提交、推送、外部发布或昂贵求解授权。
+限定M路线细分为：`G0-M-PREP（已完成）→ G0-M-CONFIRM（待作者）→ G1-M（待批准）→ G2及对应G4-M（待批准）`。G1-M只含local容量/完整母弧域和配置，不把原G1中的direct K̃模块一并实施。V1-F的迁入/空返、RH reveal/start/ext、稳态和V2可延期，但相关成果不得提前宣称完成。
+
+建议确认D1–D6后，批准**G1-M与G2及对应G4-M的独立实现**，微型求解预算单独明确；直送仍待Q2/Q3/Q4等确认再推进G3。这只是建议，未执行。每阶段交付可审查diff、公式追溯矩阵、真实测试结果及局限，再推进依赖阶段。
+
+初轮模型审计交付后，用户已授权将10份审计文档及重写README提交推送（93b2dcb、f26b4c9）；该历史授权不等于新代码迁移或昂贵求解授权。当前G0-M止于规格、审查和协调文档更新，没有继续生产实现或启动实验。
+
+## 7. 最新作者评审后的车辆调拨分支
+
+当前新增有界交付为[VEHICLE_REPOSITIONING_SPEC](VEHICLE_REPOSITIONING_SPEC.md)与独立车辆账本检查，回应“不每窗复位、独立空调拨”。不取消G0-M成果，也不把此前D1–D6当作已批准。
+
+后续实施顺序调整为：确认真实终点模式/空行参数/有限cut策略 → 独立事件账与empty母弧域 → 新变体e变量、费用和库存 → full/reduced与历史提交 → 完整结果核算 → 启发式、warm start、local branching → 获批的微型MILP验证。只有已确认的两项政策可直接进入规格；其余定义不得用生产默认值代决。
+
+生产接入不能被简化为“删终端等式”：该等式当前根本不存在；所有构造器、vehicle group、history、候选、费用和结果都须接通e。历史已完成跨城迁移不可消失；history-only零库存不构成未来永无车的上界。原稿修订仍未实施。
+
+## 8. 已批准的V0-F独立空车分支及后续依赖
+
+已交付：显式政策/事件账→独立empty弧与变量/费用/累计库存→绝对历史与滚动提交→完整结果核算→可选注册入口→有界微型测试→Referee独立审查。见[实施报告](../experiments/reports/vehicle_repositioning_implementation.md)。默认空行时间/费率沿用direct且披露，真实目标为空；完整模式可设目标，rolling明确拒绝。新任务必须在完成窗内结束，保留全部历史，不实施任意跨cut新任务。
+
+| 顺序 | 下一有限任务 | 方法 | 验证/完成标准 |
+|---|---|---|---|
+| 1（已完成） | 换装链跨窗回归与独立货流检查 | pickup、AV、destination跨控制窗；独立重放hub/容量/期限 | 31项新增用例PASS、手算费用7.2、NaN修复、审查ACCEPT；见第9节 |
+| 2 | 如需rolling真实目标，补全程可达性保障 | 给每次提交建立真实T可行尾计划或等价安全条件 | 短窗不能提前破坏终点可达；不可达输入显式失败；Referee复核 |
+| 3 | 需要时接入剪枝/启发式/邻域 | 在empty完整母域验证安全上界和完整历史，单独接入 | 同域微例对照、候选安全证据、成本核算与复现日志 |
+| 4 | 另行推进完整V1 | 确认G0-M的D1–D6后实施G1-M/G2-M | wave/stem/容量与公式逐项对齐；不能复用本次34项测试宣称完成 |
+
+本次仅有限合成测试，总solver预算60秒；大型实验、真实数据及网络发布继续单独批准。实施不产生新研究定理。
+
+## 9. 连续两步的阶段记录（历史）
+
+第一步独立cargo核验/真实跨窗链完成并经审查；随后第二步实现V1 f/h/K与母弧纯内核。两步实际预算见[方案](../experiments/specs/two_step_alignment_validation.md)，不引用上一轮60秒建议扩张权限。当前累计原扩展34+货流31+纯工具22=87个不同用例分批通过，见PROGRESS及两份实施报告。
+
+G1的capacity/network基础部分已交付，完整配置、订单域和优化器仍依赖[V1-M D1–D6](V1_M_DECISION_SPEC.md)：尤其D2波次索引冲突、D3 stop/费用单位和D1信息集不能由工具调用隐式选定。下一次完整MIP实施应先记录这些决定，再复用纯工具组装one-hot/共享AV/逐单因果及完整导出验证；不得把当前V0-F cargo checker直接当V1容量验证器。真实终点安全尾计划仍是另一个可选任务，本轮未实施。
+
+## 10. 已确认V1-M交付与后续依赖
+
+作者现确认D1–D6-A（`V1M-D1-D6-A-2026-10-18`），不再等待重复确认这些相同定义。完整configuration/mandatory_optimizer/validation/runner及M01–M15、完整六组计划/来源指纹和微型验收已交付，见[实施报告](../experiments/reports/v1_mandatory_implementation.md)与[独立审查](reviews/v1_mandatory_review.md)。验证先后为初轮74项、最终70纯例和2次真实复验，8个不同真实用例共10run，20秒上限内；原始日志缺口按报告保留。
+
+下一有限任务为G4-M实验入口与适配：给V1-M单独的solver名、显式配置/profile与结果schema，保留V0默认；核对单位/订单来源，未转换的CFS重量不得当stops。验证以dry-run与当前微型输入为主，不自行扩大正式实验。V1-F的K̃/迁入selector/empty与V1-RH的信息、历史、可达性须分别落实新容量，不直接复用V0-F-empty当作V1。无新的大型求解或Git发布授权。
+
+## 11. 最新交付：V1-F / RH / 剪枝
+
+用户本轮要求的实现与CFS小样本可运行检查已完成，见[运行合同](V1_F_RUNTIME_CONTRACT.md)、[实施报告](../experiments/reports/v1_f_runtime_smoke.md)、[原始结果](../experiments/reports/v1_f_cfs_smoke_results.json)及[审查](reviews/v1_f_runtime_review.md)。
+
+| 阶段 | 实现与验证 | 当前验收 |
+|---|---|---|
+| G1-F/G3 | direction direct逆、global fleet selector、独立empty及迁入库存，手算/原f核验 | DONE，明确源式修正与终点默认 |
+| G4-F | 三registry/CLI入口、solver局部数据/τ/汇总、完整/partial状态成本 | DONE，纯适配测试；普通CLI写盘未另实跑 |
+| G5 | 绝对历史、release、跨窗换装/迁移、整次预算 | DONE，无计算窗复位；hard真实终点目标暂拒绝 |
+| G6必要筛选 | 稀疏货流，留所有车辆母弧和历史后继 | DONE，CFS实际8265→397；一般无损证明未完成 |
+| 有界CFS检查 | 同8单、三run、独立原f重放 | DONE，1100/8、2025/7、2025/7；非正式大样本G9 |
+| G7→G8 | V1可行初解/warm start→local branching | 未实施，非本轮CFS可运行前置 |
+| RH真实终点尾计划 | 每次承诺维护真实T目标可达，不能仅最后窗补约束 | 独立OPEN，无目标默认运行不受阻 |
+| 正式G9及S/V2 | 单位校准、同信息比较与独立理论定义 | 未启动，不重复旧大规模实验 |
+
+如后续要求G7：在V1容量/库存上增量构造方案并填one-hot，独立核验后提交Start；不可沿用单车ceil代替K(v)，失败回退现有MIP。完成标准为方案可行、成本可重算和Start接受日志。G8依赖G7，兼容车数/selector邻域、移除限制并保留incumbent，不能把邻域bound当全域bound。真实终点尾计划和正式实验各自需要定义/预算，不作为本轮未完成事项自动推进。

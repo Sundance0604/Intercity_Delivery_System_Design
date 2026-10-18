@@ -1,0 +1,190 @@
+\section{A stationary benchmark for wave and load decisions}
+\label{sec:analysis}
+
+This auxiliary benchmark uses the local routing mechanism to interpret wave
+and load choices. Table~\ref{tab:model-scope} records its differences from the
+scheduling problem. It is not an established relaxation, equivalent
+reformulation, or steady-state limit of the MILP.
+
+\begin{table}[tbp]
+\centering\small
+\caption{The scheduling model and the auxiliary stationary benchmark.}
+\label{tab:model-scope}
+\begin{tabular}{@{}p{0.20\linewidth}p{0.37\linewidth}p{0.35\linewidth}@{}}
+\toprule
+Dimension & Scheduling model & Stationary benchmark\\
+\midrule
+Decisions & Dated arcs, vehicle counts, cargo flows & Wave quantity and continuous vehicle loads\\
+Information & Given orders offline; revealed orders when rolling & Constant fluid arrivals per direction\\
+Resources & Fixed integer fleets and city inventories & No competition between batches for fleets or sorting\\
+Service & Transfer, direct, and independent empty tasks & Three-leg common-wave policy class\\
+Objective & Vehicle costs and unserved-demand penalties & Per-shipment cost including mean lead time\\
+Delivery & End of the destination service arc & Mean delivery during a distribution tour\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Benchmark assumptions and cost accounting}
+\label{subsec:benchmark}
+
+We use the following benchmark to isolate the dispatch decision. All physical
+times in this section are in minutes; $\tau_{\mathrm{phys}}=\tau\Delta t$ is
+the highway travel time, rather than a number of time periods.
+
+\begin{assumption}[Stationary common-wave benchmark]
+\label{ass:analysis-benchmark}
+The two cities are identical. Shipments in each direction arrive as a
+deterministic fluid at rate $\Lambda>0$ shipments per minute, with uniformly
+distributed origins and destinations. Every shipment is served through the
+three-leg chain. The three legs share a common wave of size $q>0$, with
+headway $q/\Lambda$. Vehicle loads are continuous, and fleets are sized to
+the offered workload, without vehicle queues or inter-wave resource
+competition. Sorting has unlimited capacity, collection tours have no
+additional slowest-vehicle delay, and no hard delivery deadline is imposed.
+Common-wave operation is the prespecified policy class under study,
+rather than a conclusion that independently controlled stages synchronize
+optimally.
+\end{assumption}
+
+Let $n_1$ and $n_2$ denote the collection and distribution loads, respectively.
+The feasible load domain is
+\begin{equation}
+ 0<n_1,n_2\le\min\{M,q\},\qquad
+ s(q)=a+\frac b{\sqrt q}.
+ \label{eq:analysis-load-domain}
+\end{equation}
+Here $a>0$, $b>0$, $\rho>0$, and $M_A\ge M>0$. We take $c_H>0$ and
+$c_A\ge0$ as the manual and automated vehicle costs per minute, and
+$\omega>0$ as the cost per shipment-minute of lead time. Each hub transfer
+has fixed time $\theta\ge0$ and fee $h_{\mathrm{hand}}\ge0$ per shipment.
+As in the steady-state approximation, the highway cost per shipment is
+$c_A\tau_{\mathrm{phys}}/\min\{q,M_A\}$. For waves exceeding $M_A$, this
+treats line-haul vehicle requirements continuously and omits integer
+vehicle-rounding costs.
+
+The generalized cost per shipment in one direction is
+\begin{align}
+ G(q;n_1,n_2)={}&c_H\left[2s(q)+\frac{2\rho}{n_1}
+                                      +\frac{2\rho}{n_2}\right]
+ +\frac{c_A\tau_{\mathrm{phys}}}{\min\{q,M_A\}}
+ \notag\\
+ &+\omega\left[\frac q{2\Lambda}
+       +s(q)\left(n_1+\frac{n_2}2\right)
+       +3\rho+\tau_{\mathrm{phys}}+2\theta\right]
+ +2h_{\mathrm{hand}}.
+ \label{eq:analysis-generalized-cost}
+\end{align}
+The term $q/(2\Lambda)$ is the mean wait for a wave to form. All collected
+shipments remain in the collection chain until its tour returns, whereas a
+shipment on a distribution tour is delivered after the outward stem and half
+the in-zone tour on average. This explains the distinct coefficients of
+$n_1$ and $n_2$. In particular, this benchmark measures delivery during a
+distribution tour. Section~\ref{sec:model} instead registers delivery at the
+end of a service arc. The benchmark also adds a lead-time cost that is absent
+from the base finite-horizon vehicle-cost and rejection-penalty objective.
+
+\subsection{Optimal vehicle loads conditional on a wave}
+
+\begin{proposition}[Optimal loads conditional on a wave]
+\label{prop:analysis-loads}
+Under Assumption~\ref{ass:analysis-benchmark}, the minimizing loads for each
+$q>0$ are unique and are
+\begin{align}
+ n_1^\circ(q)&=\min\left\{M,q,
+                   \sqrt{\frac{2c_H\rho}{\omega s(q)}}\right\},
+ \label{eq:analysis-n1}\\
+ n_2^\circ(q)&=\min\left\{M,q,
+                   \sqrt{\frac{4c_H\rho}{\omega s(q)}}\right\}.
+ \label{eq:analysis-n2}
+\end{align}
+Consequently $n_1^\circ(q)\le n_2^\circ(q)\le\sqrt2\,n_1^\circ(q)$.
+\end{proposition}
+
+The clipping by $q$ in these formulas is necessary: a vehicle cannot carry
+more shipments than the entire wave. The load asymmetry reflects the different
+lead-time exposure of collection and distribution, rather than a difference
+in their physical vehicle capacities. Define
+\begin{equation}
+ G^\circ(q)=G(q;n_1^\circ(q),n_2^\circ(q)),\qquad
+ C(q)=q\left[G^\circ(q)-\frac{\omega q}{2\Lambda}\right].
+ \label{eq:analysis-dispatch-cost}
+\end{equation}
+The function $C$ is the generalized service cost of a dispatched batch. It
+includes post-dispatch lead time, but excludes the waiting already incurred
+while the batch forms.
+
+\subsection{Optimal repeated dispatch under separable batch costs}
+\label{subsec:dynamic-wave}
+
+The dispatch model permits successive common waves to have different sizes,
+while retaining the same cost and physical approximations.
+
+\begin{assumption}[Separable service accounting]
+\label{ass:analysis-accounting}
+A dispatch of size $q$ incurs the prepaid service cost $C(q)$ independently
+of earlier and later batches. Dispatch resets only the undispatched backlog;
+it does not return vehicles to their home cities or erase goods already in
+service. Services of different batches do not compete for a finite fleet or
+sorting resource. If costs are instead recorded when physical services occur,
+the difference from this prepaid accounting must be $o(T)$ over a horizon
+of length $T$ for the same long-run comparison to apply.
+\end{assumption}
+
+Let $Q(t)$ be the undispatched backlog, with $Q(0)=0$. Between dispatches,
+$\dot Q=\Lambda$. An intervention at a positive backlog dispatches all of
+it, incurs $C(Q(t-))$, and sets $Q(t)=0$. No rejection, partial dispatch,
+empty dispatch, or additional fleet or age state is permitted. The
+information consists of the deterministic arrival rate and past actions.
+The horizon $T$ below is elapsed physical time in minutes, distinct from
+the integer operating endpoint of Section~\ref{sec:model}.
+An admissible policy chooses positive wave sizes $q_k$ with
+$\sum_k q_k=\infty$, giving intervention times
+$t_k=\sum_{r=1}^k q_r/\Lambda\uparrow\infty$. It therefore has no finite-time
+accumulation of interventions. Define
+\begin{equation}
+ A_\pi(T)=\sum_{t_k\le T}C(q_k)+\int_0^T\omega Q(t)\,dt,
+ \qquad
+ \inf_\pi\liminf_{T\to\infty}\frac{A_\pi(T)}T.
+ \label{eq:analysis-average-control}
+\end{equation}
+This is an impulse problem because the controller chooses isolated dispatch
+times and pays a batch-dependent intervention cost. It is distinct from a
+fixed-step rolling-horizon controller.
+
+\begin{theorem}[Static and dynamic common-wave consistency]
+\label{thm:analysis-consistency}
+Under Assumptions~\ref{ass:analysis-benchmark} and
+\ref{ass:analysis-accounting}, the average cost rate of repeatedly dispatching
+at a positive threshold $q$ is
+\begin{equation}
+ J(q)=\frac{\Lambda C(q)}q+\frac{\omega q}2
+     =\Lambda G^\circ(q).
+ \label{eq:analysis-consistency}
+\end{equation}
+The set $\mathcal B=\argmin_{q>0}J(q)$ is nonempty and compact. If
+$g=\min_{q>0}J(q)$, every admissible policy in
+\eqref{eq:analysis-average-control} has limiting inferior average cost at
+least $g$, and repeating any threshold in $\mathcal B$ attains $g$.
+Thus $\argmin_{q>0}G^\circ(q)=\mathcal B$.
+\end{theorem}
+
+The cycle cost is $C(q)+\omega q^2/(2\Lambda)$ and its duration is
+$q/\Lambda$. Their ratio gives \eqref{eq:analysis-consistency}.
+Appendix~\ref{app:dispatch} proves existence and the lower bound for arbitrary
+calendar horizons, including the unfinished final cycle. Thus varying
+successive complete-wave sizes cannot improve the best repeated-wave
+cost under the stated assumptions; the minimizing wave need not be unique.
+For two symmetric directions, both costs and arrivals double, leaving the
+threshold set unchanged.
+
+\subsection{Scope and verification summary}
+
+Given $q$, Proposition~\ref{prop:analysis-loads} supplies the optimized
+loads and hence $G^\circ(q)$; its global minimizer set characterizes
+optimal repeated waves. Appendix~\ref{subsec:qvi} verifies the same
+backlog-reset model through a QVI, with a tail-envelope relative value,
+the waiting boundary at zero, and a proved transversality condition.
+Appendix~\ref{subsec:analysis-limits} also compares unit-Poisson and fluid
+costs within the same positive integer full-reset threshold class.
+These results retain the benchmark's common-wave and separable-cost
+assumptions. They do not prescribe the finite-fleet rolling controller.

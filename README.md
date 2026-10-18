@@ -1,153 +1,100 @@
-# BHH / Intercity 多 Agent 科研分支
+# BHH / Intercity：模型同步与调度实现
 
-当前分支：`research/qvi-multiagent`。更新日期：2026-10-17。
+当前论文终稿入口：[final_manuscript/main.tex](research/paper/final_manuscript/main.tex)。新稿已补引言、文献综述、优化模型与数学推理，原TeX保留；数值实验章节及实验计划暂未写，未编译。结构和审查入口见[终稿说明](research/paper/final_manuscript/README.md)。
 
-本分支用于梳理 BHH / Intercity 城际配送研究中的数学模型、Python 实现与理论扩展，建立可追溯的科研协作和模型迁移流程。核心工作是核对最新论文实际定义的模型，找出现有程序的差距，经过独立审查后形成实施计划。
+论文写作与QVI研究最新进度见 [PAPER_WRITING_PLAN](coordination/PAPER_WRITING_PLAN.md)：新版steady作主稿、linear作简化基准；限定共同子模型下Wave与QVI阈值一致的证明和toy核对已完成，完整随机QVI及原TeX修订尚未完成。
 
-目前已完成一轮模型同步审计。**实际代码迁移尚未开始，稳态数值验证和完整随机 QVI 理论也尚未完成。** 当前 Python 程序保留原有模型与算法，审计报告的提交不表示新模型已经实现。
+分支：`research/qvi-multiagent`。更新：2026-10-18。
 
-## 1. 分支用途与模型边界
+本分支把新论文的有限时域 BHH wave 模型落实到可运行的 Python 优化程序，并保留旧模型和历史实验作比较。**当前已经实现 V1-M、V1-F、V1-F rolling horizon 和货流剪枝；V1-F 三种运行方式已在小样本 CFS 上跑通。**
 
-系统包含两个城市、城市内人工驾驶车辆、城际自动驾驶车辆及两端换装枢纽，研究取货、干线运输、配送、直送与车辆调度之间的关系。本分支区分：
+V1-M 是强制换装，货物走“取货—自动驾驶干线—配送”；V1-F 是 flexible，允许上述换装链与人工车直送并存。这里的 F 表示运输方式可选择。V2 的随机到达、内生 wave 和 QVI 理论另行研究。
 
-| 对象 | 含义 | 首要依据 |
-|---|---|---|
-| V0 | 现有 Python 实际实现，包括强制换装、灵活直送及对应滚动算法 | `intercity_delivery/` 下的源码 |
-| V1 | 新论文的有限时域 wave 容量与调度模型 | 本地 `research/paper/main_v2_BHH.tex` |
-| 稳态变体 | 共同 timetable 下的批量、载量、成本与期限分析；两稿单列比较 | 本地 `steady_state_model.tex`、`steady_state_model_v1_linear.tex` |
-| V2 | 随机订单抵达、内生 wave 与动态发车决策的 QVI 研究目标 | 用户研究定义与本地理论笔记 |
+## 当前可运行的入口
 
-V0 以实际代码为准，旧论文不能替代代码审计。V1、稳态变体和 V2 不默认等价。本地 QVI 笔记目前主要处理确定性常率或时变需求率，尚不能代表完整随机到达模型。
+| 求解器名称 | 行为 |
+|---|---|
+| `v1_flexible_mip` | 所有订单已知的完整 V1-F MILP |
+| `v1_flexible_rolling` | 按释放时刻揭示订单，跨窗口保留已执行决策 |
+| `v1_flexible_pruned_rolling` | 同一滚动控制，加实际稀疏货流变量筛选 |
 
-本分支的产出是数学比较、代码映射、文献核验、独立审查、模型合同及迁移计划。实际实现和实验须按依赖与批准范围推进。
+三个名称均已接入 `main.py` 和共享求解器注册表，GUI 可选。原 V0 名称和默认选择保持兼容。普通实验入口的适配通过纯测试；下述真实 CFS 求解证据来自专用小样本执行器。
 
-## 2. 建议阅读顺序
+在项目根目录运行：
 
-| 顺序 | 路径 | 作用 |
-|---|---|---|
-| 1 | [coordination/PROGRESS.md](coordination/PROGRESS.md) | 当前完成事项、限制及下一步 |
-| 2 | [coordination/MODEL_CONTRACT.md](coordination/MODEL_CONTRACT.md) | 模型命名、来源、假设边界及输入散列 |
-| 3 | [coordination/MODEL_DIFF.md](coordination/MODEL_DIFF.md) | V0、V1、稳态与 QVI 的差异索引 |
-| 4 | [coordination/reviews/model_alignment_review.md](coordination/reviews/model_alignment_review.md) | 独立审查、严重问题及结论 |
-| 5 | [coordination/MIGRATION_PLAN.md](coordination/MIGRATION_PLAN.md) | 待确认问题、实施依赖、验证与完成标准 |
+```powershell
+# 只查看数据来源、参数与预算，不调用求解器
+python -B experiments/specs/run_v1f_cfs_smoke.py
 
-具体结论的证据位于三份专业报告：
+# 三种方式各最多15秒，固定同一组8条CFS订单
+python -B experiments/specs/run_v1f_cfs_smoke.py --run
 
-| 路径 | 负责 Agent | 内容 |
-|---|---|---|
-| [research/theory/model_comparison.md](research/theory/model_comparison.md) | Theorist | 逐公式比较、代码结构映射、假设与证明缺口、QVI 边界 |
-| [experiments/reports/model_code_gap.md](experiments/reports/model_code_gap.md) | Experiment | 文件/函数/行号对应、可复用部分、迁移与测试设计 |
-| [research/literature/model_positioning.md](research/literature/model_positioning.md) | Literature | 研究定位、公开引文核验及其实际支持范围 |
+# 查看普通实验入口的计划
+python -B main.py --cli --solver v1_flexible_pruned_rolling --data-source real --real-data-path data/cfs_processed_sqlite/cfs_model_orders.json --seeds 1 --time-limit 15 --dry-run
+```
 
-## 3. 文件结构
+真实求解需要可用的 `gurobipy` 与许可证。本机已验证环境为 `C:/Users/32599/.conda/envs/pavane/python.exe`、Gurobi 10.0.3。脚本默认将完整非零方案和来源证据输出到终端；可选 `--output 新文件.json`，会在任何求解前检查能否创建文件，且不覆盖现有文件。
 
-以下目录树描述当前本地工作区。标注“本地输入”的文件未纳入本轮审计提交，远端克隆不会自动获得；工作目录也不表示已有新实验实现。
+## 本次 CFS 验证结果
 
-~~~text
-.
-├── README.md                            # 本分支用途、结构与阅读入口
-├── AGENTS.md                            # 科研协作、证据等级与修改规则
-├── .codex/
-│   ├── config.toml                      # 项目级 Agent 配置
-│   └── agents/
-│       ├── literature.toml              # 文献与写作职责
-│       ├── experiment.toml              # 优化程序与实验职责
-│       ├── theorist.toml                # 数学模型与理论职责
-│       └── referee.toml                 # 独立审查职责
-├── coordination/
-│   ├── MODEL_CONTRACT.md                # 模型来源、定义与对齐合同
-│   ├── MODEL_DIFF.md                    # 模型差异索引
-│   ├── MIGRATION_PLAN.md                # 迁移阶段与作者确认清单
-│   ├── CLAIMS.md                        # 主张、假设与证据状态
-│   ├── TASKS.md                         # 有界任务、依赖与验收
-│   ├── PROGRESS.md                      # 已核实进度和开放问题
-│   ├── FIRST_RUN_PROMPT.md              # 初始四 Agent 演练模板
-│   └── reviews/
-│       └── model_alignment_review.md    # 本轮独立审查报告
-├── research/
-│   ├── paper/                           # 论文数学来源；本地输入
-│   │   ├── main_BHH.tex                 # 旧论文
-│   │   ├── main_v2_BHH.tex              # 新有限时域模型
-│   │   ├── steady_state_model.tex       # deadline / sorting 稳态稿
-│   │   └── steady_state_model_v1_linear.tex # 较早线性时间成本稳态稿
-│   ├── theory/
-│   │   ├── model_comparison.md          # 已提交的数学比较报告
-│   │   └── Common Wave 的内生化与非均匀需求扩展.md # 本地 QVI 输入
-│   ├── literature/
-│   │   └── model_positioning.md         # 已提交的文献定位报告
-│   └── toy_models/                      # 独立小型理论测试工作目录
-├── experiments/
-│   ├── reports/
-│   │   └── model_code_gap.md            # 已提交的模型—代码审计
-│   └── specs/                           # 实验方案工作目录
-├── intercity_delivery/                  # 现有 V0 优化程序
-│   ├── configuration.py                # 模型、算法及订单配置
-│   ├── models/                         # 强制换装和灵活直送优化器
-│   ├── algorithms/                     # 滚动时域、候选网络、启发式
-│   ├── data/                           # 订单、CFS 处理和 SQLite
-│   └── experiments/                    # 求解器注册、实验核心、GUI
-├── main.py                             # 现有 GUI / CLI 入口
-├── tests/                              # 现有回归测试
-├── simulation/                         # 原有实验协议、运行与对比记录
-├── docs/                               # 原有算法、数据与操作说明
-├── data/                               # 本地原始/缓存数据，Git 忽略
-└── results/                            # 本地程序输出，Git 忽略
-~~~
+城市对为 Los Angeles `06-348` ↔ San Francisco `06-488`；seed 4101，8条订单，T=24，每期60分钟，城际时间9期，滚动预测8期/步长2期/延伸6期。
 
-本轮未在 `research/toy_models/` 或 `experiments/specs/` 新增实验程序或方案。计划中的 `intercity_delivery/v1/` 尚未创建。
+| 方法 | 完成状态 | 服务量 / 需求 | 总成本 |
+|---|---|---|---|
+| 完整 V1-F | OPTIMAL，独立核验通过 | 8 / 8 | 1100 |
+| 滚动 | COMPLETED，12窗口，独立核验通过 | 7 / 8 | 2025 |
+| 剪枝滚动 | COMPLETED，12窗口，独立核验通过 | 7 / 8 | 2025 |
 
-## 4. 关键路径与职责
+剪枝把12个窗口的货流变量总数从8265减为397，实际删除7868个，约95.20%。保留车辆母弧和独立空车调拨。单个样本相同成本不证明一般等价；离线完整模型与在线滚动的信息集不同，不直接用成本差计算算法最优性差距，也不据此宣称加速。
 
-### 科研协调
+CFS 当前使用“一条 shipment = 一单位 stop”的显式运行代理，保留原 SHIPMT_ID、重量、权重和旧合成时间窗。这只验证能运行，尚未校准真实客户停靠点。旧 V0 的重量数量不随之改动；混跑按求解器隔离转换。普通 V1 JSON 入口采用来源的城际时长建议，显式敏感性覆盖另行披露。
 
-- [AGENTS.md](AGENTS.md)：主 Agent 协调职责、专业角色分工和修改边界。
-- [.codex/agents/](.codex/agents/)：四个专业角色的实际配置。各自写独立报告，Referee 在交付后审查，主 Agent 负责综合。
-- [coordination/CLAIMS.md](coordination/CLAIMS.md)：记录重要主张的假设、来源、证明/实验证据及审查状态；静态核实不等于定理成立。
-- [coordination/TASKS.md](coordination/TASKS.md)：记录交付、待批准实施阶段和独立研究任务。
+详细记录：[实施与验证报告](experiments/reports/v1_f_runtime_smoke.md)、[原始可重放结果](experiments/reports/v1_f_cfs_smoke_results.json)、[独立评审](coordination/reviews/v1_f_runtime_review.md)。
 
-### 现有程序
+## 文件结构与关键路径
+
+本机根目录：`D:/mycodelife/workshop/AI/multiagent-test`。下表均为相对根目录的路径。
 
 | 路径 | 作用 |
 |---|---|
-| [intercity_delivery/models/base_optimizer.py](intercity_delivery/models/base_optimizer.py) | V0 强制换装模型 |
-| [intercity_delivery/models/flexible_direct_optimizer.py](intercity_delivery/models/flexible_direct_optimizer.py) | V0 直送/换装共存及人工车辆迁移 |
-| [intercity_delivery/data/loader.py](intercity_delivery/data/loader.py) | BHH 函数、时间弧、容量系数与订单结构 |
-| [intercity_delivery/algorithms/paper_rolling_horizon.py](intercity_delivery/algorithms/paper_rolling_horizon.py) | 滚动窗口控制和历史决策 |
-| [intercity_delivery/algorithms/state_dependent_mip.py](intercity_delivery/algorithms/state_dependent_mip.py) | 状态相关候选网络与窗口模型 |
-| [intercity_delivery/algorithms/bhh_priority_heuristic.py](intercity_delivery/algorithms/bhh_priority_heuristic.py) | BHH 优先级构造初解 |
-| [intercity_delivery/experiments/solvers.py](intercity_delivery/experiments/solvers.py) | 求解器注册与结果适配 |
-| [main.py](main.py) | GUI / CLI 入口 |
+| `main.py` | GUI / CLI 入口 |
+| `AGENTS.md`、`.codex/agents/` | 主协调者及 Literature、Experiment、Theorist、Referee 的职责 |
+| `research/paper/main_v2_BHH.tex` | V1 有限时域模型的首要数学来源 |
+| `research/paper/main_BHH.tex` | 旧论文，对照审计使用 |
+| `research/paper/steady_state_model*.tex` | 两个稳态变体，与有限时域 V1 分开 |
+| `research/theory/` | 数学比较、容量合同、QVI 研究笔记 |
+| `research/literature/` | 文献定位和核验记录 |
+| `intercity_delivery/models/`、`algorithms/` | 保留的 V0 优化器和原滚动、剪枝、启发式算法 |
+| `intercity_delivery/repositioning/` | 先前实现的 V0-F 独立空车扩展 |
+| `intercity_delivery/v1/configuration.py` | 作者确认的基础配置、订单与 profile |
+| `intercity_delivery/v1/capacity.py`、`network.py` | 原式 f/h/K、local 与 AV 母弧 |
+| `intercity_delivery/v1/mandatory_optimizer.py` | 已实现的完整 V1-M |
+| `intercity_delivery/v1/flexible_configuration.py` | V1-F 参数、空车与终点政策 |
+| `intercity_delivery/v1/flexible_capacity.py` | 方向相关 direct 容量与独立 empty 母弧 |
+| `intercity_delivery/v1/flexible_optimizer.py` | V1-F MILP：one-hot wave、换装/直送/空车与库存 |
+| `intercity_delivery/v1/flexible_rolling.py` | 订单揭示、历史提交、窗口和总预算控制 |
+| `intercity_delivery/v1/pruning.py` | 释放/期限、正容量与三腿时间支持筛选 |
+| `intercity_delivery/v1/flexible_validation.py` | 用原始公式独立核容量、库存、货流和成本 |
+| `intercity_delivery/v1/flexible_runner.py` | 完整/滚动统一结果、状态、来源散列 |
+| `intercity_delivery/v1/adapter.py` | 旧接口和 CFS 的显式适配 |
+| `intercity_delivery/experiments/solvers.py`、`core.py` | 求解器注册、独立数据口径、结果输出 |
+| `tests/test_v1_flexible*.py`、`test_v1_pruning.py`、`test_v1f_integration.py` | 模型、跨窗、剪枝、独立核验、入口适配测试 |
+| `experiments/specs/run_v1f_cfs_smoke.py` | 有界 CFS 执行检查，默认不求解 |
+| `experiments/reports/` | 审计、实施报告和本轮结果 |
+| `data/cfs_processed_sqlite/cfs_model_orders.json` | 已处理 CFS 样本，默认小检查输入 |
+| `data/cfs_2022_pums.sqlite` | 本机原始 SQLite，可按索引只读抽样 |
+| `simulation/runs/` | 先前数值实验配置和历史结果，保留 |
+| `coordination/` | 模型合同、任务、主张、迁移计划和评审 |
 
-原有操作说明见 [GUI](docs/gui_usage.md)、[滚动时域](docs/rolling_horizon.md)、[直送模型](docs/flexible_direct_model.md)及[实验协议](docs/numerical_experiment_protocol.md)。它们描述现有实现，不能作为 V1 已迁移的证据。
+本地 TeX、数据及部分历史文件尚未进入 Git；其他机器需取得对应输入。数据来源与代码 SHA-256 随结果记录，Git HEAD 单独不能标识整个本地工作区。
 
-### 本地数学来源
+## 模型政策与尚未实现的范围
 
-当前审计工作区根目录：
+- wave 沿用已确认 D1–D6-A：按起止期、城市和方向分组，连续 stop 量，分钟与车小时费率，tour结束交付，允许同刻交接。
+- local 用联合 BHH 容量；direct 用新论文方向相关两端 tour 公式。local selector 上界改为全车队数量，使迁入车辆可在新城市服务，动态库存仍严格限制车辆。
+- 空调拨有独立变量、弧和费用，无订单也能移动。源文保留的 τ 长度零货 direct 弧仍可空行，metadata/报告披露；载货由独立货流变量表达。
+- 每个计算窗口不要求车辆回原城市。真实期末默认无目标；完整模式可显式指定目标，滚动模式暂拒绝该配置，等待尾部可达性保障。
+- 已启动任务按绝对时刻保留，货物可跨窗口在途或留在 hub。部分运行不给完整总成本；滚动不给全日 bound/gap。
+- 本轮完成 V1-F、滚动和保守货流剪枝。V1 启发式初解、warm start、local branching、正式大规模回归、稳态验证和随机 QVI 尚未实施。
 
-~~~text
-D:/mycodelife/workshop/AI/multiagent-test
-~~~
-
-四份 TeX 位于该目录下的 `research/paper/`，QVI 笔记位于 `research/theory/Common Wave 的内生化与非均匀需求扩展.md`。V1 的完整路径为：
-
-~~~text
-D:/mycodelife/workshop/AI/multiagent-test/research/paper/main_v2_BHH.tex
-~~~
-
-审计提交 `93b2dcb` 仅包含 10 份审计与协调文档，未包含上述本地 TeX 和 QVI 输入。散列已登记在模型合同中；其他机器复核时须取得相同版本。两份 main 稿所需的 `导出的条目.bib` 及部分稿称校准脚本尚未在可读工作树找到，具体限制见专业报告。
-
-## 5. 当前状态与下一步
-
-本轮结论：**三份专业报告可作为静态审计依据接受，模型与算法同步仍需重大修订。**
-
-主要差距包括 wave 联合容量与 stem 未落入代码、论文求解章节保留旧容量逻辑、空返和终端恢复缺失、候选弧及窗口定义不一致。CFS 重量单位不能直接当作 V1 的停靠点数。
-
-自动复核确定的下一步优先级：
-
-1. **G0-M：先整理 V1 强制换装最小决策规格。** 建立公式—代码—验收矩阵；将 wave 分组、单位、信息及窗口等选择留给作者确认。
-2. **G1：批准后实现独立容量表与弧模块。** 验证公式代回、零容量、物理上限、取整和单位。
-3. **G2＋对应 G4：实现最小 V1 强制换装模型与独立核算。** 公式可追溯、成本/可行性独立检查；微型求解有预算，V0 保持原样。
-
-`coordination/V1_M_DECISION_SPEC.md` 是下一项拟议交付，当前尚未创建。直送、滚动时域、剪枝、启发式及稳态/QVI 研究按迁移计划的依赖分别推进。
-
-本轮审计没有运行测试或求解，没有修改论文、生产代码及历史实验数据。提交和推送用于保存审计成果，不表示模型歧义已解决或实际迁移已获批准。
+来源和决定见 [MODEL_CONTRACT](coordination/MODEL_CONTRACT.md)、[运行合同](coordination/V1_F_RUNTIME_CONTRACT.md)；进度见 [PROGRESS](coordination/PROGRESS.md)，后续依赖见 [MIGRATION_PLAN](coordination/MIGRATION_PLAN.md)。本轮没有修改论文、旧优化器、历史实验数据，也没有提交或推送 Git。

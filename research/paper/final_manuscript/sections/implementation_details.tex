@@ -1,0 +1,87 @@
+\section{Candidate filtering and independent schedule replay}
+\label{app:implementation}
+
+\subsection{Time-support filtering of cargo variables}
+\label{app:filter}
+
+The sparse variant removes cargo variables, while keeping the vehicle and
+wave-selector mother domains. It therefore preserves automated repositioning,
+independent empty transfers, and zero-cargo vehicle movements. The filter
+does not infer future city availability from historical idle stock alone:
+a vehicle that is absent now may arrive before a future task.
+
+For a revealed order $\ell\in\mathcal L^d\cap\mathcal L(t)$, form provisional new
+collection candidates $P_\ell$ obeying \eqref{alg:origin-cut},
+$i\geq s_\ell$, and positive local capacity at the upper fleet size $N$.
+Form provisional new distribution candidates $R_\ell$ obeying
+\eqref{alg:downstream-cut}, $j\leq e_\ell$, and positive local capacity.
+Let $J^P_\ell$ be the end times of committed positive collection cargo and
+$J^A_\ell$ the arrival times of committed positive automated cargo. These
+history sets seed downstream possibilities even when there is no admissible
+new collection tour. Define
+\begin{equation}
+ \underline t_\ell^P=\min\bigl(\{j:(i,j)\in P_\ell\}\cup J^P_\ell\bigr),
+ \qquad
+ \overline t_\ell^R=\max\{i:(i,j)\in R_\ell\},
+ \label{alg:time-bounds}
+\end{equation}
+with the empty-set values $+\infty$ and $-\infty$, respectively. If
+$A>0$, retain provisional automated cargo arcs
+\begin{equation}
+ Q_\ell=\{(i,j)\in\mathcal A_A:
+ t\leq i<c_t,\ j\leq c_t,\quad
+ \underline t_\ell^P\leq i,\ j\leq\overline t_\ell^R\};
+ \label{alg:auto-support}
+\end{equation}
+if $A=0$, take $Q_\ell=\varnothing$. A new collection cargo variable is
+retained only if its end is no later than some start in $Q_\ell$.
+A new distribution cargo variable is retained only if its start is at least
+\begin{equation}
+ \min\bigl(\{j:(i,j)\in Q_\ell\}\cup J^A_\ell\bigr).
+ \label{alg:delivery-support}
+\end{equation}
+Direct cargo candidates must obey $i\geq\max\{t,s_\ell\}$,
+$i<b_t$, $j\leq\min\{c_t,e_\ell\}$, and
+$\widetilde K^d_{ij}(N)>0$. If $N=0$, all new human-driven cargo
+candidates are empty. All previously committed nonzero cargo keys are
+retained regardless of these tests so that history can be fixed exactly.
+
+These tests use time support and optimistic capacity; they do not solve
+the joint fleet-allocation problem. Retaining a candidate is therefore no
+claim that the candidate is feasible together with other decisions. In
+the MILP, omitted cargo variables are zero, and every remaining cargo
+variable is still subject to the original capacity, vehicle, precedence,
+and demand constraints. The procedure records the number of cargo
+variables before and after filtering for each rebuilt window. We do not
+assert a general preservation theorem or a computational speed advantage
+from this filter; neither follows from the construction alone.
+
+\subsection{Independent replay and certificate scope}
+\label{app:replay}
+
+A returned schedule is checked independently of the optimizer's capacity
+tables. For example, a positive local wave load $q$ and count $v$ must
+satisfy
+\begin{equation}
+ q\leq vM,\qquad
+ f_k(q)\leq v[(j-i)\Delta t-2\rho_k]^+,
+ \label{alg:local-replay}
+\end{equation}
+and positive direct cargo must satisfy $q\leq vM$ and
+\eqref{mod:direct-duration} within its assigned duration. Replay also
+checks domains, selector links, shared automated capacity, every city
+inventory, order windows, cumulative precedence, and demand balance.
+Costs are recomputed from initiated whole tasks once, rather than by
+summing overlapping window objective values.
+
+For a completed offline solve, a reported MILP gap refers only to the
+specified finite-horizon model and its input information. Window solver
+bounds and gaps refer to their individual restricted subproblems; the
+last window's bound is not a global lower bound for rolling execution.
+For partial execution, replay can certify past commitments and accounting,
+including hub or in-transit goods, but defers final stage balance and future
+completion reachability. A partial schedule consequently has no certified
+complete-horizon objective. These distinctions are also needed when
+comparing this finite-fleet dispatch procedure with the reduced
+steady-state and QVI models.
+

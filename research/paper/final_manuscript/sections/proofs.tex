@@ -1,0 +1,76 @@
+\section{Capacity derivations and loading proofs}
+\label{app:proofs}
+
+\subsection{Local capacity}
+
+Fix a city and suppress its index. Write $f(q)=aq+b\sqrt q$, where $a>0$,
+$b\ge0$, and let $D=(j-i)\Delta t$ be the physical duration of a local-service
+arc. With $B=(D-2\rho)^+$, the coefficient used in
+Section~\ref{sec:capacity} is
+\begin{equation}
+ K(v)=\min\{vM,f^{-1}(vB)\},\qquad K(0)=0.
+ \label{eq:analysis-capacity}
+\end{equation}
+The inverse of $f$ exists on $[0,\infty)$ and is
+\begin{equation}
+ f^{-1}(z)=\left(\frac{\sqrt{b^2+4az}-b}{2a}\right)^2.
+ \label{eq:analysis-inverse}
+\end{equation}
+For a positive wave $q$ served by $v>0$ vehicles, $q\le K(v)$ is equivalent to
+the load bound $q/v\le M$ and the duration bound
+\begin{equation}
+ 2\rho+\frac{f(q)}v
+ =2\rho+\left(a+\frac b{\sqrt q}\right)n\le D,
+ \qquad n=\frac qv.
+ \label{eq:analysis-local-bridge}
+\end{equation}
+Thus the per-stop routing term depends on the total wave $q$, whereas the stem
+is incurred by every vehicle. This is the zoning mechanism represented by the
+BHH-inspired approximation \cite{Beardwood1959}; it is a modeling approximation
+for finite tours, rather than an exact routing-length theorem.
+
+\begin{proof}[Proof of Proposition~\ref{prop:analysis-capacity}]
+The function $f$ is continuous and strictly increasing on $[0,\infty)$.
+Setting $r=\sqrt q$ in $ar^2+br=z$ gives
+\eqref{eq:analysis-inverse}. If $B=0$, then $K(v)=0$ for all $v$ and the
+claim is immediate. Suppose $B>0$ and write $H=f^{-1}$. For $z>0$,
+\[
+ \frac{H(z)}z=\frac1{a+b/\sqrt{H(z)}}
+\]
+is nondecreasing in $z$. Hence
+\[
+ \frac{K(v)}v=\min\left\{M,
+                  B\frac{H(vB)}{vB}\right\}
+\]
+is nondecreasing in $v>0$. For positive $v_1,v_2$, multiply
+$K(v_r)/v_r\le K(v_1+v_2)/(v_1+v_2)$ by $v_r$, for $r=1,2$, and add.
+If either argument is zero, superadditivity follows from $K(0)=0$.
+
+For completeness, neither convexity nor strictness follows from this proof.
+With $a=b=B=1$ and $M=1/2$,
+\[
+ K(1)=\frac{3-\sqrt5}2,\qquad K(2)=1,\qquad K(3)=\frac32.
+\]
+Thus $K(3)-2K(2)+K(1)<0$, which rules out convexity even on the integer
+domain. On the capped region $K(v)=vM$, so equality can hold in
+\eqref{eq:analysis-superadditive}. Zero budget and $b=0$ also remove strict
+routing economies.
+\end{proof}
+
+\subsection{Conditional vehicle loads}
+
+\begin{proof}[Proof of Proposition~\ref{prop:analysis-loads}]
+For fixed $q>0$, terms involving the loads in
+\eqref{eq:analysis-generalized-cost} are
+\[
+ \frac{2c_H\rho}{n_1}+\omega s(q)n_1
+ +\frac{2c_H\rho}{n_2}+\frac{\omega s(q)n_2}2.
+\]
+Each summand is strictly convex in its positive load and diverges as that
+load decreases to zero. Its unconstrained minimizer is the corresponding
+square root in \eqref{eq:analysis-n1}--\eqref{eq:analysis-n2}. Clipping at
+the common upper bound $U=\min(M,q)$ gives the unique constrained minimizers.
+Writing $r=\sqrt{2c_H\rho/(\omega s(q))}$, they are $\min(U,r)$ and
+$\min(U,\sqrt2r)$. Their ordering and ratio bound follow directly.
+\end{proof}
+
