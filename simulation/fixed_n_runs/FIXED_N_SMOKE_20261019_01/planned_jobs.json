@@ -1,0 +1,866 @@
+{
+  "schema_version": "fixed_n_plan/1",
+  "n": 4,
+  "seeds": [
+    4101
+  ],
+  "cases": [
+    {
+      "id": "n4_s4101_T0",
+      "label": "T0",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "mechanism",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T0",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_T1",
+      "label": "T1",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "mechanism",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T1",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_T2_m0.1",
+      "label": "T2_m0.1",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "mechanism",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.1,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T2",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_T3",
+      "label": "T3",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "mechanism",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_T3_m0.1",
+      "label": "T3_m0.1",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "mechanism",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.1,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_RH_dense",
+      "label": "RH_dense",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "algorithms",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "dense",
+      "pooling_model": "pooled",
+      "information": "release_revealed",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_RH_pruned",
+      "label": "RH_pruned",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "algorithms",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "pruned",
+      "pooling_model": "pooled",
+      "information": "release_revealed",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_T2_m0.05",
+      "label": "T2_m0.05",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "sensitivity",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.05,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T2",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_T2_m0.2",
+      "label": "T2_m0.2",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "sensitivity",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.2,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T2",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_direct_rate18.75",
+      "label": "direct_rate18.75",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "sensitivity",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 18.75,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_direct_rate31.25",
+      "label": "direct_rate31.25",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "sensitivity",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 31.25,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_RH_H8",
+      "label": "RH_H8",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "sensitivity",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "pruned",
+      "pooling_model": "pooled",
+      "information": "release_revealed",
+      "H": 8,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_RH_H16",
+      "label": "RH_H16",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "sensitivity",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "pruned",
+      "pooling_model": "pooled",
+      "information": "release_revealed",
+      "H": 16,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    {
+      "id": "n4_s4101_separate",
+      "label": "separate",
+      "n": 4,
+      "seed": 4101,
+      "instance": "n4_s4101",
+      "stage": "pooling",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.0,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "separate",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 3.0,
+      "worker_timeout_sec": 10.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    }
+  ],
+  "stage_references": {
+    "mechanism": [
+      "n4_s4101_T0",
+      "n4_s4101_T1",
+      "n4_s4101_T2_m0.1",
+      "n4_s4101_T3",
+      "n4_s4101_T3_m0.1"
+    ],
+    "algorithms": [
+      "n4_s4101_T3",
+      "n4_s4101_RH_dense",
+      "n4_s4101_RH_pruned"
+    ],
+    "sensitivity": [
+      "n4_s4101_T2_m0.1",
+      "n4_s4101_T3",
+      "n4_s4101_RH_pruned",
+      "n4_s4101_T2_m0.05",
+      "n4_s4101_T2_m0.2",
+      "n4_s4101_direct_rate18.75",
+      "n4_s4101_direct_rate31.25",
+      "n4_s4101_RH_H8",
+      "n4_s4101_RH_H16"
+    ],
+    "pooling": [
+      "n4_s4101_T3",
+      "n4_s4101_separate"
+    ]
+  },
+  "unique_jobs": 14,
+  "scope": "four directions at fixed N; offline/RH information differs"
+}

@@ -1,0 +1,8 @@
+{
+  "total_wall_sec": 600.0,
+  "pilot_per_run_sec": 5.0,
+  "mechanism_per_run_sec": 3.0,
+  "sensitivity_per_run_sec": 3.0,
+  "hard_process_sec": 15.0,
+  "maximum_attempts": 75
+}

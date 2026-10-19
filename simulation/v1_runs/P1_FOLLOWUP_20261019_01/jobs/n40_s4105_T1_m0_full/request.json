@@ -1,0 +1,73 @@
+{
+  "job": {
+    "id": "n40_s4105_T1_m0_full",
+    "instance": "n40_s4105",
+    "n": 40,
+    "seed": 4105,
+    "mechanism": "T1",
+    "minimum": 0.0,
+    "algorithm": "full"
+  },
+  "started_utc": "2026-10-19T00:50:09.553418+00:00",
+  "parent_pid": 22860,
+  "command": [
+    "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "D:\\mycodelife\\workshop\\AI\\multiagent-test\\experiments\\specs\\run_v1_followup_20261019.py",
+    "--worker",
+    "n40_s4105_T1_m0_full",
+    "--batch",
+    "P1_FOLLOWUP_20261019_01"
+  ],
+  "input_sha256": "a92c086bb9294bf26179e4ed40af36db682a3428fbb8a39b4c5216eb6940f45e",
+  "orders_sha256": "2dc7de1112b0fe97f6a7ef1d90271bfabb9bd440254b90ed56525afe35e12a82",
+  "config": {
+    "T": 24,
+    "t0_minutes": 60,
+    "tau_periods": 9,
+    "N_manual": {
+      "1": 6,
+      "2": 6
+    },
+    "N_auto": {
+      "1": 2,
+      "2": 2
+    },
+    "a": {
+      "1": 5,
+      "2": 5
+    },
+    "b": {
+      "1": 20,
+      "2": 20
+    },
+    "rho": {
+      "1": 5,
+      "2": 5
+    },
+    "M": 4,
+    "M_auto": 8,
+    "c_manual_hour": 20,
+    "c_auto_hour": 15,
+    "c_direct_hour": 25,
+    "empty_tau_periods": null,
+    "c_empty_hour": 25,
+    "terminal_target": null,
+    "transfer_time_periods": 0,
+    "transfer_cost_per_unit": 0,
+    "direct_ratio_min": 0,
+    "direct_ratio_max": 1,
+    "service_mechanism": "T1",
+    "min_direct_load_per_vehicle": 0.0
+  },
+  "config_sha256": "f4bd1322e3dcc6562835b776b72aef8f95cbe035b159bbd40c53ad6a63fe50d8",
+  "budget": {
+    "maximum_attempts": 30,
+    "total_wall_sec": 300.0,
+    "logical_per_run_sec": 5.0,
+    "hard_process_sec": 15.0,
+    "Threads": 1,
+    "Seed": 0
+  },
+  "source_content_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4",
+  "followup_harness_sha256": "d03db69a1eeac075c622c9e36b7375005d8ca8b55d2a660c1837438fd2e8f5a0"
+}

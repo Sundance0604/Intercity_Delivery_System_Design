@@ -1,0 +1,53 @@
+{
+  "purpose": "completed-round resume must create no solver attempts",
+  "parent_wall_sec": 1.827999999979511,
+  "returncode": 0,
+  "result": {
+    "batch": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\simulation\\fixed_n_runs\\FIXED_N_SMOKE_20261019_01",
+    "new_attempts": 0,
+    "stop_reason": null,
+    "cumulative_wall_sec": 30.62400000001071,
+    "budget_sec": 180.0,
+    "analysis": {
+      "analysis": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\simulation\\fixed_n_runs\\FIXED_N_SMOKE_20261019_01\\analyses\\20261019T011701065665Z",
+      "planned": 14,
+      "completed": 14,
+      "replay_failed": 0
+    },
+    "postprocessing_wall_sec": 1.6880000000237487
+  },
+  "stderr": "",
+  "raw_hashes_before": {
+    "n4_s4101_direct_rate18.75": "210fbec1c2eb429a67d36e33df09c32229a0c188c0a0e834c69367d82bd77105",
+    "n4_s4101_direct_rate31.25": "4518d0f400d74fd4fc117ff4309e7d26b91091a6e102e5a8ad4a84bbacf37155",
+    "n4_s4101_RH_dense": "d93ba91ff0cf6d3fe168ba9b599860de49f3155a086016786e1efcc61169432f",
+    "n4_s4101_RH_H16": "189ed568317902ce7dc71466b91e1f39b9582947a4fbb3f139f14263625a440f",
+    "n4_s4101_RH_H8": "e48b000d62b11c34acda81793870a32d8538e3a5f59eef125e8246de86538a37",
+    "n4_s4101_RH_pruned": "1bb69544227491d93f6282573ed29474c5cbbfa187c273ab0ab9aa24802a16a0",
+    "n4_s4101_separate": "9721ada5765176b96f4b6c5593e120416c1036700a20f9041641fbd79dc146a1",
+    "n4_s4101_T0": "c4589cc4a8dd076c0150f42e935d8afa4e9241570ce7c2ef41db49c99f805d62",
+    "n4_s4101_T1": "3f8336b85ee2317edd492e5a6b4e414d536dc6aa0664172d8801a146c2b75cbf",
+    "n4_s4101_T2_m0.05": "e9bd04e1f38a62249ed20394752cddb2b65b314e1402108d818920bb6fe6daf0",
+    "n4_s4101_T2_m0.1": "f8db0cfdb65166ac850445f1199b625fc9f16adc6139dac77b3f39679f4e99a0",
+    "n4_s4101_T2_m0.2": "c533da16860d7772cfa9b14758cf2033a83759c56dd3ece5b3fc7f5b99c92953",
+    "n4_s4101_T3": "afb338df2c75eaf49458d95b125e4c5810daedf124ae81724e65b08ba5f083f2",
+    "n4_s4101_T3_m0.1": "7bece6160c5592996697e8a2eb3ff345208bdad3da743b5dcc9d9d0ee4191259"
+  },
+  "raw_hashes_after": {
+    "n4_s4101_direct_rate18.75": "210fbec1c2eb429a67d36e33df09c32229a0c188c0a0e834c69367d82bd77105",
+    "n4_s4101_direct_rate31.25": "4518d0f400d74fd4fc117ff4309e7d26b91091a6e102e5a8ad4a84bbacf37155",
+    "n4_s4101_RH_dense": "d93ba91ff0cf6d3fe168ba9b599860de49f3155a086016786e1efcc61169432f",
+    "n4_s4101_RH_H16": "189ed568317902ce7dc71466b91e1f39b9582947a4fbb3f139f14263625a440f",
+    "n4_s4101_RH_H8": "e48b000d62b11c34acda81793870a32d8538e3a5f59eef125e8246de86538a37",
+    "n4_s4101_RH_pruned": "1bb69544227491d93f6282573ed29474c5cbbfa187c273ab0ab9aa24802a16a0",
+    "n4_s4101_separate": "9721ada5765176b96f4b6c5593e120416c1036700a20f9041641fbd79dc146a1",
+    "n4_s4101_T0": "c4589cc4a8dd076c0150f42e935d8afa4e9241570ce7c2ef41db49c99f805d62",
+    "n4_s4101_T1": "3f8336b85ee2317edd492e5a6b4e414d536dc6aa0664172d8801a146c2b75cbf",
+    "n4_s4101_T2_m0.05": "e9bd04e1f38a62249ed20394752cddb2b65b314e1402108d818920bb6fe6daf0",
+    "n4_s4101_T2_m0.1": "f8db0cfdb65166ac850445f1199b625fc9f16adc6139dac77b3f39679f4e99a0",
+    "n4_s4101_T2_m0.2": "c533da16860d7772cfa9b14758cf2033a83759c56dd3ece5b3fc7f5b99c92953",
+    "n4_s4101_T3": "afb338df2c75eaf49458d95b125e4c5810daedf124ae81724e65b08ba5f083f2",
+    "n4_s4101_T3_m0.1": "7bece6160c5592996697e8a2eb3ff345208bdad3da743b5dcc9d9d0ee4191259"
+  },
+  "raw_hashes_unchanged": true
+}

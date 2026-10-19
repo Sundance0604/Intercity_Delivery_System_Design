@@ -1,0 +1,25 @@
+{
+  "purpose": "four-direction functional verification only",
+  "command": [
+    "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "-B",
+    "experiments/run_fixed_n.py",
+    "--run",
+    "--orders",
+    "4",
+    "--seeds",
+    "4101",
+    "--batch",
+    "FIXED_N_SMOKE_20261019_01",
+    "--budget-sec",
+    "180",
+    "--per-run-sec",
+    "3",
+    "--worker-timeout-sec",
+    "10"
+  ],
+  "parent_wall_sec": 32.43800000002375,
+  "returncode": 0,
+  "stdout": "{\n  \"batch\": \"D:\\\\mycodelife\\\\workshop\\\\AI\\\\multiagent-test\\\\simulation\\\\fixed_n_runs\\\\FIXED_N_SMOKE_20261019_01\",\n  \"new_attempts\": 14,\n  \"stop_reason\": null,\n  \"cumulative_wall_sec\": 30.59299999999348,\n  \"budget_sec\": 180.0,\n  \"analysis\": {\n    \"analysis\": \"D:\\\\mycodelife\\\\workshop\\\\AI\\\\multiagent-test\\\\simulation\\\\fixed_n_runs\\\\FIXED_N_SMOKE_20261019_01\\\\analyses\\\\20261019T011646385758Z\",\n    \"planned\": 14,\n    \"completed\": 14,\n    \"replay_failed\": 0\n  },\n  \"postprocessing_wall_sec\": 1.6880000000237487\n}\n",
+  "stderr": ""
+}

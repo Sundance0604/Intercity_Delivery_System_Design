@@ -1,0 +1,1 @@
+{"schema_version":"fixed_n_design/1","direct_hourly_rates":[18.75,31.25],"t2_minimum_loads":[0.05,0.2],"prediction_horizons":[8,16],"baseline_horizon":12,"rolling_step":2,"extension_horizon":12,"empty_hourly_rate":25.0}

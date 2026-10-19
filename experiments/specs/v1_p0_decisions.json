@@ -1,0 +1,24 @@
+{
+  "schema_version": "v1_p0_decisions/1",
+  "unit": {
+    "status": "AUTHOR_CONFIRMED",
+    "decision_id": "V1P0-JOB-UNIT-2026-10-18",
+    "choice": "one_shipment_one_synthetic_job_equivalent"
+  },
+  "direct_endpoint": {
+    "status": "AUTHOR_CONFIRMED",
+    "decision_id": "V1P0-DIRECT-ENDPOINT-2026-10-18",
+    "choice": "aggregate_destination_service_node_original_formula",
+    "limitation": "Does not certify physical hub-to-hub travel or add an unmodeled destination stem"
+  },
+  "t2_policy": {
+    "status": "AUTHOR_CONFIRMED",
+    "decision_id": "V1P0-T2-MINLOAD-2026-10-18",
+    "choice": "minimum_average_direct_load",
+    "minimum_per_vehicle": 0.1,
+    "sensitivity": [0.05, 0.1, 0.2],
+    "limitation": "Aggregate lower load bound; not per-vehicle route reconstruction"
+  },
+  "solver_budget": "AUTHOR_REQUESTED_SMALL_REAL_SOLVES_THEN_BOUNDED_P1",
+  "parameter_calibration": "synthetic_design_not_empirical"
+}

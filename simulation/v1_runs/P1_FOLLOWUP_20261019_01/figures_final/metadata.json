@@ -1,0 +1,8 @@
+{
+  "analysis_sha256": "5b99ed1691dffc02f8e12d7b261446fba2d6315448f97259aa5b4444464b83b8",
+  "plot_script_sha256": "7ed95cbb5dd3407c9d0e87fe1de91e02700fc9ca44bc79c5345604e0ed915c47",
+  "figure_sha256": "1510aada97a95e34c2ede083f0bdb010aa213ce7803c4d52b9cd058a8eae9a7e",
+  "elapsed_sec": 0.2029999999795109,
+  "new_solver_runs": 0,
+  "scope": "derived plot of fixed saved results; no new experiment"
+}

@@ -1,0 +1,8 @@
+{
+  "mode": "prepare",
+  "parent_wall_sec": 0.3600000000442378,
+  "returncode": 0,
+  "stdout": "{\n  \"batch\": \"D:\\\\mycodelife\\\\workshop\\\\AI\\\\multiagent-test\\\\simulation\\\\v1_runs\\\\P1_FOLLOWUP_20261019_01\",\n  \"new_solver_runs\": 0,\n  \"planned_attempts\": 30,\n  \"prepare_wall_sec\": 0.23399999999674037\n}\n",
+  "stderr": "",
+  "new_solver_runs": 0
+}

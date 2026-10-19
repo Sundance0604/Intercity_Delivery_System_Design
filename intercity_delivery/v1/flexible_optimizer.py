@@ -81,6 +81,9 @@ class V1FlexibleOptimizer:
                 variables = model.addVars(keys, vtype=domain, lb=0, name=name)
                 setattr(self, name, variables)
                 self.groups[name] = variables
+            # Preserve the same mother domains for dense/pruned comparisons.
+            # Mechanisms constrain vehicle and cargo variables, not cargo ratios.
+            self._apply_mechanism_bounds()
             self.z_unserved = {(o.order_id,): model.addVar(lb=0, ub=o.quantity,
                                   name=f"z_unserved_{n}") for n, o in enumerate(self.orders)}
             self.groups["z_unserved"] = self.z_unserved
@@ -140,6 +143,10 @@ class V1FlexibleOptimizer:
                 model.addConstr(self.w_direct[key] == gp.quicksum(v*self.u_direct[*key, v]
                     for v in range(1, fleet+1)))
                 model.addConstr(gp.quicksum(self.u_direct[*key, v] for v in range(1, fleet+1)) <= 1)
+                if cfg.min_direct_load_per_vehicle > 0:
+                    model.addConstr(gp.quicksum(direct_cargo[key]) >=
+                                    cfg.min_direct_load_per_vehicle*self.w_direct[key],
+                                    name=f"direct_minimum_load_{key}")
                 model.addConstr(gp.quicksum(direct_cargo[key]) <= gp.quicksum(
                     self.direct_capacities[*key, v]*self.u_direct[*key, v]
                     for v in range(1, fleet+1)))
@@ -188,6 +195,16 @@ class V1FlexibleOptimizer:
             model.dispose()
             self.model = None
             raise
+
+    def _apply_mechanism_bounds(self):
+        disabled = []
+        if self.config.service_mechanism in ("T0", "T1"):
+            disabled.extend(("w_direct", "u_direct", "h_direct"))
+        if self.config.service_mechanism in ("T0", "T2"):
+            disabled.append("empty_vehicles")
+        for name in disabled:
+            for variable in self.groups[name].values():
+                variable.UB = 0
 
     def configure_window(self, current_time, start_end, completion_end, committed):
         """Keep all past starts exactly; only new tasks obey this window's cut."""

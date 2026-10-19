@@ -1,0 +1,4527 @@
+{
+  "schema_version": "fixed_n_analysis/1",
+  "generated_utc": "2026-10-19T01:16:46.396752+00:00",
+  "n": 4,
+  "seeds": [
+    4101
+  ],
+  "stages": {
+    "mechanism": {
+      "planned_references": 5,
+      "completed_feasible": 5,
+      "status_counts": {
+        "OPTIMAL": 5
+      }
+    },
+    "algorithms": {
+      "planned_references": 3,
+      "completed_feasible": 3,
+      "status_counts": {
+        "COMPLETED": 2,
+        "OPTIMAL": 1
+      }
+    },
+    "sensitivity": {
+      "planned_references": 9,
+      "completed_feasible": 9,
+      "status_counts": {
+        "COMPLETED": 3,
+        "OPTIMAL": 6
+      }
+    },
+    "pooling": {
+      "planned_references": 2,
+      "completed_feasible": 2,
+      "status_counts": {
+        "OPTIMAL": 2
+      }
+    }
+  },
+  "planned_unique_jobs": 14,
+  "completed_feasible": 14,
+  "rows": [
+    {
+      "id": "n4_s4101_T0",
+      "label": "T0",
+      "stage": "mechanism",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.5619999999762513,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 720.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.1720000000204891,
+        "candidate": 0.0,
+        "build": 0.06300000002374873,
+        "configure": 0.0,
+        "solve": 0.014999999955762178,
+        "extract_commit": 0.0,
+        "replay_accounting": 0.10899999999674037,
+        "other": 0.01600000000325963
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.375,
+      "variable_count": 4692,
+      "constraint_count": 1279
+    },
+    {
+      "id": "n4_s4101_T1",
+      "label": "T1",
+      "stage": "mechanism",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 1.0939999999827705,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 660.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.7029999999795109,
+        "candidate": 0.0,
+        "build": 0.062000000034458935,
+        "configure": 0.0,
+        "solve": 0.046999999962281436,
+        "extract_commit": 0.01600000000325963,
+        "replay_accounting": 0.10899999999674037,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.9369999999762513,
+      "variable_count": 4692,
+      "constraint_count": 1279
+    },
+    {
+      "id": "n4_s4101_T2_m0.1",
+      "label": "T2_m0.1",
+      "stage": "mechanism",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.6709999999729916,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.25,
+        "candidate": 0.0,
+        "build": 0.07900000002700835,
+        "configure": 0.0,
+        "solve": 0.031000000017229468,
+        "extract_commit": 0.014999999955762178,
+        "replay_accounting": 0.0940000000409782,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.4690000000409782,
+      "variable_count": 4692,
+      "constraint_count": 1395
+    },
+    {
+      "id": "n4_s4101_T3",
+      "label": "T3",
+      "stage": "mechanism",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.5310000000172295,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.14000000001396984,
+        "candidate": 0.0,
+        "build": 0.06300000002374873,
+        "configure": 0.0,
+        "solve": 0.061999999976251274,
+        "extract_commit": 0.0,
+        "replay_accounting": 0.10999999998603016,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.375,
+      "variable_count": 4692,
+      "constraint_count": 1279
+    },
+    {
+      "id": "n4_s4101_T3_m0.1",
+      "label": "T3_m0.1",
+      "stage": "mechanism",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.5779999999795109,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.18799999996554106,
+        "candidate": 0.0,
+        "build": 0.062000000034458935,
+        "configure": 0.0,
+        "solve": 0.06299999996554106,
+        "extract_commit": 0.0,
+        "replay_accounting": 0.10899999999674037,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.42199999996228144,
+      "variable_count": 4692,
+      "constraint_count": 1395
+    },
+    {
+      "id": "n4_s4101_RH_dense",
+      "label": "RH_dense",
+      "stage": "algorithms",
+      "n": 4,
+      "seed": 4101,
+      "information": "release_revealed",
+      "pooling_model": "pooled",
+      "status": "COMPLETED",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 1.3910000000032596,
+      "solver_calls": 12,
+      "global_bound": null,
+      "global_gap": null,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0,
+      "lead_time_mean_minutes": 690.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.1720000000204891,
+        "candidate": 0.0,
+        "build": 0.6409999998868443,
+        "configure": 0.21700000000419095,
+        "solve": 0.10900000005494803,
+        "extract_commit": 0.0470000000204891,
+        "replay_accounting": 0.0,
+        "other": 0.06400000001303852
+      },
+      "windows": [
+        {
+          "window_start": 0,
+          "start_window_end": 12,
+          "completion_window_end": 24,
+          "control_end": 2,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.061999999976251274,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.015000000013969839,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 2,
+          "start_window_end": 14,
+          "completion_window_end": 24,
+          "control_end": 4,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.06300000002374873,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 4,
+          "start_window_end": 16,
+          "completion_window_end": 24,
+          "control_end": 6,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 336,
+          "variable_count": 4354,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 338,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.125,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.061999999976251274,
+            "configure": 0.0,
+            "solve": 0.0470000000204891,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.01600000000325963
+          }
+        },
+        {
+          "window_start": 6,
+          "start_window_end": 18,
+          "completion_window_end": 24,
+          "control_end": 8,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 336,
+          "variable_count": 4354,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 338,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.0,
+            "solve": 0.015000000013969839,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.01600000000325963
+          }
+        },
+        {
+          "window_start": 8,
+          "start_window_end": 20,
+          "completion_window_end": 24,
+          "control_end": 10,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.10899999999674037,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.061999999976251274,
+            "configure": 0.0,
+            "solve": 0.0470000000204891,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 10,
+          "start_window_end": 22,
+          "completion_window_end": 24,
+          "control_end": 12,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.06300000002374873,
+            "configure": 0.014999999955762178,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.01600000000325963
+          }
+        },
+        {
+          "window_start": 12,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 14,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0940000000409782,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.06300000002374873,
+            "configure": 0.015000000013969839,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 14,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 16,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.031000000017229468,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 16,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 18,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09299999999348074,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.045999999972991645,
+            "configure": 0.03200000000651926,
+            "solve": 0.0,
+            "extract_commit": 0.015000000013969839,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 18,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 20,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.030999999959021807,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.01600000000325963
+          }
+        },
+        {
+          "window_start": 20,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 22,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.07800000003771856,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.031000000017229468,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 22,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 24,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": null,
+          "cargo_variable_count": 672,
+          "variable_count": 4692,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 676,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.06299999996554106,
+            "configure": 0.031000000017229468,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        }
+      ],
+      "bound_scope": "none_window_local_only",
+      "optimal": false,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 1.25,
+      "variable_count": null,
+      "constraint_count": null
+    },
+    {
+      "id": "n4_s4101_RH_pruned",
+      "label": "RH_pruned",
+      "stage": "algorithms",
+      "n": 4,
+      "seed": 4101,
+      "information": "release_revealed",
+      "pooling_model": "pooled",
+      "status": "COMPLETED",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 1.3439999999827705,
+      "solver_calls": 12,
+      "global_bound": null,
+      "global_gap": null,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.17199999996228144,
+        "candidate": 0.015000000013969839,
+        "build": 0.5929999999934807,
+        "configure": 0.1600000000325963,
+        "solve": 0.17099999991478398,
+        "extract_commit": 0.046000000031199306,
+        "replay_accounting": 0.015000000013969839,
+        "other": 0.031000000017229468
+      },
+      "windows": [
+        {
+          "window_start": 0,
+          "start_window_end": 12,
+          "completion_window_end": 24,
+          "control_end": 2,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "after": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed": 0,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.06300000002374873,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.0,
+            "solve": 0.01600000000325963,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 2,
+          "start_window_end": 14,
+          "completion_window_end": 24,
+          "control_end": 4,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "after": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed": 0,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.061999999976251274,
+            "configure": 0.0,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 4,
+          "start_window_end": 16,
+          "completion_window_end": 24,
+          "control_end": 6,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 188,
+              "g_auto": 32,
+              "h_direct": 116
+            },
+            "after": {
+              "g_manual": 32,
+              "g_auto": 9,
+              "h_direct": 27
+            },
+            "removed_by_group": {
+              "g_manual": 156,
+              "g_auto": 23,
+              "h_direct": 89
+            },
+            "removed": 268,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 68,
+          "variable_count": 4086,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 70,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.10899999999674037,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.0,
+            "solve": 0.045999999972991645,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.01600000000325963
+          }
+        },
+        {
+          "window_start": 6,
+          "start_window_end": 18,
+          "completion_window_end": 24,
+          "control_end": 8,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 188,
+              "g_auto": 32,
+              "h_direct": 116
+            },
+            "after": {
+              "g_manual": 22,
+              "g_auto": 7,
+              "h_direct": 15
+            },
+            "removed_by_group": {
+              "g_manual": 166,
+              "g_auto": 25,
+              "h_direct": 101
+            },
+            "removed": 292,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 44,
+          "variable_count": 4062,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 46,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0940000000409782,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.031000000017229468,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 8,
+          "start_window_end": 20,
+          "completion_window_end": 24,
+          "control_end": 10,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 37,
+              "g_auto": 12,
+              "h_direct": 27
+            },
+            "removed_by_group": {
+              "g_manual": 339,
+              "g_auto": 52,
+              "h_direct": 205
+            },
+            "removed": 596,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 76,
+          "variable_count": 4096,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 80,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.061999999976251274,
+            "configure": 0.0,
+            "solve": 0.03200000000651926,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 10,
+          "start_window_end": 22,
+          "completion_window_end": 24,
+          "control_end": 12,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 29,
+              "g_auto": 10,
+              "h_direct": 11
+            },
+            "removed_by_group": {
+              "g_manual": 347,
+              "g_auto": 54,
+              "h_direct": 221
+            },
+            "removed": 622,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 50,
+          "variable_count": 4070,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 54,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09299999999348074,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.015000000013969839,
+            "build": 0.046999999962281436,
+            "configure": 0.01600000000325963,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.015000000013969839
+          }
+        },
+        {
+          "window_start": 12,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 14,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 25,
+              "g_auto": 6,
+              "h_direct": 3
+            },
+            "removed_by_group": {
+              "g_manual": 351,
+              "g_auto": 58,
+              "h_direct": 229
+            },
+            "removed": 638,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 34,
+          "variable_count": 4054,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 38,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.014999999955762178,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 14,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 16,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 24,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 352,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 644,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 28,
+          "variable_count": 4048,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 32,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0940000000409782,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.01600000000325963,
+            "extract_commit": 0.015000000013969839,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 16,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 18,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 24,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 352,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 644,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 28,
+          "variable_count": 4048,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 32,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.01600000000325963,
+            "solve": 0.0,
+            "extract_commit": 0.015000000013969839,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 18,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 20,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 21,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 355,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 647,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 25,
+          "variable_count": 4045,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 29,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.014999999955762178,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 20,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 22,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 13,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 363,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 655,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 17,
+          "variable_count": 4037,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 21,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.07900000002700835,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.03200000000651926,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 22,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 24,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 9,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 367,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 659,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 13,
+          "variable_count": 4033,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 17,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.045999999972991645,
+            "configure": 0.03200000000651926,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        }
+      ],
+      "bound_scope": "none_window_local_only",
+      "optimal": false,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 1.202999999979511,
+      "variable_count": null,
+      "constraint_count": null
+    },
+    {
+      "id": "n4_s4101_T2_m0.05",
+      "label": "T2_m0.05",
+      "stage": "sensitivity",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.625,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.26600000000325963,
+        "candidate": 0.0,
+        "build": 0.061999999976251274,
+        "configure": 0.0,
+        "solve": 0.031000000017229468,
+        "extract_commit": 0.01600000000325963,
+        "replay_accounting": 0.09399999998277053,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.46899999998277053,
+      "variable_count": 4692,
+      "constraint_count": 1395
+    },
+    {
+      "id": "n4_s4101_T2_m0.2",
+      "label": "T2_m0.2",
+      "stage": "sensitivity",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.625,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.23399999999674037,
+        "candidate": 0.0,
+        "build": 0.06299999996554106,
+        "configure": 0.0,
+        "solve": 0.031000000017229468,
+        "extract_commit": 0.01600000000325963,
+        "replay_accounting": 0.09299999999348074,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.4369999999762513,
+      "variable_count": 4692,
+      "constraint_count": 1395
+    },
+    {
+      "id": "n4_s4101_direct_rate18.75",
+      "label": "direct_rate18.75",
+      "stage": "sensitivity",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.9379999999655411,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.5469999999622814,
+        "candidate": 0.0,
+        "build": 0.062000000034458935,
+        "configure": 0.0,
+        "solve": 0.06299999996554106,
+        "extract_commit": 0.0,
+        "replay_accounting": 0.10899999999674037,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.7809999999590218,
+      "variable_count": 4692,
+      "constraint_count": 1279
+    },
+    {
+      "id": "n4_s4101_direct_rate31.25",
+      "label": "direct_rate31.25",
+      "stage": "sensitivity",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "pooled",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.5939999999827705,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.18699999997625127,
+        "candidate": 0.0,
+        "build": 0.06300000002374873,
+        "configure": 0.0,
+        "solve": 0.061999999976251274,
+        "extract_commit": 0.0,
+        "replay_accounting": 0.10899999999674037,
+        "other": 0.01600000000325963
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_adopted_V1_F_profile_only",
+      "optimal": true,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.4369999999762513,
+      "variable_count": 4692,
+      "constraint_count": 1279
+    },
+    {
+      "id": "n4_s4101_RH_H8",
+      "label": "RH_H8",
+      "stage": "sensitivity",
+      "n": 4,
+      "seed": 4101,
+      "information": "release_revealed",
+      "pooling_model": "pooled",
+      "status": "COMPLETED",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 1.3589999999967404,
+      "solver_calls": 12,
+      "global_bound": null,
+      "global_gap": null,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.18799999996554106,
+        "candidate": 0.0,
+        "build": 0.5800000000162981,
+        "configure": 0.19899999996414408,
+        "solve": 0.14100000000325963,
+        "extract_commit": 0.06400000001303852,
+        "replay_accounting": 0.01600000000325963,
+        "other": 0.0
+      },
+      "windows": [
+        {
+          "window_start": 0,
+          "start_window_end": 8,
+          "completion_window_end": 20,
+          "control_end": 2,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "after": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed": 0,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.062000000034458935,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.015000000013969839,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 2,
+          "start_window_end": 10,
+          "completion_window_end": 22,
+          "control_end": 4,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "after": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed": 0,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.06299999996554106,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.01600000000325963,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 4,
+          "start_window_end": 12,
+          "completion_window_end": 24,
+          "control_end": 6,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 188,
+              "g_auto": 32,
+              "h_direct": 116
+            },
+            "after": {
+              "g_manual": 32,
+              "g_auto": 9,
+              "h_direct": 27
+            },
+            "removed_by_group": {
+              "g_manual": 156,
+              "g_auto": 23,
+              "h_direct": 89
+            },
+            "removed": 268,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 68,
+          "variable_count": 4086,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 70,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.10899999999674037,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.015000000013969839,
+            "solve": 0.030999999959021807,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 6,
+          "start_window_end": 14,
+          "completion_window_end": 24,
+          "control_end": 8,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 188,
+              "g_auto": 32,
+              "h_direct": 116
+            },
+            "after": {
+              "g_manual": 22,
+              "g_auto": 7,
+              "h_direct": 15
+            },
+            "removed_by_group": {
+              "g_manual": 166,
+              "g_auto": 25,
+              "h_direct": 101
+            },
+            "removed": 292,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 44,
+          "variable_count": 4062,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 46,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.07800000003771856,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.0,
+            "solve": 0.031000000017229468,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 8,
+          "start_window_end": 16,
+          "completion_window_end": 24,
+          "control_end": 10,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 37,
+              "g_auto": 12,
+              "h_direct": 27
+            },
+            "removed_by_group": {
+              "g_manual": 339,
+              "g_auto": 52,
+              "h_direct": 205
+            },
+            "removed": 596,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 76,
+          "variable_count": 4096,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 80,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.01600000000325963,
+            "solve": 0.031000000017229468,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 10,
+          "start_window_end": 18,
+          "completion_window_end": 24,
+          "control_end": 12,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 29,
+              "g_auto": 10,
+              "h_direct": 11
+            },
+            "removed_by_group": {
+              "g_manual": 347,
+              "g_auto": 54,
+              "h_direct": 221
+            },
+            "removed": 622,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 50,
+          "variable_count": 4070,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 54,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.014999999955762178,
+            "solve": 0.01600000000325963,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 12,
+          "start_window_end": 20,
+          "completion_window_end": 24,
+          "control_end": 14,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 25,
+              "g_auto": 6,
+              "h_direct": 3
+            },
+            "removed_by_group": {
+              "g_manual": 351,
+              "g_auto": 58,
+              "h_direct": 229
+            },
+            "removed": 638,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 34,
+          "variable_count": 4054,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 38,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0940000000409782,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.031000000017229468,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 14,
+          "start_window_end": 22,
+          "completion_window_end": 24,
+          "control_end": 16,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 24,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 352,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 644,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 28,
+          "variable_count": 4048,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 32,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.015000000013969839,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 16,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 18,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 24,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 352,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 644,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 28,
+          "variable_count": 4048,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 32,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.014999999955762178,
+            "solve": 0.01600000000325963,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 18,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 20,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 21,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 355,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 647,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 25,
+          "variable_count": 4045,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 29,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0940000000409782,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.06300000002374873,
+            "configure": 0.015000000013969839,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 20,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 22,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 13,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 363,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 655,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 17,
+          "variable_count": 4037,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 21,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.015000000013969839,
+            "solve": 0.01600000000325963,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 22,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 24,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 9,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 367,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 659,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 13,
+          "variable_count": 4033,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 17,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.030999999959021807,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        }
+      ],
+      "bound_scope": "none_window_local_only",
+      "optimal": false,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 1.187999999965541,
+      "variable_count": null,
+      "constraint_count": null
+    },
+    {
+      "id": "n4_s4101_RH_H16",
+      "label": "RH_H16",
+      "stage": "sensitivity",
+      "n": 4,
+      "seed": 4101,
+      "information": "release_revealed",
+      "pooling_model": "pooled",
+      "status": "COMPLETED",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 1.2660000000032596,
+      "solver_calls": 12,
+      "global_bound": null,
+      "global_gap": null,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.14100000000325963,
+        "candidate": 0.015000000013969839,
+        "build": 0.5779999999795109,
+        "configure": 0.12699999997857958,
+        "solve": 0.12299999996321276,
+        "extract_commit": 0.07900000002700835,
+        "replay_accounting": 0.0,
+        "other": 0.046000000031199306
+      },
+      "windows": [
+        {
+          "window_start": 0,
+          "start_window_end": 16,
+          "completion_window_end": 24,
+          "control_end": 2,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "after": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed": 0,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.061999999976251274,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.045999999972991645,
+            "configure": 0.0,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.01600000000325963
+          }
+        },
+        {
+          "window_start": 2,
+          "start_window_end": 18,
+          "completion_window_end": 24,
+          "control_end": 4,
+          "known_order_ids": [],
+          "status": 2,
+          "feasible": true,
+          "objective": 0.0,
+          "best_bound": 0.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "after": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 0,
+              "g_auto": 0,
+              "h_direct": 0
+            },
+            "removed": 0,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 0,
+          "variable_count": 4016,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1071,
+          "continuous_variable_count": 0,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.06300000002374873,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.0,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 4,
+          "start_window_end": 20,
+          "completion_window_end": 24,
+          "control_end": 6,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 188,
+              "g_auto": 32,
+              "h_direct": 116
+            },
+            "after": {
+              "g_manual": 32,
+              "g_auto": 9,
+              "h_direct": 27
+            },
+            "removed_by_group": {
+              "g_manual": 156,
+              "g_auto": 23,
+              "h_direct": 89
+            },
+            "removed": 268,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 68,
+          "variable_count": 4086,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 70,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09299999999348074,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.045999999972991645,
+            "configure": 0.0,
+            "solve": 0.03200000000651926,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.015000000013969839
+          }
+        },
+        {
+          "window_start": 6,
+          "start_window_end": 22,
+          "completion_window_end": 24,
+          "control_end": 8,
+          "known_order_ids": [
+            "14632193",
+            "34538284"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 175.0,
+          "best_bound": 175.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 188,
+              "g_auto": 32,
+              "h_direct": 116
+            },
+            "after": {
+              "g_manual": 16,
+              "g_auto": 5,
+              "h_direct": 15
+            },
+            "removed_by_group": {
+              "g_manual": 172,
+              "g_auto": 27,
+              "h_direct": 101
+            },
+            "removed": 300,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 36,
+          "variable_count": 4054,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1175,
+          "continuous_variable_count": 38,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.014999999955762178,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 8,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 10,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 37,
+              "g_auto": 12,
+              "h_direct": 27
+            },
+            "removed_by_group": {
+              "g_manual": 339,
+              "g_auto": 52,
+              "h_direct": 205
+            },
+            "removed": 596,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 76,
+          "variable_count": 4096,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 80,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.07800000003771856,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.0,
+            "solve": 0.031000000017229468,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 10,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 12,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 25,
+              "g_auto": 8,
+              "h_direct": 11
+            },
+            "removed_by_group": {
+              "g_manual": 351,
+              "g_auto": 56,
+              "h_direct": 221
+            },
+            "removed": 628,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 44,
+          "variable_count": 4064,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 48,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09399999998277053,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.06299999996554106,
+            "configure": 0.0,
+            "solve": 0.015000000013969839,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 12,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 14,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 21,
+              "g_auto": 6,
+              "h_direct": 3
+            },
+            "removed_by_group": {
+              "g_manual": 355,
+              "g_auto": 58,
+              "h_direct": 229
+            },
+            "removed": 642,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 30,
+          "variable_count": 4050,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 34,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.014999999955762178,
+            "solve": 0.0,
+            "extract_commit": 0.01600000000325963,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 14,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 16,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 20,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 356,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 648,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 24,
+          "variable_count": 4044,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 28,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.07800000003771856,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.015000000013969839
+          }
+        },
+        {
+          "window_start": 16,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 18,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 20,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 356,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 648,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 24,
+          "variable_count": 4044,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 28,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.046999999962281436,
+            "configure": 0.01600000000325963,
+            "solve": 0.015000000013969839,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 18,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 20,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 17,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 359,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 651,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 21,
+          "variable_count": 4041,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 25,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.0779999999795109,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.01600000000325963,
+            "solve": 0.014999999955762178,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 20,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 22,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 13,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 363,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 655,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 17,
+          "variable_count": 4037,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 21,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.07900000002700835,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.0,
+            "build": 0.0470000000204891,
+            "configure": 0.03200000000651926,
+            "solve": 0.0,
+            "extract_commit": 0.0,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        },
+        {
+          "window_start": 22,
+          "start_window_end": 24,
+          "completion_window_end": 24,
+          "control_end": 24,
+          "known_order_ids": [
+            "11947597",
+            "14632193",
+            "34538284",
+            "36919528"
+          ],
+          "status": 2,
+          "feasible": true,
+          "objective": 350.0,
+          "best_bound": 350.0,
+          "mip_gap": 0.0,
+          "bound_scope": "window_local_only",
+          "pruning": {
+            "scope": "cargo_variables_only",
+            "rule": "time_support_positive_capacity",
+            "before": {
+              "g_manual": 376,
+              "g_auto": 64,
+              "h_direct": 232
+            },
+            "after": {
+              "g_manual": 9,
+              "g_auto": 4,
+              "h_direct": 0
+            },
+            "removed_by_group": {
+              "g_manual": 367,
+              "g_auto": 60,
+              "h_direct": 232
+            },
+            "removed": 659,
+            "vehicle_arcs_retained": true,
+            "selector_bound": "global_manual_fleet",
+            "global_safety_proof": false
+          },
+          "cargo_variable_count": 13,
+          "variable_count": 4033,
+          "binary_variable_count": 3648,
+          "integer_variable_count": 4016,
+          "constraint_count": 1279,
+          "continuous_variable_count": 17,
+          "vehicle_selector_domain_sha256": "1660a09c1de93a99bdd3468884c84b629de81324e2e044beb24cd8111d6a21ab",
+          "vehicle_selector_domain_counts": {
+            "x_manual": 188,
+            "y_auto": 32,
+            "w_direct": 116,
+            "empty_vehicles": 32,
+            "u_wave": 2256,
+            "u_direct": 1392
+          },
+          "elapsed_sec": 0.09299999999348074,
+          "phase_timing_sec": {
+            "setup_provenance": 0.0,
+            "candidate": 0.015000000013969839,
+            "build": 0.046999999962281436,
+            "configure": 0.01600000000325963,
+            "solve": 0.0,
+            "extract_commit": 0.015000000013969839,
+            "replay_accounting": 0.0,
+            "other": 0.0
+          }
+        }
+      ],
+      "bound_scope": "none_window_local_only",
+      "optimal": false,
+      "model_id": "v1_flexible_arc_wave_empty_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 1.1089999999967404,
+      "variable_count": null,
+      "constraint_count": null
+    },
+    {
+      "id": "n4_s4101_separate",
+      "label": "separate",
+      "stage": "pooling",
+      "n": 4,
+      "seed": 4101,
+      "information": "offline",
+      "pooling_model": "separate",
+      "status": "OPTIMAL",
+      "completed_feasible": true,
+      "cost": 350.0,
+      "served_rate": 1.0,
+      "parent_wall_sec": 0.6410000000032596,
+      "solver_calls": 1,
+      "global_bound": 350.0,
+      "global_gap": 0.0,
+      "orders_sha256": "474222f47b0f705a73712cb5a67f3eafb22b1fd07e9a366e1137189fce1538c8",
+      "process_status": "EXITED",
+      "direct_share": 0.0,
+      "explicit_empty_vehicle_tasks": 0.0,
+      "zero_cargo_direct_vehicle_tasks": 0.0,
+      "lead_time_mean_minutes": 750.0,
+      "manual_busy_fraction": 0.013888888888888888,
+      "phase_timing_sec": {
+        "setup_provenance": 0.25,
+        "candidate": 0.0,
+        "build": 0.061999999976251274,
+        "configure": 0.0,
+        "solve": 0.06300000002374873,
+        "extract_commit": 0.0,
+        "replay_accounting": 0.10899999999674037,
+        "other": 0.0
+      },
+      "windows": [],
+      "bound_scope": "full_horizon_local_separate_comparison_only",
+      "optimal": true,
+      "model_id": "v1_comparison_local_separate_v1",
+      "raw_budget_exceeded": false,
+      "runner_elapsed_sec": 0.48399999999674037,
+      "variable_count": 4692,
+      "constraint_count": 1279
+    }
+  ],
+  "paired": [
+    {
+      "stage": "mechanism",
+      "baseline": "T0",
+      "treatment": "T1",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.5137111517231282,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T0",
+      "treatment": "T2_m0.1",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.837555886734534,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T0",
+      "treatment": "T3",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 1.0583804142335518,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T3",
+      "treatment": "T3_m0.1",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.918685121169641,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T2_m0.1",
+      "treatment": "T3_m0.1",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 1.1608996539736633,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "algorithms",
+      "baseline": "T3",
+      "treatment": "RH_dense",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "COMPLETED",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.3817397555830231,
+      "optimal_cost_delta_interval_from_solver_bounds": null,
+      "interval_scope": "not_available; RH has no full-horizon bound",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": null,
+      "information_comparison": "offline_oracle_vs_release_revealed",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "algorithms",
+      "baseline": "T3",
+      "treatment": "RH_pruned",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "COMPLETED",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.3950892857321701,
+      "optimal_cost_delta_interval_from_solver_bounds": null,
+      "interval_scope": "not_available; RH has no full-horizon bound",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": null,
+      "information_comparison": "offline_oracle_vs_release_revealed",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "algorithms",
+      "baseline": "RH_dense",
+      "treatment": "RH_pruned",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "COMPLETED",
+      "treatment_status": "COMPLETED",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 1.0349702381109314,
+      "optimal_cost_delta_interval_from_solver_bounds": null,
+      "interval_scope": "not_available; RH has no full-horizon bound",
+      "changed_objective": false,
+      "baseline_global_gap": null,
+      "treatment_global_gap": null,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "pooling",
+      "baseline": "T3",
+      "treatment": "separate",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.8283931357480955,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T2_m0.1",
+      "treatment": "T2_m0.05",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 1.0735999999567867,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T2_m0.1",
+      "treatment": "T2_m0.2",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 1.0735999999567867,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": false,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T3",
+      "treatment": "direct_rate18.75",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.5660980810626189,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": true,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "direct-channel price, including zero-cargo direct"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T3",
+      "treatment": "direct_rate31.25",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "OPTIMAL",
+      "treatment_status": "OPTIMAL",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.8939393939943292,
+      "optimal_cost_delta_interval_from_solver_bounds": [
+        0.0,
+        0.0
+      ],
+      "interval_scope": "reported full-model bounds for each own objective",
+      "changed_objective": true,
+      "baseline_global_gap": 0.0,
+      "treatment_global_gap": 0.0,
+      "information_comparison": "same",
+      "policy_scope": "direct-channel price, including zero-cargo direct"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "RH_pruned",
+      "treatment": "RH_H8",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "COMPLETED",
+      "treatment_status": "COMPLETED",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 0.9889624723958751,
+      "optimal_cost_delta_interval_from_solver_bounds": null,
+      "interval_scope": "not_available; RH has no full-horizon bound",
+      "changed_objective": false,
+      "baseline_global_gap": null,
+      "treatment_global_gap": null,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "RH_pruned",
+      "treatment": "RH_H16",
+      "seed": 4101,
+      "same_orders": true,
+      "baseline_status": "COMPLETED",
+      "treatment_status": "COMPLETED",
+      "eligible": true,
+      "cost_delta_treatment_minus_baseline": 0.0,
+      "served_rate_delta": 0.0,
+      "wall_speedup_baseline_over_treatment": 1.06161137439124,
+      "optimal_cost_delta_interval_from_solver_bounds": null,
+      "interval_scope": "not_available; RH has no full-horizon bound",
+      "changed_objective": false,
+      "baseline_global_gap": null,
+      "treatment_global_gap": null,
+      "information_comparison": "same",
+      "policy_scope": "explicit case difference"
+    }
+  ],
+  "paired_aggregates": [
+    {
+      "stage": "mechanism",
+      "baseline": "T0",
+      "treatment": "T1",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.5137111517231282,
+        "sd": null,
+        "median": 0.5137111517231282,
+        "min": 0.5137111517231282,
+        "max": 0.5137111517231282,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T0",
+      "treatment": "T2_m0.1",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.837555886734534,
+        "sd": null,
+        "median": 0.837555886734534,
+        "min": 0.837555886734534,
+        "max": 0.837555886734534,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T0",
+      "treatment": "T3",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 1.0583804142335518,
+        "sd": null,
+        "median": 1.0583804142335518,
+        "min": 1.0583804142335518,
+        "max": 1.0583804142335518,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T3",
+      "treatment": "T3_m0.1",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.918685121169641,
+        "sd": null,
+        "median": 0.918685121169641,
+        "min": 0.918685121169641,
+        "max": 0.918685121169641,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "mechanism",
+      "baseline": "T2_m0.1",
+      "treatment": "T3_m0.1",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 1.1608996539736633,
+        "sd": null,
+        "median": 1.1608996539736633,
+        "min": 1.1608996539736633,
+        "max": 1.1608996539736633,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "algorithms",
+      "baseline": "T3",
+      "treatment": "RH_dense",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.3817397555830231,
+        "sd": null,
+        "median": 0.3817397555830231,
+        "min": 0.3817397555830231,
+        "max": 0.3817397555830231,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "algorithms",
+      "baseline": "T3",
+      "treatment": "RH_pruned",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.3950892857321701,
+        "sd": null,
+        "median": 0.3950892857321701,
+        "min": 0.3950892857321701,
+        "max": 0.3950892857321701,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "algorithms",
+      "baseline": "RH_dense",
+      "treatment": "RH_pruned",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 1.0349702381109314,
+        "sd": null,
+        "median": 1.0349702381109314,
+        "min": 1.0349702381109314,
+        "max": 1.0349702381109314,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "pooling",
+      "baseline": "T3",
+      "treatment": "separate",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.8283931357480955,
+        "sd": null,
+        "median": 0.8283931357480955,
+        "min": 0.8283931357480955,
+        "max": 0.8283931357480955,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T2_m0.1",
+      "treatment": "T2_m0.05",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 1.0735999999567867,
+        "sd": null,
+        "median": 1.0735999999567867,
+        "min": 1.0735999999567867,
+        "max": 1.0735999999567867,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T2_m0.1",
+      "treatment": "T2_m0.2",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 1.0735999999567867,
+        "sd": null,
+        "median": 1.0735999999567867,
+        "min": 1.0735999999567867,
+        "max": 1.0735999999567867,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T3",
+      "treatment": "direct_rate18.75",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.5660980810626189,
+        "sd": null,
+        "median": 0.5660980810626189,
+        "min": 0.5660980810626189,
+        "max": 0.5660980810626189,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "T3",
+      "treatment": "direct_rate31.25",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.8939393939943292,
+        "sd": null,
+        "median": 0.8939393939943292,
+        "min": 0.8939393939943292,
+        "max": 0.8939393939943292,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "RH_pruned",
+      "treatment": "RH_H8",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.9889624723958751,
+        "sd": null,
+        "median": 0.9889624723958751,
+        "min": 0.9889624723958751,
+        "max": 0.9889624723958751,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    },
+    {
+      "stage": "sensitivity",
+      "baseline": "RH_pruned",
+      "treatment": "RH_H16",
+      "cost_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "served_rate_delta": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 0.0,
+        "sd": null,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "wall_speedup": {
+        "n": 1,
+        "planned_n": 1,
+        "mean": 1.06161137439124,
+        "sd": null,
+        "median": 1.06161137439124,
+        "min": 1.06161137439124,
+        "max": 1.06161137439124,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "scope": "complete replay-valid incumbents only; differing gaps retained; descriptive seed variation"
+    }
+  ],
+  "capacity_curves": [
+    {
+      "scenario": "baseline",
+      "b": 20,
+      "duration_minutes": 60,
+      "vehicles": 1,
+      "pooled": 3.0333704529042342,
+      "separate": 3.0333704529042342
+    },
+    {
+      "scenario": "baseline",
+      "b": 20,
+      "duration_minutes": 60,
+      "vehicles": 2,
+      "pooled": 8.0,
+      "separate": 6.0667409058084685
+    },
+    {
+      "scenario": "baseline",
+      "b": 20,
+      "duration_minutes": 60,
+      "vehicles": 3,
+      "pooled": 12.0,
+      "separate": 9.100111358712702
+    },
+    {
+      "scenario": "baseline",
+      "b": 20,
+      "duration_minutes": 60,
+      "vehicles": 5,
+      "pooled": 20.0,
+      "separate": 15.166852264521172
+    },
+    {
+      "scenario": "load_saturated_control",
+      "b": 10,
+      "duration_minutes": 60,
+      "vehicles": 1,
+      "pooled": 4.0,
+      "separate": 4.0
+    },
+    {
+      "scenario": "load_saturated_control",
+      "b": 10,
+      "duration_minutes": 60,
+      "vehicles": 2,
+      "pooled": 8.0,
+      "separate": 8.0
+    },
+    {
+      "scenario": "load_saturated_control",
+      "b": 10,
+      "duration_minutes": 60,
+      "vehicles": 3,
+      "pooled": 12.0,
+      "separate": 12.0
+    },
+    {
+      "scenario": "load_saturated_control",
+      "b": 10,
+      "duration_minutes": 60,
+      "vehicles": 5,
+      "pooled": 20.0,
+      "separate": 20.0
+    }
+  ],
+  "core_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4",
+  "suite_sha256": "9c1fa8f3d7acbef31159486d2be05a804e62f7bf87b18e96936ac7f3d7e3bb26",
+  "cumulative_execution_wall_sec": 30.59299999999348,
+  "limits": [
+    "RH window bounds/gaps are not global bounds",
+    "partial/no-incumbent cases retain denominator; no full-cost ranking",
+    "CI only for all five eligible seeds; timing order fixed without repeated timing trials",
+    "separate ablates local pooling only; direct capacity unchanged"
+  ],
+  "analysis_elapsed_sec": 1.672000000020489
+}

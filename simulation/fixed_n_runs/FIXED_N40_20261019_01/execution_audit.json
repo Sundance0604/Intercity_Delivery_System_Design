@@ -1,0 +1,273 @@
+{
+  "schema_version": "fixed_n_execution_audit/1",
+  "created_utc": "2026-10-19T01:28:38.772072+00:00",
+  "scope": "read-only post-execution audit; no extra solve or replay invocation",
+  "planned_unique_jobs": 70,
+  "completed_feasible": 70,
+  "status_counts": {
+    "OPTIMAL": 41,
+    "TIME_LIMIT": 9,
+    "COMPLETED": 20
+  },
+  "unique_jobs_by_stage": {
+    "mechanism": 25,
+    "algorithms": 10,
+    "sensitivity": 30,
+    "pooling": 5
+  },
+  "stage_references": {
+    "mechanism": {
+      "planned_references": 25,
+      "completed_feasible": 25,
+      "status_counts": {
+        "OPTIMAL": 22,
+        "TIME_LIMIT": 3
+      }
+    },
+    "algorithms": {
+      "planned_references": 15,
+      "completed_feasible": 15,
+      "status_counts": {
+        "COMPLETED": 10,
+        "OPTIMAL": 4,
+        "TIME_LIMIT": 1
+      }
+    },
+    "sensitivity": {
+      "planned_references": 45,
+      "completed_feasible": 45,
+      "status_counts": {
+        "COMPLETED": 15,
+        "OPTIMAL": 26,
+        "TIME_LIMIT": 4
+      }
+    },
+    "pooling": {
+      "planned_references": 10,
+      "completed_feasible": 10,
+      "status_counts": {
+        "OPTIMAL": 5,
+        "TIME_LIMIT": 5
+      }
+    }
+  },
+  "solver_optimize_attempts": 290,
+  "solver_calls_by_stage": {
+    "mechanism": 25,
+    "algorithms": 120,
+    "sensitivity": 140,
+    "pooling": 5
+  },
+  "rh_windows": 240,
+  "soft_budget_exceeded": [
+    "n40_s4103_T2_m0.1",
+    "n40_s4103_T3",
+    "n40_s4103_T3_m0.1",
+    "n40_s4103_T2_m0.05",
+    "n40_s4103_T2_m0.2",
+    "n40_s4101_separate",
+    "n40_s4102_separate",
+    "n40_s4103_separate",
+    "n40_s4105_separate"
+  ],
+  "max_parent_wall_sec": 5.39100000000326,
+  "max_runner_elapsed_sec": 5.23399999999674,
+  "all_raw_hashes_match_records": true,
+  "raw_sha256": {
+    "n40_s4101_direct_rate18.75": "6c3e8f66d0db6bf3ac93235a386205cfe5c6f62e84e61beb9fa075befe2f61b6",
+    "n40_s4101_direct_rate31.25": "9856dab9af12681e33aa43ac3e0963d5ff2218052408d7043391bb4c14f17172",
+    "n40_s4101_RH_dense": "9fe512cb2144a5f0125e019129e53dbf7b3d19cb5c02e2a6ae83dc0c70b7e994",
+    "n40_s4101_RH_H16": "93dd2f65e59636d8821132a87df16b75e9c5869476c6fa166a498d23cb4a919b",
+    "n40_s4101_RH_H8": "9e3035f29bb0897dd2de35c2073b527cd990e28dd67b67dba30020c105a2c8db",
+    "n40_s4101_RH_pruned": "313d91a8153b647f96648a9939380ae1ed80d466fab4e809783d0b2a98b51ef4",
+    "n40_s4101_separate": "992cf40df413b68f682fa6c31dffdbfef275ac72e6229e373780c0ee7d0afd45",
+    "n40_s4101_T0": "dc06033e3422a6c7f4a6da48a9ec8f8ab561622be02f9890859ac46750ff70b9",
+    "n40_s4101_T1": "dbe8378cb32e4495ae806b2993003d10b36acfb916f84bcad7dbba8d7d3675ef",
+    "n40_s4101_T2_m0.05": "d539bd7103416244b69e9cd05c9b29efe4c90f665b8697b5c13c1ebcb6e1ca28",
+    "n40_s4101_T2_m0.1": "7b541acef1dc47beac1ec456b1e85af49d4d6cba7217adb50f1c308e8b8d9053",
+    "n40_s4101_T2_m0.2": "8e37a1dbec69a4f77d0d6846867d1674c71f89316abe5cfdd4e991e1cb4527e2",
+    "n40_s4101_T3": "92c7323593c28570e4d16719bb32594106b857612350834d547ce20f20145078",
+    "n40_s4101_T3_m0.1": "e50cf6bfad678006df0cd70d1b2d38ae1d40cb21312dbd3e40074dd223a87608",
+    "n40_s4102_direct_rate18.75": "4005c46c89659106f788769c0acac279cef747473e6e929f00e9bd5d32738f5b",
+    "n40_s4102_direct_rate31.25": "aa73a1cc3e6fe9a5d674d17159bb2ca45619a0a818ac8c4ce41f139c9182cc67",
+    "n40_s4102_RH_dense": "e29284f7f727a78fd079dc5b27af7780a88fce46171bd70d08753bbab270f576",
+    "n40_s4102_RH_H16": "4d92e3abea325e9dc739efc6977a9c3a4988de79f3e4514ab83c51a60ef1b7f3",
+    "n40_s4102_RH_H8": "d9163ea71feb2674568aeaab8a669141e3d16b411a680c95bc2789083d2e0896",
+    "n40_s4102_RH_pruned": "25bd639ee098f4966bc993ff7c77c701f319a0567f9aca1822644c3b4a445e62",
+    "n40_s4102_separate": "9c92ea8b9fc7de5c1b6fe14c7c7fa64149fc6c7ac7ae7d81205766ebe9e3d178",
+    "n40_s4102_T0": "e84bd1732d682504f0dffa063d66cf7b4ef38bfd637a2472d3325c5eaa757917",
+    "n40_s4102_T1": "2f82f1d7529c137bc7e15c89b3ddccfb3ca03d80abf78d727c44729843faeca3",
+    "n40_s4102_T2_m0.05": "f701ed9d455c6900022c2e2543d4bb73d71cbb27ef5778d720aaad82d347ebae",
+    "n40_s4102_T2_m0.1": "6a845922a8f32ddf3ecde0f469130a13132c630e596cdf6edbabaa8acd1ca0a3",
+    "n40_s4102_T2_m0.2": "a801b9d84cb367b8037bb1ae3ac9dadcb97563ef45f57315a6b73544adb9cbbc",
+    "n40_s4102_T3": "bfcca0b913f577cffab5979dcca413fa2199569c3272ca61483ec4c568922623",
+    "n40_s4102_T3_m0.1": "4fb8932d26ec6ecdf6a1bcbf5b0a503a9182330ba72106c40a3fe723869b776e",
+    "n40_s4103_direct_rate18.75": "ab3c02aac83a2f247ce9657ed4c9eea28e25fec5c5191505e45bffc877abda4f",
+    "n40_s4103_direct_rate31.25": "2606c92bdd169bfad029d25d7bb22cf1705885c30e929a4f92229c078781c850",
+    "n40_s4103_RH_dense": "bc03845f2bb4fa0cf2b6cb7e65eaa9526a9f9b9a2e8bebac0b2d11c2e3e34766",
+    "n40_s4103_RH_H16": "532b7db8658c8203fde65398aa100f24285fec32c513ce553108b3b73ab5e237",
+    "n40_s4103_RH_H8": "88d745f5d2b8c610a0a56f10712c5eb22c2759b65ecdd5da9ed3396da029da79",
+    "n40_s4103_RH_pruned": "855d0abe0367e1eb062de8c0104810cdff77c3d6920bedf4d3cf8fbd45b98748",
+    "n40_s4103_separate": "ce7e7a84660cc13ce4a50963d3f91e3926958988c9d82d237a0e7b7c44955f88",
+    "n40_s4103_T0": "8966c7aa64afe9b426cf99fda0f088ec941f958aec3201ec638f3ee52932f500",
+    "n40_s4103_T1": "233ed038438d31058b1d0d3d95ac7224911dfd1def54891ef97dcdc01c1c3715",
+    "n40_s4103_T2_m0.05": "b953016881af96ea72ec7ec30511fda9d5915929f5db7beb8834c17a707f2a44",
+    "n40_s4103_T2_m0.1": "8f714c36508908abe6f722929ee9afb09627b6365ff87bae565ed7ec39565769",
+    "n40_s4103_T2_m0.2": "c25f4a336fdf45c0fda48883859ef0b1a4dcd8421cb7cf36acdc02c85afb335f",
+    "n40_s4103_T3": "7b86b81ce8215335d1780eebba4d47cfd04be56ef7e813fbf8f1a7eee0fef207",
+    "n40_s4103_T3_m0.1": "32d6e3220276aac4553f05fca4c7bdd7ffa1360ba11a90ff52345cb1e721efaa",
+    "n40_s4104_direct_rate18.75": "57216772f1e0c5dc27bbe2db19899b747e7b5704c28c81d631c2624c85ea541b",
+    "n40_s4104_direct_rate31.25": "f1831d3cd0e26590c954a7c60340004081df25fc4bf0f50c6e6e17596605b6c0",
+    "n40_s4104_RH_dense": "272155c5a5e523841f2333bcf0e089db11206f7b65bd872e9591fc06742eed34",
+    "n40_s4104_RH_H16": "6e77c2163c9a4444a59a140fd54d271e5d287932c558234a4e20863401e8f930",
+    "n40_s4104_RH_H8": "691a89632a3b96c0dcd362aa2264b890db89e27c7aacf7291893dbbebb188759",
+    "n40_s4104_RH_pruned": "9645990ba3867773993540805629c11fbce8d301f28fec9bca20f358c0b90240",
+    "n40_s4104_separate": "55ba822247e2dae0aa269021167067792445d75a5e31aab45c8d23514c15e3d4",
+    "n40_s4104_T0": "11de3c84483d846cf4ccccf041e0336d5fc556b944e8ad6af19171dc0e2c4e0e",
+    "n40_s4104_T1": "6a81ecc09c2107f734e4393e6edf869c7f66ee075ead10a3886af55d072865b4",
+    "n40_s4104_T2_m0.05": "7f949e6201ae775ec392e450783bc25d0c916209090a9d9ebcdbaff7767af865",
+    "n40_s4104_T2_m0.1": "057dce72024311735642943cafda4335a296a69210cfb3c639d43fc89289f777",
+    "n40_s4104_T2_m0.2": "63be1603b4c63db22755e62f1055a7d7705c39feda8a0d00f5f6c62d91e52f02",
+    "n40_s4104_T3": "6cdf42deb2fef54af03f1062b4966151696966096a8759970a66e71d915bf923",
+    "n40_s4104_T3_m0.1": "9cd4fff648afea5e36d3d5fb5c76834fa6f8a427969e616477da7d666d8b44cc",
+    "n40_s4105_direct_rate18.75": "9c02c4e6a21a3d1082e69cd249847a65353dfe9e5faf5f89e41d48b457ca4336",
+    "n40_s4105_direct_rate31.25": "d90aae571a9afd21545919b278202f79db5608ede60c8d1e1b8b50506f31a5d9",
+    "n40_s4105_RH_dense": "c653d60e4d5f866e0493008d70abce801a8729b5fb2e5457deb8817f77d545cb",
+    "n40_s4105_RH_H16": "8a921e1940191bd10930b9d0aa8ada48f6018c21638a7e3a4940ca8d5ace3ff2",
+    "n40_s4105_RH_H8": "ceed1d3d600210d5acebec10ef5c64d292f0f961b623be6830249dee7faff5d1",
+    "n40_s4105_RH_pruned": "0a8131d10b580f986f4d90702cdc7a689e1c759526507eaea9366fb2d84e82e6",
+    "n40_s4105_separate": "075c790ec2e8fba95f2e69016a85cd4bd61ba9783d7d4ee7e6930a382649ec67",
+    "n40_s4105_T0": "a7dd6a3cecadef5e71217310e3a1e84a7ec1724765668d365ccc381e43b5069a",
+    "n40_s4105_T1": "9b04e28d329dd8045f050651dd960f5767661b62d783e242d5cc4d64e7b96998",
+    "n40_s4105_T2_m0.05": "2ca12aca6e2de5f53ca54702c27dcabfb4230e758458c5684f38096d7ade1380",
+    "n40_s4105_T2_m0.1": "a3ee87870b1d61b5531fc5ae2c60ad21005daea0ba7e957cdadf5acc8f8aa8f7",
+    "n40_s4105_T2_m0.2": "c512f7c7d24035ecc55d1f1067e3ad0b52346a24b268aba56fe09b021569bc96",
+    "n40_s4105_T3": "b6f831164f54bec3619cd8bd1897b16bd9c49a850b427f500c0bbd318057942b",
+    "n40_s4105_T3_m0.1": "0e6434387f2d77cdf1df5013d87efd80f638bd8f50481ae1ea8e51637bd816d9"
+  },
+  "immutable_order_import_checks": {
+    "n40_s4101": {
+      "imported_from": {
+        "batch": "P1_SMALL_20261018_01",
+        "file_sha256": "17205439e3c0839ed2cc1a043c8b0adb3034b7b7adfd46f3e67401b0ac8a80ee",
+        "scope": "inputs only; no old solve reused"
+      },
+      "new_orders_match_old": true,
+      "old_file_sha256": "17205439e3c0839ed2cc1a043c8b0adb3034b7b7adfd46f3e67401b0ac8a80ee"
+    },
+    "n40_s4102": {
+      "imported_from": {
+        "batch": "P1_SMALL_20261018_01",
+        "file_sha256": "5ea1db485f074326dbccbc6c2d14e1db88dff07f77e3047bda00e1521a788822",
+        "scope": "inputs only; no old solve reused"
+      },
+      "new_orders_match_old": true,
+      "old_file_sha256": "5ea1db485f074326dbccbc6c2d14e1db88dff07f77e3047bda00e1521a788822"
+    },
+    "n40_s4103": {
+      "imported_from": {
+        "batch": "P1_SMALL_20261018_01",
+        "file_sha256": "c5a41d1f9d947731cee2c8f5bdbbb98efb550be5d336513ca079fa01e62a01b1",
+        "scope": "inputs only; no old solve reused"
+      },
+      "new_orders_match_old": true,
+      "old_file_sha256": "c5a41d1f9d947731cee2c8f5bdbbb98efb550be5d336513ca079fa01e62a01b1"
+    },
+    "n40_s4104": {
+      "imported_from": {
+        "batch": "P1_SMALL_20261018_01",
+        "file_sha256": "7a4b165a282619662f7157eb3543ea04cc2ad5af0b6c2d3858b8fe2b57fa782b",
+        "scope": "inputs only; no old solve reused"
+      },
+      "new_orders_match_old": true,
+      "old_file_sha256": "7a4b165a282619662f7157eb3543ea04cc2ad5af0b6c2d3858b8fe2b57fa782b"
+    },
+    "n40_s4105": {
+      "imported_from": {
+        "batch": "P1_SMALL_20261018_01",
+        "file_sha256": "878eef5a152866615640bff6312b0da2a7d99b66b50a5d35d2ee74883b84db7b",
+        "scope": "inputs only; no old solve reused"
+      },
+      "new_orders_match_old": true,
+      "old_file_sha256": "878eef5a152866615640bff6312b0da2a7d99b66b50a5d35d2ee74883b84db7b"
+    }
+  },
+  "domain_comparison": [
+    {
+      "seed": 4101,
+      "aligned_windows": 12,
+      "vehicle_selector_keys_equal": true,
+      "scope": "keys only; not identical cargo, bounds, history or subproblem"
+    },
+    {
+      "seed": 4102,
+      "aligned_windows": 12,
+      "vehicle_selector_keys_equal": true,
+      "scope": "keys only; not identical cargo, bounds, history or subproblem"
+    },
+    {
+      "seed": 4103,
+      "aligned_windows": 12,
+      "vehicle_selector_keys_equal": true,
+      "scope": "keys only; not identical cargo, bounds, history or subproblem"
+    },
+    {
+      "seed": 4104,
+      "aligned_windows": 12,
+      "vehicle_selector_keys_equal": true,
+      "scope": "keys only; not identical cargo, bounds, history or subproblem"
+    },
+    {
+      "seed": 4105,
+      "aligned_windows": 12,
+      "vehicle_selector_keys_equal": true,
+      "scope": "keys only; not identical cargo, bounds, history or subproblem"
+    }
+  ],
+  "max_constraint_violation_mixed_units": 4.7066350816749036e-11,
+  "local_separate_original_f_max_violation": 6.394884621840902e-13,
+  "p0_check_after_run": {
+    "p0_checks_passed": true,
+    "errors": [],
+    "frozen_source_files": 63,
+    "mechanism_configs": {
+      "T0": {
+        "min_direct_load_per_vehicle": 0,
+        "terminal_target": null
+      },
+      "T1": {
+        "min_direct_load_per_vehicle": 0,
+        "terminal_target": null
+      },
+      "T2": {
+        "min_direct_load_per_vehicle": 0.1,
+        "terminal_target": null
+      },
+      "T3": {
+        "min_direct_load_per_vehicle": 0,
+        "terminal_target": null
+      }
+    },
+    "capacity_probes": {
+      "routing_binding": {
+        "two_vehicle_pooled": 4.0,
+        "two_vehicle_separate": 2.4156877825154432
+      },
+      "load_binding": {
+        "two_vehicle_pooled": 8.0,
+        "two_vehicle_separate": 8.0
+      },
+      "near_transition": {
+        "two_vehicle_pooled": 8.0,
+        "two_vehicle_separate": 6.0667409058084685
+      }
+    },
+    "evidence_scope": "source/units/configuration/pure capacity checks only",
+    "license_status": "NOT_CHECKED",
+    "new_solver_runs": 0,
+    "solver_budget": "AUTHOR_REQUESTED_SMALL_REAL_SOLVES_THEN_BOUNDED_P1"
+  },
+  "suite_sha256_after_run": "9c1fa8f3d7acbef31159486d2be05a804e62f7bf87b18e96936ac7f3d7e3bb26",
+  "summary_path": "simulation\\fixed_n_runs\\FIXED_N40_20261019_01\\analyses\\20261019T012741615782Z\\summary.json",
+  "summary_sha256": "15bc99d93eea03727bd5117999828b9ffd6304a0bc8426091d7dee47df9a6100"
+}

@@ -2,7 +2,7 @@
 
 2026-10-17（Asia/Shanghai）。负责人：Principal Investigator。
 
-最新状态（2026-10-18）：**STRUCTURE_REVIEWED / AUTHOR_COMPILATION_PENDING**；新稿已按容量→MILP/RH→独立稳态重排，见第12节。Direct物理路线待作者确认；数值章节和计划延期；既有T0与V1结论范围不变，不宣称全文已完成投稿验收。
+最新状态（2026-10-19）：**模型已确认冻结；P1小规模阶段及固定N40机制后续实验完成**，见第14–16节。Direct城市抽象节点已获作者确认，物理道路接驳仍非实证结论；论文编译由作者负责。既有T0与V1结论范围不变，不宣称全文已完成投稿验收。
 
 ## 1. 来源与命名
 
@@ -141,3 +141,92 @@ Git HEAD：`3b3c34b37df4f50d34ae6160bcd1303a696afd3b`。已有大量untracked论
 新增BHH几何式仅解释现有均衡分区；b是输入系数，不声称完成校准。w=e=h=0明确为city-dedicated human-driven fleets的transfer-only变体。Direct路径/目的接驳/再派位置仍REQUIRES_AUTHOR_CONFIRMATION，旧式未补项。
 
 [结构报告](../research/paper/final_manuscript/BHH_structure_revision_report.md)与[来源及标签映射](../research/paper/final_manuscript/BHH_source_and_claim_map.md)记录当前证据。Referee限定ACCEPT；原53显示块、5结论、2假设与5proof均保留，最终11TeX/78labels/68refs/18Bib静态通过。作者明确自行编译，PDF排版待作者验收；本轮无实验或新理论。
+
+## 13. 数值实验P0准备（2026-10-18）
+
+用户要求“完成P0”。已读本次运行手册及实得21页`Intercity_Operation_BHH (3).pdf`，
+以当前`final_manuscript/main.tex`全项目为拟冻结数学来源；实得PDF/手册原样快照和
+来源哈希由[manifest](../experiments/specs/v1_source_manifest.json)记录。
+手册提及的`(3)(1).pdf`未提供，不声明它与实得PDF/TeX完全同版。
+
+作者已明确确认“一票一合成任务等效量”，决定号`V1P0-JOB-UNIT-2026-10-18`：
+每条抽样CFS shipment的D=1个连续可分job-equivalent，一单位在两端各产生一次等效服务；
+不称为真实客户stop、不将重量作为模型需求或另添重量容量。
+[数据合同](../experiments/specs/experiment_data_contract.json)与新增
+`v1/experiment_inputs.py::load_cfs_job_orders`保留重量来源、合成窗及显式转换信息；旧smoke loader保持原行为。
+
+V1-F新增显式`service_mechanism`和`min_direct_load_per_vehicle`。
+T0关闭w/u_direct/h/e，T1关闭w/u_direct/h，T2关闭e且要求正minimum，
+T3默认m=0保留原式零货direct。通过UB关闭而保留vehicle/selector母域，
+minimum政策是每弧`sum h>=m*w`，独立核验对完整和partial同步检查。
+这只是可选接口的实施，不代表作者已采用T2推荐m=.1政策；direct目的服务节点解释也仍待作者答复。
+机器决定记录在[v1_p0_decisions.json](../experiments/specs/v1_p0_decisions.json)，
+预检会拒绝pending或不支持的作者选项，不把预选/等待时间当确认。
+
+[合成容量设计](../experiments/specs/v1_p0_capacity_design.json)覆盖routing、载量饱和及交界，
+主基线a=5,b=20,rho=5,M=4、分钟制。系数/费用/车队/罚金是预先声明的合成设计，
+不声称CFS实证标定、运营成本收益或已观察到库存绑定。
+三阶段链时间校核与新候选H/E见[数学说明](../research/theory/v1_p0_parameter_design.md)。
+旧8单smoke所有local容量均为vM，不能作为pooling收益证据。
+
+[冻结稿](V1_MODEL_FREEZE.md)和[逐式矩阵](../experiments/specs/equation_to_code_matrix.md)
+区分源公式、实现、测试和附加实验政策。P0无新Gurobi求解、许可证初始化、CFS重建或正式批量实验；
+当前数学冻结状态必须以作者决定文件和[准备报告](../experiments/reports/v1_p0_preparation.md)为准。
+
+## 14. 作者确认完整P0与有界P1（2026-10-18）
+
+作者明确回复“两个都采用建议”，并逐项指定：Direct保留当前公式、完成后进入目的城市级抽象可用库存；
+T2采用每车最低平均载量m=.1，保留.05/.1/.2，且不声称逐车严格非空。
+决定编号分别为`V1P0-DIRECT-ENDPOINT-2026-10-18`、`V1P0-T2-MINLOAD-2026-10-18`。
+本节关闭第12–13节当时的作者待决项，历史记录保留。Direct的j时刻可再派与local半开占用/同刻交接一致；
+它是城市级聚合可达节点的假设，不是已测量目的端回hub零时。若真实连接不能被聚合时间式代表，须另修模型，不能直接用本次结果证明现实hub路径可行。
+
+最低平均载量的精确含义为每条direct弧满足q>=m*w：除零货外，正货但平均低于m的wave也会被排除；
+例如w=1、q=.05在m=.1下不可行，已由micro验证。它不保证每辆车严格非空载，亦不能表述为只改变q=0这一点。
+
+本轮P1先5个有手算oracle的真实micro（每次≤3秒），全部通过才继续：N10/20/40各5seed三算法45次，
+N10四机制复用5个T3基线后新增15次，T2最低装载.05/.2与matched T3 .1另15次。
+合计最多80次新run，Threads1、solverSeed0；执行/编排总墙钟600秒，pilot每次5秒、其他3秒，worker硬上限15秒。
+任何失败/partial/未运行均保留；不自动重跑替换结果，不启动N>=100或大规模正式实验。
+完整P1的规模外推和正式论文效果结论须后续独立预算，当前交付为小规模P1基础设施与有界验证。
+
+## 15. 有界P1完成状态
+
+三项决定正式冻结，63来源哈希快照与P0预检均通过；内容SHA为
+`5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4`。
+冻结的是论文源+明确作者profile，不声称实得PDF和缺失(3)(1)逐字相等；论文TeX未在本次改写。
+
+最终195纯测试/454个subtests通过；真实5micro按预注册得到3个INFEASIBLE与成本5/4的两可行例。
+批次75例全部完成并通过独立原f重放，真实optimize总数413（批次405+micro8），累计执行136.108秒。
+见[结果报告](../experiments/reports/v1_p1_results.md)和[独立审查](reviews/v1_p1_validation_review.md)。
+最大全量核验leq违反量约4.214685e-7，低于绝对容差1e-6；该总最大值混合原单位，只作诊断，不能加总或当统一物理误差。
+
+N40剪枝后均值成本上升（个别seed变好），因此不宣布无损；不同RH历史或最优解选取可能分叉，
+当前结果不单独定位为某条过滤规则删除了最优解。N10所有机制都未采用direct/empty，最低载量亦未自然激活，
+故该样本不支持运输机制收益。一次full限时只提供incumbent/bound，RH仍无全日gap。
+全部结论限给定合成参数、小样本与聚合节点；大规模P1论文实验继续延期，不自动追跑或调参求显著性。
+## 16. 2026-10-19 有界机制后续实验
+
+用户要求继续下一步数值实验。原N40五seed均已自然采用Direct，下一阶段复用这五组订单、原基础参数和T3/0参考，新增T0/0、T1/0、T2/.1、T3/.1、T2/.05、T2/.2各5次full，总30次；全部offline，与旧full相同5秒逻辑预算，硬进程15秒，prepare与执行累计上限300秒。模型、单位、Direct聚合节点及T2政策不变，原63源冻结保留；补充实验脚本和计划单独绑定SHA，历史raw不重写。
+
+该实验是已观察旧样本后的后续探索，不是新独立样本或确认性推断。OPTIMAL解释为solver设定容差内最优，保留原bound/gap；限时incumbent不得当精确机制最优成本。除成本差外应报告可支持的最优值差区间[右bound−左incumbent，右incumbent−左bound]及独立replay。预算/错误/限时全部留档，不重跑挑选结果。100–500单、费率/车队/需求方向改变与生产剪枝修复均不在本轮。
+
+实际完成30新full和35保存方案双重独立replay，新增13纯测试通过；26新OPTIMAL/4新TIME_LIMIT均有完整可行incumbent。内部总92.578秒、外层92.813秒；四例5秒软预算超出如实保存。T2/.1相对T0五个实例的最优成本差solver证书上界均负，支持给定五模型实例的Direct政策成本改善；均值可行成本1745→1669.8386677，服务量比80.5%→93.7540%。这不是全国运营或真实路线结果。empty/minimum没有识别额外收益；保存direct最低平均载量3.0，不能据其松弛宣称所有最优解或其他密度均不绑定。详见后续结果报告和Referee的LIMITED_ACCEPT；原63源及旧raw未变。
+
+## 17. 固定订单数的四方向自动实验（2026-10-19）
+
+用户明确确认统一脚本每轮固定N，依次运行运营机制、RH/剪枝、参数敏感性及BHH pooling；不同N分别新建轮次，非强制先扩大到100。每轮同seed订单只生成一次，公共基准按完整模型/输入/信息/参数/预算/源码身份去重；换N的同seed不默认嵌套或配对。默认每seed14唯一任务（5机制full+2RH+6单因素+1local-separate），四方向共享T3/m0 baseline。
+
+Pooling为明确counterfactual，K_sep(v)=v*K_pooled(1)，只替换local容量；原Direct、AV、拓扑、单位及费用不改，不能把该解标为原pooled优化证书。原核验后追加独立原式aq+b√(vq)<=vB及q<=vM。Direct费率敏感性同时作用零货Direct渠道，显式empty费率保持25；empty单因素用同minimum的T3/.1对T2/.1。H敏感性保持E12/h2，H改变也会改变完成域。
+
+新增suite放experiments/fixed_n与新入口，旧63源/manifest不变；新模块、计划、输入与参数另绑定SHA。默认预览不求解，显式预算后可顺序执行并继续未尝试任务；失败/partial/限时保留，已有attempt不自动重试。当前任务是实施与有界功能验证，不自动运行全量70任务或扩大N。详见fixed_n_round_contract与FIXED_N_ROUND_GUIDE。
+
+交付已通过23项纯测试和Referee独立复验。N4/seed4101的14任务功能批次完整执行并逐个原式核验，separate另核原始local工作不等式；58次optimize、15配对、48窗计数一致。真实再次运行新增attempt0、14raw SHA不变。累计执行30.624<180秒，无新科学效能结论；Referee限定接受实现与tiny功能，未宣称40单70任务已经运行。suite SHA为9c1fa8f3d7acbef31159486d2be05a804e62f7bf87b18e96936ac7f3d7e3bb26。异常遗留独占锁会阻止继续，不能手工删锁后假定累计预算仍完整。
+
+## 18. 作者授权40单完整四方向批次
+
+2026-10-19用户明确要求“执行40单完整批次”，关闭§17当时仅功能验证的运行范围。新batch固定为FIXED_N40_20261019_01，N40、seeds4101–4105、14唯一任务/seed，共70个新顶层attempt；按mechanism→algorithms→sensitivity→pooling依序运行。复用旧P1_SMALL_20261018_01的五份原订单输入，不复用旧求解结果作为新运行。每run逻辑5秒、worker硬15秒、整轮prepare+controller累计600秒；后续独立重放/统计/审查单列，不自动调参、增N、充值或重试。原63来源和已交付suite保持冻结，母域/信息/比较模型边界继承§17。
+
+实际70任务全部完成并通过原式重放（41OPTIMAL/9TIME_LIMIT/20RH COMPLETED），290optimize、240窗，执行181.313秒，后处理18.953秒；9个5秒软超出保留，parent最大5.391<15。T2对T0及pooled对separate的五实例solver差界分别支持当前实例的Direct/local pooling成本优势；RH剪枝更快但平均成本更高，其他参数结论限定描述。独立Referee已全量核物理约束/身份/预算，但最终配对统计/prose因工作区额度不足中断；协调者复算并记录，完整独立终审仍OPEN，不标ACCEPT。
+
+用户另明确授权完成后推送GitHub。仅增加Git精确字节保存属性、记录和派生审计，不改变模型、原raw或冻结SHA；当前分支同步不构成论文验收或新增科学主张。

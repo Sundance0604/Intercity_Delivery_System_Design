@@ -1,6 +1,6 @@
 # TASKS — 有界任务与依赖
 
-更新：2026-10-18。最新新建终稿任务已完成，见文末：8TeX与独立Bib、引言/综述/模型/推理及子Agent全文审查。数值实验与计划DEFERRED，未编译；旧TeX和生产代码不改。DONE仅对本轮正文范围，不表示全部投稿、完整随机理论或数值研究完成。
+更新：2026-10-19。论文正文任务、P0冻结、P1小规模阶段及固定N40机制后续实验均已完成，任务见文末。100–500单论文级实验仍DEFERRED；本轮不改生产模型、论文或旧结果。DONE仅对列明范围，不表示全部投稿、完整随机理论或数值研究完成。
 
 ## 本轮模型同步审计
 
@@ -152,4 +152,64 @@ VR-PARAM采用可覆写且披露来源的工程默认，见合同§6，不代表
 | STRUCTURE-COMPILE | 作者：以现有main.tex自行编译及排版核对 | AUTHOR_HANDOFF；不继续本机重试 |
 | DIRECT-ROUTE-DECISION | 作者：明确Direct连接段与再次可用位置 | REQUIRES_AUTHOR_CONFIRMATION |
 
+## P0 数值实验准备（2026-10-18）
+
+用户要求“完成P0”；范围是模型/数据单位冻结、四机制配置、纯容量参数和验证，
+不含正式批量求解、历史结果改写或论文改稿。
+
+| ID | Owner/唯一范围 | 验收与当前状态 |
+|---|---|---|
+| P0-MECHANISMS | experiment：F configuration/optimizer/validation/runner、新mechanism测试 | IMPLEMENTED/PURE_REVIEWED；机制与独立replay相符，含零货容差修复 |
+| P0-PARAMETERS | theorist：capacity_design JSON、parameter_design说明、新容量测试 | 合成基线预注册冻结，原式独立二分与时间链PURE_CHECKED，不是运营结果 |
+| P0-FREEZE-TEXT | literature：V1_MODEL_FREEZE、equation_to_code_matrix | DONE；式1–26/Appendix C及三项作者决定均冻结，63来源/预检通过 |
+| P0-INPUT-SOURCES | PI：experiment_data_contract、experiment_inputs、来源快照/manifest/preflight及测试 | DONE；最终63来源哈希一致，SQLite两次同seed映射一致；三项作者决定已确认，gate通过且拒绝pending替身 |
+| P0-REVIEW | referee：reviews/v1_p0_preparation_review.md | DONE；准备产物限定ACCEPT，75纯测及来源核验通过；正式冻结待作者选择 |
+| P0-AUTHOR | 作者：direct终点和T2最低装载政策 | DONE；用户逐项明确确认，见MODEL_CONTRACT§14及机器决定记录 |
+
+## P1有界真实验证与小规模实验
+
+| ID | Owner/写入范围 | 验收/状态 |
+|---|---|---|
+| P1-ENDPOINT | theorist：v1_direct_endpoint_contract与direct_continuity纯测 | DONE；抽象节点语义与j同刻复用，提前使用拒绝；不证明真实hub路径 |
+| P1-INSTRUMENT | experiment：F runner/rolling/validation及instrumentation纯测 | DONE/PURE_REVIEWED；phase分区、模型规模、原约束残差、母域SHA与optimize次数，合并195纯测通过 |
+| P1-HARNESS | experiment：run_v1_p1、experiment_metrics、harness纯测 | DONE；输入冻结、单次claim、累计预算、micro门、失败保留和配对统计，真实75例校验通过 |
+| P1-PROTOCOL | literature：冻结稿/矩阵及V1_P1_BOUNDED_PROTOCOL | DONE；三作者决定、T2平均语义、80次/600秒上限、N<=40 |
+| P1-MICRO | PI：run_v1_p1_micro及真实raw | DONE；5顶层/8optimize、3预期不可行、成本5/4，两可行例原f核验通过 |
+| P1-RUN-REPORT | PI：独立新batch、汇总/图、共享账本与报告 | DONE_SMALL_SCALE；15固定实例、75批次结果、CSV/JSON/2图，80总顶层/413opt/136.108秒 |
+| P1-REVIEW | referee：reviews/v1_p1_validation_review | DONE/LIMITED_ACCEPT；全量75独立重放/身份/统计/校准/计时通过，明确非无损/非机制收益证据 |
+
+P1的100–500单、广城市和更紧车队正式效果实验DEFERRED，未在当前80次任务范围内实施；不自动追加求解。
+
 详见[结构报告](../research/paper/final_manuscript/BHH_structure_revision_report.md)。不自动启动数值实验、模型扩展或代码迁移。
+## 2026-10-19 固定N40样本的机制后续实验
+
+用户要求继续下一步数值实验。保留原63来源冻结、五组N40订单和全部基础参数；本轮不扩大到100–500单。
+
+| ID | Owner/唯一写入范围 | 验收/预算 | 状态 |
+|---|---|---|---|
+| FOLLOWUP-DESIGN | theorist：research/theory/v1_followup_design_20261019.md | 解释原N40 Direct已启用；同历史剪枝恢复的证据边界；不运行solver | DONE |
+| FOLLOWUP-HARNESS | experiment：run_v1_followup_20261019.py、test_followup_20261019.py、新batch目录 | 30新full，5秒软预算/15秒硬限，累计300秒；固定输入/计划/源绑定、独立replay、无覆盖重试 | DONE；13纯测、30新solve/35replay通过；26OPTIMAL/4TIME_LIMIT |
+| FOLLOWUP-DOCS | literature：V1_FOLLOWUP_20261019_PROTOCOL.md、v1_followup_20261019_results.md | 预先固定7配对、全部状态/证书、探索性结论与可追溯链接 | DONE；报告LIMITED_ACCEPT |
+| FOLLOWUP-REVIEW | referee：coordination/reviews/v1_followup_20261019_review.md | 专员产物完成后独立全量审查；不运行新solver | DONE；35原式replay/35配对/七组统计/证书和报告一致 |
+| FOLLOWUP-FIGURE | PI：plot_v1_followup_20261019.py、batch figures_final | 从固定analysis绘成本证书区间/服务量，保存SHA；无新solve | DONE；已视觉核验，初版图另保留 |
+
+新策略为T0/0、T1/0、T2/.1、T3/.1、T2/.05、T2/.2各5seed，另复用旧T3/0五行作为比较参考。旧限时incumbent不升级为精确最优值，OPTIMAL亦保留solver容差/gap。
+
+## 固定N四方向自动实验脚本
+
+| ID | Owner/唯一范围 | 验收 | 状态 |
+|---|---|---|---|
+| FIXED-N-CORE | experiment：experiments/fixed_n中pooling.py以外模块、run_fixed_n.py、test_fixed_n_round.py | 固定N、共享基准、四阶段、预算/恢复/身份门/独立重放/汇总 | DONE；15核心纯测PASS，真实14任务+零新增resume通过 |
+| FIXED-N-POOL | 首派experiment因服务容量两次失败；PI补pooling.py、test_fixed_n_pooling.py | 仅local容量替换、独立原式额外核验；不改旧63源 | DONE；8纯测、真实separate与Referee独立原式核验通过 |
+| FIXED-N-THEORY | theorist：research/theory/fixed_n_round_contract.md | 14任务、15配对、同模型/信息/单因素边界 | DONE，无新solver |
+| FIXED-N-GUIDE | literature：experiments/specs/FIXED_N_ROUND_GUIDE.md | 实际CLI使用、恢复/预算/不同N、真实验证证据 | DONE；实际help/plan核对，PI补奇数/锁/真实验证，12链接通过 |
+| FIXED-N-REVIEW | referee：coordination/reviews/fixed_n_round_review.md | 专员产物后审查，并核有界四方向真实验证 | DONE；23独立纯测/14独立replay/15配对/48窗/恢复SHA，LIMITED_ACCEPT |
+
+## N40完整四方向运行（作者明确要求）
+
+| ID | Owner/唯一范围 | 验收 | 状态 |
+|---|---|---|---|
+| N40-EXEC | experiment：simulation/fixed_n_runs/FIXED_N40_20261019_01/ | 5seed/70任务、600秒累计、5秒逻辑/15秒硬限、四方向自动汇总与真实状态 | DONE；70完整可行/290optimize，181.313秒，无补跑 |
+| N40-REPORT | 原literature，额度中断后由PI完成fixed_n40_20261019_results.md及统计audit | 四方向配对/证书/服务/时间与局限，全部分母保留 | DONE；75配对/15组统计850数值比较通过，协调者记录非独立终审 |
+| N40-REVIEW | referee，PI整理已完成消息至fixed_n40_20261019_review.md | 专员产物后全量独立复验及统计/来源/预算审查，无新增solve | PARTIAL/OPEN；70独立原式与来源/预算已过；最终统计与prose因工作区额度不足未完成 |
+| N40-GITHUB | PI：当前research/qvi-multiagent分支 | 用户明确授权完成后推送；保存精确源/产物字节，核commit与remote一致 | AUTHORIZED；提交包含此前未同步的P0/P1及四方向实现与实验 |

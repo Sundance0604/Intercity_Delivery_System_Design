@@ -16,6 +16,8 @@ class V1FConfig(V1MConfig):
     transfer_cost_per_unit: float = 0
     direct_ratio_min: float = 0
     direct_ratio_max: float = 1
+    service_mechanism: str = "T3"
+    min_direct_load_per_vehicle: float = 0
 
 
 def flexible_profile(information="offline"):
@@ -42,6 +44,15 @@ def validate_f_instance(config, orders, profile):
     high = _real("direct_ratio_max", config.direct_ratio_max)
     if not 0 <= low <= high <= 1:
         raise ValueError("direct ratios must satisfy 0 <= min <= max <= 1")
+    if not isinstance(config.service_mechanism, str) or config.service_mechanism not in ("T0", "T1", "T2", "T3"):
+        raise ValueError("service_mechanism must be T0, T1, T2, or T3")
+    minimum = _real("min_direct_load_per_vehicle", config.min_direct_load_per_vehicle)
+    if minimum > config.M:
+        raise ValueError("min_direct_load_per_vehicle must not exceed M")
+    if config.service_mechanism == "T2" and minimum <= 0:
+        raise ValueError("T2 requires an explicit positive min_direct_load_per_vehicle")
+    if config.service_mechanism in ("T0", "T1") and low > 0:
+        raise ValueError("direct_ratio_min conflicts with disabled direct service")
     if config.terminal_target is not None:
         target = _city_mapping("terminal_target", config.terminal_target)
         for value in target.values():

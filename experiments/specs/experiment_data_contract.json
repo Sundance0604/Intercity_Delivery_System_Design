@@ -1,0 +1,44 @@
+{
+  "schema_version": "v1_experiment_data_contract/1",
+  "unit_status": "AUTHOR_CONFIRMED",
+  "decision_id": "V1P0-JOB-UNIT-2026-10-18",
+  "author_choice": "One sampled CFS shipment represents one synthetic job-equivalent",
+  "model_unit": "synthetic_job_equivalent",
+  "quantity_per_shipment": 1.0,
+  "continuous_divisible": true,
+  "conversion_rule": "D_l = 1 for each unique sampled SHIPMT_ID; weight is not converted to demand",
+  "interpretation": "One unit of an order entails one pickup and one delivery equivalent; these are not two units of order demand. This is not an observed stop count or an indivisible parcel model.",
+  "source_weight_used_as_demand": false,
+  "weight_used_as_extra_capacity_constraint": false,
+  "observed_fields": ["SHIPMT_ID", "ORIG_CFS_AREA", "DEST_CFS_AREA", "SHIPMT_WGHT", "SHIPMT_DIST_GC", "WGT_FACTOR", "MODE", "SCTG"],
+  "synthetic_fields": ["model_quantity", "release_time", "deadline", "reveal_time", "a", "b", "rho", "M", "M_auto", "fleet_sizes", "vehicle_costs", "rejection_penalty"],
+  "time_units": {
+    "period": "60 minutes in the initial LA-SF design",
+    "a": "minutes per job-equivalent",
+    "b": "minutes per square root of job-equivalents",
+    "rho": "minutes",
+    "vehicle_input_rate": "currency per vehicle-hour, divided by 60 once",
+    "rejection_penalty": "currency per unserved job-equivalent",
+    "M_and_M_auto": "job-equivalents per vehicle"
+  },
+  "synthetic_parameter_policy": {
+    "calibration_status": "synthetic design, not empirically calibrated",
+    "base_penalty_per_job": 100.0,
+    "penalty_sensitivity_multipliers": [0.5, 1.0, 2.0],
+    "selection_basis": "Declared design before new optimization; not selected to improve observed results",
+    "capacity_design": "experiments/specs/v1_p0_capacity_design.json",
+    "operational_effects_status": "NOT_TESTED"
+  },
+  "sampling": {
+    "primary_pair": ["06-348", "06-488"],
+    "formal_source": "data/cfs_2022_pums.sqlite",
+    "preferred_method": "Existing per-direction WGT_FACTOR weighted sampling without replacement from SQLite",
+    "baseline_direction_allocation": "balanced by design; disclose and preserve observed direction totals separately",
+    "processed_json_scope": "Seeded sampling from an existing processed pool is a provenance/replay check, not a new weighted sample from the full CFS population",
+    "time_windows": "Existing synthetic window generator, release also defines revelation; never describe these as observed CFS times",
+    "corridor_tau": "Calibrate once from the entire eligible city pair, freeze across seeds; initial LA-SF source recommendation is 9 periods",
+    "fixed_instance_export": "P1: write immutable per-seed order JSON and SHA256 before comparative solves"
+  },
+  "reporting_name": "CFS-calibrated synthetic operational instances",
+  "forbidden_interpretations": ["pounds are customer stops", "observed customer coordinates", "observed release/deadline times", "empirically calibrated local routing coefficients", "job capacity is physical truck weight capacity"]
+}

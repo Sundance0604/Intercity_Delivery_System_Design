@@ -1,0 +1,16 @@
+﻿stage,baseline,treatment,seed,same_orders,baseline_status,treatment_status,eligible,cost_delta_treatment_minus_baseline,served_rate_delta,wall_speedup_baseline_over_treatment,optimal_cost_delta_interval_from_solver_bounds,interval_scope,changed_objective,baseline_global_gap,treatment_global_gap,information_comparison,policy_scope
+mechanism,T0,T1,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,0.5137111517231282,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+mechanism,T0,T2_m0.1,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,0.837555886734534,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+mechanism,T0,T3,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,1.0583804142335518,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+mechanism,T3,T3_m0.1,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,0.918685121169641,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+mechanism,T2_m0.1,T3_m0.1,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,1.1608996539736633,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+algorithms,T3,RH_dense,4101,True,OPTIMAL,COMPLETED,True,0.0,0.0,0.3817397555830231,,not_available; RH has no full-horizon bound,False,0.0,,offline_oracle_vs_release_revealed,explicit case difference
+algorithms,T3,RH_pruned,4101,True,OPTIMAL,COMPLETED,True,0.0,0.0,0.3950892857321701,,not_available; RH has no full-horizon bound,False,0.0,,offline_oracle_vs_release_revealed,explicit case difference
+algorithms,RH_dense,RH_pruned,4101,True,COMPLETED,COMPLETED,True,0.0,0.0,1.0349702381109314,,not_available; RH has no full-horizon bound,False,,,same,explicit case difference
+pooling,T3,separate,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,0.8283931357480955,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+sensitivity,T2_m0.1,T2_m0.05,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,1.0735999999567867,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+sensitivity,T2_m0.1,T2_m0.2,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,1.0735999999567867,"[0.0, 0.0]",reported full-model bounds for each own objective,False,0.0,0.0,same,explicit case difference
+sensitivity,T3,direct_rate18.75,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,0.5660980810626189,"[0.0, 0.0]",reported full-model bounds for each own objective,True,0.0,0.0,same,"direct-channel price, including zero-cargo direct"
+sensitivity,T3,direct_rate31.25,4101,True,OPTIMAL,OPTIMAL,True,0.0,0.0,0.8939393939943292,"[0.0, 0.0]",reported full-model bounds for each own objective,True,0.0,0.0,same,"direct-channel price, including zero-cargo direct"
+sensitivity,RH_pruned,RH_H8,4101,True,COMPLETED,COMPLETED,True,0.0,0.0,0.9889624723958751,,not_available; RH has no full-horizon bound,False,,,same,explicit case difference
+sensitivity,RH_pruned,RH_H16,4101,True,COMPLETED,COMPLETED,True,0.0,0.0,1.06161137439124,,not_available; RH has no full-horizon bound,False,,,same,explicit case difference

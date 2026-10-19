@@ -1,6 +1,6 @@
 # PROGRESS — 已核实的模型同步进展
 
-更新：2026-10-18（Asia/Shanghai）。**新英文终稿模型/理论正文、引言与综述已完成，子Agent全文审查限定ACCEPT。** 数值章节和实验计划按用户要求暂不写，未编译。此前T0证明与V1-F/RH/剪枝保持已有验收；一般随机QVI、warm start/local branching和大型回归未完成。最新证据见文末。
+更新：2026-10-19（Asia/Shanghai）。**N40完整四方向70任务已完成，用户明确授权GitHub同步；完整Referee统计/prose终审仍OPEN。** 论文未在本轮改写或编译，100–500单实验未运行。此前T0证明与V1-F/RH/剪枝保持已有验收；一般随机QVI、warm start/local branching和大型回归未完成。最新证据见文末。
 
 ## 已完成的有界交付
 
@@ -120,3 +120,85 @@ M范围G0/G1/G2和独立结果核算完成；原V0/RH与TeX/历史数据保留�
 Referee发现时间线原j>c_t示意与固定窗口参数不符，已修为i<t<b_t<j≤c_t≤T并复核，最终限定ACCEPT。11TeX、10inputs、78labels、68refs、18Bib静态检查通过；本轮无数值实验、新研究或生产代码变更。
 
 内置编译准备阶段仍失败；随后作者明确本机不编译、由其自行编译，故停止重试，不声明有新PDF或无排版溢出。[修订报告](../research/paper/final_manuscript/BHH_structure_revision_report.md)、[来源和迁移表](../research/paper/final_manuscript/BHH_source_and_claim_map.md)为当前交付；旧报告保留历史。未提交推送。
+
+## 数值实验P0准备（2026-10-18）
+
+用户要求完成P0。实际附件PDF与运行手册已归档快照，完整稿源到式1–26/Appendix C的映射已整理。
+作者明确选择一票一合成job-equivalent，unit决定编号V1P0-JOB-UNIT-2026-10-18；
+direct终点与T2最低装载政策尚在异步选择中，未以推荐项代替作者答复。
+
+Experiment交付机制级UB开关、minimum约束和独立full/partial核验；Theorist给出三种纯容量情景与时间链；
+Literature交付冻结稿/矩阵；PI补显式job输入wrapper、来源/单位哈希核验和只读P0预检。
+初次PI定向回归159项测试/429个subtests通过（0.62秒），选择所有纯类并排除真实微型求解类；
+之后针对Referee发现的作者choice校验绕过和零货minimum容差边界增加修复与测试，最终数目以准备报告为准。
+无新Gurobi优化、许可证初始化、数据库重建、45次先导或正式效果实验；未编译/修改论文或历史结果。
+
+交付、复验命令、文件职责和剩余模型决定见[准备报告](../experiments/reports/v1_p0_preparation.md)。
+
+PI最终纯回归165项/442个subtests通过（0.62秒、exit0），导入pytest前显式禁用gurobipy。
+实际SQLite同seed10单读取两次完全相同、5+5方向、总需求10个job-equivalent，罚金100，源重量与合成窗标签完整；无优化。
+53来源manifest只读核验通过，runtime binding确认当前字节一致。Referee独立75项纯测通过并复核manifest，准备产物限定ACCEPT。
+整体P0预检exit1仅因direct/T2作者决定pending，不能把技术验收通过写成作者模型已冻结或已授权45次先导。
+
+## 作者关闭P0待决并授权P1小规模验证
+
+用户明确“两个都采用建议”并逐项给出Direct城市级抽象节点、T2 m=.1及.05/.1/.2敏感性。
+对应决定已登记，前节pending记录为此前状态。Direct时间衔接4项纯测通过；P1冻结稿/矩阵/有界协议已更新。
+新production计时/模型规模/原约束残差，以及独立固定实例、单worker执行、预算和配对统计正实施审查。
+真实求解前先完成source重新冻结和预检；计划最多80次、单线程、总600秒、N<=40，当前不因协议存在预报执行通过。
+
+## P0冻结与P1小规模完成（2026-10-18）
+
+P0三项作者决定已冻结；63来源checker valid、P0 gate=true，source content SHA为5c8b233f...3b1c6c4。
+最终纯回归195项/454个subtests，0.70秒、exit0、Gurobi导入禁用。
+初次合并回归仅旧测试仍要求pending而失败，随后按作者确认更新状态断言；最终整套通过，未以改生产可行域迎合测试。
+harness临时目录权限/cleanup停顿另以已批准普通文件权限的纯测试完成，未消耗真实求解预算。
+
+新batch P1_SMALL_20261018_01先5micro通过（3个预期不可行、成本5/4，顶层5/opt8、外层.375秒），
+再读15固定实例开展45配对pilot+15新增机制+15新增敏感性，共75例。全部完整且独立replay通过；
+44full OPTIMAL、30RH COMPLETED、1full TIME_LIMIT，限时例成本1910/bound1893.9115018/gap0.84233%，未冒称最优。
+全程80顶层/413optimize，prepare26.39+micro.375+sessions109.343=136.108秒，未超600或15秒worker硬限；
+一例runner超过5秒软逻辑限(5.234秒)原标记保留，无重跑替换结果。
+
+产出全run/逐窗/配对CSV、原始JSON、两科研图、只读全OD校准核对。Referee独立全量复核75raw及全部身份、域签名、计时、16组统计和校准，最终限定ACCEPT。
+N40剪枝速度比均值1.626但成本差均值+109.713（CI含0），N10各机制及minimum全部零成本差且direct/empty均未使用。
+这些是给定小规模模型的有限观测，不宣布一般无损、真实hub可行性或机制普遍收益。
+报告：[v1_p1_results.md](../experiments/reports/v1_p1_results.md)；证据：[batch](../simulation/v1_runs/P1_SMALL_20261018_01/manifest.json)。
+本轮没有N>=100、大规模研究、论文改稿/编译、Git提交或网络推送。
+## 2026-10-19 后续实验启动
+
+用户要求继续数值实验。只读审计确认旧N40五seed均自然采用Direct（货量占服务量约17–20%），因此先补齐同规模机制/minimum比较，不改参数追求效果、不直接扩至100–500单。新计划30次full、累计编排300秒、单次5秒软预算与15秒硬保护，复用五个原始N40输入和五行旧T3基准；计划与身份固定后才执行。生产模型、旧63源manifest及原raw保持不变。当前尚未启动新求解。
+
+### 本阶段最终核实结果
+
+batch=`P1_FOLLOWUP_20261019_01`已完成30新solve（26OPTIMAL、4TIME_LIMIT），每run恰一次optimize，均有完整可行解；加五个旧参考共35方案，PI与Referee分别独立原式重放35/35通过。13新增纯安全测试通过，原63来源SHA不变。内部prepare+session92.578秒、外层总92.813秒，均低于300；四个新限时runner超过5秒软预算，最长parent7.734<15，未重跑或删行。
+
+T2/.1相对T0五例的成本差证书上界均严格负；均值incumbent成本1745→1669.8386677（均值比下降4.3072%），服务连续量80.5%→93.7540%。配对均差−75.1613323，95%描述区间[−137.2461481,−13.0765165]；均值最优差solver证书界[−80.089178,−75.141533]，二者口径不同。独立empty未采用，保存direct最小平均载量3>.2；minimum与empty未识别额外成本收益，不升级为精确等价或一般无效。
+
+[结果报告](../experiments/reports/v1_followup_20261019_results.md)与[独立审查](reviews/v1_followup_20261019_review.md)均LIMITED_ACCEPT。新增执行/纯测/协议/设计/报告和派生表图；四共享账本更新。本轮无生产模型、论文、旧结果变更，无大规模运行或Git发布。固定历史剪枝重建仅有只读可恢复性说明，尚未执行单窗验证。
+
+## 固定N的四方向自动化实施
+
+用户确认每轮固定订单数，四方向顺序运行，之后按需要更换N。当前实现新通用入口与独立suite，默认14个任务/seed，核心基准跨方向共享、不自动增加N。理论合同已交付；pooling专员服务连续两次容量错误后由PI补独立模块，8项纯测试通过，原63来源不动。整体编排/CLI/使用指南及Referee和有界真实功能验证尚未完成，不预报自动化成功。
+
+### 自动化交付最终状态
+
+统一入口experiments/run_fixed_n.py、suite的round.py/default_design.json/pooling.py及两套新测试已完成；默认预览不求解，显式累计预算执行，四阶段自动汇总CSV/JSON/Markdown，支持未尝试继续、已attempt不重跑。23项纯测试通过且由Referee独立复验。suite SHA=`9c1fa8f3d7acbef31159486d2be05a804e62f7bf87b18e96936ac7f3d7e3bb26`，原63来源SHA不变。
+
+功能批次FIXED_N_SMOKE_20261019_01固定N4/seed4101，真实14任务（10full OPTIMAL、4RH COMPLETED），共58次optimize；PI与Referee均逐个原式replay通过，separate另独立原式容量通过。首次prepare+执行30.593秒、post1.688秒、outer32.438秒；无3秒软预算超出。第二次同flags运行newattempt0，14raw SHA不变，累计执行30.624<180秒。四阶段引用5/3/9/2共19次引用实际14唯一解，15配对和48RH窗保留。
+
+[指南](../experiments/specs/FIXED_N_ROUND_GUIDE.md)与[最终审查](reviews/fixed_n_round_review.md)已交付，LIMITED_ACCEPT仅实施/功能范围。未实际跑40单五seed70任务，也未做任意硬杀恢复或新运营收益研究；异常独占锁不自动清除。本轮只增新suite/入口/两测试/理论合同/指南/审查/功能产物并更新四共享账本，旧生产模型、论文、旧结果和63源冻结未改，无Git发布。
+
+## 作者要求执行N40完整批次
+
+用户明确要求执行40单完整批次。已只读检查工作区、原63来源/现有suite及批次目录；新批次FIXED_N40_20261019_01采用5seed、70任务、600秒执行上限、单run5秒/worker15秒，复用原N40订单。Experiment承担实际执行；运行后由Literature和Referee依次整理与复核。当前尚无本批成功结果，不将上一轮tiny验证充当N40正式实验。
+
+### N40完整执行最终记录与同步范围
+
+70/70完整可行：41 full OPTIMAL、9 full TIME_LIMIT、20 RH COMPLETED，290optimize、240RH窗，无重试/partial/未运行。25/10/30/5阶段新增任务，25/15/45/10共95表引用复用70run。prepare .250+session181.063=181.313秒<600，后处理18.953秒、外层200.516秒；9软预算超出完整披露，最长parent5.391<15。原63与suite SHA不变。
+
+结果：T2相对T0均值成本1745→1669.8386677、服务80.5%→93.7540%；pruned/dense配对墙钟速度比1.6898799而平均成本差+109.7130365；separate−pooled均值可行成本差+128.5048672，五个solver最优差下界均正。价格升25%时服务均值降至86.2540%，H与minimum情景保留全部零差/异号与描述区间，不声称一般显著或单调结论。
+
+Referee独立70原f与940个separate wave核验、来源/配置/预算/phase/母域已报告通过；剩余75配对统计和prose终审因工作区额度耗尽中断。Literature亦未能交稿，PI据原始产物完成[结果报告](../experiments/reports/fixed_n40_20261019_results.md)，另复算850项统计/证书数值比较并保存coordinator_statistics_audit；[审查记录](reviews/fixed_n40_20261019_review.md)明确为PI整理已完成消息，非最终ACCEPT。完整独立终审保留OPEN，无新增solve。
+
+用户随后要求完成后推送GitHub，授权包含当前研究分支上此前未同步的P0/P1来源、实现、测试和保存实验。为确保Git跨平台checkout不破坏已登记SHA，新增.gitattributes仅关闭冻结源和实验产物的换行转换，不修改工作区源字节；提交核对index与工作区原字节。原始SQLite/缓存/临时文件不纳入提交，论文科学主张不改。

@@ -1,0 +1,22 @@
+{
+  "schema_version": "v1_p1_corridor_audit/1",
+  "evidence_class": "post_run_read_only_full_pair_calibration_check",
+  "source": "data/cfs_2022_pums.sqlite",
+  "function": "intercity_delivery.data.cfs_processor.calibrate_city_pair_travel_time",
+  "city_pair": ["06-348", "06-488"],
+  "method": "full_eligible_pair_weighted_median",
+  "eligible_record_count": 30185,
+  "direction_counts": {"a_to_b": 15177, "b_to_a": 15008},
+  "weight": "WGT_FACTOR",
+  "representative_gc_miles": 354.0,
+  "circuity_factor": 1.2,
+  "representative_route_miles": 424.8,
+  "truck_speed_mph": 50.0,
+  "representative_linehaul_hours": 8.496,
+  "period_hours": 1.0,
+  "travel_time_periods": 9,
+  "frozen_run_tau_periods": 9,
+  "tau_agrees": true,
+  "input_metadata_limitation": "Existing loader's explicit-tau branch reports route_miles=0 as a placeholder and labels it smoke. That field is not an observed zero distance. This separate audit verifies the predeclared tau; immutable inputs and all results remain unchanged.",
+  "new_solver_runs": 0
+}

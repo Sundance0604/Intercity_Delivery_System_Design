@@ -1,0 +1,1384 @@
+{
+  "evidence_class": "bounded_small_scale_full_model_experiment_not_large_scale_publication_package",
+  "planned_batch_runs": 75,
+  "completed_feasible_batch_runs": 75,
+  "total_top_level_runs_including_micro": 80,
+  "total_optimize_attempts_including_micro": 413,
+  "budget_execution_wall_sec": 136.10800000000745,
+  "prepare_wall_sec": 26.39000000001397,
+  "micro_wall_sec": 0.375,
+  "sessions_wall_sec": 109.34299999999348,
+  "budget_limit_sec": 600,
+  "max_residual_mixed_units": 4.214684873293864e-07,
+  "run_status_counts": {
+    "COMPLETED": 30,
+    "OPTIMAL": 44,
+    "TIME_LIMIT": 1
+  },
+  "time_limited_rows": [
+    {
+      "id": "n40_s4103_T3_m0_full",
+      "total_cost": 1910.0,
+      "best_bound": 1893.9115018068374,
+      "mip_gap": 0.00842329748333123,
+      "budget_exceeded": true
+    }
+  ],
+  "pilot": [
+    {
+      "n": 10,
+      "algorithm": "full",
+      "count": 5,
+      "mean_cost": 688.0,
+      "mean_served_rate": 0.78,
+      "mean_parent_wall_sec": 0.6622000000206754,
+      "mean_manual_busy_fraction": 0.024999999999999998,
+      "mean_av_busy_fraction": 0.225
+    },
+    {
+      "n": 10,
+      "algorithm": "dense",
+      "count": 5,
+      "mean_cost": 780.0,
+      "mean_served_rate": 0.8,
+      "mean_parent_wall_sec": 1.6720000000088475,
+      "mean_manual_busy_fraction": 0.025694444444444443,
+      "mean_av_busy_fraction": 0.3
+    },
+    {
+      "n": 10,
+      "algorithm": "pruned",
+      "count": 5,
+      "mean_cost": 780.0,
+      "mean_served_rate": 0.8,
+      "mean_parent_wall_sec": 1.3875999999814668,
+      "mean_manual_busy_fraction": 0.025694444444444443,
+      "mean_av_busy_fraction": 0.3
+    },
+    {
+      "n": 20,
+      "algorithm": "full",
+      "count": 5,
+      "mean_cost": 1071.0,
+      "mean_served_rate": 0.88,
+      "mean_parent_wall_sec": 1.1842000000062398,
+      "mean_manual_busy_fraction": 0.04583333333333333,
+      "mean_av_busy_fraction": 0.39375
+    },
+    {
+      "n": 20,
+      "algorithm": "dense",
+      "count": 5,
+      "mean_cost": 1280.8386676965933,
+      "mean_served_rate": 0.8750806661517033,
+      "mean_parent_wall_sec": 2.040800000005402,
+      "mean_manual_busy_fraction": 0.07291666666666667,
+      "mean_av_busy_fraction": 0.39375
+    },
+    {
+      "n": 20,
+      "algorithm": "pruned",
+      "count": 5,
+      "mean_cost": 1280.8386676965933,
+      "mean_served_rate": 0.8750806661517033,
+      "mean_parent_wall_sec": 1.4841999999945983,
+      "mean_manual_busy_fraction": 0.07291666666666667,
+      "mean_av_busy_fraction": 0.39375
+    },
+    {
+      "n": 40,
+      "algorithm": "full",
+      "count": 5,
+      "mean_cost": 1669.8386676965933,
+      "mean_served_rate": 0.9375403330758517,
+      "mean_parent_wall_sec": 2.940400000009686,
+      "mean_manual_busy_fraction": 0.13333333333333333,
+      "mean_av_busy_fraction": 0.375
+    },
+    {
+      "n": 40,
+      "algorithm": "dense",
+      "count": 5,
+      "mean_cost": 2399.3546707863734,
+      "mean_served_rate": 0.8601613323034066,
+      "mean_parent_wall_sec": 2.7313999999896623,
+      "mean_manual_busy_fraction": 0.17708333333333334,
+      "mean_av_busy_fraction": 0.45
+    },
+    {
+      "n": 40,
+      "algorithm": "pruned",
+      "count": 5,
+      "mean_cost": 2509.06770724995,
+      "mean_served_rate": 0.8769830731875123,
+      "mean_parent_wall_sec": 1.681000000005588,
+      "mean_manual_busy_fraction": 0.2048611111111111,
+      "mean_av_busy_fraction": 0.43125
+    }
+  ],
+  "domain_and_pruning_checks": [
+    {
+      "n": 10,
+      "seed": 4101,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 16632,
+      "retained_cargo_candidates": 660,
+      "reduction": 0.9603174603174603,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 10,
+      "seed": 4102,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 16296,
+      "retained_cargo_candidates": 658,
+      "reduction": 0.9596219931271478,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 10,
+      "seed": 4103,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 17472,
+      "retained_cargo_candidates": 992,
+      "reduction": 0.9432234432234432,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 10,
+      "seed": 4104,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 15960,
+      "retained_cargo_candidates": 622,
+      "reduction": 0.9610275689223058,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 10,
+      "seed": 4105,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 15456,
+      "retained_cargo_candidates": 589,
+      "reduction": 0.9618918219461697,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 20,
+      "seed": 4101,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 33600,
+      "retained_cargo_candidates": 1354,
+      "reduction": 0.9597023809523809,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 20,
+      "seed": 4102,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 32760,
+      "retained_cargo_candidates": 1287,
+      "reduction": 0.9607142857142857,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 20,
+      "seed": 4103,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 34608,
+      "retained_cargo_candidates": 1836,
+      "reduction": 0.9469486823855756,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 20,
+      "seed": 4104,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 33264,
+      "retained_cargo_candidates": 1261,
+      "reduction": 0.9620911495911496,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 20,
+      "seed": 4105,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 31752,
+      "retained_cargo_candidates": 1395,
+      "reduction": 0.9560657596371882,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 40,
+      "seed": 4101,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 66864,
+      "retained_cargo_candidates": 2851,
+      "reduction": 0.9573612108159847,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 40,
+      "seed": 4102,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 65016,
+      "retained_cargo_candidates": 2585,
+      "reduction": 0.9602405561707887,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 40,
+      "seed": 4103,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 67704,
+      "retained_cargo_candidates": 2730,
+      "reduction": 0.9596774193548387,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 40,
+      "seed": 4104,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 67704,
+      "retained_cargo_candidates": 2693,
+      "reduction": 0.9602239158690772,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    },
+    {
+      "n": 40,
+      "seed": 4105,
+      "all_vehicle_selector_signatures_equal": true,
+      "pruned_path_dense_cargo_candidates": 63504,
+      "retained_cargo_candidates": 2607,
+      "reduction": 0.9589474678760394,
+      "scope": "candidate reduction follows pruned trajectory; domain equality is not equality of historical constraints"
+    }
+  ],
+  "pilot_pairs": [
+    {
+      "n": 10,
+      "left": "full",
+      "right": "dense",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 92.0,
+        "sd": 45.77116996538323,
+        "median": 100.0,
+        "min": 35.0,
+        "max": 135.0,
+        "ci95": [
+          35.167586098318104,
+          148.8324139016819
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 0,
+        "planned_n": 5,
+        "mean": null,
+        "sd": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T3_m0_full",
+          "right": "n10_s4101_T3_m0_dense",
+          "cost_difference_right_minus_left": 100.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T3_m0_full",
+          "right": "n10_s4102_T3_m0_dense",
+          "cost_difference_right_minus_left": 35.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T3_m0_full",
+          "right": "n10_s4103_T3_m0_dense",
+          "cost_difference_right_minus_left": 55.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T3_m0_full",
+          "right": "n10_s4104_T3_m0_dense",
+          "cost_difference_right_minus_left": 135.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T3_m0_full",
+          "right": "n10_s4105_T3_m0_dense",
+          "cost_difference_right_minus_left": 135.0,
+          "left_global_optimal_oracle": true
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "left": "full",
+      "right": "pruned",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 92.0,
+        "sd": 45.77116996538323,
+        "median": 100.0,
+        "min": 35.0,
+        "max": 135.0,
+        "ci95": [
+          35.167586098318104,
+          148.8324139016819
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 0,
+        "planned_n": 5,
+        "mean": null,
+        "sd": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T3_m0_full",
+          "right": "n10_s4101_T3_m0_pruned",
+          "cost_difference_right_minus_left": 100.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T3_m0_full",
+          "right": "n10_s4102_T3_m0_pruned",
+          "cost_difference_right_minus_left": 35.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T3_m0_full",
+          "right": "n10_s4103_T3_m0_pruned",
+          "cost_difference_right_minus_left": 55.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T3_m0_full",
+          "right": "n10_s4104_T3_m0_pruned",
+          "cost_difference_right_minus_left": 135.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T3_m0_full",
+          "right": "n10_s4105_T3_m0_pruned",
+          "cost_difference_right_minus_left": 135.0,
+          "left_global_optimal_oracle": true
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "left": "dense",
+      "right": "pruned",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 1.2049166731856262,
+        "sd": 0.030814623674191032,
+        "median": 1.204363636376167,
+        "min": 1.176957831361343,
+        "max": 1.2524613220859795,
+        "ci95": [
+          1.1666552643511858,
+          1.2431780820200666
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T3_m0_dense",
+          "right": "n10_s4101_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.204363636376167
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T3_m0_dense",
+          "right": "n10_s4102_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.2524613220859795
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T3_m0_dense",
+          "right": "n10_s4103_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.1784511784622644
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T3_m0_dense",
+          "right": "n10_s4104_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.2123493976423778
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T3_m0_dense",
+          "right": "n10_s4105_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.176957831361343
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "left": "full",
+      "right": "dense",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 209.8386676965933,
+        "sd": 134.0577511472197,
+        "median": 195.0,
+        "min": 39.99999999999977,
+        "max": 404.19333848296674,
+        "ci95": [
+          43.3839844169309,
+          376.2933509762557
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 0,
+        "planned_n": 5,
+        "mean": null,
+        "sd": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n20_s4101_T3_m0_full",
+          "right": "n20_s4101_T3_m0_dense",
+          "cost_difference_right_minus_left": 255.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n20_s4102_T3_m0_full",
+          "right": "n20_s4102_T3_m0_dense",
+          "cost_difference_right_minus_left": 404.19333848296674,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n20_s4103_T3_m0_full",
+          "right": "n20_s4103_T3_m0_dense",
+          "cost_difference_right_minus_left": 39.99999999999977,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n20_s4104_T3_m0_full",
+          "right": "n20_s4104_T3_m0_dense",
+          "cost_difference_right_minus_left": 155.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n20_s4105_T3_m0_full",
+          "right": "n20_s4105_T3_m0_dense",
+          "cost_difference_right_minus_left": 195.0,
+          "left_global_optimal_oracle": true
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "left": "full",
+      "right": "pruned",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 209.8386676965933,
+        "sd": 134.0577511472197,
+        "median": 195.0,
+        "min": 39.99999999999977,
+        "max": 404.19333848296674,
+        "ci95": [
+          43.3839844169309,
+          376.2933509762557
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 0,
+        "planned_n": 5,
+        "mean": null,
+        "sd": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n20_s4101_T3_m0_full",
+          "right": "n20_s4101_T3_m0_pruned",
+          "cost_difference_right_minus_left": 255.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n20_s4102_T3_m0_full",
+          "right": "n20_s4102_T3_m0_pruned",
+          "cost_difference_right_minus_left": 404.19333848296674,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n20_s4103_T3_m0_full",
+          "right": "n20_s4103_T3_m0_pruned",
+          "cost_difference_right_minus_left": 39.99999999999977,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n20_s4104_T3_m0_full",
+          "right": "n20_s4104_T3_m0_pruned",
+          "cost_difference_right_minus_left": 155.0,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n20_s4105_T3_m0_full",
+          "right": "n20_s4105_T3_m0_pruned",
+          "cost_difference_right_minus_left": 195.0,
+          "left_global_optimal_oracle": true
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "left": "dense",
+      "right": "pruned",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 1.374770326045099,
+        "sd": 0.06748054547955815,
+        "median": 1.3584905660429163,
+        "min": 1.3167115903175879,
+        "max": 1.4893333333311602,
+        "ci95": [
+          1.2909821621439797,
+          1.4585584899462183
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n20_s4101_T3_m0_dense",
+          "right": "n20_s4101_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.3726158038303258
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n20_s4102_T3_m0_dense",
+          "right": "n20_s4102_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.4893333333311602
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n20_s4103_T3_m0_dense",
+          "right": "n20_s4103_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.3584905660429163
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n20_s4104_T3_m0_dense",
+          "right": "n20_s4104_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.3167115903175879
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n20_s4105_T3_m0_dense",
+          "right": "n20_s4105_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.3367003367035042
+        }
+      ]
+    },
+    {
+      "n": 40,
+      "left": "full",
+      "right": "dense",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 729.51600308978,
+        "sd": 113.81788822116145,
+        "median": 729.1933384829667,
+        "min": 628.3866769659335,
+        "max": 905.8066615170333,
+        "ci95": [
+          588.1924289339834,
+          870.8395772455767
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 0,
+        "planned_n": 5,
+        "mean": null,
+        "sd": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n40_s4101_T3_m0_full",
+          "right": "n40_s4101_T3_m0_dense",
+          "cost_difference_right_minus_left": 905.8066615170333,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n40_s4102_T3_m0_full",
+          "right": "n40_s4102_T3_m0_dense",
+          "cost_difference_right_minus_left": 628.3866769659335,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n40_s4103_T3_m0_full",
+          "right": "n40_s4103_T3_m0_dense",
+          "cost_difference_right_minus_left": 754.1933384829667,
+          "left_global_optimal_oracle": false
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n40_s4104_T3_m0_full",
+          "right": "n40_s4104_T3_m0_dense",
+          "cost_difference_right_minus_left": 729.1933384829667,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n40_s4105_T3_m0_full",
+          "right": "n40_s4105_T3_m0_dense",
+          "cost_difference_right_minus_left": 630.0,
+          "left_global_optimal_oracle": true
+        }
+      ]
+    },
+    {
+      "n": 40,
+      "left": "full",
+      "right": "pruned",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 839.2290395533571,
+        "sd": 220.45187812181686,
+        "median": 754.1933384829667,
+        "min": 630.0,
+        "max": 1190.8066615170333,
+        "ci95": [
+          565.5018791530925,
+          1112.9561999536218
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 0,
+        "planned_n": 5,
+        "mean": null,
+        "sd": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "ci95": null,
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n40_s4101_T3_m0_full",
+          "right": "n40_s4101_T3_m0_pruned",
+          "cost_difference_right_minus_left": 905.8066615170337,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n40_s4102_T3_m0_full",
+          "right": "n40_s4102_T3_m0_pruned",
+          "cost_difference_right_minus_left": 1190.8066615170333,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n40_s4103_T3_m0_full",
+          "right": "n40_s4103_T3_m0_pruned",
+          "cost_difference_right_minus_left": 754.1933384829667,
+          "left_global_optimal_oracle": false
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n40_s4104_T3_m0_full",
+          "right": "n40_s4104_T3_m0_pruned",
+          "cost_difference_right_minus_left": 715.3385362497515,
+          "left_global_optimal_oracle": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n40_s4105_T3_m0_full",
+          "right": "n40_s4105_T3_m0_pruned",
+          "cost_difference_right_minus_left": 630.0,
+          "left_global_optimal_oracle": true
+        }
+      ]
+    },
+    {
+      "n": 40,
+      "left": "dense",
+      "right": "pruned",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 109.71303646357701,
+        "sd": 253.14197731564096,
+        "median": 0.0,
+        "min": -13.854802233215196,
+        "max": 562.4199845510998,
+        "ci95": [
+          -204.60424320336892,
+          424.0303161305229
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "dense_pruned_speedup": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 1.6255519549448876,
+        "sd": 0.10427186954508955,
+        "median": 1.644307692320301,
+        "min": 1.4862008220217056,
+        "max": 1.7485582468351897,
+        "ci95": [
+          1.4960813285053502,
+          1.755022581384425
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n40_s4101_T3_m0_dense",
+          "right": "n40_s4101_T3_m0_pruned",
+          "cost_difference_right_minus_left": 4.547473508864641e-13,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.644307692320301
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n40_s4102_T3_m0_dense",
+          "right": "n40_s4102_T3_m0_pruned",
+          "cost_difference_right_minus_left": 562.4199845510998,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.558823529402879
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n40_s4103_T3_m0_dense",
+          "right": "n40_s4103_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.7485582468351897
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n40_s4104_T3_m0_dense",
+          "right": "n40_s4104_T3_m0_pruned",
+          "cost_difference_right_minus_left": -13.854802233215196,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.6898694841443622
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n40_s4105_T3_m0_dense",
+          "right": "n40_s4105_T3_m0_pruned",
+          "cost_difference_right_minus_left": 0.0,
+          "left_global_optimal_oracle": false,
+          "process_end_to_end_speedup_dense_over_pruned": 1.4862008220217056
+        }
+      ]
+    }
+  ],
+  "mechanism_sensitivity_pairs": [
+    {
+      "comparison": "mechanism_T1_minus_T0",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T0_m0_full",
+          "right": "n10_s4101_T1_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T0_m0_full",
+          "right": "n10_s4102_T1_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T0_m0_full",
+          "right": "n10_s4103_T1_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T0_m0_full",
+          "right": "n10_s4104_T1_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T0_m0_full",
+          "right": "n10_s4105_T1_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        }
+      ]
+    },
+    {
+      "comparison": "mechanism_T2_minus_T0",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T0_m0_full",
+          "right": "n10_s4101_T2_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T0_m0_full",
+          "right": "n10_s4102_T2_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T0_m0_full",
+          "right": "n10_s4103_T2_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T0_m0_full",
+          "right": "n10_s4104_T2_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T0_m0_full",
+          "right": "n10_s4105_T2_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        }
+      ]
+    },
+    {
+      "comparison": "mechanism_T3_minus_T0",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T0_m0_full",
+          "right": "n10_s4101_T3_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T0_m0_full",
+          "right": "n10_s4102_T3_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T0_m0_full",
+          "right": "n10_s4103_T3_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T0_m0_full",
+          "right": "n10_s4104_T3_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T0_m0_full",
+          "right": "n10_s4105_T3_m0_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        }
+      ]
+    },
+    {
+      "comparison": "matched_minimum_independent_empty_T3_minus_T2",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T2_m0.1_full",
+          "right": "n10_s4101_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T2_m0.1_full",
+          "right": "n10_s4102_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T2_m0.1_full",
+          "right": "n10_s4103_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T2_m0.1_full",
+          "right": "n10_s4104_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T2_m0.1_full",
+          "right": "n10_s4105_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        }
+      ]
+    },
+    {
+      "comparison": "T3_minimum_policy_m01_minus_m0",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T3_m0_full",
+          "right": "n10_s4101_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T3_m0_full",
+          "right": "n10_s4102_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T3_m0_full",
+          "right": "n10_s4103_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T3_m0_full",
+          "right": "n10_s4104_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T3_m0_full",
+          "right": "n10_s4105_T3_m0.1_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        }
+      ]
+    },
+    {
+      "comparison": "T2_sensitivity_m005_minus_m01",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T2_m0.1_full",
+          "right": "n10_s4101_T2_m0.05_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T2_m0.1_full",
+          "right": "n10_s4102_T2_m0.05_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T2_m0.1_full",
+          "right": "n10_s4103_T2_m0.05_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T2_m0.1_full",
+          "right": "n10_s4104_T2_m0.05_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T2_m0.1_full",
+          "right": "n10_s4105_T2_m0.05_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        }
+      ]
+    },
+    {
+      "comparison": "T2_sensitivity_m02_minus_m01",
+      "cost_difference": {
+        "n": 5,
+        "planned_n": 5,
+        "mean": 0.0,
+        "sd": 0.0,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+      },
+      "seeds": [
+        {
+          "seed": 4101,
+          "eligible": true,
+          "left": "n10_s4101_T2_m0.1_full",
+          "right": "n10_s4101_T2_m0.2_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4102,
+          "eligible": true,
+          "left": "n10_s4102_T2_m0.1_full",
+          "right": "n10_s4102_T2_m0.2_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4103,
+          "eligible": true,
+          "left": "n10_s4103_T2_m0.1_full",
+          "right": "n10_s4103_T2_m0.2_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4104,
+          "eligible": true,
+          "left": "n10_s4104_T2_m0.1_full",
+          "right": "n10_s4104_T2_m0.2_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        },
+        {
+          "seed": 4105,
+          "eligible": true,
+          "left": "n10_s4105_T2_m0.1_full",
+          "right": "n10_s4105_T2_m0.2_full",
+          "cost_difference_right_minus_left": 0.0,
+          "left_optimal": true,
+          "right_optimal": true
+        }
+      ]
+    }
+  ],
+  "analysis_sha256": "3c3a0b9d8fdefea2c96eb316f8cbd7ca78b5ebbdbbd9cb53d56f8758abfaa7b2",
+  "postprocessor_sha256": "06e9852af1ac5db29475e17c2d28e73709f0e14a087da75398fc0ac770f9793e",
+  "source_content_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4",
+  "new_solver_runs_by_postprocessor": 0
+}

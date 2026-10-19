@@ -1,0 +1,37 @@
+{
+  "stage": "mechanism",
+  "finished_utc": "2026-10-18T15:32:41.949502+00:00",
+  "attempted": [
+    "n10_s4101_T0_m0_full",
+    "n10_s4101_T1_m0_full",
+    "n10_s4101_T2_m0.1_full",
+    "n10_s4102_T0_m0_full",
+    "n10_s4102_T1_m0_full",
+    "n10_s4102_T2_m0.1_full",
+    "n10_s4103_T0_m0_full",
+    "n10_s4103_T1_m0_full",
+    "n10_s4103_T2_m0.1_full",
+    "n10_s4104_T0_m0_full",
+    "n10_s4104_T1_m0_full",
+    "n10_s4104_T2_m0.1_full",
+    "n10_s4105_T0_m0_full",
+    "n10_s4105_T1_m0_full",
+    "n10_s4105_T2_m0.1_full"
+  ],
+  "existing_retained": [
+    "n10_s4101_T3_m0_full",
+    "n10_s4102_T3_m0_full",
+    "n10_s4103_T3_m0_full",
+    "n10_s4104_T3_m0_full",
+    "n10_s4105_T3_m0_full"
+  ],
+  "budget_not_run": [],
+  "budget_sec": 600.0,
+  "wall_sec": 11.5,
+  "cumulative_wall_before_sec": 111.85800000000745,
+  "available_batch_wall_sec": 488.14199999999255,
+  "micro_sha256": "efab879fe383ff8ac366bcaeed301a2a12dd5455749bf81d51d697eeccf40a60",
+  "stop_reason": null,
+  "cumulative_scope": "input preparation + five micro checks + controller sessions; excludes human waiting, analysis/replay reported separately",
+  "no_automatic_retries": true
+}

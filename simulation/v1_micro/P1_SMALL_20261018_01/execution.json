@@ -1,0 +1,15 @@
+{
+  "exit_code": 0,
+  "stdout": "{\n  \"all_passed\": true,\n  \"executed\": 5,\n  \"output\": \"simulation\\\\v1_micro\\\\P1_SMALL_20261018_01\\\\raw.json\"\n}\n",
+  "stderr": "",
+  "timed_out": false,
+  "command": [
+    "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "-B",
+    "experiments/specs/run_v1_p1_micro.py",
+    "--run",
+    "--output",
+    "simulation\\v1_micro\\P1_SMALL_20261018_01\\raw.json"
+  ],
+  "parent_wall_sec": 0.375
+}

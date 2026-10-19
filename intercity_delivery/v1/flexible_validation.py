@@ -55,8 +55,25 @@ def validate_flexible_schedule(config, orders, profile, schedule, *, completed=T
     if not isinstance(schedule, Mapping) or set(schedule) != set(GROUPS):
         raise ValueError("schedule must contain exactly ten V1-F groups")
 
+    violations, comparisons = {}, {}
+    check_units = {
+        "one-hot": "dimensionless selector sum",
+        "selector vehicle link": "vehicles",
+        "manual city inventory": "vehicles",
+        "AV city inventory": "vehicles",
+        "real terminal fleet target": "vehicles",
+        "mechanism disables independent empty": "vehicles",
+        "mechanism disables direct": "mixed variable units: vehicles, dimensionless selectors, or service-equivalents",
+        "local original f budget": "minutes of aggregate routing work",
+        "direct original directional f budget": "minutes",
+        "objective mismatch": "currency",
+    }
+
     def leq(a, b, name):
         a, b = _finite(a, name), _finite(b, name)
+        residual = max(0., _finite(a-b, f"{name} residual"))
+        violations[name] = max(violations.get(name, 0.), residual)
+        comparisons[name] = comparisons.get(name, 0)+1
         if a > b + tol:
             raise ValueError(f"{name}: {a} > {b}")
 
@@ -124,6 +141,13 @@ def validate_flexible_schedule(config, orders, profile, schedule, *, completed=T
             group[key] = value
         groups[name] = group
     x, y, u, g, ga, z, w, ud, e, h = (groups[n] for n in GROUPS)
+    if config.service_mechanism in ("T0", "T1"):
+        for group in (w, ud, h):
+            for value in group.values():
+                leq(value, 0, "mechanism disables direct")
+    if config.service_mechanism in ("T0", "T2"):
+        for value in e.values():
+            leq(value, 0, "mechanism disables independent empty")
     for vehicles, selectors, cargo, prefix, local in (
             (x, u, g, 4, True), (w, ud, h, 3, False)):
         arcs = set(vehicles) | {k[:prefix] for k in selectors} | {k[:prefix] for k in cargo}
@@ -134,6 +158,11 @@ def validate_flexible_schedule(config, orders, profile, schedule, *, completed=T
                      "one-hot sum"), 1, "one-hot")
             equal(vehicles.get(arc, 0), count, "selector vehicle link")
             load = _sum((v for k, v in cargo.items() if k[:prefix] == arc), "wave load")
+            if not local:
+                if count > 0 and config.min_direct_load_per_vehicle > 0 and load <= 0:
+                    raise ValueError("minimum direct load requires strictly positive cargo")
+                leq(_finite(count*config.min_direct_load_per_vehicle, "minimum direct load"),
+                    load, "minimum direct load per vehicle")
             leq(load, _finite(count*config.M, "wave physical capacity"), "manual physical cap")
             i, j = arc[:2]
             duration = _finite((j-i)*config.t0_minutes, "task duration")
@@ -243,6 +272,12 @@ def validate_flexible_schedule(config, orders, profile, schedule, *, completed=T
     if reported_objective is not None:
         equal(_number(reported_objective, "reported objective"), committed_cost, "objective mismatch")
     return {"schedule_valid": True, "validator": "independent_original_f_v1_f",
+            "max_constraint_violation": max(violations.values(), default=0.),
+            "constraint_violation_by_check": violations,
+            "constraint_comparison_count_by_check": comparisons,
+            "constraint_violation_units_by_check": {name: check_units.get(name, "continuous service-equivalents")
+                                                     for name in violations},
+            "constraint_violation_scope": "leq/equal comparisons only; maximum is a mixed-units diagnostic, not a normalized certificate; do not sum across checks; domain, integrality, finite-value and strict-positive-load checks remain separate rejection checks",
             "profile_decision_id": PROFILE_DECISION_ID, "completed": completed,
             "completed_horizon": cut, "tolerance": tol, "comparison": "absolute",
             "costs": costs, "objective": costs["total"], "orders": evidence,

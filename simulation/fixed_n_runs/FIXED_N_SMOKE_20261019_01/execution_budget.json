@@ -1,0 +1,4 @@
+{
+  "cumulative_wall_sec": 180.0,
+  "scope": "prepare + all controller sessions; excludes separately reported replay/analysis and human idle"
+}

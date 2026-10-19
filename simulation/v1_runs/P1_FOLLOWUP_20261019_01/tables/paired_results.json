@@ -1,0 +1,660 @@
+[
+  {
+    "comparison": "T1_minus_T0",
+    "incumbent_difference_summary": {
+      "n": 5,
+      "planned_n": 5,
+      "mean": 9.094947017729283e-14,
+      "sd": 2.033691978340166e-13,
+      "median": 0.0,
+      "min": 0.0,
+      "max": 4.547473508864641e-13,
+      "ci95": [
+        -1.6156674111678497e-13,
+        3.4346568147137066e-13
+      ],
+      "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+    },
+    "seeds": [
+      {
+        "seed": 4101,
+        "left": "n40_s4101_T0_m0_full",
+        "right": "n40_s4101_T1_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4102,
+        "left": "n40_s4102_T0_m0_full",
+        "right": "n40_s4102_T1_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4103,
+        "left": "n40_s4103_T0_m0_full",
+        "right": "n40_s4103_T1_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 4.547473508864641e-13,
+        "optimal_cost_difference_certificate_interval": [
+          -0.1597497034413209,
+          0.09899777161376733
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4104,
+        "left": "n40_s4104_T0_m0_full",
+        "right": "n40_s4104_T1_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4105,
+        "left": "n40_s4105_T0_m0_full",
+        "right": "n40_s4105_T1_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      }
+    ]
+  },
+  {
+    "comparison": "T2_m01_minus_T0",
+    "incumbent_difference_summary": {
+      "n": 5,
+      "planned_n": 5,
+      "mean": -75.16133230340665,
+      "sd": 50.00130138867,
+      "median": -75.80666151703326,
+      "min": -125.0,
+      "max": -25.0,
+      "ci95": [
+        -137.2461481010542,
+        -13.076516505759116
+      ],
+      "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+    },
+    "seeds": [
+      {
+        "seed": 4101,
+        "left": "n40_s4101_T0_m0_full",
+        "right": "n40_s4101_T2_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -75.80666151703326,
+        "optimal_cost_difference_certificate_interval": [
+          -75.80666151703326,
+          -75.80666151703326
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4102,
+        "left": "n40_s4102_T0_m0_full",
+        "right": "n40_s4102_T2_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -125.0,
+        "optimal_cost_difference_certificate_interval": [
+          -125.0,
+          -125.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4103,
+        "left": "n40_s4103_T0_m0_full",
+        "right": "n40_s4103_T2_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "TIME_LIMIT",
+        "incumbent_cost_difference_right_minus_left": -25.0,
+        "optimal_cost_difference_certificate_interval": [
+          -49.63922968599809,
+          -24.901002228386687
+        ],
+        "left_optimal": true,
+        "right_optimal": false
+      },
+      {
+        "seed": 4104,
+        "left": "n40_s4104_T0_m0_full",
+        "right": "n40_s4104_T2_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -125.0,
+        "optimal_cost_difference_certificate_interval": [
+          -125.0,
+          -125.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4105,
+        "left": "n40_s4105_T0_m0_full",
+        "right": "n40_s4105_T2_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -25.0,
+        "optimal_cost_difference_certificate_interval": [
+          -25.0,
+          -25.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      }
+    ]
+  },
+  {
+    "comparison": "T3_m0_minus_T0",
+    "incumbent_difference_summary": {
+      "n": 5,
+      "planned_n": 5,
+      "mean": -75.16133230340665,
+      "sd": 50.00130138867,
+      "median": -75.80666151703326,
+      "min": -125.0,
+      "max": -25.0,
+      "ci95": [
+        -137.2461481010542,
+        -13.076516505759116
+      ],
+      "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+    },
+    "seeds": [
+      {
+        "seed": 4101,
+        "left": "n40_s4101_T0_m0_full",
+        "right": "n40_s4101_T3_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -75.80666151703326,
+        "optimal_cost_difference_certificate_interval": [
+          -75.80666151703326,
+          -75.80666151703326
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4102,
+        "left": "n40_s4102_T0_m0_full",
+        "right": "n40_s4102_T3_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -125.0,
+        "optimal_cost_difference_certificate_interval": [
+          -125.0,
+          -125.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4103,
+        "left": "n40_s4103_T0_m0_full",
+        "right": "n40_s4103_T3_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "TIME_LIMIT",
+        "incumbent_cost_difference_right_minus_left": -25.0,
+        "optimal_cost_difference_certificate_interval": [
+          -41.08849819316265,
+          -24.901002228386687
+        ],
+        "left_optimal": true,
+        "right_optimal": false
+      },
+      {
+        "seed": 4104,
+        "left": "n40_s4104_T0_m0_full",
+        "right": "n40_s4104_T3_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -125.0,
+        "optimal_cost_difference_certificate_interval": [
+          -125.0,
+          -125.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4105,
+        "left": "n40_s4105_T0_m0_full",
+        "right": "n40_s4105_T3_m0_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": -25.0,
+        "optimal_cost_difference_certificate_interval": [
+          -25.075166619777065,
+          -25.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      }
+    ]
+  },
+  {
+    "comparison": "T3_m01_minus_T2_m01",
+    "incumbent_difference_summary": {
+      "n": 5,
+      "planned_n": 5,
+      "mean": 7.73070496506989e-13,
+      "sd": 1.6045559063402243e-12,
+      "median": 0.0,
+      "min": 0.0,
+      "max": 3.637978807091713e-12,
+      "ci95": [
+        -1.2192488055008821e-12,
+        2.7653897985148603e-12
+      ],
+      "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+    },
+    "seeds": [
+      {
+        "seed": 4101,
+        "left": "n40_s4101_T2_m0.1_full",
+        "right": "n40_s4101_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          -1.7103438040066976e-05,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4102,
+        "left": "n40_s4102_T2_m0.1_full",
+        "right": "n40_s4102_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 2.2737367544323206e-13,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          2.2737367544323206e-13
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4103,
+        "left": "n40_s4103_T2_m0.1_full",
+        "right": "n40_s4103_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "TIME_LIMIT",
+        "right_status": "TIME_LIMIT",
+        "incumbent_cost_difference_right_minus_left": 3.637978807091713e-12,
+        "optimal_cost_difference_certificate_interval": [
+          -16.024973824970857,
+          24.639229686001727
+        ],
+        "left_optimal": false,
+        "right_optimal": false
+      },
+      {
+        "seed": 4104,
+        "left": "n40_s4104_T2_m0.1_full",
+        "right": "n40_s4104_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4105,
+        "left": "n40_s4105_T2_m0.1_full",
+        "right": "n40_s4105_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          -0.07516661977706462,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      }
+    ]
+  },
+  {
+    "comparison": "T3_m01_minus_T3_m0",
+    "incumbent_difference_summary": {
+      "n": 5,
+      "planned_n": 5,
+      "mean": 7.73070496506989e-13,
+      "sd": 1.6045559063402243e-12,
+      "median": 0.0,
+      "min": 0.0,
+      "max": 3.637978807091713e-12,
+      "ci95": [
+        -1.2192488055008821e-12,
+        2.7653897985148603e-12
+      ],
+      "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+    },
+    "seeds": [
+      {
+        "seed": 4101,
+        "left": "n40_s4101_T3_m0_full",
+        "right": "n40_s4101_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          -1.7103438040066976e-05,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4102,
+        "left": "n40_s4102_T3_m0_full",
+        "right": "n40_s4102_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 2.2737367544323206e-13,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          2.2737367544323206e-13
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4103,
+        "left": "n40_s4103_T3_m0_full",
+        "right": "n40_s4103_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "TIME_LIMIT",
+        "right_status": "TIME_LIMIT",
+        "incumbent_cost_difference_right_minus_left": 3.637978807091713e-12,
+        "optimal_cost_difference_certificate_interval": [
+          -16.024973824970857,
+          16.088498193166288
+        ],
+        "left_optimal": false,
+        "right_optimal": false
+      },
+      {
+        "seed": 4104,
+        "left": "n40_s4104_T3_m0_full",
+        "right": "n40_s4104_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4105,
+        "left": "n40_s4105_T3_m0_full",
+        "right": "n40_s4105_T3_m0.1_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          -0.07516661977706462,
+          0.07516661977706462
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      }
+    ]
+  },
+  {
+    "comparison": "T2_m005_minus_T2_m01",
+    "incumbent_difference_summary": {
+      "n": 5,
+      "planned_n": 5,
+      "mean": 6.366462912410497e-13,
+      "sd": 8.717638371618165e-13,
+      "median": 0.0,
+      "min": 0.0,
+      "max": 1.5916157281026244e-12,
+      "ci95": [
+        -4.4579148029874846e-13,
+        1.719084062780848e-12
+      ],
+      "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+    },
+    "seeds": [
+      {
+        "seed": 4101,
+        "left": "n40_s4101_T2_m0.1_full",
+        "right": "n40_s4101_T2_m0.05_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 1.5916157281026244e-12,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          1.5916157281026244e-12
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4102,
+        "left": "n40_s4102_T2_m0.1_full",
+        "right": "n40_s4102_T2_m0.05_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 1.5916157281026244e-12,
+        "optimal_cost_difference_certificate_interval": [
+          1.5916157281026244e-12,
+          1.5916157281026244e-12
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4103,
+        "left": "n40_s4103_T2_m0.1_full",
+        "right": "n40_s4103_T2_m0.05_full",
+        "eligible": true,
+        "left_status": "TIME_LIMIT",
+        "right_status": "TIME_LIMIT",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          -24.123752772985654,
+          24.63922968599809
+        ],
+        "left_optimal": false,
+        "right_optimal": false
+      },
+      {
+        "seed": 4104,
+        "left": "n40_s4104_T2_m0.1_full",
+        "right": "n40_s4104_T2_m0.05_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4105,
+        "left": "n40_s4105_T2_m0.1_full",
+        "right": "n40_s4105_T2_m0.05_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          -0.08065141532961206,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      }
+    ]
+  },
+  {
+    "comparison": "T2_m02_minus_T2_m01",
+    "incumbent_difference_summary": {
+      "n": 5,
+      "planned_n": 5,
+      "mean": 0.0,
+      "sd": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "ci_method": "Student t, df=4; only when all 5 seeds eligible; descriptive normality assumption"
+    },
+    "seeds": [
+      {
+        "seed": 4101,
+        "left": "n40_s4101_T2_m0.1_full",
+        "right": "n40_s4101_T2_m0.2_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4102,
+        "left": "n40_s4102_T2_m0.1_full",
+        "right": "n40_s4102_T2_m0.2_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4103,
+        "left": "n40_s4103_T2_m0.1_full",
+        "right": "n40_s4103_T2_m0.2_full",
+        "eligible": true,
+        "left_status": "TIME_LIMIT",
+        "right_status": "TIME_LIMIT",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          -20.2327015455312,
+          24.63922968599809
+        ],
+        "left_optimal": false,
+        "right_optimal": false
+      },
+      {
+        "seed": 4104,
+        "left": "n40_s4104_T2_m0.1_full",
+        "right": "n40_s4104_T2_m0.2_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      },
+      {
+        "seed": 4105,
+        "left": "n40_s4105_T2_m0.1_full",
+        "right": "n40_s4105_T2_m0.2_full",
+        "eligible": true,
+        "left_status": "OPTIMAL",
+        "right_status": "OPTIMAL",
+        "incumbent_cost_difference_right_minus_left": 0.0,
+        "optimal_cost_difference_certificate_interval": [
+          0.0,
+          0.0
+        ],
+        "left_optimal": true,
+        "right_optimal": true
+      }
+    ]
+  }
+]

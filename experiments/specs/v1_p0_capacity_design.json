@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "status": "frozen_synthetic_parameter_design_v1",
+  "evidence_class": "pure_capacity_calculation_not_operational_experiment",
+  "model_source": "research/paper/final_manuscript/sections/service_capacities.tex",
+  "unit_contract": {
+    "quantity": "synthetic_job_equivalent",
+    "time": "minutes",
+    "a": "minutes_per_job_equivalent",
+    "b": "minutes_per_sqrt_job_equivalent",
+    "rates": "currency_per_vehicle_hour",
+    "penalty": "currency_per_unserved_job_equivalent",
+    "calibration_status": "synthetic_mechanism_design_not_empirical_CFS_calibration",
+    "source_weight_is_model_quantity": false,
+    "demand_mapping": "one_source_shipment_one_synthetic_job_equivalent",
+    "unit_decision_id": "V1P0-JOB-UNIT-2026-10-18",
+    "unit_status": "author_confirmed",
+    "quantities_continuous_divisible": true
+  },
+  "baseline": {
+    "scenario_id": "near_transition",
+    "T": 24,
+    "t0_minutes": 60,
+    "tau_periods": 9,
+    "M": 4,
+    "M_auto": 8,
+    "N_manual": {"1": 6, "2": 6},
+    "N_auto": {"1": 2, "2": 2},
+    "a": {"1": 5, "2": 5},
+    "b": {"1": 20, "2": 20},
+    "rho_minutes": {"1": 5, "2": 5},
+    "c_manual_hour": 20,
+    "c_auto_hour": 15,
+    "c_direct_hour": 25,
+    "c_empty_hour": 25,
+    "penalty_per_unit": 100,
+    "terminal_target": null,
+    "transfer_time_periods": 0,
+    "transfer_cost_per_unit": 0,
+    "physical_direct_endpoint_status": "author_confirmed_aggregate_city_node_not_physical_hub_route"
+  },
+  "candidate_rh": {
+    "H": 12,
+    "h": 2,
+    "E": 12,
+    "status": "frozen_P1_pilot_design_not_runtime_default",
+    "one_unit_chain_periods": 11,
+    "single_vehicle_full_load_chain_periods": 13,
+    "scope": "time_support_only_real_T_deadlines_inventory_still_checked"
+  },
+  "scenarios": [
+    {
+      "id": "routing_binding", "a": 5, "b": 40, "rho_minutes": 5,
+      "M": 4, "duration_minutes": 60, "f_at_M_minutes": 100,
+      "pooled_integer_saturation_threshold": 8,
+      "curve": [
+        {"vehicles": 1, "pooled_capacity": 1.2078438912577216, "separate_capacity": 1.2078438912577216},
+        {"vehicles": 2, "pooled_capacity": 4.0, "separate_capacity": 2.4156877825154432},
+        {"vehicles": 3, "pooled_capacity": 7.741360134997855, "separate_capacity": 3.623531673773165},
+        {"vehicles": 5, "pooled_capacity": 17.007692762912313, "separate_capacity": 6.039219456288608}
+      ]
+    },
+    {
+      "id": "load_binding", "a": 5, "b": 10, "rho_minutes": 5,
+      "M": 4, "duration_minutes": 60, "f_at_M_minutes": 40,
+      "pooled_integer_saturation_threshold": 1,
+      "curve": [
+        {"vehicles": 1, "pooled_capacity": 4, "separate_capacity": 4},
+        {"vehicles": 2, "pooled_capacity": 8, "separate_capacity": 8},
+        {"vehicles": 3, "pooled_capacity": 12, "separate_capacity": 12},
+        {"vehicles": 5, "pooled_capacity": 20, "separate_capacity": 20}
+      ]
+    },
+    {
+      "id": "near_transition", "a": 5, "b": 20, "rho_minutes": 5,
+      "M": 4, "duration_minutes": 60, "f_at_M_minutes": 60,
+      "pooled_integer_saturation_threshold": 2,
+      "curve": [
+        {"vehicles": 1, "pooled_capacity": 3.0333704529042342, "separate_capacity": 3.0333704529042342},
+        {"vehicles": 2, "pooled_capacity": 8, "separate_capacity": 6.0667409058084685},
+        {"vehicles": 3, "pooled_capacity": 12, "separate_capacity": 9.100111358712702},
+        {"vehicles": 5, "pooled_capacity": 20, "separate_capacity": 15.166852264521172}
+      ]
+    }
+  ],
+  "asymmetric_extension": {
+    "status": "planned_separate_extension_not_part_of_single_factor_curves",
+    "cities": [
+      {"city": 1, "a": 5, "b": 20, "rho_minutes": 5},
+      {"city": 2, "a": 6, "b": 24, "rho_minutes": 8}
+    ]
+  },
+  "planned_sensitivity_ranges_not_established_binding_regimes": {
+    "penalty_per_unit": [50, 100, 200],
+    "manual_fleet_per_city": [4, 6, 8]
+  },
+  "comparison_scope": {
+    "changed_component": "local_capacity_only",
+    "direct_capacity": "retain_source_formula_do_not_change_with_local_ablation",
+    "operational_effect": "not_established",
+    "solver_runs": 0
+  }
+}

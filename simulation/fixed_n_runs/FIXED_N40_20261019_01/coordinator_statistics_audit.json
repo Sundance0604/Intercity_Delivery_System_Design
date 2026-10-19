@@ -1,0 +1,13 @@
+{
+  "scope": "coordinator recomputation; not an independent Referee verdict",
+  "analysis_sha256": "15bc99d93eea03727bd5117999828b9ffd6304a0bc8426091d7dee47df9a6100",
+  "script_sha256": "7dbe9d2116765c6cdfcf374cf9622c8ac7dec427246e5d72011533cf35122665",
+  "rows": 70,
+  "pairs": 75,
+  "paired_groups": 15,
+  "rh_windows": 240,
+  "numeric_comparisons_passed": 850,
+  "elapsed_sec": 0.01600000000325963,
+  "new_solver_runs": 0,
+  "passed": true
+}

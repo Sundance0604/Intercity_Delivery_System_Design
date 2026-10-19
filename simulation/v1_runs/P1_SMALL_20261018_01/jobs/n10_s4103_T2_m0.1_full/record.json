@@ -1,0 +1,1786 @@
+{
+  "schema_version": "v1_p1_attempt/1",
+  "started_utc": "2026-10-18T15:32:36.407688+00:00",
+  "job": {
+    "id": "n10_s4103_T2_m0.1_full",
+    "instance": "n10_s4103",
+    "n": 10,
+    "seed": 4103,
+    "mechanism": "T2",
+    "minimum": 0.1,
+    "algorithm": "full"
+  },
+  "input_sha256": "169acf46a17408ff05dd5a5bb2fb278895b45918647785ab89a0f1685ec720a9",
+  "orders_sha256": "df9629b895dd58e9174751ef0f9190157118bd1dc3c0fbf430416c2fca8eff6b",
+  "config": {
+    "T": 24,
+    "t0_minutes": 60,
+    "tau_periods": 9,
+    "N_manual": {
+      "1": 6,
+      "2": 6
+    },
+    "N_auto": {
+      "1": 2,
+      "2": 2
+    },
+    "a": {
+      "1": 5,
+      "2": 5
+    },
+    "b": {
+      "1": 20,
+      "2": 20
+    },
+    "rho": {
+      "1": 5,
+      "2": 5
+    },
+    "M": 4,
+    "M_auto": 8,
+    "c_manual_hour": 20,
+    "c_auto_hour": 15,
+    "c_direct_hour": 25,
+    "empty_tau_periods": null,
+    "c_empty_hour": 25,
+    "terminal_target": null,
+    "transfer_time_periods": 0,
+    "transfer_cost_per_unit": 0,
+    "direct_ratio_min": 0,
+    "direct_ratio_max": 1,
+    "service_mechanism": "T2",
+    "min_direct_load_per_vehicle": 0.1
+  },
+  "config_sha256": "4c14f91648fd347fc96cbce2d576f49764673daa20917a0b06b061528d3ddf31",
+  "source_content_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4",
+  "command": [
+    "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "D:\\mycodelife\\workshop\\AI\\multiagent-test\\experiments\\specs\\run_v1_p1.py",
+    "--worker",
+    "n10_s4103_T2_m0.1_full",
+    "--batch",
+    "P1_SMALL_20261018_01"
+  ],
+  "per_run_budget_sec": 3.0,
+  "hard_process_timeout_cap_sec": 15.0,
+  "solver_parameters": {
+    "Threads": 1,
+    "Seed": 0
+  },
+  "environment": {
+    "timestamp_utc": "2026-10-18T15:32:36.502054+00:00",
+    "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+    "executable": "C:\\Users\\32599\\.conda\\envs\\pavane\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "logical_cpus": 24,
+    "physical_ram_bytes": 16890322944,
+    "package_versions": {
+      "gurobipy": "10.0.3",
+      "numpy": "1.26.4",
+      "scipy": "1.15.3",
+      "pytest": "9.1.1"
+    },
+    "git": {
+      "revision": "3387a198ab43f5e934de75bf2fce4aca1b9a9fff",
+      "revision_warnings": "",
+      "status_porcelain": "M coordination/CLAIMS.md\n M coordination/MODEL_CONTRACT.md\n M coordination/PROGRESS.md\n M coordination/TASKS.md\n M intercity_delivery/v1/flexible_configuration.py\n M intercity_delivery/v1/flexible_optimizer.py\n M intercity_delivery/v1/flexible_rolling.py\n M intercity_delivery/v1/flexible_runner.py\n M intercity_delivery/v1/flexible_validation.py\n?? coordination/V1_MODEL_FREEZE.md\n?? coordination/reviews/v1_p0_preparation_review.md\n?? coordination/reviews/v1_p1_validation_review.md\n?? experiments/reports/v1_p0_data_preflight.json\n?? experiments/reports/v1_p0_preparation.md\n?? experiments/reports/v1_p1_results.md\n?? experiments/specs/V1_P1_BOUNDED_PROTOCOL.md\n?? experiments/specs/equation_to_code_matrix.md\n?? experiments/specs/experiment_data_contract.json\n?? experiments/specs/freeze_v1_p0_sources.py\n?? experiments/specs/plot_v1_p1.py\n?? experiments/specs/run_v1_p1.py\n?? experiments/specs/run_v1_p1_micro.py\n?? experiments/specs/source_snapshots/\n?? experiments/specs/v1_p0_capacity_design.json\n?? experiments/specs/v1_p0_decisions.json\n?? experiments/specs/v1_p0_preflight.py\n?? experiments/specs/v1_p1_budget.json\n?? experiments/specs/v1_source_manifest.json\n?? intercity_delivery/v1/experiment_inputs.py\n?? intercity_delivery/v1/experiment_metrics.py\n?? research/theory/v1_direct_endpoint_contract.md\n?? research/theory/v1_p0_parameter_design.md\n?? simulation/v1_micro/\n?? simulation/v1_runs/\n?? tests/test_v1_direct_continuity.py\n?? tests/test_v1_mechanisms.py\n?? tests/test_v1_p0_capacity_design.py\n?? tests/test_v1_p0_source_and_units.py\n?? tests/test_v1_p1_harness.py\n?? tests/test_v1_p1_instrumentation.py",
+      "status_porcelain_warnings": ""
+    }
+  },
+  "micro_evidence": {
+    "path": "D:\\mycodelife\\workshop\\AI\\multiagent-test\\simulation\\v1_micro\\P1_SMALL_20261018_01\\gate_evidence.json",
+    "sha256": "efab879fe383ff8ac366bcaeed301a2a12dd5455749bf81d51d697eeccf40a60",
+    "evidence": {
+      "schema_version": "v1_p1_micro/1",
+      "plan": {
+        "max_new_runs": 5,
+        "per_run_limit_sec": 3,
+        "threads": 1,
+        "solver_seed": 0,
+        "checks": [
+          "T2_forced_load005_below_minimum_infeasible",
+          "direct_then_same_node_local_cost5",
+          "direct_then_early_local_infeasible",
+          "T0_forced_direct_infeasible",
+          "direct_committed_across_windows_cost4"
+        ]
+      },
+      "preflight": {
+        "p0_checks_passed": true,
+        "errors": [],
+        "frozen_source_files": 63,
+        "mechanism_configs": {
+          "T0": {
+            "min_direct_load_per_vehicle": 0,
+            "terminal_target": null
+          },
+          "T1": {
+            "min_direct_load_per_vehicle": 0,
+            "terminal_target": null
+          },
+          "T2": {
+            "min_direct_load_per_vehicle": 0.1,
+            "terminal_target": null
+          },
+          "T3": {
+            "min_direct_load_per_vehicle": 0,
+            "terminal_target": null
+          }
+        },
+        "capacity_probes": {
+          "routing_binding": {
+            "two_vehicle_pooled": 4.0,
+            "two_vehicle_separate": 2.4156877825154432
+          },
+          "load_binding": {
+            "two_vehicle_pooled": 8.0,
+            "two_vehicle_separate": 8.0
+          },
+          "near_transition": {
+            "two_vehicle_pooled": 8.0,
+            "two_vehicle_separate": 6.0667409058084685
+          }
+        },
+        "evidence_scope": "source/units/configuration/pure capacity checks only",
+        "license_status": "NOT_CHECKED",
+        "new_solver_runs": 0,
+        "solver_budget": "AUTHOR_REQUESTED_SMALL_REAL_SOLVES_THEN_BOUNDED_P1"
+      },
+      "source_binding": {
+        "manifest_path": "experiments/specs/v1_source_manifest.json",
+        "manifest_sha256": "aeeff0bce6b60623ecb977f0f64fd48c4cb2e0023a8bd2835d48a74d4885b3c8",
+        "manifest": {
+          "schema_version": "v1_p0_source_manifest/1",
+          "git_head_at_freeze": "3387a198ab43f5e934de75bf2fce4aca1b9a9fff",
+          "working_tree_dirty_at_freeze": true,
+          "identity_scope": "Exact bytes of enumerated files, including uncommitted changes",
+          "mathematical_authority": "research/paper/final_manuscript/main.tex and its TeX/Bib project",
+          "provided_pdf": "experiments/specs/source_snapshots/Intercity_Operation_BHH_3.pdf",
+          "runbook_requested_pdf": "Intercity_Operation_BHH (3)(1).pdf",
+          "missing_requested_pdf": true,
+          "source_relationship": "Provided (3) PDF core equations audited against the local source; no claim of byte identity, identical compilation or identity with (3)(1)",
+          "does_not_authorize_solving": true,
+          "files": {
+            "coordination/V1_F_RUNTIME_CONTRACT.md": {
+              "sha256": "e78e616eaa7416e8b059d030e065741591c88299ce9461b031a7a8e650314b59",
+              "size_bytes": 6523
+            },
+            "coordination/V1_MODEL_FREEZE.md": {
+              "sha256": "5f53f7851a60392c619febfd7a6b61f35cb9aed9485c509a36ae9b8d80da5efb",
+              "size_bytes": 11395
+            },
+            "coordination/V1_M_IMPLEMENTATION_PROFILE.md": {
+              "sha256": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+              "size_bytes": 4266
+            },
+            "experiments/reports/v1_p0_data_preflight.json": {
+              "sha256": "c5c7714dc6b2ede04f575194afdf27f1d30e6d9c7d5f77986563f897be74dba3",
+              "size_bytes": 1209
+            },
+            "experiments/specs/V1_P1_BOUNDED_PROTOCOL.md": {
+              "sha256": "c6557688ea532c6b180f08afc9cdf7fe5b65d4b7f4940eb46bcaaafa1d9a5369",
+              "size_bytes": 12361
+            },
+            "experiments/specs/equation_to_code_matrix.md": {
+              "sha256": "0aec926c559ff0913f4656ef5f9edd40812dc2e1793cc5785186eb26d655a5bb",
+              "size_bytes": 12866
+            },
+            "experiments/specs/experiment_data_contract.json": {
+              "sha256": "68f211c50d670566f56087fe7c4690f43e023ea8b5dce5a6e92ecf819b887b01",
+              "size_bytes": 3044
+            },
+            "experiments/specs/freeze_v1_p0_sources.py": {
+              "sha256": "359fcdce3869b6b6546523ba01782df75fccecbd01533d65ec2465a7b010064e",
+              "size_bytes": 5363
+            },
+            "experiments/specs/plot_v1_p1.py": {
+              "sha256": "20edc0949d83db26bb6e8aa29969dcddc07c24dec965180570a1098ad9920393",
+              "size_bytes": 5386
+            },
+            "experiments/specs/run_v1_p1.py": {
+              "sha256": "bacb09b76368786057aa78ecedad8230134adf275b034911cf7a4fd219f26e84",
+              "size_bytes": 35501
+            },
+            "experiments/specs/run_v1_p1_micro.py": {
+              "sha256": "80d28bb8f9c793f5763c2037ebd097bed0a1962962b8d991407f3b9d42ef2dd0",
+              "size_bytes": 7765
+            },
+            "experiments/specs/source_snapshots/BHH_CFS_V1_Numerical_Experiment_Runbook.md": {
+              "sha256": "44c47302abfcaed41c5821b8ebfcf6d6572a17587093e4647fad31492390a862",
+              "size_bytes": 38021
+            },
+            "experiments/specs/source_snapshots/Intercity_Operation_BHH_3.pdf": {
+              "sha256": "a7f49a07adc6ac499a91143f218cdc665c0e81dd68f6fd618c26e7cca97e55a0",
+              "size_bytes": 315053
+            },
+            "experiments/specs/v1_p0_capacity_design.json": {
+              "sha256": "029f6fa8d34e54d422d721ff16024dbd52c6ba172cedd8ce5479a12e0d34f170",
+              "size_bytes": 4085
+            },
+            "experiments/specs/v1_p0_decisions.json": {
+              "sha256": "a42d9bd28493369b17331fb0b9bf69ee2efb5f7fd19de40791b6e66764f12a10",
+              "size_bytes": 924
+            },
+            "experiments/specs/v1_p0_preflight.py": {
+              "sha256": "71714b047620957b64fba96ee36489417f99c9c3f83a695db3e30d70567e0b10",
+              "size_bytes": 5459
+            },
+            "experiments/specs/v1_p1_budget.json": {
+              "sha256": "e7c95bada8018222a94473ce2c79dabd731fc55f35938b403e3a818e06a0a143",
+              "size_bytes": 1410
+            },
+            "intercity_delivery/v1/__init__.py": {
+              "sha256": "3da89de24e2cfb129488784fdd4603d064ba8c8f8a883da7f8ae23858683d0a8",
+              "size_bytes": 326
+            },
+            "intercity_delivery/v1/adapter.py": {
+              "sha256": "345f38a143ec3c9ecb00f1323d145a5956bf3d8d6e542d87e0c6ba6185fdc545",
+              "size_bytes": 9577
+            },
+            "intercity_delivery/v1/capacity.py": {
+              "sha256": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+              "size_bytes": 3494
+            },
+            "intercity_delivery/v1/configuration.py": {
+              "sha256": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+              "size_bytes": 3970
+            },
+            "intercity_delivery/v1/experiment_inputs.py": {
+              "sha256": "98b498f3f8ebc32315552c4231472fedd9acd85fac892d090da46cb7256a206a",
+              "size_bytes": 2963
+            },
+            "intercity_delivery/v1/experiment_metrics.py": {
+              "sha256": "60b4b06be03d6d5d519b3a1a809fd3f5d92647aee3e619c2fd296bb5fb269098",
+              "size_bytes": 6941
+            },
+            "intercity_delivery/v1/flexible_capacity.py": {
+              "sha256": "1b46bb68f54dd8ad12f8e91e8fe506ff9d295f21dd351a011c4a39de1b179a19",
+              "size_bytes": 1486
+            },
+            "intercity_delivery/v1/flexible_configuration.py": {
+              "sha256": "422d520678ad555a9b31f08df27c0e0b8d4d989ec8fa7ce927a382ebe52e6a6e",
+              "size_bytes": 3224
+            },
+            "intercity_delivery/v1/flexible_optimizer.py": {
+              "sha256": "1ba214cd0e113703f44ebc291a1f723f2e8239f275f13af14abf83a1a9b19fa2",
+              "size_bytes": 15191
+            },
+            "intercity_delivery/v1/flexible_rolling.py": {
+              "sha256": "548ef9580e9af487924d6342e89f78344c93f15775f42745b8dbcc2ac09a0cb3",
+              "size_bytes": 10356
+            },
+            "intercity_delivery/v1/flexible_runner.py": {
+              "sha256": "c0e201a64f97b9ae3115669eae90a40a79354df6748e15edafb9281a98f2990a",
+              "size_bytes": 19040
+            },
+            "intercity_delivery/v1/flexible_validation.py": {
+              "sha256": "de7faedf212c27e02a28b9ec81f2e0140ce75fae0a29fc18fcb95bcd88fad761",
+              "size_bytes": 17271
+            },
+            "intercity_delivery/v1/mandatory_optimizer.py": {
+              "sha256": "8def82b611df4204d8039580379b06a61d33b94344f1f0c768d2586b0e795caa",
+              "size_bytes": 9548
+            },
+            "intercity_delivery/v1/network.py": {
+              "sha256": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+              "size_bytes": 2275
+            },
+            "intercity_delivery/v1/pruning.py": {
+              "sha256": "8f22445ac044d889ed0ed2dc5f141ef7e1e6df9cfc843741df213af8971cf9d7",
+              "size_bytes": 5802
+            },
+            "intercity_delivery/v1/runner.py": {
+              "sha256": "434d90112dcdd1bcb1bc64d10f851a0ded32429863a71801e13adda555567a57",
+              "size_bytes": 8112
+            },
+            "intercity_delivery/v1/validation.py": {
+              "sha256": "07febddb0645c6fe27b1db10bf5df3e4be5cff604c9e3cc75600cb205216b043",
+              "size_bytes": 13179
+            },
+            "research/paper/final_manuscript/main.tex": {
+              "sha256": "ccc9cfd1652700758ad2f59260b084317bb295bd3338c911adf0d802a6394c6c",
+              "size_bytes": 2982
+            },
+            "research/paper/final_manuscript/references.bib": {
+              "sha256": "c42efd8780a95e05108f13a7f03a36813fa23953aaa86056a16de87788e4a2cb",
+              "size_bytes": 7248
+            },
+            "research/paper/final_manuscript/sections/discussion.tex": {
+              "sha256": "61613d1f27655eff1605fc0e9683022245dc328a8345be6b53acebc20da689a5",
+              "size_bytes": 1850
+            },
+            "research/paper/final_manuscript/sections/dispatch_verification.tex": {
+              "sha256": "9fd05510693285f44e5ff4f775248b5a0ef5446a5119eb0189604c19e4845182",
+              "size_bytes": 13350
+            },
+            "research/paper/final_manuscript/sections/implementation_details.tex": {
+              "sha256": "d989c2a18c6589a6f4c7deecef9c9419be454eef4c75b41c6cabaf0df3f1f239",
+              "size_bytes": 4273
+            },
+            "research/paper/final_manuscript/sections/introduction.tex": {
+              "sha256": "0953242004b6d2121ed9e247311ef382926ab1e4eb5133f96ac865d804bfc92f",
+              "size_bytes": 4039
+            },
+            "research/paper/final_manuscript/sections/mathematical_analysis.tex": {
+              "sha256": "49713aad5ec25c5ccdcdfcf1ffd9491872c2af8430e2bba9d84e11e451f99c8a",
+              "size_bytes": 9271
+            },
+            "research/paper/final_manuscript/sections/optimization_model.tex": {
+              "sha256": "621d3b1b159b9a6ac7f6495bf01100b681d8d246a47e79b349a9bd7b32e27662",
+              "size_bytes": 8436
+            },
+            "research/paper/final_manuscript/sections/proofs.tex": {
+              "sha256": "4d87e5eee404c0859295d7cdf20cc9d3432af886ba22d9c578653b4e91306519",
+              "size_bytes": 2992
+            },
+            "research/paper/final_manuscript/sections/related_work.tex": {
+              "sha256": "e08689a6cf2bb1c4f028a9a2fd3d808de60e3edbf15a74d41098346120bef482",
+              "size_bytes": 4584
+            },
+            "research/paper/final_manuscript/sections/service_capacities.tex": {
+              "sha256": "542791cfb8a66fd659858be4a62b79d0dd3fe23844eaad659dd5344691f6774d",
+              "size_bytes": 10537
+            },
+            "research/paper/final_manuscript/sections/solution_method.tex": {
+              "sha256": "1cf51b29e6a5cb7a4e1edb4482c195ae80642d9b23f36270e9f402b3e8a28803",
+              "size_bytes": 3963
+            },
+            "research/theory/v1_direct_endpoint_contract.md": {
+              "sha256": "5b42e43ecb33875d1899b01771e2388c9acd3f68f519c2ca530313ea248edb4f",
+              "size_bytes": 3543
+            },
+            "research/theory/v1_p0_parameter_design.md": {
+              "sha256": "30ee5762c777e50ac9a1925378804bda3e7f7f41c0c0ceb501a8c34355423f0d",
+              "size_bytes": 6428
+            },
+            "tests/test_v1_direct_continuity.py": {
+              "sha256": "5f8fb83e1af8d4c0282a9ca8b154348807b857a81efc0952c9cdcb8ac953f2cd",
+              "size_bytes": 5031
+            },
+            "tests/test_v1_flexible.py": {
+              "sha256": "d29a4962b1d5cbab3c9561f3b487f9d97f16580dc70b4403a055eca22395b01c",
+              "size_bytes": 7146
+            },
+            "tests/test_v1_flexible_rolling.py": {
+              "sha256": "72969c5a72be394083e9bd1887e99b8f720e445e1e365c8bbf9d92061519cfa0",
+              "size_bytes": 8974
+            },
+            "tests/test_v1_flexible_validation.py": {
+              "sha256": "85773ab383ff7a9f8202d1baf741a154eac75f1f3f7cc4e557e320d4027977d0",
+              "size_bytes": 13354
+            },
+            "tests/test_v1_kernel.py": {
+              "sha256": "baa21ba77fd32eff1f59acc991f2d266b6f8ed8b5dc6e6cf7ddd64772d753364",
+              "size_bytes": 8804
+            },
+            "tests/test_v1_mandatory.py": {
+              "sha256": "4a27bfbbe9915556e83a1947b5885ae23201f792f7ffca6baaa58f0449b1059a",
+              "size_bytes": 11470
+            },
+            "tests/test_v1_mechanisms.py": {
+              "sha256": "9b9a21efee38c8a4f5fbd0baec6b537c6f968a592191122c005e09a35178dded",
+              "size_bytes": 8642
+            },
+            "tests/test_v1_p0_capacity_design.py": {
+              "sha256": "7a2a945a464c0d76d4e46f7a41753751f6489a5b9cf647b3c5b002e14d169f1e",
+              "size_bytes": 4705
+            },
+            "tests/test_v1_p0_source_and_units.py": {
+              "sha256": "8055d70604e9b3df8caab180d59fc4e211f35733c8dfb4578023eed6e4cfbeba",
+              "size_bytes": 6457
+            },
+            "tests/test_v1_p1_harness.py": {
+              "sha256": "c6b5a4302c9140e176774588eb8b3500f14a24b76be8041f8feec023955d6d03",
+              "size_bytes": 14271
+            },
+            "tests/test_v1_p1_instrumentation.py": {
+              "sha256": "d749cf830b87ee71d005a365283cd163a1030ba958aa3475683bf0a5aafb94ba",
+              "size_bytes": 9605
+            },
+            "tests/test_v1_pruning.py": {
+              "sha256": "a3afe8630700e7e3ab28c5abed2f82f2f1ea8cad7fbdbce5a9987b015150baca",
+              "size_bytes": 4556
+            },
+            "tests/test_v1_runner_status.py": {
+              "sha256": "a515912dcebc58451f93a179a7965825b2498f5b12ceab2008c31b308457ca22",
+              "size_bytes": 3753
+            },
+            "tests/test_v1_validation.py": {
+              "sha256": "03a7074d830381a1553a9aa208fc82ee8ff6d2b905fcf4f1e1e801af14e87df7",
+              "size_bytes": 13743
+            },
+            "tests/test_v1f_integration.py": {
+              "sha256": "001e02cd2bd99ba348947c96e7a3383f3c78109cbc007050b577dc68e9c0520c",
+              "size_bytes": 8294
+            }
+          },
+          "content_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4"
+        },
+        "current_sources_match": true,
+        "verification_errors": [],
+        "scope": "source hashes recorded only; PDF/source version equivalence is not certified"
+      },
+      "runs": [
+        {
+          "name": "T2_forced_load005_below_minimum_infeasible",
+          "config": {
+            "T": 4,
+            "t0_minutes": 60,
+            "tau_periods": 1,
+            "N_manual": {
+              "1": 1,
+              "2": 0
+            },
+            "N_auto": {
+              "1": 0,
+              "2": 0
+            },
+            "a": {
+              "1": 10,
+              "2": 10
+            },
+            "b": {
+              "1": 0,
+              "2": 0
+            },
+            "rho": {
+              "1": 0,
+              "2": 0
+            },
+            "M": 2,
+            "M_auto": 2,
+            "c_manual_hour": 1,
+            "c_auto_hour": 1,
+            "c_direct_hour": 2,
+            "empty_tau_periods": null,
+            "c_empty_hour": null,
+            "terminal_target": null,
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1,
+            "service_mechanism": "T2",
+            "min_direct_load_per_vehicle": 0.1
+          },
+          "orders": [
+            {
+              "order_id": "direct_job",
+              "flow": "+",
+              "quantity": 1,
+              "earliest_start": 0,
+              "latest_completion": 4,
+              "penalty": 100
+            }
+          ],
+          "per_run_limit_sec": 3,
+          "expected_status": "INFEASIBLE",
+          "forced_tasks": {
+            "loaded_direct": [
+              0,
+              2,
+              "+",
+              0.05
+            ],
+            "vehicle_only_local_start": null
+          },
+          "input_sha256": "63701e883e7604d9cf225694c5e60ee373130fabf3906d4424fb2a11b9b8b7f3",
+          "solver_parameters": {
+            "Threads": 1,
+            "Seed": 0
+          },
+          "solver_optimize_attempts": 1,
+          "status": 3,
+          "solution_count": 0,
+          "passed": true,
+          "wall_time_sec": 0.015000000013969839
+        },
+        {
+          "name": "direct_then_same_node_local_cost5",
+          "config": {
+            "T": 4,
+            "t0_minutes": 60,
+            "tau_periods": 1,
+            "N_manual": {
+              "1": 1,
+              "2": 0
+            },
+            "N_auto": {
+              "1": 0,
+              "2": 0
+            },
+            "a": {
+              "1": 10,
+              "2": 10
+            },
+            "b": {
+              "1": 0,
+              "2": 0
+            },
+            "rho": {
+              "1": 0,
+              "2": 0
+            },
+            "M": 2,
+            "M_auto": 2,
+            "c_manual_hour": 1,
+            "c_auto_hour": 1,
+            "c_direct_hour": 2,
+            "empty_tau_periods": null,
+            "c_empty_hour": null,
+            "terminal_target": null,
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1,
+            "service_mechanism": "T2",
+            "min_direct_load_per_vehicle": 0.1
+          },
+          "orders": [
+            {
+              "order_id": "direct_job",
+              "flow": "+",
+              "quantity": 1,
+              "earliest_start": 0,
+              "latest_completion": 4,
+              "penalty": 100
+            }
+          ],
+          "per_run_limit_sec": 3,
+          "expected_status": "OPTIMAL",
+          "forced_tasks": {
+            "loaded_direct": [
+              0,
+              2,
+              "+",
+              1.0
+            ],
+            "vehicle_only_local_start": 2
+          },
+          "input_sha256": "96ec04e7871fdb33d1163ebc30ac57d59299d9e0e300753a054afab122165dd8",
+          "solver_parameters": {
+            "Threads": 1,
+            "Seed": 0
+          },
+          "solver_optimize_attempts": 1,
+          "status": 2,
+          "solution_count": 1,
+          "expected_cost": 5,
+          "validation": {
+            "schedule_valid": true,
+            "validator": "independent_original_f_v1_f",
+            "max_constraint_violation": 0.0,
+            "constraint_violation_by_check": {
+              "mechanism disables independent empty": 0.0,
+              "one-hot": 0.0,
+              "selector vehicle link": 0.0,
+              "manual physical cap": 0.0,
+              "local original f budget": 0.0,
+              "minimum direct load per vehicle": 0.0,
+              "direct original directional f budget": 0.0,
+              "shared AV capacity": 0.0,
+              "manual city inventory": 0.0,
+              "AV city inventory": 0.0,
+              "pickup before AV": 0.0,
+              "AV before delivery": 0.0,
+              "demand reservation": 0.0,
+              "completed stage balance": 0.0,
+              "completed demand balance": 0.0,
+              "minimum direct ratio": 0.0,
+              "maximum direct ratio": 0.0,
+              "objective mismatch": 0.0
+            },
+            "constraint_comparison_count_by_check": {
+              "mechanism disables independent empty": 8,
+              "one-hot": 30,
+              "selector vehicle link": 60,
+              "manual physical cap": 30,
+              "local original f budget": 16,
+              "minimum direct load per vehicle": 14,
+              "direct original directional f budget": 1,
+              "shared AV capacity": 8,
+              "manual city inventory": 10,
+              "AV city inventory": 10,
+              "pickup before AV": 5,
+              "AV before delivery": 5,
+              "demand reservation": 3,
+              "completed stage balance": 4,
+              "completed demand balance": 2,
+              "minimum direct ratio": 1,
+              "maximum direct ratio": 1,
+              "objective mismatch": 2
+            },
+            "constraint_violation_units_by_check": {
+              "mechanism disables independent empty": "vehicles",
+              "one-hot": "dimensionless selector sum",
+              "selector vehicle link": "vehicles",
+              "manual physical cap": "continuous service-equivalents",
+              "local original f budget": "minutes of aggregate routing work",
+              "minimum direct load per vehicle": "continuous service-equivalents",
+              "direct original directional f budget": "minutes",
+              "shared AV capacity": "continuous service-equivalents",
+              "manual city inventory": "vehicles",
+              "AV city inventory": "vehicles",
+              "pickup before AV": "continuous service-equivalents",
+              "AV before delivery": "continuous service-equivalents",
+              "demand reservation": "continuous service-equivalents",
+              "completed stage balance": "continuous service-equivalents",
+              "completed demand balance": "continuous service-equivalents",
+              "minimum direct ratio": "continuous service-equivalents",
+              "maximum direct ratio": "continuous service-equivalents",
+              "objective mismatch": "currency"
+            },
+            "constraint_violation_scope": "leq/equal comparisons only; maximum is a mixed-units diagnostic, not a normalized certificate; do not sum across checks; domain, integrality, finite-value and strict-positive-load checks remain separate rejection checks",
+            "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+            "completed": true,
+            "completed_horizon": 4,
+            "tolerance": 1e-06,
+            "comparison": "absolute",
+            "costs": {
+              "manual": 1.0,
+              "auto": 0.0,
+              "direct": 4.0,
+              "empty": 0.0,
+              "transfer": 0.0,
+              "penalty": 0.0,
+              "committed_total": 5.0,
+              "total": 5.0
+            },
+            "objective": 5.0,
+            "orders": {
+              "direct_job": {
+                "pickup": 0.0,
+                "linehaul": 0.0,
+                "delivery": 0.0,
+                "direct": 1.0,
+                "served": 1.0,
+                "unserved": 0.0,
+                "penalized_unserved": 0.0,
+                "delivered_transfer": 0.0,
+                "delivered_direct": 1.0
+              }
+            },
+            "served_quantity": 1.0,
+            "unserved_quantity": 0.0,
+            "direct_quantity": 1.0,
+            "transfer_quantity": 0.0,
+            "empty_trip_count": 0.0,
+            "direct_trip_count": 1.0,
+            "min_manual_inventory": {
+              "1": 0.0,
+              "2": 0.0
+            },
+            "min_AV_inventory": {
+              "1": 0.0,
+              "2": 0.0
+            },
+            "checks": [
+              "domains",
+              "one_hot",
+              "global_fleet_selector_bound",
+              "original_f_local_and_directional_direct",
+              "physical_cap",
+              "manual_migration_and_occupancy",
+              "AV_inventory",
+              "empty_duration",
+              "windows",
+              "cargo_causality",
+              "demand_reservations",
+              "costs"
+            ],
+            "deferred_checks": [],
+            "cost_scope": "initiated whole tasks charged once; transfer on actual delivery; penalties final or expired; partial is not full-day objective"
+          },
+          "schedule": {
+            "x_manual": {
+              "(2, 3, 2, '+')": 1.0
+            },
+            "y_auto": {},
+            "w_direct": {
+              "(0, 2, '+')": 1.0
+            },
+            "empty_vehicles": {},
+            "u_wave": {
+              "(2, 3, 2, '+', 1)": 1.0
+            },
+            "u_direct": {
+              "(0, 2, '+', 1)": 1.0
+            },
+            "g_manual": {},
+            "g_auto": {},
+            "h_direct": {
+              "(0, 2, '+', 'direct_job')": 1.0
+            },
+            "z_unserved": {}
+          },
+          "cost": 5.0,
+          "passed": true,
+          "wall_time_sec": 0.01600000000325963
+        },
+        {
+          "name": "direct_then_early_local_infeasible",
+          "config": {
+            "T": 4,
+            "t0_minutes": 60,
+            "tau_periods": 1,
+            "N_manual": {
+              "1": 1,
+              "2": 0
+            },
+            "N_auto": {
+              "1": 0,
+              "2": 0
+            },
+            "a": {
+              "1": 10,
+              "2": 10
+            },
+            "b": {
+              "1": 0,
+              "2": 0
+            },
+            "rho": {
+              "1": 0,
+              "2": 0
+            },
+            "M": 2,
+            "M_auto": 2,
+            "c_manual_hour": 1,
+            "c_auto_hour": 1,
+            "c_direct_hour": 2,
+            "empty_tau_periods": null,
+            "c_empty_hour": null,
+            "terminal_target": null,
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1,
+            "service_mechanism": "T2",
+            "min_direct_load_per_vehicle": 0.1
+          },
+          "orders": [
+            {
+              "order_id": "direct_job",
+              "flow": "+",
+              "quantity": 1,
+              "earliest_start": 0,
+              "latest_completion": 4,
+              "penalty": 100
+            }
+          ],
+          "per_run_limit_sec": 3,
+          "expected_status": "INFEASIBLE",
+          "forced_tasks": {
+            "loaded_direct": [
+              0,
+              2,
+              "+",
+              1.0
+            ],
+            "vehicle_only_local_start": 1
+          },
+          "input_sha256": "629dcc81d257c95c915ff3d3c683cb577ab04080c1f3a7c5cf8fb824c6bcea55",
+          "solver_parameters": {
+            "Threads": 1,
+            "Seed": 0
+          },
+          "solver_optimize_attempts": 1,
+          "status": 3,
+          "solution_count": 0,
+          "passed": true,
+          "wall_time_sec": 0.0
+        },
+        {
+          "name": "T0_forced_direct_infeasible",
+          "config": {
+            "T": 4,
+            "t0_minutes": 60,
+            "tau_periods": 1,
+            "N_manual": {
+              "1": 1,
+              "2": 0
+            },
+            "N_auto": {
+              "1": 0,
+              "2": 0
+            },
+            "a": {
+              "1": 10,
+              "2": 10
+            },
+            "b": {
+              "1": 0,
+              "2": 0
+            },
+            "rho": {
+              "1": 0,
+              "2": 0
+            },
+            "M": 2,
+            "M_auto": 2,
+            "c_manual_hour": 1,
+            "c_auto_hour": 1,
+            "c_direct_hour": 2,
+            "empty_tau_periods": null,
+            "c_empty_hour": null,
+            "terminal_target": null,
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1,
+            "service_mechanism": "T0",
+            "min_direct_load_per_vehicle": 0
+          },
+          "orders": [
+            {
+              "order_id": "direct_job",
+              "flow": "+",
+              "quantity": 1,
+              "earliest_start": 0,
+              "latest_completion": 4,
+              "penalty": 100
+            }
+          ],
+          "per_run_limit_sec": 3,
+          "expected_status": "INFEASIBLE",
+          "forced_tasks": {
+            "loaded_direct": [
+              0,
+              2,
+              "+",
+              1.0
+            ],
+            "vehicle_only_local_start": null
+          },
+          "input_sha256": "fb57fad5f2afa8090bd40fb94f9cf62e1a786ff2a3367e3f1338e83cc3fe6f85",
+          "solver_parameters": {
+            "Threads": 1,
+            "Seed": 0
+          },
+          "solver_optimize_attempts": 1,
+          "status": 3,
+          "solution_count": 0,
+          "passed": true,
+          "wall_time_sec": 0.0
+        },
+        {
+          "name": "direct_committed_across_windows",
+          "config": {
+            "T": 4,
+            "t0_minutes": 60,
+            "tau_periods": 1,
+            "N_manual": {
+              "1": 1,
+              "2": 0
+            },
+            "N_auto": {
+              "1": 0,
+              "2": 0
+            },
+            "a": {
+              "1": 10,
+              "2": 10
+            },
+            "b": {
+              "1": 0,
+              "2": 0
+            },
+            "rho": {
+              "1": 0,
+              "2": 0
+            },
+            "M": 2,
+            "M_auto": 2,
+            "c_manual_hour": 1,
+            "c_auto_hour": 1,
+            "c_direct_hour": 2,
+            "empty_tau_periods": null,
+            "c_empty_hour": null,
+            "terminal_target": null,
+            "transfer_time_periods": 0,
+            "transfer_cost_per_unit": 0,
+            "direct_ratio_min": 0,
+            "direct_ratio_max": 1,
+            "service_mechanism": "T2",
+            "min_direct_load_per_vehicle": 0.1
+          },
+          "orders": [
+            {
+              "order_id": "direct_job",
+              "flow": "+",
+              "quantity": 1,
+              "earliest_start": 0,
+              "latest_completion": 4,
+              "penalty": 100
+            }
+          ],
+          "raw_result": {
+            "schema_version": "v1_flexible_result/1",
+            "model_id": "v1_flexible_arc_wave_empty_v1",
+            "semantic_status": "author_confirmed_profile_with_disclosed_vehicle_extensions",
+            "status": "COMPLETED",
+            "status_name": "COMPLETED",
+            "completed": true,
+            "has_incumbent": true,
+            "optimal": false,
+            "schedule_valid": true,
+            "total_cost": 4.0,
+            "best_bound": null,
+            "mip_gap": null,
+            "bound_scope": "none_window_local_only",
+            "elapsed_sec": 0.1720000000204891,
+            "requested_time_limit_sec": 3.0,
+            "solver_optimize_attempts": 4,
+            "schedule": {
+              "x_manual": {},
+              "y_auto": {},
+              "u_wave": {},
+              "g_manual": {},
+              "g_auto": {},
+              "z_unserved": {
+                "('direct_job',)": 0.0
+              },
+              "w_direct": {
+                "(0, 2, '+')": 1.0
+              },
+              "u_direct": {
+                "(0, 2, '+', 1)": 1.0
+              },
+              "empty_vehicles": {},
+              "h_direct": {
+                "(0, 2, '+', 'direct_job')": 1.0
+              }
+            },
+            "validation": {
+              "schedule_valid": true,
+              "validator": "independent_original_f_v1_f",
+              "max_constraint_violation": 0.0,
+              "constraint_violation_by_check": {
+                "one-hot": 0.0,
+                "selector vehicle link": 0.0,
+                "minimum direct load per vehicle": 0.0,
+                "manual physical cap": 0.0,
+                "direct original directional f budget": 0.0,
+                "manual city inventory": 0.0,
+                "AV city inventory": 0.0,
+                "pickup before AV": 0.0,
+                "AV before delivery": 0.0,
+                "demand reservation": 0.0,
+                "completed stage balance": 0.0,
+                "completed demand balance": 0.0,
+                "minimum direct ratio": 0.0,
+                "maximum direct ratio": 0.0
+              },
+              "constraint_comparison_count_by_check": {
+                "one-hot": 1,
+                "selector vehicle link": 2,
+                "minimum direct load per vehicle": 1,
+                "manual physical cap": 1,
+                "direct original directional f budget": 1,
+                "manual city inventory": 10,
+                "AV city inventory": 10,
+                "pickup before AV": 5,
+                "AV before delivery": 5,
+                "demand reservation": 3,
+                "completed stage balance": 4,
+                "completed demand balance": 2,
+                "minimum direct ratio": 1,
+                "maximum direct ratio": 1
+              },
+              "constraint_violation_units_by_check": {
+                "one-hot": "dimensionless selector sum",
+                "selector vehicle link": "vehicles",
+                "minimum direct load per vehicle": "continuous service-equivalents",
+                "manual physical cap": "continuous service-equivalents",
+                "direct original directional f budget": "minutes",
+                "manual city inventory": "vehicles",
+                "AV city inventory": "vehicles",
+                "pickup before AV": "continuous service-equivalents",
+                "AV before delivery": "continuous service-equivalents",
+                "demand reservation": "continuous service-equivalents",
+                "completed stage balance": "continuous service-equivalents",
+                "completed demand balance": "continuous service-equivalents",
+                "minimum direct ratio": "continuous service-equivalents",
+                "maximum direct ratio": "continuous service-equivalents"
+              },
+              "constraint_violation_scope": "leq/equal comparisons only; maximum is a mixed-units diagnostic, not a normalized certificate; do not sum across checks; domain, integrality, finite-value and strict-positive-load checks remain separate rejection checks",
+              "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+              "completed": true,
+              "completed_horizon": 4,
+              "tolerance": 1e-06,
+              "comparison": "absolute",
+              "costs": {
+                "manual": 0.0,
+                "auto": 0.0,
+                "direct": 4.0,
+                "empty": 0.0,
+                "transfer": 0.0,
+                "penalty": 0.0,
+                "committed_total": 4.0,
+                "total": 4.0
+              },
+              "objective": 4.0,
+              "orders": {
+                "direct_job": {
+                  "pickup": 0.0,
+                  "linehaul": 0.0,
+                  "delivery": 0.0,
+                  "direct": 1.0,
+                  "served": 1.0,
+                  "unserved": 0.0,
+                  "penalized_unserved": 0.0,
+                  "delivered_transfer": 0.0,
+                  "delivered_direct": 1.0
+                }
+              },
+              "served_quantity": 1.0,
+              "unserved_quantity": 0.0,
+              "direct_quantity": 1.0,
+              "transfer_quantity": 0.0,
+              "empty_trip_count": 0.0,
+              "direct_trip_count": 1.0,
+              "min_manual_inventory": {
+                "1": 0.0,
+                "2": 0.0
+              },
+              "min_AV_inventory": {
+                "1": 0.0,
+                "2": 0.0
+              },
+              "checks": [
+                "domains",
+                "one_hot",
+                "global_fleet_selector_bound",
+                "original_f_local_and_directional_direct",
+                "physical_cap",
+                "manual_migration_and_occupancy",
+                "AV_inventory",
+                "empty_duration",
+                "windows",
+                "cargo_causality",
+                "demand_reservations",
+                "costs"
+              ],
+              "deferred_checks": [],
+              "cost_scope": "initiated whole tasks charged once; transfer on actual delivery; penalties final or expired; partial is not full-day objective"
+            },
+            "windows": [
+              {
+                "window_start": 0,
+                "start_window_end": 2,
+                "completion_window_end": 4,
+                "control_end": 1,
+                "known_order_ids": [
+                  "direct_job"
+                ],
+                "status": 2,
+                "feasible": true,
+                "objective": 4.0,
+                "best_bound": 4.0,
+                "mip_gap": 0.0,
+                "bound_scope": "window_local_only",
+                "pruning": null,
+                "cargo_variable_count": 19,
+                "variable_count": 96,
+                "binary_variable_count": 30,
+                "integer_variable_count": 76,
+                "constraint_count": 151,
+                "continuous_variable_count": 20,
+                "vehicle_selector_domain_sha256": "339afbf30ebf13d079d500a21430056e76271564293ec00670a46006f1bac259",
+                "vehicle_selector_domain_counts": {
+                  "x_manual": 16,
+                  "y_auto": 8,
+                  "w_direct": 14,
+                  "empty_vehicles": 8,
+                  "u_wave": 16,
+                  "u_direct": 14
+                },
+                "elapsed_sec": 0.0,
+                "phase_timing_sec": {
+                  "setup_provenance": 0.0,
+                  "candidate": 0.0,
+                  "build": 0.0,
+                  "configure": 0.0,
+                  "solve": 0.0,
+                  "extract_commit": 0.0,
+                  "replay_accounting": 0.0,
+                  "other": 0.0
+                }
+              },
+              {
+                "window_start": 1,
+                "start_window_end": 3,
+                "completion_window_end": 4,
+                "control_end": 2,
+                "known_order_ids": [
+                  "direct_job"
+                ],
+                "status": 2,
+                "feasible": true,
+                "objective": 4.0,
+                "best_bound": 4.0,
+                "mip_gap": 0.0,
+                "bound_scope": "window_local_only",
+                "pruning": null,
+                "cargo_variable_count": 19,
+                "variable_count": 96,
+                "binary_variable_count": 30,
+                "integer_variable_count": 76,
+                "constraint_count": 151,
+                "continuous_variable_count": 20,
+                "vehicle_selector_domain_sha256": "339afbf30ebf13d079d500a21430056e76271564293ec00670a46006f1bac259",
+                "vehicle_selector_domain_counts": {
+                  "x_manual": 16,
+                  "y_auto": 8,
+                  "w_direct": 14,
+                  "empty_vehicles": 8,
+                  "u_wave": 16,
+                  "u_direct": 14
+                },
+                "elapsed_sec": 0.01600000000325963,
+                "phase_timing_sec": {
+                  "setup_provenance": 0.0,
+                  "candidate": 0.0,
+                  "build": 0.01600000000325963,
+                  "configure": 0.0,
+                  "solve": 0.0,
+                  "extract_commit": 0.0,
+                  "replay_accounting": 0.0,
+                  "other": 0.0
+                }
+              },
+              {
+                "window_start": 2,
+                "start_window_end": 4,
+                "completion_window_end": 4,
+                "control_end": 3,
+                "known_order_ids": [
+                  "direct_job"
+                ],
+                "status": 2,
+                "feasible": true,
+                "objective": 4.0,
+                "best_bound": 4.0,
+                "mip_gap": 0.0,
+                "bound_scope": "window_local_only",
+                "pruning": null,
+                "cargo_variable_count": 19,
+                "variable_count": 96,
+                "binary_variable_count": 30,
+                "integer_variable_count": 76,
+                "constraint_count": 151,
+                "continuous_variable_count": 20,
+                "vehicle_selector_domain_sha256": "339afbf30ebf13d079d500a21430056e76271564293ec00670a46006f1bac259",
+                "vehicle_selector_domain_counts": {
+                  "x_manual": 16,
+                  "y_auto": 8,
+                  "w_direct": 14,
+                  "empty_vehicles": 8,
+                  "u_wave": 16,
+                  "u_direct": 14
+                },
+                "elapsed_sec": 0.0,
+                "phase_timing_sec": {
+                  "setup_provenance": 0.0,
+                  "candidate": 0.0,
+                  "build": 0.0,
+                  "configure": 0.0,
+                  "solve": 0.0,
+                  "extract_commit": 0.0,
+                  "replay_accounting": 0.0,
+                  "other": 0.0
+                }
+              },
+              {
+                "window_start": 3,
+                "start_window_end": 4,
+                "completion_window_end": 4,
+                "control_end": 4,
+                "known_order_ids": [
+                  "direct_job"
+                ],
+                "status": 2,
+                "feasible": true,
+                "objective": 4.0,
+                "best_bound": 4.0,
+                "mip_gap": 0.0,
+                "bound_scope": "window_local_only",
+                "pruning": null,
+                "cargo_variable_count": 19,
+                "variable_count": 96,
+                "binary_variable_count": 30,
+                "integer_variable_count": 76,
+                "constraint_count": 151,
+                "continuous_variable_count": 20,
+                "vehicle_selector_domain_sha256": "339afbf30ebf13d079d500a21430056e76271564293ec00670a46006f1bac259",
+                "vehicle_selector_domain_counts": {
+                  "x_manual": 16,
+                  "y_auto": 8,
+                  "w_direct": 14,
+                  "empty_vehicles": 8,
+                  "u_wave": 16,
+                  "u_direct": 14
+                },
+                "elapsed_sec": 0.0,
+                "phase_timing_sec": {
+                  "setup_provenance": 0.0,
+                  "candidate": 0.0,
+                  "build": 0.0,
+                  "configure": 0.0,
+                  "solve": 0.0,
+                  "extract_commit": 0.0,
+                  "replay_accounting": 0.0,
+                  "other": 0.0
+                }
+              }
+            ],
+            "metadata": {
+              "provenance": {
+                "input": {
+                  "config": {
+                    "T": 4,
+                    "t0_minutes": 60,
+                    "tau_periods": 1,
+                    "N_manual": {
+                      "1": 1,
+                      "2": 0
+                    },
+                    "N_auto": {
+                      "1": 0,
+                      "2": 0
+                    },
+                    "a": {
+                      "1": 10,
+                      "2": 10
+                    },
+                    "b": {
+                      "1": 0,
+                      "2": 0
+                    },
+                    "rho": {
+                      "1": 0,
+                      "2": 0
+                    },
+                    "M": 2,
+                    "M_auto": 2,
+                    "c_manual_hour": 1,
+                    "c_auto_hour": 1,
+                    "c_direct_hour": 2,
+                    "empty_tau_periods": null,
+                    "c_empty_hour": null,
+                    "terminal_target": null,
+                    "transfer_time_periods": 0,
+                    "transfer_cost_per_unit": 0,
+                    "direct_ratio_min": 0,
+                    "direct_ratio_max": 1,
+                    "service_mechanism": "T2",
+                    "min_direct_load_per_vehicle": 0.1
+                  },
+                  "orders": [
+                    {
+                      "order_id": "direct_job",
+                      "flow": "+",
+                      "quantity": 1,
+                      "earliest_start": 0,
+                      "latest_completion": 4,
+                      "penalty": 100
+                    }
+                  ],
+                  "profile": {
+                    "information": "release_revealed",
+                    "wave": "arc",
+                    "demand": "continuous_stops_zero_allowed",
+                    "units": "minutes_hourly",
+                    "service": "tour_end_same_time",
+                    "input_domain": "integer_windows_within_horizon"
+                  }
+                },
+                "input_sha256": "68411e9c20def272bb6781f9aff9760e9304f6f13efcb4812e5c899a7e9559f2",
+                "source_sha256": {
+                  "research/paper/main_v2_BHH.tex": "500be1ada854317be79c358e0ff1269786dd4c7ea8e1102b501354eff04a3457",
+                  "coordination/V1_F_RUNTIME_CONTRACT.md": "e78e616eaa7416e8b059d030e065741591c88299ce9461b031a7a8e650314b59",
+                  "coordination/V1_M_IMPLEMENTATION_PROFILE.md": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+                  "intercity_delivery/v1/capacity.py": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+                  "intercity_delivery/v1/network.py": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+                  "intercity_delivery/v1/configuration.py": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+                  "intercity_delivery/v1/flexible_configuration.py": "422d520678ad555a9b31f08df27c0e0b8d4d989ec8fa7ce927a382ebe52e6a6e",
+                  "intercity_delivery/v1/flexible_capacity.py": "1b46bb68f54dd8ad12f8e91e8fe506ff9d295f21dd351a011c4a39de1b179a19",
+                  "intercity_delivery/v1/flexible_optimizer.py": "1ba214cd0e113703f44ebc291a1f723f2e8239f275f13af14abf83a1a9b19fa2",
+                  "intercity_delivery/v1/flexible_validation.py": "de7faedf212c27e02a28b9ec81f2e0140ce75fae0a29fc18fcb95bcd88fad761",
+                  "intercity_delivery/v1/flexible_runner.py": "c0e201a64f97b9ae3115669eae90a40a79354df6748e15edafb9281a98f2990a",
+                  "intercity_delivery/v1/flexible_rolling.py": "548ef9580e9af487924d6342e89f78344c93f15775f42745b8dbcc2ac09a0cb3",
+                  "intercity_delivery/v1/pruning.py": "8f22445ac044d889ed0ed2dc5f141ef7e1e6df9cfc843741df213af8971cf9d7",
+                  "intercity_delivery/v1/adapter.py": "345f38a143ec3c9ecb00f1323d145a5956bf3d8d6e542d87e0c6ba6185fdc545",
+                  "research/paper/final_manuscript/main.tex": "ccc9cfd1652700758ad2f59260b084317bb295bd3338c911adf0d802a6394c6c",
+                  "research/paper/final_manuscript/references.bib": "c42efd8780a95e05108f13a7f03a36813fa23953aaa86056a16de87788e4a2cb",
+                  "research/paper/final_manuscript/sections/discussion.tex": "61613d1f27655eff1605fc0e9683022245dc328a8345be6b53acebc20da689a5",
+                  "research/paper/final_manuscript/sections/dispatch_verification.tex": "9fd05510693285f44e5ff4f775248b5a0ef5446a5119eb0189604c19e4845182",
+                  "research/paper/final_manuscript/sections/implementation_details.tex": "d989c2a18c6589a6f4c7deecef9c9419be454eef4c75b41c6cabaf0df3f1f239",
+                  "research/paper/final_manuscript/sections/introduction.tex": "0953242004b6d2121ed9e247311ef382926ab1e4eb5133f96ac865d804bfc92f",
+                  "research/paper/final_manuscript/sections/mathematical_analysis.tex": "49713aad5ec25c5ccdcdfcf1ffd9491872c2af8430e2bba9d84e11e451f99c8a",
+                  "research/paper/final_manuscript/sections/optimization_model.tex": "621d3b1b159b9a6ac7f6495bf01100b681d8d246a47e79b349a9bd7b32e27662",
+                  "research/paper/final_manuscript/sections/proofs.tex": "4d87e5eee404c0859295d7cdf20cc9d3432af886ba22d9c578653b4e91306519",
+                  "research/paper/final_manuscript/sections/related_work.tex": "e08689a6cf2bb1c4f028a9a2fd3d808de60e3edbf15a74d41098346120bef482",
+                  "research/paper/final_manuscript/sections/service_capacities.tex": "542791cfb8a66fd659858be4a62b79d0dd3fe23844eaad659dd5344691f6774d",
+                  "research/paper/final_manuscript/sections/solution_method.tex": "1cf51b29e6a5cb7a4e1edb4482c195ae80642d9b23f36270e9f402b3e8a28803"
+                },
+                "source_binding": {
+                  "manifest_path": "experiments/specs/v1_source_manifest.json",
+                  "manifest_sha256": "aeeff0bce6b60623ecb977f0f64fd48c4cb2e0023a8bd2835d48a74d4885b3c8",
+                  "manifest": {
+                    "schema_version": "v1_p0_source_manifest/1",
+                    "git_head_at_freeze": "3387a198ab43f5e934de75bf2fce4aca1b9a9fff",
+                    "working_tree_dirty_at_freeze": true,
+                    "identity_scope": "Exact bytes of enumerated files, including uncommitted changes",
+                    "mathematical_authority": "research/paper/final_manuscript/main.tex and its TeX/Bib project",
+                    "provided_pdf": "experiments/specs/source_snapshots/Intercity_Operation_BHH_3.pdf",
+                    "runbook_requested_pdf": "Intercity_Operation_BHH (3)(1).pdf",
+                    "missing_requested_pdf": true,
+                    "source_relationship": "Provided (3) PDF core equations audited against the local source; no claim of byte identity, identical compilation or identity with (3)(1)",
+                    "does_not_authorize_solving": true,
+                    "files": {
+                      "coordination/V1_F_RUNTIME_CONTRACT.md": {
+                        "sha256": "e78e616eaa7416e8b059d030e065741591c88299ce9461b031a7a8e650314b59",
+                        "size_bytes": 6523
+                      },
+                      "coordination/V1_MODEL_FREEZE.md": {
+                        "sha256": "5f53f7851a60392c619febfd7a6b61f35cb9aed9485c509a36ae9b8d80da5efb",
+                        "size_bytes": 11395
+                      },
+                      "coordination/V1_M_IMPLEMENTATION_PROFILE.md": {
+                        "sha256": "1e72d9365fdd02c6e8f8941f98f2768c74da038a3d25ee86256d75fdd097f599",
+                        "size_bytes": 4266
+                      },
+                      "experiments/reports/v1_p0_data_preflight.json": {
+                        "sha256": "c5c7714dc6b2ede04f575194afdf27f1d30e6d9c7d5f77986563f897be74dba3",
+                        "size_bytes": 1209
+                      },
+                      "experiments/specs/V1_P1_BOUNDED_PROTOCOL.md": {
+                        "sha256": "c6557688ea532c6b180f08afc9cdf7fe5b65d4b7f4940eb46bcaaafa1d9a5369",
+                        "size_bytes": 12361
+                      },
+                      "experiments/specs/equation_to_code_matrix.md": {
+                        "sha256": "0aec926c559ff0913f4656ef5f9edd40812dc2e1793cc5785186eb26d655a5bb",
+                        "size_bytes": 12866
+                      },
+                      "experiments/specs/experiment_data_contract.json": {
+                        "sha256": "68f211c50d670566f56087fe7c4690f43e023ea8b5dce5a6e92ecf819b887b01",
+                        "size_bytes": 3044
+                      },
+                      "experiments/specs/freeze_v1_p0_sources.py": {
+                        "sha256": "359fcdce3869b6b6546523ba01782df75fccecbd01533d65ec2465a7b010064e",
+                        "size_bytes": 5363
+                      },
+                      "experiments/specs/plot_v1_p1.py": {
+                        "sha256": "20edc0949d83db26bb6e8aa29969dcddc07c24dec965180570a1098ad9920393",
+                        "size_bytes": 5386
+                      },
+                      "experiments/specs/run_v1_p1.py": {
+                        "sha256": "bacb09b76368786057aa78ecedad8230134adf275b034911cf7a4fd219f26e84",
+                        "size_bytes": 35501
+                      },
+                      "experiments/specs/run_v1_p1_micro.py": {
+                        "sha256": "80d28bb8f9c793f5763c2037ebd097bed0a1962962b8d991407f3b9d42ef2dd0",
+                        "size_bytes": 7765
+                      },
+                      "experiments/specs/source_snapshots/BHH_CFS_V1_Numerical_Experiment_Runbook.md": {
+                        "sha256": "44c47302abfcaed41c5821b8ebfcf6d6572a17587093e4647fad31492390a862",
+                        "size_bytes": 38021
+                      },
+                      "experiments/specs/source_snapshots/Intercity_Operation_BHH_3.pdf": {
+                        "sha256": "a7f49a07adc6ac499a91143f218cdc665c0e81dd68f6fd618c26e7cca97e55a0",
+                        "size_bytes": 315053
+                      },
+                      "experiments/specs/v1_p0_capacity_design.json": {
+                        "sha256": "029f6fa8d34e54d422d721ff16024dbd52c6ba172cedd8ce5479a12e0d34f170",
+                        "size_bytes": 4085
+                      },
+                      "experiments/specs/v1_p0_decisions.json": {
+                        "sha256": "a42d9bd28493369b17331fb0b9bf69ee2efb5f7fd19de40791b6e66764f12a10",
+                        "size_bytes": 924
+                      },
+                      "experiments/specs/v1_p0_preflight.py": {
+                        "sha256": "71714b047620957b64fba96ee36489417f99c9c3f83a695db3e30d70567e0b10",
+                        "size_bytes": 5459
+                      },
+                      "experiments/specs/v1_p1_budget.json": {
+                        "sha256": "e7c95bada8018222a94473ce2c79dabd731fc55f35938b403e3a818e06a0a143",
+                        "size_bytes": 1410
+                      },
+                      "intercity_delivery/v1/__init__.py": {
+                        "sha256": "3da89de24e2cfb129488784fdd4603d064ba8c8f8a883da7f8ae23858683d0a8",
+                        "size_bytes": 326
+                      },
+                      "intercity_delivery/v1/adapter.py": {
+                        "sha256": "345f38a143ec3c9ecb00f1323d145a5956bf3d8d6e542d87e0c6ba6185fdc545",
+                        "size_bytes": 9577
+                      },
+                      "intercity_delivery/v1/capacity.py": {
+                        "sha256": "0a0f1f32dd162e82716fd4011a106775a607f5226ed26b400bb05b396d3feef8",
+                        "size_bytes": 3494
+                      },
+                      "intercity_delivery/v1/configuration.py": {
+                        "sha256": "6566663b166c3c7ff6ec6b6faecfa9a19b2702208c1ff9cd9d65e58481e1d10b",
+                        "size_bytes": 3970
+                      },
+                      "intercity_delivery/v1/experiment_inputs.py": {
+                        "sha256": "98b498f3f8ebc32315552c4231472fedd9acd85fac892d090da46cb7256a206a",
+                        "size_bytes": 2963
+                      },
+                      "intercity_delivery/v1/experiment_metrics.py": {
+                        "sha256": "60b4b06be03d6d5d519b3a1a809fd3f5d92647aee3e619c2fd296bb5fb269098",
+                        "size_bytes": 6941
+                      },
+                      "intercity_delivery/v1/flexible_capacity.py": {
+                        "sha256": "1b46bb68f54dd8ad12f8e91e8fe506ff9d295f21dd351a011c4a39de1b179a19",
+                        "size_bytes": 1486
+                      },
+                      "intercity_delivery/v1/flexible_configuration.py": {
+                        "sha256": "422d520678ad555a9b31f08df27c0e0b8d4d989ec8fa7ce927a382ebe52e6a6e",
+                        "size_bytes": 3224
+                      },
+                      "intercity_delivery/v1/flexible_optimizer.py": {
+                        "sha256": "1ba214cd0e113703f44ebc291a1f723f2e8239f275f13af14abf83a1a9b19fa2",
+                        "size_bytes": 15191
+                      },
+                      "intercity_delivery/v1/flexible_rolling.py": {
+                        "sha256": "548ef9580e9af487924d6342e89f78344c93f15775f42745b8dbcc2ac09a0cb3",
+                        "size_bytes": 10356
+                      },
+                      "intercity_delivery/v1/flexible_runner.py": {
+                        "sha256": "c0e201a64f97b9ae3115669eae90a40a79354df6748e15edafb9281a98f2990a",
+                        "size_bytes": 19040
+                      },
+                      "intercity_delivery/v1/flexible_validation.py": {
+                        "sha256": "de7faedf212c27e02a28b9ec81f2e0140ce75fae0a29fc18fcb95bcd88fad761",
+                        "size_bytes": 17271
+                      },
+                      "intercity_delivery/v1/mandatory_optimizer.py": {
+                        "sha256": "8def82b611df4204d8039580379b06a61d33b94344f1f0c768d2586b0e795caa",
+                        "size_bytes": 9548
+                      },
+                      "intercity_delivery/v1/network.py": {
+                        "sha256": "8a1e7b147e7fb8f9e3bdcb16d898d4f86c6620fcc3cbd267c0efecebb56e613a",
+                        "size_bytes": 2275
+                      },
+                      "intercity_delivery/v1/pruning.py": {
+                        "sha256": "8f22445ac044d889ed0ed2dc5f141ef7e1e6df9cfc843741df213af8971cf9d7",
+                        "size_bytes": 5802
+                      },
+                      "intercity_delivery/v1/runner.py": {
+                        "sha256": "434d90112dcdd1bcb1bc64d10f851a0ded32429863a71801e13adda555567a57",
+                        "size_bytes": 8112
+                      },
+                      "intercity_delivery/v1/validation.py": {
+                        "sha256": "07febddb0645c6fe27b1db10bf5df3e4be5cff604c9e3cc75600cb205216b043",
+                        "size_bytes": 13179
+                      },
+                      "research/paper/final_manuscript/main.tex": {
+                        "sha256": "ccc9cfd1652700758ad2f59260b084317bb295bd3338c911adf0d802a6394c6c",
+                        "size_bytes": 2982
+                      },
+                      "research/paper/final_manuscript/references.bib": {
+                        "sha256": "c42efd8780a95e05108f13a7f03a36813fa23953aaa86056a16de87788e4a2cb",
+                        "size_bytes": 7248
+                      },
+                      "research/paper/final_manuscript/sections/discussion.tex": {
+                        "sha256": "61613d1f27655eff1605fc0e9683022245dc328a8345be6b53acebc20da689a5",
+                        "size_bytes": 1850
+                      },
+                      "research/paper/final_manuscript/sections/dispatch_verification.tex": {
+                        "sha256": "9fd05510693285f44e5ff4f775248b5a0ef5446a5119eb0189604c19e4845182",
+                        "size_bytes": 13350
+                      },
+                      "research/paper/final_manuscript/sections/implementation_details.tex": {
+                        "sha256": "d989c2a18c6589a6f4c7deecef9c9419be454eef4c75b41c6cabaf0df3f1f239",
+                        "size_bytes": 4273
+                      },
+                      "research/paper/final_manuscript/sections/introduction.tex": {
+                        "sha256": "0953242004b6d2121ed9e247311ef382926ab1e4eb5133f96ac865d804bfc92f",
+                        "size_bytes": 4039
+                      },
+                      "research/paper/final_manuscript/sections/mathematical_analysis.tex": {
+                        "sha256": "49713aad5ec25c5ccdcdfcf1ffd9491872c2af8430e2bba9d84e11e451f99c8a",
+                        "size_bytes": 9271
+                      },
+                      "research/paper/final_manuscript/sections/optimization_model.tex": {
+                        "sha256": "621d3b1b159b9a6ac7f6495bf01100b681d8d246a47e79b349a9bd7b32e27662",
+                        "size_bytes": 8436
+                      },
+                      "research/paper/final_manuscript/sections/proofs.tex": {
+                        "sha256": "4d87e5eee404c0859295d7cdf20cc9d3432af886ba22d9c578653b4e91306519",
+                        "size_bytes": 2992
+                      },
+                      "research/paper/final_manuscript/sections/related_work.tex": {
+                        "sha256": "e08689a6cf2bb1c4f028a9a2fd3d808de60e3edbf15a74d41098346120bef482",
+                        "size_bytes": 4584
+                      },
+                      "research/paper/final_manuscript/sections/service_capacities.tex": {
+                        "sha256": "542791cfb8a66fd659858be4a62b79d0dd3fe23844eaad659dd5344691f6774d",
+                        "size_bytes": 10537
+                      },
+                      "research/paper/final_manuscript/sections/solution_method.tex": {
+                        "sha256": "1cf51b29e6a5cb7a4e1edb4482c195ae80642d9b23f36270e9f402b3e8a28803",
+                        "size_bytes": 3963
+                      },
+                      "research/theory/v1_direct_endpoint_contract.md": {
+                        "sha256": "5b42e43ecb33875d1899b01771e2388c9acd3f68f519c2ca530313ea248edb4f",
+                        "size_bytes": 3543
+                      },
+                      "research/theory/v1_p0_parameter_design.md": {
+                        "sha256": "30ee5762c777e50ac9a1925378804bda3e7f7f41c0c0ceb501a8c34355423f0d",
+                        "size_bytes": 6428
+                      },
+                      "tests/test_v1_direct_continuity.py": {
+                        "sha256": "5f8fb83e1af8d4c0282a9ca8b154348807b857a81efc0952c9cdcb8ac953f2cd",
+                        "size_bytes": 5031
+                      },
+                      "tests/test_v1_flexible.py": {
+                        "sha256": "d29a4962b1d5cbab3c9561f3b487f9d97f16580dc70b4403a055eca22395b01c",
+                        "size_bytes": 7146
+                      },
+                      "tests/test_v1_flexible_rolling.py": {
+                        "sha256": "72969c5a72be394083e9bd1887e99b8f720e445e1e365c8bbf9d92061519cfa0",
+                        "size_bytes": 8974
+                      },
+                      "tests/test_v1_flexible_validation.py": {
+                        "sha256": "85773ab383ff7a9f8202d1baf741a154eac75f1f3f7cc4e557e320d4027977d0",
+                        "size_bytes": 13354
+                      },
+                      "tests/test_v1_kernel.py": {
+                        "sha256": "baa21ba77fd32eff1f59acc991f2d266b6f8ed8b5dc6e6cf7ddd64772d753364",
+                        "size_bytes": 8804
+                      },
+                      "tests/test_v1_mandatory.py": {
+                        "sha256": "4a27bfbbe9915556e83a1947b5885ae23201f792f7ffca6baaa58f0449b1059a",
+                        "size_bytes": 11470
+                      },
+                      "tests/test_v1_mechanisms.py": {
+                        "sha256": "9b9a21efee38c8a4f5fbd0baec6b537c6f968a592191122c005e09a35178dded",
+                        "size_bytes": 8642
+                      },
+                      "tests/test_v1_p0_capacity_design.py": {
+                        "sha256": "7a2a945a464c0d76d4e46f7a41753751f6489a5b9cf647b3c5b002e14d169f1e",
+                        "size_bytes": 4705
+                      },
+                      "tests/test_v1_p0_source_and_units.py": {
+                        "sha256": "8055d70604e9b3df8caab180d59fc4e211f35733c8dfb4578023eed6e4cfbeba",
+                        "size_bytes": 6457
+                      },
+                      "tests/test_v1_p1_harness.py": {
+                        "sha256": "c6b5a4302c9140e176774588eb8b3500f14a24b76be8041f8feec023955d6d03",
+                        "size_bytes": 14271
+                      },
+                      "tests/test_v1_p1_instrumentation.py": {
+                        "sha256": "d749cf830b87ee71d005a365283cd163a1030ba958aa3475683bf0a5aafb94ba",
+                        "size_bytes": 9605
+                      },
+                      "tests/test_v1_pruning.py": {
+                        "sha256": "a3afe8630700e7e3ab28c5abed2f82f2f1ea8cad7fbdbce5a9987b015150baca",
+                        "size_bytes": 4556
+                      },
+                      "tests/test_v1_runner_status.py": {
+                        "sha256": "a515912dcebc58451f93a179a7965825b2498f5b12ceab2008c31b308457ca22",
+                        "size_bytes": 3753
+                      },
+                      "tests/test_v1_validation.py": {
+                        "sha256": "03a7074d830381a1553a9aa208fc82ee8ff6d2b905fcf4f1e1e801af14e87df7",
+                        "size_bytes": 13743
+                      },
+                      "tests/test_v1f_integration.py": {
+                        "sha256": "001e02cd2bd99ba348947c96e7a3383f3c78109cbc007050b577dc68e9c0520c",
+                        "size_bytes": 8294
+                      }
+                    },
+                    "content_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4"
+                  },
+                  "current_sources_match": true,
+                  "verification_errors": [],
+                  "scope": "source hashes recorded only; PDF/source version equivalence is not certified"
+                },
+                "git_revision": "3387a198ab43f5e934de75bf2fce4aca1b9a9fff",
+                "git_revision_scope": "HEAD only; SHA256 includes uncommitted implementation",
+                "timestamp_utc": "2026-10-18T15:28:57.725241+00:00",
+                "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+                "platform": "Windows-10-10.0.26200-SP0",
+                "gurobipy_version": "10.0.3"
+              },
+              "direct_endpoint_author_decision": {
+                "status": "AUTHOR_CONFIRMED",
+                "scope": "metadata only; does not certify physical routes",
+                "decision_id": "V1P0-DIRECT-ENDPOINT-2026-10-18",
+                "choice": "aggregate_destination_service_node_original_formula",
+                "limitation": "Does not certify physical hub-to-hub travel or add an unmodeled destination stem",
+                "decision_file_sha256": "a42d9bd28493369b17331fb0b9bf69ee2efb5f7fd19de40791b6e66764f12a10"
+              },
+              "phase_timing_scope": "exclusive wall-time partition within runner API; upstream input loading excluded; window timings are nested diagnostics, not additive to run phases",
+              "vehicle_selector_domain_signature_scope": "all tuple keys of x_manual/y_auto/w_direct/empty_vehicles/u_wave/u_direct; excludes cargo, values, bounds, window restrictions and history; equal signatures alone do not certify identical subproblems",
+              "model_scope": "adopted V1-F arc-wave + independent empty; excludes S/QVI",
+              "profile_decision_id": "V1M-D1-D6-A-2026-10-18",
+              "profile": {
+                "information": "release_revealed",
+                "wave": "arc",
+                "demand": "continuous_stops_zero_allowed",
+                "units": "minutes_hourly",
+                "service": "tour_end_same_time",
+                "input_domain": "integer_windows_within_horizon"
+              },
+              "information": "release_revealed",
+              "run_mode": "rolling",
+              "service_mechanism": "T2",
+              "min_direct_load_per_vehicle": 0.1,
+              "mechanism_policy": {
+                "direct_enabled": true,
+                "independent_empty_enabled": false,
+                "minimum_load_scope": "aggregate cargo per direct arc >= minimum times dispatched vehicles; synthetic policy when positive",
+                "zero_cargo_direct_allowed": false
+              },
+              "wave_grouping": "absolute (start,end,city,direction)",
+              "selector_bound": "global_manual_fleet",
+              "selector_bound_reason": "migrated vehicles can serve local waves",
+              "quantity_units": "continuous service-equivalents; input contract identifies job/stop proxy and conversion",
+              "time_units": "minutes",
+              "vehicle_rate_units": "currency/hour",
+              "cost_units": "currency; minutes divided by 60 exactly once",
+              "window_terminal_reset": false,
+              "terminal_target": null,
+              "terminal_default": "none; no forced real-T city reset unless explicit full-run target",
+              "empty_tau_periods": 1,
+              "empty_duration_source": "tau_periods fallback",
+              "c_empty_hour": 2,
+              "empty_cost_source": "c_direct_hour fallback",
+              "compatibility_extensions": {
+                "transfer_time_periods": 0,
+                "transfer_cost_per_unit": 0,
+                "direct_ratio_min": 0,
+                "direct_ratio_max": 1
+              },
+              "candidate_scope": "full mother domains",
+              "completion_policy": "new tasks finish within completion window; prior commitments persist",
+              "rolling_options": {
+                "prediction_horizon": 2,
+                "rolling_step": 1,
+                "extension_horizon": 2,
+                "prune": false
+              },
+              "threads": 1,
+              "solver_seed": 0,
+              "validation_tolerance": 1e-06,
+              "pruning_evidence_scope": "finite checks do not prove general pruning equivalence",
+              "vehicle_usage_scope": "dispatched vehicle-task counts, not unique vehicles"
+            },
+            "served_quantity": 1.0,
+            "unserved_quantity": 0.0,
+            "direct_quantity": 1.0,
+            "transshipment_quantity": 0.0,
+            "empty_trip_count": 0.0,
+            "auto_usage": 0,
+            "manual_usage": 1.0,
+            "warnings": [],
+            "cost_components": {
+              "manual": 0.0,
+              "auto": 0.0,
+              "direct": 4.0,
+              "empty": 0.0,
+              "transfer": 0.0,
+              "penalty": 0.0,
+              "committed_total": 4.0,
+              "total": 4.0
+            },
+            "current_time": 4,
+            "message": "Rolling execution reached the real horizon.",
+            "phase_timing_sec": {
+              "setup_provenance": 0.15600000001722947,
+              "candidate": 0.0,
+              "build": 0.01600000000325963,
+              "configure": 0.0,
+              "solve": 0.0,
+              "extract_commit": 0.0,
+              "replay_accounting": 0.0,
+              "other": 0.0
+            },
+            "budget_exceeded": false
+          },
+          "expected_cost": 4,
+          "per_run_limit_sec": 3,
+          "passed": true
+        }
+      ],
+      "source_content_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4",
+      "source_manifest_sha256": "aeeff0bce6b60623ecb977f0f64fd48c4cb2e0023a8bd2835d48a74d4885b3c8",
+      "local_continuity_scope": "forced local task carries no cargo; checks vehicle reuse and inventory timing",
+      "all_passed": true,
+      "successful_runs": 5,
+      "elapsed_sec": 0.375,
+      "raw_evidence_file": "raw.json",
+      "raw_evidence_sha256": "9ffa1c1dac268d9452d5da8fe04cfdb157968a65cedfe672462b5e6dd6c863d6",
+      "solver_checks_wall_sec": 0.20300000003771856,
+      "elapsed_scope": "parent worker process including imports/preflight/checks/export"
+    }
+  },
+  "parent_pid": 11892,
+  "hard_process_timeout_sec": 15.0,
+  "worker_spawned": true,
+  "worker_exit_status": 0,
+  "process_status": "EXITED",
+  "parent_wall_sec": 0.8900000000139698,
+  "finished_utc": "2026-10-18T15:32:37.388134+00:00",
+  "raw_sha256": "305c1f476145a24f31d8d6671c5b3f4dfb68899d0b7d508a577c1f111e5c8f8b",
+  "status": "OPTIMAL",
+  "metrics": {
+    "status": "OPTIMAL",
+    "completed_feasible": true,
+    "validation_passed": true,
+    "demand_quantity": 10.0,
+    "total_cost": 665.0,
+    "cost_components": {
+      "manual": 160.0,
+      "auto": 405.0,
+      "direct": 0.0,
+      "empty": 0.0,
+      "transfer": 0.0,
+      "penalty": 100.0,
+      "committed_total": 665.0,
+      "total": 665.0
+    },
+    "served_quantity": 9.0,
+    "unserved_quantity": 1.0,
+    "unserved_scope": "final refusal",
+    "served_rate": 0.9,
+    "direct_share": 0.0,
+    "explicit_empty_vehicle_tasks": 0.0,
+    "zero_cargo_direct_vehicle_tasks": 0.0,
+    "zero_cargo_reporting_tolerance": 1e-08,
+    "manual_vehicle_tasks": 8.0,
+    "explicit_empty_task_ratio": 0.0,
+    "empty_including_zero_direct_task_ratio": 0.0,
+    "empty_scope": "manual vehicle-task counts; aggregate wave cargo cannot identify each vehicle's load",
+    "manual_busy_vehicle_minutes": 480.0,
+    "av_busy_vehicle_minutes": 1620.0,
+    "manual_busy_fraction": 0.027777777777777776,
+    "av_busy_fraction": 0.28125,
+    "utilization_scope": "all committed task durations / initial total fleet times full real horizon; partial may include future commitments",
+    "delivered_flow_weight": 9.0,
+    "lead_time_mean_minutes": 806.6666666666666,
+    "lead_time_p50_minutes": 780.0,
+    "lead_time_p95_minutes": 960.0,
+    "lead_time_scope": "continuous delivered-flow weighted arc end minus order release, conditional on delivery",
+    "end_to_end_sec": 0.7339999999967404,
+    "phase_timing_sec": {
+      "setup_provenance": 0.14000000001396984,
+      "candidate": 0.0,
+      "build": 0.06300000002374873,
+      "configure": 0.0,
+      "solve": 0.4059999999590218,
+      "extract_commit": 0.01600000000325963,
+      "replay_accounting": 0.10899999999674037,
+      "other": 0.0
+    },
+    "window_count": 0,
+    "window_statistics": [],
+    "global_optimal_oracle": true,
+    "full_horizon_best_bound": 665.0,
+    "bound_scope": "full_horizon_adopted_V1_F_profile_only"
+  },
+  "stop_reason": null
+}

@@ -1,0 +1,37 @@
+{
+  "stage": "sensitivity",
+  "finished_utc": "2026-10-18T15:33:07.253080+00:00",
+  "attempted": [
+    "n10_s4101_T2_m0.05_full",
+    "n10_s4101_T2_m0.2_full",
+    "n10_s4101_T3_m0.1_full",
+    "n10_s4102_T2_m0.05_full",
+    "n10_s4102_T2_m0.2_full",
+    "n10_s4102_T3_m0.1_full",
+    "n10_s4103_T2_m0.05_full",
+    "n10_s4103_T2_m0.2_full",
+    "n10_s4103_T3_m0.1_full",
+    "n10_s4104_T2_m0.05_full",
+    "n10_s4104_T2_m0.2_full",
+    "n10_s4104_T3_m0.1_full",
+    "n10_s4105_T2_m0.05_full",
+    "n10_s4105_T2_m0.2_full",
+    "n10_s4105_T3_m0.1_full"
+  ],
+  "existing_retained": [
+    "n10_s4101_T2_m0.1_full",
+    "n10_s4102_T2_m0.1_full",
+    "n10_s4103_T2_m0.1_full",
+    "n10_s4104_T2_m0.1_full",
+    "n10_s4105_T2_m0.1_full"
+  ],
+  "budget_not_run": [],
+  "budget_sec": 600.0,
+  "wall_sec": 12.75,
+  "cumulative_wall_before_sec": 123.35800000000745,
+  "available_batch_wall_sec": 476.64199999999255,
+  "micro_sha256": "efab879fe383ff8ac366bcaeed301a2a12dd5455749bf81d51d697eeccf40a60",
+  "stop_reason": null,
+  "cumulative_scope": "input preparation + five micro checks + controller sessions; excludes human waiting, analysis/replay reported separately",
+  "no_automatic_retries": true
+}

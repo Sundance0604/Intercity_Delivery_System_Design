@@ -1,0 +1,75 @@
+{
+  "identity": {
+    "case": {
+      "id": "n40_s4104_T3_m0.1",
+      "label": "T3_m0.1",
+      "n": 40,
+      "seed": 4104,
+      "instance": "n40_s4104",
+      "stage": "mechanism",
+      "config": {
+        "M": 4,
+        "M_auto": 8,
+        "N_auto": {
+          "1": 2,
+          "2": 2
+        },
+        "N_manual": {
+          "1": 6,
+          "2": 6
+        },
+        "T": 24,
+        "a": {
+          "1": 5,
+          "2": 5
+        },
+        "b": {
+          "1": 20,
+          "2": 20
+        },
+        "c_auto_hour": 15,
+        "c_direct_hour": 25.0,
+        "c_empty_hour": 25.0,
+        "c_manual_hour": 20,
+        "direct_ratio_max": 1,
+        "direct_ratio_min": 0,
+        "empty_tau_periods": null,
+        "min_direct_load_per_vehicle": 0.1,
+        "rho": {
+          "1": 5,
+          "2": 5
+        },
+        "service_mechanism": "T3",
+        "t0_minutes": 60,
+        "tau_periods": 9,
+        "terminal_target": null,
+        "transfer_cost_per_unit": 0,
+        "transfer_time_periods": 0
+      },
+      "algorithm": "full",
+      "pooling_model": "pooled",
+      "information": "offline",
+      "H": 12,
+      "h": 2,
+      "E": 12,
+      "logical_budget_sec": 5.0,
+      "worker_timeout_sec": 15.0,
+      "solver": {
+        "Threads": 1,
+        "Seed": 0
+      }
+    },
+    "input_sha256": "0e3c61718b9e4c9045b4b06145acbb5acfec17ee9e790e459b64a7c7998dc135",
+    "orders_sha256": "1c4522e635a94adc9c3f41e0673d4d7eae5482b5bd9f30cee41028538b206930",
+    "core_sha256": "5c8b233fbc50cda4d23383f404915027e2b8d63de5faa03a30f6703063b1c6c4",
+    "suite_sha256": "9c1fa8f3d7acbef31159486d2be05a804e62f7bf87b18e96936ac7f3d7e3bb26",
+    "execution_budget": {
+      "cumulative_wall_sec": 600.0,
+      "scope": "prepare + all controller sessions; excludes separately reported replay/analysis and human idle"
+    }
+  },
+  "identity_sha256": "b9d1721073df7254ae2f138baaab0c2ba1be9c442d18a9b90d79c05cf41529a5",
+  "parent_pid": 16672,
+  "session": "20261019T012421749765Z",
+  "created_utc": "2026-10-19T01:25:08.720200+00:00"
+}

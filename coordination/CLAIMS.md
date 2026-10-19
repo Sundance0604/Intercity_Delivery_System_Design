@@ -81,6 +81,8 @@ V2/QVI与稳态主张不升级；full离线与RH在线信息不同，不能从�
 
 ## 当前结构修订的证据（2026-10-18）
 
+以下结构修订为既有历史记录；最新P0状态另见本文件末尾。
+
 | ID | 精确主张与边界 | 状态/Owner | 来源、证明与实验证据 |
 |---|---|---|---|
 | PAPER-STRUCTURE-001 | 容量→MILP/RH主线与独立稳态分工完成；原结论及证明全部保留，QVI/Poisson移附录 | WRITTEN / STATIC_REVIEWED，PI/Referee | [结构报告](../research/paper/final_manuscript/BHH_structure_revision_report.md)及[映射](../research/paper/final_manuscript/BHH_source_and_claim_map.md)；独立限定ACCEPT；无新实验 |
@@ -89,3 +91,73 @@ V2/QVI与稳态主张不升级；full离线与RH在线信息不同，不能从�
 | PAPER-LIT-018 | 当前18条实际引文包含已读原PDF的Banerjee2022 | SOURCE_CHECKED，Literature | 原PDF首页、1331/1333/1336/1339页；未查其在线附录，不认证novelty |
 
 旧12条/17条记录保留为相应阶段历史。原QW及V1范围不变；作者自行编译，静态审查不等于排版或正式投稿验收。
+
+## 数值实验P0的限定证据（2026-10-18）
+
+| ID | 精确主张/假设 | 状态 | Owner | 来源、证明、实验及审查证据 |
+|---|---|---|---|---|
+| P0-JOB-UNIT-001 | 每条CFS shipment定义为一个连续可分合成job-equivalent，非真实stop；不按pounds换算需求 | AUTHOR_CONFIRMED_UNIT；无实证校准声明 | 作者/PI | 用户选择及V1P0-JOB-UNIT-2026-10-18；experiment_data_contract与experiment_inputs wrapper；单元测试检查原重量保留 |
+| P0-MECHANISM-001 | T0/T1关闭direct车辆/selector/货流，T0/T2关闭独立empty；同母域保留；T2附加平均最低载量 | AUTHOR_CONFIRMED / PURE_TESTED / SMALL_SCALE_SOLVER_CHECKED；m=.1，敏感性.05/.1/.2 | experiment | flexible_configuration/optimizer/validation；test_v1_mechanisms；真实micro验证.05低于.1时不可行，批量证据见P1结果报告；不保证逐车非空或一般运营收益 |
+| P0-CAPACITY-001 | 原smoke参数下K=vM；合成新参数在routing与交界情景有pooling容量差、load-binding为零差对照 | PURE_NUMERICAL / ANALYTIC_ALGEBRA；非运营改善 | theorist | parameter_design推导与capacity_design表；独立原f二分核验，4项纯测试 |
+| P0-SOURCE-001 | 实得PDF和当前TeX核心有限期公式已映射，来源快照可按字节哈希核验 | STATIC_SOURCE_AUDIT；缺失(3)(1)身份不作结论 | literature/PI | V1_MODEL_FREEZE/equation_to_code_matrix/v1_source_manifest；不声称相同编译或全部版本等价 |
+| P0-DIRECT-ENDPOINT-001 | 作者已选择聚合目的城市可用节点，保留原公式，不额外声称真实hub接驳零时 | AUTHOR_CONFIRMED_MODEL_ASSUMPTION | 作者 | V1P0-DIRECT-ENDPOINT-2026-10-18，关闭此前pending；原式不构成真实路线证明 |
+
+本轮纯测不升级一般无损剪枝、全网络QVI或正式CFS效果实验。
+
+## 作者确认后的P1登记
+
+| ID | 主张/范围 | 状态与owner | 来源/证据 |
+|---|---|---|---|
+| P1-ENDPOINT-ASSUMPTION | Direct于完成j进入目的城市抽象可用节点，可j时刻接后续任务；非物理hub接驳零时定理 | AUTHOR_CONFIRMED_MODEL_ASSUMPTION；作者/theorist | V1P0-DIRECT-ENDPOINT-2026-10-18；v1_direct_endpoint_contract；4项纯连续性测试，非新运营结果 |
+| P1-T2-POLICY | T2的sum(h)>=m*w，主m=.1、敏感性.05/.1/.2；只限定wave平均，不证明逐车非空 | AUTHOR_CONFIRMED_POLICY；作者/experiment | V1P0-T2-MINLOAD-2026-10-18；V1_MODEL_FREEZE与机器决定 |
+| P1-BOUNDED-PROTOCOL | 先5micro，后最多75小样本独立run，N<=40、总600秒、失败不重试覆盖 | AUTHORIZED_BOUNDED_PLAN；PI | V1_P1_BOUNDED_PROTOCOL、v1_p1_budget；尚无此行赋予的运行成功主张 |
+
+## P1小规模实际结果（2026-10-18）
+
+共同范围：LA–SF、合成job单位/参数、N=10/20/40各5seed，默认free terminal和作者确认聚合Direct。
+batch=`P1_SMALL_20261018_01`，完整结果和审查分别见
+[报告](../experiments/reports/v1_p1_results.md)、[Referee](reviews/v1_p1_validation_review.md)。
+
+| ID | 精确主张及边界 | 状态/Owner | 来源、证明/实验与独立证据 |
+|---|---|---|---|
+| P1-EXEC-001 | 5micro+75批次顶层run全部执行；批次75/75完成且独立replay通过；实际413次optimize | FULL_MODEL_EXPERIMENT / FINITE_VERIFIED；PI/experiment/referee | batch raw/CSV、micro raw、75例独立原f全量复验；不是80个可行调度（micro含3个预期不可行） |
+| P1-CERT-001 | 批次44full OPTIMAL、30RH COMPLETED、1full TIME_LIMIT；后者1910、bound1893.9115018、gap0.84233% | FINITE_SOLVER_EVIDENCE；experiment/PI | n40_s4103_T3_m0_full raw；未证明该incumbent最优，不用RH末窗证书当全日证书 |
+| P1-PRUNE-001 | 10/20/40单mean paired进程速度比约1.205/1.375/1.626；前两规模成本差0，40单均差+109.713，CI[-204.604,424.030] | FULL_MODEL_NUMERICAL_OBSERVATION；PI/experiment | paired JSON/CSV与Referee重算；5seed、固定算法顺序、一次计时；不证明一般加速/无损或统计显著成本恶化 |
+| P1-DOMAIN-001 | 15对dense/pruned各窗口车辆/selector键签名一致；cargo候选削减均约95.7–95.9% | FINITE_STRUCTURAL_CHECK；experiment/referee | domain_and_pruning_checks；签名不含UB/历史，不证明窗口子问题相同；削减不是全部变量削减率 |
+| P1-MECH-001 | N10的35个offline机制/minimum运行皆OPTIMAL、各seed成本相同；全部direct货量/车次和empty车次为0 | NULL_RESULT_IN_THIS_SAMPLE；PI/experiment | 同m T2/T3和m敏感性均零成本差；不是direct/empty无用的普遍结论，也未实证识别其收益 |
+| P1-BUDGET-001 | 80顶层、413optimize、累计prepare+micro+sessions136.108秒<600；无重试/大规模运行 | AUDITED_EXECUTION；PI/referee | session/micro执行记录；一例runner5.234秒超过5秒软逻辑预算，worker5.390<15秒硬限，原标记保留 |
+| P1-CFS-001 | 全合格OD只读重算30185条、GC354mi、绕行1.2、50mph得8.496h并ceil为9期 | READ_ONLY_DATA_AUDIT；PI/referee | corridor_calibration_audit与独立重算；不把explicit-tau输入metadata的route0 placeholder称为真实距离 |
+
+Referee最终限定ACCEPT；195项纯测试通过。P1基础设施和小规模阶段完成，100–500单、广城市/紧车队及论文级规模效应仍DEFERRED。
+
+## 2026-10-19 N40机制后续实验登记
+
+| ID | 精确主张及边界 | 状态/Owner | 来源、证明/实验与独立证据 |
+|---|---|---|---|
+| FOLLOWUP-PLAN-001 | 不改基础参数，复用N40五seed订单与T3/0参考，新增六政策各5run；300秒总编排、5秒软预算、15秒硬保护 | BOUNDED_PLAN；PI/experiment | V1_FOLLOWUP_20261019_PROTOCOL、run_v1_followup_20261019；本行不代表已成功执行 |
+| FOLLOWUP-DESIGN-001 | 旧N40五seed已自然启用Direct，无须改费率/车队来补机制比较；N10的零采用仅为既有样本观察 | FINITE_PREVIOUS_OBSERVATION；theorist/PI | v1_followup_design_20261019及旧五个raw；direct约17–20%，不对N10零采用作唯一因果归因 |
+| FOLLOWUP-PRUNING-001 | 最终committed schedule可按start<t构造历史输入；旧raw未保存每窗全部lookahead incumbent | STATIC_RECOVERABILITY_ASSESSMENT；theorist | 设计§4及commit/configure源码；尚无新同历史单窗重建/求解结果，不据此宣称剪枝无损或已定位成本差原因 |
+| FOLLOWUP-EXEC-001 | 30新full（26OPTIMAL/4TIME_LIMIT）均有完整可行解；含旧五参考共35原式replay通过，新增30次optimize，无重跑 | FULL_MODEL_EXPERIMENT / FINITE_VERIFIED；PI/experiment/referee | batch raw、session、35CSV、PI和Referee各自全量replay，报告LIMITED_ACCEPT |
+| FOLLOWUP-DIRECT-001 | T2/.1相对T0在五实例的最优成本差证书上界均严格负；均值incumbent差−75.1613323，成本1745→1669.8386677，服务80.5%→93.7540% | FINITE_SOLVER_BOUND_EVIDENCE；PI/referee | 35pair表、每seed[右LB−左UB,右UB−左LB]；4103上界−24.901002；描述性CI与solver证书分列，不称普遍或确认性结论 |
+| FOLLOWUP-INACTIVE-001 | 全35保存方案独立empty/零货direct均0；正货direct最小wave平均3>.2，各direct/minimum政策可行成本同至浮点容差 | INACTIVE_IN_SAVED_INCUMBENTS；referee/PI | 全量raw审计；4103各政策bound差界跨0，不宣称精确最优等价、empty一般无用或minimum一般松弛 |
+| FOLLOWUP-BUDGET-001 | 内部prepare+session92.578秒、外层92.813秒<300；四新limit软预算超出，最长parent7.734<15 | AUDITED_FINITE_EXECUTION；PI/referee | prepare/run_execution与session；只读export/replay25.656秒、Referee15.765秒及派生绘图另报，无新solver |
+
+## 固定N四方向自动化（2026-10-19）
+
+| ID | 精确主张及边界 | 状态/Owner | 来源、证明/实验与独立证据 |
+|---|---|---|---|
+| FIXED-N-PLAN | 每seed14唯一任务，机制5/RH2/敏感性6/local-separate1；四方向共享不可变订单与基准 | IMPLEMENTED_PLAN；experiment/theorist/PI | run_fixed_n、fixed_n_round_contract、default_design；不同N不默认同样本配对 |
+| FIXED-N-POOL | separate只收紧instance local容量；原pooled验证后额外核aq+b√(vq)<=vB及q<=vM | EXPLICIT_COMPARISON_MODEL；PI | pooling.py、8纯测试；原63源/Direct/AV/母域不改，不冒称原模型证书 |
+| FIXED-N-FUNCTIONAL | N4/seed4101顺序完成14任务，10full OPTIMAL/4RH COMPLETED，共58optimize，14原式重放通过 | FUNCTIONAL_SOLVER_SMOKE；PI/experiment | FIXED_N_SMOKE_20261019_01；只验证自动编排和核验，不构成运营收益/剪枝无损新结论 |
+| FIXED-N-RESUME | 完成后重复同命令新增attempt=0，14raw前后SHA一致；普通未尝试可继续，异常遗留锁阻止自动续跑 | FINITE_RUNTIME_CHECK；PI | resume_execution.json、session账本；不承诺任意强制中断恢复或自动重试失败 |
+| FIXED-N-REVIEW | 23纯测试由Referee复验；14raw原式核验、separate独立工作式、15配对/48窗/19引用复用14解及真实resume身份均一致 | LIMITED_ACCEPT_IMPLEMENTATION_AND_FUNCTIONAL_SCOPE；referee | fixed_n_round_review；无新增solver，tiny全cost350/服务100%不作科研效益证据；未跑N40五seed正式round |
+
+## N40完整四方向实际结果
+
+| ID | 精确主张及边界 | 状态/Owner | 来源与复核 |
+|---|---|---|---|
+| N40-EXEC | 70完整可行=41OPTIMAL/9TIME_LIMIT/20RH；290optimize/240窗；无重试缺失 | FULL_MODEL_EXPERIMENT；experiment/PI | batch raw/record/summary/execution_audit；Referee全70原f独立通过 |
+| N40-DIRECT | T2/.1对T0均值成本−75.1613、服务+13.2540pp，五实例最优差上界均负 | FINITE_SOLVER_BOUND_OBSERVATION；PI | paired.csv及协调者统计audit；终审统计OPEN，不作广泛推断 |
+| N40-PRUNE | dense/pruned配对墙钟速度比均值1.68988，成本均差+109.713，CI[−204.604,424.030] | FINITE_CONTROL_TRAJECTORY_OBSERVATION；PI | 五seed/固定顺序/一次计时；母域相同不等于历史相同，不宣布无损或显著劣势 |
+| N40-POOL | separate−pooled可行成本均差+128.5049；五个最优差下界均正约49.014–115.075 | FINITE_COUNTERFACTUAL_SOLVER_BOUND_OBSERVATION；PI | 仅local替换、separate4/5限时；940 wave另原式核验；不把incumbent差当精确最优差 |
+| N40-REVIEW-SCOPE | Referee物理/来源/预算审查已完成；最终75配对统计及prose中断，PI复算850比较通过 | PARTIAL_INDEPENDENT_REVIEW / FINAL_SIGNOFF_OPEN；PI整理 | workspace out of credits；fixed_n40_20261019_review及coordinator_statistics_audit，不伪称最终ACCEPT |
